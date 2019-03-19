@@ -1,0 +1,14 @@
+[
+  {
+    "pk": "user:1234",
+    "sk": "detail",
+    "email": "steve@soundpruf.com",
+    "createdAt": "timestamp"
+  },
+  {
+    "pk": "user:2345",
+    "sk": "detail",
+    "email": "liam@soundpruf.com",
+    "createdAt": "timestamp"
+  }
+]

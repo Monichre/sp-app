@@ -1,0 +1,449 @@
+service: ${env:SERVICE, "sp-app-back"}
+frameworkVersion: ">=1.21.0 <2.0.0"
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: ${self:custom.target}
+  region: ${self:custom.region}
+  versionFunctions: false
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - sqs:SendMessage
+        - sqs:GetQueueUrl
+        - sqs:ListQueues
+      Resource: arn:aws:sqs:*:*:*
+    - Effect: Allow
+      Action:
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:BatchWriteItem
+        - dynamodb:Query
+        - dynamodb:DeleteItem
+        - dynamodb:DescribeStream
+        - dynamodb:GetRecords
+        - dynamodb:GetShardIterator
+        - dynamodb:ListStreams
+      Resource: arn:aws:dynamodb:*:*:table/*
+    - Effect: Allow
+      Action:
+        - ssm:GetParametersByPath
+      Resource: arn:aws:ssm:*:*:parameter/*
+    - Effect: Allow
+      Action:
+        - kinesis:PutRecords
+      Resource: arn:aws:kinesis:*:*:stream/*
+
+  environment:
+    NS: ${self:custom.ns}
+    STAGE: ${self:custom.target}
+    DYNAMO_ENDPOINT: ${self:custom.DYNAMO_ENDPOINT}
+
+plugins:
+  - serverless-webpack
+  - serverless-offline-kinesis
+  - serverless-offline-sqs
+  # current version of this plugin does not respect webpack plugin
+  # - serverless-offline-scheduler
+  - serverless-dynamodb-local
+  - serverless-plugin-offline-dynamodb-stream
+  - serverless-offline
+
+custom:
+################################################################################
+# custom: GLOBAL VARIABLES
+################################################################################
+# Never use env: variables anywhere else
+# Centralize them all here
+# Here, we should handle any wonkiness between offline and cloud
+
+  target: ${env:TARGET, "local"}
+  config: ${env:CONFIG, "local"}
+  region: ${env:REGION, "us-east-1"}
+
+  ns: ${self:service}-${self:custom.target}
+  # used by -front project to get api gateway path & config used
+  ssmTargetPath: /${self:service}/target/${self:custom.target}
+  # not used yet but defining path structure
+  ssmConfigPath:  /${self:service}/config/${self:custom.config}
+
+  # offline vs cloud cares about this
+  DYNAMO_ENDPOINT: ${env:DynamoEndpoint, "https://dynamodb.${self:custom.region}.amazonaws.com"}
+  # this only matters for cloud ssm parameter setting used by frontend build
+  # API_GATEWAY_ENDPOINT: "https://dynamodb.${self:custom.region}.amazonaws.com"
+  API_GATEWAY_ENDPOINT:
+    Fn::Join:
+      - ""
+      - - "https://"
+        - Ref: "ApiGatewayRestApi"
+        - ".execute-api.${self:custom.region}.amazonaws.com/${self:custom.target}"
+
+  # (because Ref: fns don't get run in `sls offline`)
+  # this jiggery pokery is needed
+  # to enable these env vars in `sls offline`
+  # you (and yarn) should `source .env/local.env && sls offline`
+  # to set the resource refs for the local environment
+  # they should NOT be part of any deployment environment
+  # so the cfn reference will be used
+  ref:
+    QueueHiFetchSpotifyPlays: ${env:QueueHiFetchSpotifyPlays, self:custom.cfref.QueueHiFetchSpotifyPlays}
+    TableProfile: ${env:TableProfile, self:custom.cfref.TableProfile}
+    StreamCreatePlayFromSpotify: ${env:StreamCreatePlayFromSpotify, self:custom.cfref.StreamCreatePlayFromSpotify}
+
+  cfref:
+    QueueHiFetchSpotifyPlays:
+      Ref: QueueHiFetchSpotifyPlays
+    TableProfile:
+      Ref: TableProfile
+    StreamCreatePlayFromSpotify:
+      Ref: StreamCreatePlayFromSpotify
+
+################################################################################
+# custom: PLUGINS
+################################################################################
+  serverless-offline-sqs:
+    endpoint: http://0.0.0.0:9324
+    region: ${self:provider.region}
+    accessKeyId: local
+    secretAccessKey: local
+
+  serverless-offline:
+    port: 4000
+
+  dynamodb:
+    start:
+      port: 8888
+      migrate: true
+      seed: true
+    seed:
+      all:
+        sources:
+          - table: ${self:custom.ref.TableProfile}
+            sources: [./config/seed/profile.json]
+
+  dynamodbStream:
+    host: localhost
+    port: 8888
+    pollForever: true
+    streams:
+      - table: ${self:custom.ref.TableProfile}
+        functions:
+          - onProfileAdd
+  webpack:
+    includeModules: true
+    packager: 'yarn'
+
+  serverless-offline-kinesis:
+    apiVersion: '2013-12-02'
+    endpoint: http://0.0.0.0:4567
+    region: us-east-1
+    accessKeyId: root
+    secretAccessKey: root
+    skipCacheInvalidation: false
+    readInterval: 2000
+
+
+functions:
+
+  graphql:
+    handler: src/fns/graphql/graphql.handler
+    events:
+      - http:
+          path: graphql
+          method: post
+          cors: true
+
+  graphiql:
+    handler: src/fns/graphiql.handler
+    events:
+      - http:
+          path: graphiql
+          method: get
+          cors: true
+
+
+
+
+  # periodically called by frontend
+  # triggers a harvest check for the active user
+  # sends its triggers to a more time-sensitive queue
+  startHarvestActiveUser:
+    events:
+      - http:
+          path: heartbeat
+          method: post
+          cors: true
+    handler: src/fns/startHarvestActiveUser.handler
+    environment:
+      QUEUE_TARGET: ${self:custom.ref.QueueHiFetchSpotifyPlays}
+
+  # scheduled job that triggers a harvest for all users
+  # sends its triggers to a less time-sensitive queue
+  startHarvestAllUsers:
+    events:
+      - schedule: rate(15 minutes)
+      - http:
+          path: startHarvestAllUsers
+          method: post
+          cors: true
+    handler: src/fns/startHarvestAllUsers.handler
+    environment:
+      TABLE_SOURCE: ${self:custom.ref.TableProfile}
+      QUEUE_TARGET: ${self:custom.ref.QueueHiFetchSpotifyPlays}
+  #   handler: src/fns/startHarvestAllUsers.handler
+  #   # handler: () =>
+  #   #   get all profileId with external spotify auth from TABLE_SOURCE
+  #   #   for each one, push profileId to QUEUE_TARGET
+  createProfile:
+    events:
+      - http:
+          path: createProfile
+          method: post
+          cors: true
+    handler: src/fns/createProfile.handler
+    environment:
+      TABLE_TARGET: ${self:custom.ref.TableProfile}
+
+  onProfileAdd:
+    events:
+      - stream:
+          type: dynamodb
+          arn:
+            Fn::GetAtt: [ TableProfile, StreamArn ]
+    handler: src/fns/onProfileAdd.handler
+
+  # if the profile's external poll is stale
+  # run it and feed the response into a stream
+  fetchSpotifyPlaysHI:
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt: [ QueueHiFetchSpotifyPlays, Arn ]
+    handler: src/fns/fetchSpotifyPlays.handler
+    environment:
+      STALE_MS: 30000 # 30 sec
+      FETCH_COUNT: 2 # 2 songs
+      TABLE_SOURCE: ${self:custom.ref.TableProfile}
+      STREAM_TARGET: ${self:custom.ref.StreamCreatePlayFromSpotify}
+
+
+  createPlayFromSpotify:
+    events:
+      - stream:
+          type: kinesis
+          startingPosition: LATEST
+          arn:
+            Fn::GetAtt: [StreamCreatePlayFromSpotify, Arn]
+    environment:
+      TABLE_TARGET: 'plays'
+    handler: src/fns/createPlayFromSpotify.handler
+    # handler: ({profileId, play}) =>
+    #   dbPlays = table from TABLE_TARGET
+    #   dbPlays.createUniquePlay({profileId, ...play})
+
+  # createPlayFromSpotify_LO:
+  #   events:
+  #     - stream:
+  #         type: kinesis
+  #         arn:
+  #           Fn::GetAtt: [KIN_LO_CreatePlayFromSpotify, Arn]
+  #   environment:
+  #     TABLE_TARGET:
+  #       Fn::GetAttr: [DYN_Play, Arn]
+  #   handler: src/fns/createPlayFromSpotify.handler
+
+  # onPlayUpdateStats:
+  #   events:
+  #     - stream:
+  #         type: dynamodb
+  #         arn:
+  #           Fn::GetAtt: [DYN_Play, LatestArn]
+  #   environment:
+  #     TABLE_TARGET:
+  #       Fn::GetAttr: [DYN_Stat, Uri]
+  #   # handler: (rec) =>
+  #   #   if pk.includes('PLAY#') and sk == 'DETAIL':
+  #   #     DBStat(TABLE_TARGET).updateForPlay(play)
+
+  # OnArtistFetchSpotify:
+  #   events:
+  #     - stream:
+  #         type: dynamodb
+  #         arn:
+  #           Fn::GetAtt: [DYN_Play, LatestArn]
+  #   environment:
+  #     QUEUE_TARGET:
+  #       Fn::GetAttr: [SQS_FetchSpotifyArtist, Uri]
+    # handler: (rec) =>
+    #   if pk.includes('ARTIST#') && sk == 'DETAIL' then
+    #     publish(QUEUE_TARGET, artistId)
+
+  # ping:
+  #   handler: src/fns/http/ping.handler
+  #   events:
+  #     - http:
+  #         path: ping
+  #         method: post
+  #         cors: true
+
+  # graphql:
+  #   handler: src/fns/http/graphql/graphql.handler
+  #   events:
+  #     - http:
+  #         path: graphql
+  #         method: post
+  #         cors: true
+
+  # sqsWorker:
+  #   handler: src/fns/sqs/worker.handler
+  #   events:
+  #     - sqs:
+  #         arn:
+  #           Fn::GetAtt: [SQS_Q_Sample, Arn]
+
+  # kinConsumer:
+  #   handler: src/fns/kin/consumer.handler
+  #   events:
+  #     - stream:
+  #         type: kinesis
+  #         arn:
+  #           Fn::GetAtt: [KIN_S_Sample, Arn]
+
+  customResource:
+    handler: src/fns/customResourceFirebase.handler
+
+
+resources:
+  Description: stack experiments by stevo
+
+  Resources:
+
+################################################################################
+# resources: DEPLOYMENT
+################################################################################
+
+    # BucketFrontend:
+    #   Type: AAWS::S3::Bucket
+    #   Properties:
+    #     BucketName: ${self:custom.ns}-frontend
+    #     AccessControl: PublicRead
+    #     WebsiteConfiguration:
+    #       IndexDocument: index.html
+    #       ErrorDocument: index.html
+
+    ParameterTargetAPIEndpoint:
+      Type: AWS::SSM::Parameter
+      Properties:
+        Description: "API Endpoint for frontend"
+        Name: ${self:custom.ssmTargetPath}/public/API_ENDPOINT
+        Type: String
+        Value: ${self:custom.API_GATEWAY_ENDPOINT}
+    ParameterTargetConfig:
+      Type: AWS::SSM::Parameter
+      Properties:
+        Description: "What config key was this endpoint built with"
+        Name: ${self:custom.ssmTargetPath}/public/CONFIG
+        Type: String
+        Value: ${self:custom.config}
+
+    ParameterFirebaseApiKey:
+      Type: AWS::SSM::Parameter
+      Properties:
+        Name: ${self:custom.ssmTargetPath}/public/FIREBASE_API_KEY
+        Type: String
+        Value: AIzaSyAJ55pTxAz0iVyXJFckuEZKsJtk5ecojSU
+      
+    ParameterFirebaseAuthDomain:
+      Type: AWS::SSM::Parameter
+      Properties:
+        Name: ${self:custom.ssmTargetPath}/public/FIREBASE_AUTH_DOMAIN
+        Type: String
+        Value: exp-stevo-back-local.firebaseapp.com
+      
+    ParameterFirebaseDatabaseUrl:
+      Type: AWS::SSM::Parameter
+      Properties:
+        Name: ${self:custom.ssmTargetPath}/public/FIREBASE_DATABASE_URL
+        Type: String
+        Value: https://exp-stevo-back-local.firebaseio.com
+      
+    ParameterFirebaseProjectId:
+      Type: AWS::SSM::Parameter
+      Properties:
+        Name: ${self:custom.ssmTargetPath}/public/FIREBASE_PROJECT_ID
+        Type: String
+        Value: exp-stevo-back-local
+      
+    
+################################################################################
+# resources: USER AUTH
+################################################################################
+
+    # need proper gcp creds to complete this
+    TestCustomResource:
+      Type: Custom::MyCustomResourceType
+      Properties:
+        ServiceToken:
+          Fn::GetAtt: [CustomResourceLambdaFunction, Arn]
+        GCPProjectId: gcp-${self:custom.ns}
+        GCPFolderName: sp-auth
+        TestInput: myInput
+
+################################################################################
+# resources: USER PROFILES
+################################################################################
+
+    TableProfile:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.ns}-TableProfile
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
+
+################################################################################
+# resources: HARVEST
+################################################################################
+
+    QueueHiFetchSpotifyPlays:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:custom.ns}-QueueHiFetchSpotifyPlays
+
+    StreamCreatePlayFromSpotify:
+      Type: AWS::Kinesis::Stream
+      Properties:
+        Name: ${self:custom.ns}-StreamCreatePlayFromSpotify
+        ShardCount: 1
+
+    # SQS_LO_FetchSpotifyPlays:
+    #   Type: AWS::SQS::Queue
+    #   Properties:
+    #     QueueName: ${self:custom.ns}-LO-FetchSpotifyPlays
+
+    # KIN_HI_CreatePlayFromSpotify:
+    #   Type: AWS::Kinesis::Stream
+    #   Properties:
+    #     Name: ${self:custom.ns}-HI-PlayFromSpotify
+    #     ShardCount: 1
+
+    # KIN_LO_PlayFromSpotify:
+    #   Type: AWS::Kinesis::Stream
+    #   Properties:
+    #     Name: ${self:custom.ns}-LO-PlayFromSpotify
+    #     ShardCount: 1
+

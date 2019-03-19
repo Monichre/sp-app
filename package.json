@@ -1,0 +1,15 @@
+{
+  "name": "sp-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "check:target": "./bin/check-target.sh",
+    "check:config": "./bin/check-config.sh",
+    "deploy:all:test": "TARGET=test CONFIG=test cd back && TARGET=test CONFIG=test yarn deploy && cd ../front && TARGET=test yarn build && TARGET=test yarn deploy",
+    "deploy:all": "yarn check:target && cd back && yarn deploy && cd ../front && yarn build && yarn deploy",
+    "install:all": "cd front && yarn install && cd ../back && yarn install && yarn install:extra",
+    "start": "echo 'Dont `yarn start` here.  Read the docs.  You need to have four shells: first yarn start from back/ and then yarn start from front/'",
+    "start:all": "yarn start",
+    "": ""
+  }
+}

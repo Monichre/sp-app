@@ -1,0 +1,5 @@
+mutation OnLogin($user: FirebaseUser!) {
+  onLogin(user: $user) {
+    ok
+  }
+}

@@ -1,0 +1,48 @@
+type Query {
+  ping: QueryPingResponse!
+}
+type Mutation {
+  _: String
+}
+
+type QueryPingResponse {
+  value: String!
+}
+
+# user auth
+
+extend type Mutation {
+  onLogin(user: FirebaseUser!): BasicResponse
+  addUserSpotifyCredentials(creds: UserSpotifyCreds!): BasicResponse
+}
+
+input FirebaseUser {
+  uid: String!
+  displayName: String!
+  photoURL: String!
+  email: String!
+  emailVerified: Boolean!
+  phoneNumber: String
+  isAnonymous: Boolean!
+  providerData: [FirebaseUserProviderData!]!
+}
+
+input FirebaseUserProviderData {
+  uid: String!
+  displayName: String!
+  photoURL: String!
+  email: String!
+  phoneNumber: String
+  providerId: String!
+}
+
+input UserSpotifyCreds {
+  uid: String!
+  spotifyId: String!
+  accessToken: String!
+  refreshToken: String!
+}
+
+type BasicResponse {
+  ok: Boolean
+}

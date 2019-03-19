@@ -1,0 +1,5 @@
+mutation UpdateSpotifyAuth($userId: String!, $creds: SpotifyCredentials!) {
+  updateSpotifyAuth(userId: $userId, creds: $creds) {
+    ok
+  }
+}

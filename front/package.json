@@ -1,0 +1,58 @@
+{
+  "name": "front",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "check:target": "../bin/check-target.sh",
+    "start": "TARGET=local && source ./scripts/local-env.sh && react-scripts start",
+    "start:other": "yarn check:target && source ./scripts/ssm-env.sh && react-scripts start",
+    "build": "yarn check:target && source ./scripts/ssm-env.sh && react-scripts build",
+    "build:test": "TARGET=test yarn build",
+    "deploy": "yarn check:target && sls deploy && sls info --verbose | grep SiteUrl",
+    "deploy:test": "TARGET=test yarn deploy",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "": ""
+  },
+  "dependencies": {
+    "apollo-boost": "^0.3.1",
+    "firebase": "^5.9.0",
+    "graphql": "^14.1.1",
+    "graphql-tag": "^2.10.1",
+    "ramda": "^0.26.1",
+    "react": "^16.8.4",
+    "react-apollo": "^2.5.2",
+    "react-apollo-hooks": "^0.4.3",
+    "react-dom": "^16.8.4",
+    "react-router-dom": "^4.4.0",
+    "react-scripts": "2.1.8",
+    "typescript": "3.3.3333"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "devDependencies": {
+    "@types/firebase": "^3.2.1",
+    "@types/graphql": "^14.0.7",
+    "@types/jest": "24.0.11",
+    "@types/node": "11.11.1",
+    "@types/ramda": "^0.26.3",
+    "@types/react": "16.8.7",
+    "@types/react-dom": "16.8.2",
+    "@types/react-router-dom": "^4.3.1",
+    "graphql-code-generator": "^0.18.0",
+    "graphql-codegen-add": "^0.18.0",
+    "graphql-codegen-time": "^0.18.0",
+    "graphql-codegen-typescript-client": "^0.18.0",
+    "graphql-codegen-typescript-common": "^0.18.0",
+    "graphql-codegen-typescript-react-apollo": "^0.18.0",
+    "serverless-s3-sync": "^1.7.3",
+    "serverless-stack-output": "^0.2.3"
+  }
+}

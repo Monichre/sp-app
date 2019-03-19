@@ -1,0 +1,55 @@
+service: ${env:SERVICE, "sp-app-front"}
+frameworkVersion: ">=1.21.0 <2.0.0"
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: ${self:custom.target}
+  region: ${self:custom.region}
+
+  environment:
+    NS: ${self:custom.ns}
+    STAGE: ${self:custom.target}
+
+plugins:
+  - serverless-s3-sync
+
+custom:
+################################################################################
+# custom: GLOBAL VARIABLES
+################################################################################
+# Never use env: variables anywhere else
+# Centralize them all here
+# Here, we should handle any wonkiness between offline and cloud
+
+  target: ${env:TARGET, "local"}
+  # config: ${env:CONFIG, "local"}
+  region: ${env:REGION, "us-east-1"}
+
+  ns: ${self:service}-${self:custom.target}
+
+  s3Sync:
+    - bucketName: ${self:custom.ns}-frontend
+      localDir: ./build # make this .build
+      acl: public-read
+
+resources:
+  
+  Description: frontend stack experiments by stevo
+
+  Resources:
+
+    BucketFrontend:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.ns}-frontend
+        AccessControl: PublicRead
+        WebsiteConfiguration:
+          IndexDocument: index.html
+          ErrorDocument: index.html
+
+  Outputs:
+    SiteUrl:
+      Value: "http://${self:custom.ns}-frontend.s3-website-${self:custom.region}.amazonaws.com"
+      Export:
+        Name: "${self:custom.ns}-SiteUrl"
