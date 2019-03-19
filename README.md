@@ -2,11 +2,6 @@
 
 Monorepo for services that deliver the Soundpruf app.
 
-I SHOULDNT BE ABLE TO PUSH THIS
-SECOND TEST
-THIRD TEST
-FOURTH TEST
-
 # developer setup
 
 From the root of the project:
@@ -80,7 +75,14 @@ Builds and deploys the frontend to a **TARGET** that should match an already-dep
 
 # making changes
 
-Using gitflow.  Two special branches:
+## branching
+
+Using gitflow.
+
+### master and dev
+
+Two special branches are restricted.  You will not be able to push or merge to them directly.  You need to make a PR.
+
 - `master` has tagged versions that we can deploy
   - merges only from:
     - `hotfix/xx` for critical production fixes
@@ -91,6 +93,8 @@ Using gitflow.  Two special branches:
     - `hotfix/xx` if appropriate
     - `feat/xx` for new features
   - will have some sort of CD that will deploy commits to a cloud environment
+
+### feat/xx, release/xx, and hotfix/xx branches
 
 And then there are three types of general branches:
 - `feat/xx` each new unit of work, that should roughly correspond to a card
