@@ -42,6 +42,7 @@ provider:
     DYNAMO_ENDPOINT: ${self:custom.DYNAMO_ENDPOINT}
 
 plugins:
+  - serverless-plugin-epsagon
   - serverless-webpack
   - serverless-offline-kinesis
   - serverless-offline-sqs
@@ -103,6 +104,17 @@ custom:
 ################################################################################
 # custom: PLUGINS
 ################################################################################
+  notification:
+    deployer: ${env:USER}
+    slack:
+      token: Kol5B0SRzL2LGYBkuCeIYZKK
+      channel:  "#devops-notify"
+      username: Serverless
+      
+  epsagon:
+    token: 47d802aa-0e78-43c9-8220-d3e02acbf4f1
+    appName: ${self:custom.ns}
+
   serverless-offline-sqs:
     endpoint: http://0.0.0.0:9324
     region: ${self:provider.region}

@@ -66,3 +66,11 @@ typings/
 .dynamodb
 
 .tmp
+
+*.zip
+*.jar
+
+# because some creds and big data files are json
+*.json
+!tsconfig.json
+!package.json
