@@ -1,0 +1,22 @@
+service: sp-app-back-layer
+frameworkVersion: ">=1.34.0 <2.0.0"
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: ${self:custom.target}
+  region: ${self:custom.region}
+custom:
+  target: ${env:TARGET, "local"}
+  region: ${env:REGION, "us-east-1"}
+
+  ns: ${self:service}-${self:custom.target}
+layers:
+  npm:
+    path: layers/npm
+resources:
+  Outputs:
+    NpmLayerExport:
+        Value:
+          Ref: NpmLambdaLayer
+        Export:
+          Name: NpmLambdaLayer

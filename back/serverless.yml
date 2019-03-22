@@ -41,8 +41,14 @@ provider:
     STAGE: ${self:custom.target}
     DYNAMO_ENDPOINT: ${self:custom.DYNAMO_ENDPOINT}
 
+# layers:
+#   npm:
+#     path: layers/npm
+#     name: ${self:custom.ns}-layer-npm
+#     description: NPM packages used by lambdas
+
 plugins:
-  - serverless-plugin-epsagon
+  # - serverless-plugin-epsagon
   - serverless-webpack
   - serverless-offline-kinesis
   - serverless-offline-sqs
@@ -144,7 +150,7 @@ custom:
         functions:
           - onProfileAdd
   webpack:
-    includeModules: true
+    # includeModules: true
     packager: 'yarn'
 
   serverless-offline-kinesis:
@@ -161,6 +167,8 @@ functions:
 
   graphql:
     handler: src/fns/graphql/graphql.handler
+    layers:
+      - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
     events:
       - http:
           path: graphql
@@ -169,6 +177,8 @@ functions:
 
   graphiql:
     handler: src/fns/graphiql.handler
+    layers:
+      - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
     events:
       - http:
           path: graphiql
@@ -188,6 +198,8 @@ functions:
           method: post
           cors: true
     handler: src/fns/startHarvestActiveUser.handler
+    layers:
+      - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
     environment:
       QUEUE_TARGET: ${self:custom.ref.QueueHiFetchSpotifyPlays}
 
@@ -201,6 +213,8 @@ functions:
           method: post
           cors: true
     handler: src/fns/startHarvestAllUsers.handler
+    layers:
+      - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
     environment:
       TABLE_SOURCE: ${self:custom.ref.TableProfile}
       QUEUE_TARGET: ${self:custom.ref.QueueHiFetchSpotifyPlays}
@@ -215,6 +229,8 @@ functions:
           method: post
           cors: true
     handler: src/fns/createProfile.handler
+    layers:
+      - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
     environment:
       TABLE_TARGET: ${self:custom.ref.TableProfile}
 
@@ -225,6 +241,8 @@ functions:
           arn:
             Fn::GetAtt: [ TableProfile, StreamArn ]
     handler: src/fns/onProfileAdd.handler
+    layers:
+      - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
 
   # if the profile's external poll is stale
   # run it and feed the response into a stream
@@ -234,6 +252,8 @@ functions:
           arn:
             Fn::GetAtt: [ QueueHiFetchSpotifyPlays, Arn ]
     handler: src/fns/fetchSpotifyPlays.handler
+    layers:
+      - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
     environment:
       STALE_MS: 30000 # 30 sec
       FETCH_COUNT: 2 # 2 songs
@@ -251,9 +271,9 @@ functions:
     environment:
       TABLE_TARGET: 'plays'
     handler: src/fns/createPlayFromSpotify.handler
-    # handler: ({profileId, play}) =>
-    #   dbPlays = table from TABLE_TARGET
-    #   dbPlays.createUniquePlay({profileId, ...play})
+    layers:
+      - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
+
 
   # createPlayFromSpotify_LO:
   #   events:
@@ -325,6 +345,8 @@ functions:
 
   customResource:
     handler: src/fns/customResourceFirebase.handler
+    layers:
+      - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
 
 
 resources:
