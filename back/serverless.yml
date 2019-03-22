@@ -41,12 +41,6 @@ provider:
     STAGE: ${self:custom.target}
     DYNAMO_ENDPOINT: ${self:custom.DYNAMO_ENDPOINT}
 
-# layers:
-#   npm:
-#     path: layers/npm
-#     name: ${self:custom.ns}-layer-npm
-#     description: NPM packages used by lambdas
-
 plugins:
   # - serverless-plugin-epsagon
   - serverless-webpack
@@ -172,7 +166,6 @@ functions:
   graphql:
     handler: src/fns/graphql/graphql.handler
     layers:
-      # - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
       - ${self:custom.LAYER_REF.${self:custom.config}}
     events:
       - http:
@@ -183,7 +176,6 @@ functions:
   graphiql:
     handler: src/fns/graphiql.handler
     layers:
-      # - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
       - ${self:custom.LAYER_REF.${self:custom.config}}
     events:
       - http:
@@ -205,7 +197,6 @@ functions:
           cors: true
     handler: src/fns/startHarvestActiveUser.handler
     layers:
-      # - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
       - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
       QUEUE_TARGET: ${self:custom.ref.QueueHiFetchSpotifyPlays}
@@ -221,7 +212,6 @@ functions:
           cors: true
     handler: src/fns/startHarvestAllUsers.handler
     layers:
-      # - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
       - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
       TABLE_SOURCE: ${self:custom.ref.TableProfile}
@@ -238,7 +228,6 @@ functions:
           cors: true
     handler: src/fns/createProfile.handler
     layers:
-      # - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
       - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
       TABLE_TARGET: ${self:custom.ref.TableProfile}
@@ -251,7 +240,6 @@ functions:
             Fn::GetAtt: [ TableProfile, StreamArn ]
     handler: src/fns/onProfileAdd.handler
     layers:
-      # - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
       - ${self:custom.LAYER_REF.${self:custom.config}}
 
   # if the profile's external poll is stale
@@ -263,7 +251,6 @@ functions:
             Fn::GetAtt: [ QueueHiFetchSpotifyPlays, Arn ]
     handler: src/fns/fetchSpotifyPlays.handler
     layers:
-      # - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
       - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
       STALE_MS: 30000 # 30 sec
@@ -283,7 +270,6 @@ functions:
       TABLE_TARGET: 'plays'
     handler: src/fns/createPlayFromSpotify.handler
     layers:
-      # - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
       - ${self:custom.LAYER_REF.${self:custom.config}}
 
 
