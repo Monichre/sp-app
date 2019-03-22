@@ -1,0 +1,19 @@
+{
+  "name": "sp-app-back-layer-npm",
+  "version": "1.0.0",
+  "dependencies": {
+    "@google-cloud/resource": "^0.9.1",
+    "apollo-server-lambda": "^2.4.8",
+    "aws-lambda": "^0.1.2",
+    "epsagon": "^1.16.0",
+    "firebase": "^5.8.6",
+    "firebase-admin": "^7.0.0",
+    "googleapis": "^38.0.0",
+    "graphql": "^14.1.1",
+    "graphql-playground-middleware-lambda": "^1.7.13",
+    "graphql-tag": "^2.10.1",
+    "graphql-tools": "^4.0.4",
+    "reflect-metadata": "^0.1.13",
+    "uuid": "^3.3.2"
+  }
+}

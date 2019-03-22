@@ -42,7 +42,7 @@ provider:
     DYNAMO_ENDPOINT: ${self:custom.DYNAMO_ENDPOINT}
 
 plugins:
-  - serverless-plugin-epsagon
+  # - serverless-plugin-epsagon
   - serverless-webpack
   - serverless-offline-kinesis
   - serverless-offline-sqs
@@ -80,6 +80,10 @@ custom:
       - - "https://"
         - Ref: "ApiGatewayRestApi"
         - ".execute-api.${self:custom.region}.amazonaws.com/${self:custom.target}"
+
+  LAYER_REF:
+    local: "not used"
+    test: ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport, ""} # without this fallback i cant sls dynamodb install
 
   # (because Ref: fns don't get run in `sls offline`)
   # this jiggery pokery is needed
@@ -144,7 +148,7 @@ custom:
         functions:
           - onProfileAdd
   webpack:
-    includeModules: true
+    # includeModules: true
     packager: 'yarn'
 
   serverless-offline-kinesis:
@@ -161,6 +165,8 @@ functions:
 
   graphql:
     handler: src/fns/graphql/graphql.handler
+    layers:
+      - ${self:custom.LAYER_REF.${self:custom.config}}
     events:
       - http:
           path: graphql
@@ -169,6 +175,8 @@ functions:
 
   graphiql:
     handler: src/fns/graphiql.handler
+    layers:
+      - ${self:custom.LAYER_REF.${self:custom.config}}
     events:
       - http:
           path: graphiql
@@ -188,6 +196,8 @@ functions:
           method: post
           cors: true
     handler: src/fns/startHarvestActiveUser.handler
+    layers:
+      - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
       QUEUE_TARGET: ${self:custom.ref.QueueHiFetchSpotifyPlays}
 
@@ -201,6 +211,8 @@ functions:
           method: post
           cors: true
     handler: src/fns/startHarvestAllUsers.handler
+    layers:
+      - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
       TABLE_SOURCE: ${self:custom.ref.TableProfile}
       QUEUE_TARGET: ${self:custom.ref.QueueHiFetchSpotifyPlays}
@@ -215,6 +227,8 @@ functions:
           method: post
           cors: true
     handler: src/fns/createProfile.handler
+    layers:
+      - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
       TABLE_TARGET: ${self:custom.ref.TableProfile}
 
@@ -225,6 +239,8 @@ functions:
           arn:
             Fn::GetAtt: [ TableProfile, StreamArn ]
     handler: src/fns/onProfileAdd.handler
+    layers:
+      - ${self:custom.LAYER_REF.${self:custom.config}}
 
   # if the profile's external poll is stale
   # run it and feed the response into a stream
@@ -234,6 +250,8 @@ functions:
           arn:
             Fn::GetAtt: [ QueueHiFetchSpotifyPlays, Arn ]
     handler: src/fns/fetchSpotifyPlays.handler
+    layers:
+      - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
       STALE_MS: 30000 # 30 sec
       FETCH_COUNT: 2 # 2 songs
@@ -251,9 +269,9 @@ functions:
     environment:
       TABLE_TARGET: 'plays'
     handler: src/fns/createPlayFromSpotify.handler
-    # handler: ({profileId, play}) =>
-    #   dbPlays = table from TABLE_TARGET
-    #   dbPlays.createUniquePlay({profileId, ...play})
+    layers:
+      - ${self:custom.LAYER_REF.${self:custom.config}}
+
 
   # createPlayFromSpotify_LO:
   #   events:
@@ -325,6 +343,9 @@ functions:
 
   customResource:
     handler: src/fns/customResourceFirebase.handler
+    layers:
+      # - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
+      - ${self:custom.LAYER_REF.${self:custom.config}}
 
 
 resources:
