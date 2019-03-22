@@ -87,6 +87,10 @@ custom:
         - Ref: "ApiGatewayRestApi"
         - ".execute-api.${self:custom.region}.amazonaws.com/${self:custom.target}"
 
+  LAYER_REF:
+    local: "not used"
+    test: ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport, ""} # without this fallback i cant sls dynamodb install
+
   # (because Ref: fns don't get run in `sls offline`)
   # this jiggery pokery is needed
   # to enable these env vars in `sls offline`
@@ -168,7 +172,8 @@ functions:
   graphql:
     handler: src/fns/graphql/graphql.handler
     layers:
-      - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
+      # - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
+      - ${self:custom.LAYER_REF.${self:custom.config}}
     events:
       - http:
           path: graphql
@@ -178,7 +183,8 @@ functions:
   graphiql:
     handler: src/fns/graphiql.handler
     layers:
-      - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
+      # - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
+      - ${self:custom.LAYER_REF.${self:custom.config}}
     events:
       - http:
           path: graphiql
@@ -199,7 +205,8 @@ functions:
           cors: true
     handler: src/fns/startHarvestActiveUser.handler
     layers:
-      - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
+      # - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
+      - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
       QUEUE_TARGET: ${self:custom.ref.QueueHiFetchSpotifyPlays}
 
@@ -214,7 +221,8 @@ functions:
           cors: true
     handler: src/fns/startHarvestAllUsers.handler
     layers:
-      - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
+      # - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
+      - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
       TABLE_SOURCE: ${self:custom.ref.TableProfile}
       QUEUE_TARGET: ${self:custom.ref.QueueHiFetchSpotifyPlays}
@@ -230,7 +238,8 @@ functions:
           cors: true
     handler: src/fns/createProfile.handler
     layers:
-      - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
+      # - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
+      - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
       TABLE_TARGET: ${self:custom.ref.TableProfile}
 
@@ -242,7 +251,8 @@ functions:
             Fn::GetAtt: [ TableProfile, StreamArn ]
     handler: src/fns/onProfileAdd.handler
     layers:
-      - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
+      # - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
+      - ${self:custom.LAYER_REF.${self:custom.config}}
 
   # if the profile's external poll is stale
   # run it and feed the response into a stream
@@ -253,7 +263,8 @@ functions:
             Fn::GetAtt: [ QueueHiFetchSpotifyPlays, Arn ]
     handler: src/fns/fetchSpotifyPlays.handler
     layers:
-      - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
+      # - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
+      - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
       STALE_MS: 30000 # 30 sec
       FETCH_COUNT: 2 # 2 songs
@@ -272,7 +283,8 @@ functions:
       TABLE_TARGET: 'plays'
     handler: src/fns/createPlayFromSpotify.handler
     layers:
-      - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
+      # - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
+      - ${self:custom.LAYER_REF.${self:custom.config}}
 
 
   # createPlayFromSpotify_LO:
@@ -346,7 +358,8 @@ functions:
   customResource:
     handler: src/fns/customResourceFirebase.handler
     layers:
-      - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
+      # - ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport}
+      - ${self:custom.LAYER_REF.${self:custom.config}}
 
 
 resources:
