@@ -19,4 +19,4 @@ resources:
         Value:
           Ref: NpmLambdaLayer
         Export:
-          Name: NpmLambdaLayer
+          Name: SpAppBackLayer${self:custom.target}NpmLambdaLayer

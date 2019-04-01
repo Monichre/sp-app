@@ -35,11 +35,16 @@ export const Dash: React.SFC = () => {
   useUserChange(user => !user && window.location.replace('/'))
   const { user, isLoading } = useUser()
   if (isLoading) { return <div>Loading</div> }
+  if (!user) { return <div>User not found!</div>}
   return (
     <LayoutAppBar>
-      <h1>My Dash</h1>
-      <EnterSpotifyAuth/>
-      <DebugPrint title='Firebase Auth User' value={user}/>
+      <h1 style={{textAlign: 'center'}}>
+        Welcome to Soundpruf,
+        <br/>
+        <span data-test="displayName">{user.displayName}</span>
+      </h1>
+      {/* <EnterSpotifyAuth/>
+      <DebugPrint title='Firebase Auth User' value={user}/> */}
     </LayoutAppBar>
   )
 }

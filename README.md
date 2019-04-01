@@ -2,6 +2,10 @@
 
 Monorepo for services that deliver the Soundpruf app.
 
+# IMPORTANT:
+
+A critical manual dependency has been introduced: our spotify app configuration.  For brand-new deployments, this will need to be manually configured.  This only has to be done once for every deployment target.  See more under **deploying**.
+
 # services overview
 
 Each service has its own `serverless.yml` for deployment.
@@ -60,6 +64,24 @@ A **TARGET** is an arbitrarily-named stack that you want to deploy to.
 - `local` is a special **TARGET** that should not be used for deployment.  Some bits use this target to behave differently.
 
 A **CONFIG** is a collection of settings.  It should map to a SSM Parameter path.
+
+
+## CRITICAL MANUAL DEPENDENCY
+
+**NOTE:** we are currently using a test spotify app under stevo's personal account.  We will need to create a spotify service account so we can publish a few apps and manage them together.  The following instructions are where we want to be.
+
+You need to update the authorized domains every time you deploy to a completely new target:
+- log in to the spotify developer console with our service account
+- select the spotify app that matches the config you are using for the target
+- add a domain name that follows the pattern you see, for the new target you're deploying to.
+
+### Thoughts on automating this
+
+We have a spotify app, we use its credentials in the login-with-spotify process and other back-end stuff.  But it needs to be configured to accept auth requests from specific domains.  So when we deploy to a target on an arbitrary AWS domain, it doesn't work.  You have to manually go into the app console and add an auth domain for whatever you just deployed.
+
+You cannot use wildcards.  There is no API that I could find that lets you change that setting.
+
+Only option I can think of: a puppeteer script that actually logs in to the damn console and clicks on things to make the change happen.
 
 ## full stack
 
