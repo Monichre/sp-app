@@ -28,15 +28,19 @@ const BlackPage = styled.div`
   }
 `
 
+// react suspense isnt ready for async data loading in 16.8.x...
+const Loading: React.SFC = () => <div>Loading...</div>
 
 export const App: React.SFC = () =>
   <FirebaseContext.Provider value={firebase}>
     <ApolloProvider client={client}>
       <BlackPage>
-      <Router>
-        <Route exact path='/' component={Home}/>
-        <Route path='/customAuth' component={CustomAuth}/>
-      </Router>
+        <React.Suspense fallback={<Loading/>}>
+          <Router>
+            <Route exact path='/' component={Home}/>
+            <Route path='/customAuth' component={CustomAuth}/>
+          </Router>
+        </React.Suspense>
       </BlackPage>
     </ApolloProvider>
   </FirebaseContext.Provider>
