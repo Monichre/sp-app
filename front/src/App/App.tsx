@@ -11,7 +11,8 @@ import styled from 'styled-components';
 const client = new ApolloClient({
   uri: `${process.env.REACT_APP_API_ENDPOINT}/graphql`,
 })
-const firebase = createFirebase({ // wrap this to validate and type it
+
+const firebase = createFirebase({ // wrap this config to validate and type it
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
   databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
@@ -29,6 +30,7 @@ const BlackPage = styled.div`
 `
 
 // react suspense isnt ready for async data loading in 16.8.x...
+// but somehow react-apollo-hooks supports it
 const Loading: React.SFC = () => <div>Loading...</div>
 
 export const App: React.SFC = () =>

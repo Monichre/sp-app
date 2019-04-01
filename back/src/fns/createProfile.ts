@@ -1,7 +1,10 @@
 import * as AWS from 'aws-sdk';
 import { Handler, APIGatewayEvent } from "aws-lambda";
-import { config } from './config';
+// import { config } from './config';
 import * as uuid from 'uuid/v1'
+
+// not used atm
+
 
 export const handler: Handler<APIGatewayEvent> = async (event, context) => {
   console.log('function', JSON.stringify(context.invokedFunctionArn, null, 2))
@@ -9,8 +12,8 @@ export const handler: Handler<APIGatewayEvent> = async (event, context) => {
   console.log('requestContext.identity', event.requestContext.identity)
   console.log('env.TABLE_TARGET', process.env.TABLE_TARGET)
 
-  const params = await config()
-  console.log('params', params)
+  // const params = await config()
+  // console.log('params', params)
   const args = JSON.parse(event.body)
   console.log('args', args)
 
@@ -27,7 +30,7 @@ export const handler: Handler<APIGatewayEvent> = async (event, context) => {
     }
   }).promise()
   // const result = await dyn.putItem({
-  //   // TableName: "TableProfile",
+  //   // TableName: "TableUser",
   //   TableUrl: "",
   //   Item: {
   //     "pk": {

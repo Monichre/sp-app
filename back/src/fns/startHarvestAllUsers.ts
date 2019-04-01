@@ -1,26 +1,32 @@
 import { ScheduledHandler, ScheduledEvent, Context, APIGatewayEvent, APIGatewayProxyResult, Handler } from "aws-lambda";
-import * as AWS from 'aws-sdk';
+import { verifyEnv } from "../shared/env";
+import { TableUser } from "../shared/tables/TableUser";
+import { QueueFetchSpotifyPlays } from "../shared/queues";
+
 
 export const handler: Handler<ScheduledEvent | APIGatewayEvent, void | APIGatewayProxyResult> = async (event, context) => {
-  console.log('event', JSON.stringify(event, null, 2))
+  const env = verifyEnv({
+    DYNAMO_ENDPOINT: process.env.DYNAMO_ENDPOINT,
+    TABLE_SOURCE: process.env.TABLE_SOURCE,
+    QUEUE_TARGET: process.env.QUEUE_TARGET
+  })
+  const table = TableUser(env.DYNAMO_ENDPOINT, env.TABLE_SOURCE)
+  const creds = await table.getAllSpotifyCreds()
 
-  const doc = new AWS.DynamoDB.DocumentClient({endpoint: process.env.DYNAMO_ENDPOINT})
-  const results = await doc.scan({
-    TableName: process.env.TABLE_SOURCE
-  }).promise()
-  console.log('results', results)
-
-  const sqs = new AWS.SQS()
-  for (const result of results.Items) {
-    const result = await sqs.sendMessage({
-      MessageBody: JSON.stringify({profileId: '1234'}),
-      QueueUrl: process.env.QUEUE_TARGET,
-    }).promise()  
+  for (const cred of creds) {
+    await QueueFetchSpotifyPlays.publish( env.QUEUE_TARGET, {
+      uid: cred.uid,
+      accessToken: cred.accessToken,
+      refreshToken: cred.refreshToken,
+    })
   }
   if (event['httpMethod']) { // hacky test to see if its being called from http
     return {
       statusCode: 200,
-      body: JSON.stringify({message: `${results.Items.length} users harvesting`}, null, 2)
+      body: JSON.stringify({
+        message: `${creds.length} users harvesting`,
+        uids: creds.map(i => i.uid)
+      }, null, 2)
     }  
   }
 

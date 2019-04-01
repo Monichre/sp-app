@@ -1,4 +1,4 @@
-// Generated in 2019-03-18T01:42:38-07:00
+// Generated in 2019-03-26T12:58:13-07:00
 // REGENERATE THIS BY STARTING THE LOCAL SERVER
 // AND THEN RUNNING `back % yarn generate`
 
@@ -54,10 +54,34 @@ export interface Query {
   _?: Maybe<string>;
 
   ping?: Maybe<BasicResponse>;
+
+  recentPlays: RecentPlaysResponse;
 }
 
 export interface BasicResponse {
   ok?: Maybe<boolean>;
+}
+
+export interface RecentPlaysResponse {
+  lastUpdate?: Maybe<string>;
+
+  plays: Play[];
+}
+
+export interface Play {
+  track: Track;
+
+  playedAt: string;
+}
+
+export interface Track {
+  name: string;
+
+  artists: Artist[];
+}
+
+export interface Artist {
+  name: string;
 }
 
 export interface Mutation {
@@ -72,6 +96,9 @@ export interface Mutation {
 // Arguments
 // ====================================================
 
+export interface RecentPlaysQueryArgs {
+  uid: string;
+}
 export interface OnLoginMutationArgs {
   user: FirebaseUser;
 }
@@ -82,6 +109,8 @@ export interface UpdateSpotifyAuthMutationArgs {
 }
 
 import { GraphQLResolveInfo } from "graphql";
+
+import { Context } from "./graphql";
 
 export type Resolver<Result, Parent = {}, TContext = {}, Args = {}> = (
   parent: Parent,
@@ -133,45 +162,131 @@ export type DirectiveResolverFn<TResult, TArgs = {}, TContext = {}> = (
 ) => TResult | Promise<TResult>;
 
 export namespace QueryResolvers {
-  export interface Resolvers<TContext = {}, TypeParent = {}> {
+  export interface Resolvers<TContext = Context, TypeParent = {}> {
     dummy?: DummyResolver<Maybe<string>, TypeParent, TContext>;
 
     _?: _Resolver<Maybe<string>, TypeParent, TContext>;
 
     ping?: PingResolver<Maybe<BasicResponse>, TypeParent, TContext>;
+
+    recentPlays?: RecentPlaysResolver<
+      RecentPlaysResponse,
+      TypeParent,
+      TContext
+    >;
   }
 
   export type DummyResolver<
     R = Maybe<string>,
     Parent = {},
-    TContext = {}
+    TContext = Context
   > = Resolver<R, Parent, TContext>;
   export type _Resolver<
     R = Maybe<string>,
     Parent = {},
-    TContext = {}
+    TContext = Context
   > = Resolver<R, Parent, TContext>;
   export type PingResolver<
     R = Maybe<BasicResponse>,
     Parent = {},
-    TContext = {}
+    TContext = Context
   > = Resolver<R, Parent, TContext>;
+  export type RecentPlaysResolver<
+    R = RecentPlaysResponse,
+    Parent = {},
+    TContext = Context
+  > = Resolver<R, Parent, TContext, RecentPlaysArgs>;
+  export interface RecentPlaysArgs {
+    uid: string;
+  }
 }
 
 export namespace BasicResponseResolvers {
-  export interface Resolvers<TContext = {}, TypeParent = BasicResponse> {
+  export interface Resolvers<TContext = Context, TypeParent = BasicResponse> {
     ok?: OkResolver<Maybe<boolean>, TypeParent, TContext>;
   }
 
   export type OkResolver<
     R = Maybe<boolean>,
     Parent = BasicResponse,
-    TContext = {}
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace RecentPlaysResponseResolvers {
+  export interface Resolvers<
+    TContext = Context,
+    TypeParent = RecentPlaysResponse
+  > {
+    lastUpdate?: LastUpdateResolver<Maybe<string>, TypeParent, TContext>;
+
+    plays?: PlaysResolver<Play[], TypeParent, TContext>;
+  }
+
+  export type LastUpdateResolver<
+    R = Maybe<string>,
+    Parent = RecentPlaysResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type PlaysResolver<
+    R = Play[],
+    Parent = RecentPlaysResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace PlayResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = Play> {
+    track?: TrackResolver<Track, TypeParent, TContext>;
+
+    playedAt?: PlayedAtResolver<string, TypeParent, TContext>;
+  }
+
+  export type TrackResolver<
+    R = Track,
+    Parent = Play,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type PlayedAtResolver<
+    R = string,
+    Parent = Play,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace TrackResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = Track> {
+    name?: NameResolver<string, TypeParent, TContext>;
+
+    artists?: ArtistsResolver<Artist[], TypeParent, TContext>;
+  }
+
+  export type NameResolver<
+    R = string,
+    Parent = Track,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type ArtistsResolver<
+    R = Artist[],
+    Parent = Track,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace ArtistResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = Artist> {
+    name?: NameResolver<string, TypeParent, TContext>;
+  }
+
+  export type NameResolver<
+    R = string,
+    Parent = Artist,
+    TContext = Context
   > = Resolver<R, Parent, TContext>;
 }
 
 export namespace MutationResolvers {
-  export interface Resolvers<TContext = {}, TypeParent = {}> {
+  export interface Resolvers<TContext = Context, TypeParent = {}> {
     onLogin?: OnLoginResolver<Maybe<BasicResponse>, TypeParent, TContext>;
 
     updateSpotifyAuth?: UpdateSpotifyAuthResolver<
@@ -186,7 +301,7 @@ export namespace MutationResolvers {
   export type OnLoginResolver<
     R = Maybe<BasicResponse>,
     Parent = {},
-    TContext = {}
+    TContext = Context
   > = Resolver<R, Parent, TContext, OnLoginArgs>;
   export interface OnLoginArgs {
     user: FirebaseUser;
@@ -195,7 +310,7 @@ export namespace MutationResolvers {
   export type UpdateSpotifyAuthResolver<
     R = Maybe<BasicResponse>,
     Parent = {},
-    TContext = {}
+    TContext = Context
   > = Resolver<R, Parent, TContext, UpdateSpotifyAuthArgs>;
   export interface UpdateSpotifyAuthArgs {
     userId: string;
@@ -206,7 +321,7 @@ export namespace MutationResolvers {
   export type _Resolver<
     R = Maybe<string>,
     Parent = {},
-    TContext = {}
+    TContext = Context
   > = Resolver<R, Parent, TContext>;
 }
 
@@ -214,7 +329,7 @@ export namespace MutationResolvers {
 export type SkipDirectiveResolver<Result> = DirectiveResolverFn<
   Result,
   SkipDirectiveArgs,
-  {}
+  Context
 >;
 export interface SkipDirectiveArgs {
   /** Skipped when true. */
@@ -225,7 +340,7 @@ export interface SkipDirectiveArgs {
 export type IncludeDirectiveResolver<Result> = DirectiveResolverFn<
   Result,
   IncludeDirectiveArgs,
-  {}
+  Context
 >;
 export interface IncludeDirectiveArgs {
   /** Included when true. */
@@ -236,16 +351,20 @@ export interface IncludeDirectiveArgs {
 export type DeprecatedDirectiveResolver<Result> = DirectiveResolverFn<
   Result,
   DeprecatedDirectiveArgs,
-  {}
+  Context
 >;
 export interface DeprecatedDirectiveArgs {
   /** Explains why this element was deprecated, usually also including a suggestion for how to access supported similar data. Formatted using the Markdown syntax (as specified by [CommonMark](https://commonmark.org/). */
   reason?: string;
 }
 
-export type IResolvers<TContext = {}> = {
+export type IResolvers<TContext = Context> = {
   Query?: QueryResolvers.Resolvers<TContext>;
   BasicResponse?: BasicResponseResolvers.Resolvers<TContext>;
+  RecentPlaysResponse?: RecentPlaysResponseResolvers.Resolvers<TContext>;
+  Play?: PlayResolvers.Resolvers<TContext>;
+  Track?: TrackResolvers.Resolvers<TContext>;
+  Artist?: ArtistResolvers.Resolvers<TContext>;
   Mutation?: MutationResolvers.Resolvers<TContext>;
 } & { [typeName: string]: never };
 

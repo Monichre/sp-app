@@ -1,5 +1,0 @@
-query Ping {
-  ping {
-    ok
-  }
-}

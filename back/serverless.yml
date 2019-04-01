@@ -19,6 +19,7 @@ provider:
       Action:
         - dynamodb:GetItem
         - dynamodb:PutItem
+        - dynamodb:UpdateItem
         - dynamodb:BatchWriteItem
         - dynamodb:Query
         - dynamodb:DeleteItem
@@ -26,6 +27,7 @@ provider:
         - dynamodb:GetRecords
         - dynamodb:GetShardIterator
         - dynamodb:ListStreams
+        - dynamodb:Scan # i would really rather not
       Resource: arn:aws:dynamodb:*:*:table/*
     - Effect: Allow
       Action:
@@ -142,16 +144,22 @@ custom:
   # so the cfn reference will be used
   ref:
     QueueHiFetchSpotifyPlays: ${env:QueueHiFetchSpotifyPlays, self:custom.cfref.QueueHiFetchSpotifyPlays}
-    TableProfile: ${env:TableProfile, self:custom.cfref.TableProfile}
-    StreamCreatePlayFromSpotify: ${env:StreamCreatePlayFromSpotify, self:custom.cfref.StreamCreatePlayFromSpotify}
+    QueueStartHarvestUser: ${env:QueueStartHarvestUser, self:custom.cfref.QueueStartHarvestUser}
+    TableUser: ${env:TableUser, self:custom.cfref.TableUser}
+    TablePlay: ${env:TablePlay, self:custom.cfref.TablePlay}
+    # StreamCreatePlayFromSpotify: ${env:StreamCreatePlayFromSpotify, self:custom.cfref.StreamCreatePlayFromSpotify}
 
   cfref:
     QueueHiFetchSpotifyPlays:
       Ref: QueueHiFetchSpotifyPlays
-    TableProfile:
-      Ref: TableProfile
-    StreamCreatePlayFromSpotify:
-      Ref: StreamCreatePlayFromSpotify
+    QueueStartHarvestUser:
+      Ref: QueueStartHarvestUser
+    TableUser:
+      Ref: TableUser
+    TablePlay:
+      Ref: TablePlay
+    # StreamCreatePlayFromSpotify:
+    #   Ref: StreamCreatePlayFromSpotify
 
 ################################################################################
 # custom: PLUGINS
@@ -177,7 +185,7 @@ custom:
     seed:
       all:
         sources:
-          - table: ${self:custom.ref.TableProfile}
+          - table: ${self:custom.ref.TableUser}
             sources: [./config/seed/profile.json]
 
   dynamodbStream:
@@ -185,7 +193,7 @@ custom:
     port: 8888
     pollForever: true
     streams:
-      - table: ${self:custom.ref.TableProfile}
+      - table: ${self:custom.ref.TableUser}
         functions:
           - onProfileAdd
   webpack:
@@ -228,6 +236,7 @@ functions:
     layers:
       - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
+      TABLE_TARGET: ${self:custom.ref.TableUser}
       SPOTIFY_CLIENT_ID: ${ssm:${self:custom.ssmConfigPath}/SPOTIFY_CLIENT_ID}
       SPOTIFY_CLIENT_SECRET: ${ssm:${self:custom.ssmConfigPath}/SPOTIFY_CLIENT_SECRET}
       SPOTIFY_REDIRECT_URI: ${self:custom.SPOTIFY_REDIRECT_URI.${self:custom.config}}
@@ -235,6 +244,7 @@ functions:
       FIREBASE_CLIENT_EMAIL: ${ssm:${self:custom.ssmConfigPath}/FIREBASE_CLIENT_EMAIL}
       FIREBASE_PRIVATE_KEY: ${ssm:${self:custom.ssmConfigPath}/FIREBASE_PRIVATE_KEY}
       FRONTEND_CUSTOMAUTH_URI: ${self:custom.FRONTEND_CUSTOMAUTH_URI.${self:custom.config}}
+      QUEUE_TARGET: ${self:custom.ref.QueueHiFetchSpotifyPlays}
     events:
       - http:
           path: "spotify/callback"
@@ -254,6 +264,10 @@ functions:
           path: graphql
           method: post
           cors: true
+    environment:
+      TABLE_PLAY: ${self:custom.ref.TablePlay}
+      TABLE_USER: ${self:custom.ref.TableUser}
+      QUEUE_START_HARVEST_USER: ${self:custom.ref.QueueStartHarvestUser}
 
   graphiql:
     handler: src/fns/graphiql.handler
@@ -280,14 +294,14 @@ functions:
     layers:
       - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
-      TABLE_TARGET: ${self:custom.ref.TableProfile}
+      TABLE_TARGET: ${self:custom.ref.TableUser}
 
   onProfileAdd:
     events:
       - stream:
           type: dynamodb
           arn:
-            Fn::GetAtt: [ TableProfile, StreamArn ]
+            Fn::GetAtt: [ TableUser, StreamArn ]
     handler: src/fns/onProfileAdd.handler
     layers:
       - ${self:custom.LAYER_REF.${self:custom.config}}
@@ -302,15 +316,15 @@ functions:
   # this should be a graphql mutation eg announcePresence
   startHarvestActiveUser:
     events:
-      - http:
-          path: heartbeat
-          method: post
-          cors: true
-    handler: src/fns/startHarvestActiveUser.handler
+      - sqs:
+          arn:
+            Fn::GetAtt: [ QueueStartHarvestUser, Arn ]
+    handler: src/fns/startHarvestUser.handler
     layers:
       - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
-      QUEUE_TARGET: ${self:custom.ref.QueueHiFetchSpotifyPlays}
+      TABLE_USER: ${self:custom.ref.TableUser}
+      QUEUE_FETCH_SPOTIFY_PLAYS: ${self:custom.ref.QueueHiFetchSpotifyPlays}
 
   # scheduled job that triggers a harvest for all users
   # sends its triggers to a less time-sensitive queue
@@ -325,7 +339,7 @@ functions:
     layers:
       - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
-      TABLE_SOURCE: ${self:custom.ref.TableProfile}
+      TABLE_SOURCE: ${self:custom.ref.TableUser}
       QUEUE_TARGET: ${self:custom.ref.QueueHiFetchSpotifyPlays}
 
 
@@ -342,21 +356,25 @@ functions:
     environment:
       STALE_MS: 30000 # 30 sec
       FETCH_COUNT: 2 # 2 songs
-      TABLE_SOURCE: ${self:custom.ref.TableProfile}
-      STREAM_TARGET: ${self:custom.ref.StreamCreatePlayFromSpotify}
+      TABLE_TARGET: ${self:custom.ref.TablePlay}
+      TABLE_USER: ${self:custom.ref.TableUser}
+      # STREAM_TARGET: ${self:custom.ref.StreamCreatePlayFromSpotify}
+      SPOTIFY_CLIENT_ID: ${ssm:${self:custom.ssmConfigPath}/SPOTIFY_CLIENT_ID}
+      SPOTIFY_CLIENT_SECRET: ${ssm:${self:custom.ssmConfigPath}/SPOTIFY_CLIENT_SECRET}
+      SPOTIFY_REDIRECT_URI: ${self:custom.SPOTIFY_REDIRECT_URI.${self:custom.config}}
 
-  createPlayFromSpotify:
-    events:
-      - stream:
-          type: kinesis
-          startingPosition: LATEST
-          arn:
-            Fn::GetAtt: [StreamCreatePlayFromSpotify, Arn]
-    environment:
-      TABLE_TARGET: 'plays'
-    handler: src/fns/createPlayFromSpotify.handler
-    layers:
-      - ${self:custom.LAYER_REF.${self:custom.config}}
+  # createPlayFromSpotify:
+  #   events:
+  #     - stream:
+  #         type: kinesis
+  #         startingPosition: LATEST
+  #         arn:
+  #           Fn::GetAtt: [StreamCreatePlayFromSpotify, Arn]
+  #   environment:
+  #     TABLE_TARGET: 'plays'
+  #   handler: src/fns/createPlayFromSpotify.handler
+  #   layers:
+  #     - ${self:custom.LAYER_REF.${self:custom.config}}
 
   # design notes for rest of harvest
   # onPlayUpdateStats:
@@ -466,13 +484,13 @@ resources:
         TestInput: myInput
 
 ################################################################################
-# resources: prototype USER PROFILES
+# resources: USER INFO
 ################################################################################
 
-    TableProfile:
+    TableUser:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:custom.ns}-TableProfile
+        TableName: ${self:custom.ns}-TableUser
         AttributeDefinitions:
           - AttributeName: pk
             AttributeType: S
@@ -493,13 +511,38 @@ resources:
 # resources: prototype HARVEST
 ################################################################################
 
+    TablePlay:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.ns}-TablePlay
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
+
+    QueueStartHarvestUser:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:custom.ns}-QueueStartHarvestUser
+
     QueueHiFetchSpotifyPlays:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: ${self:custom.ns}-QueueHiFetchSpotifyPlays
 
-    StreamCreatePlayFromSpotify:
-      Type: AWS::Kinesis::Stream
-      Properties:
-        Name: ${self:custom.ns}-StreamCreatePlayFromSpotify
-        ShardCount: 1
+    # StreamCreatePlayFromSpotify:
+    #   Type: AWS::Kinesis::Stream
+    #   Properties:
+    #     Name: ${self:custom.ns}-StreamCreatePlayFromSpotify
+    #     ShardCount: 1

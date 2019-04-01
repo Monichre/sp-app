@@ -1,4 +1,4 @@
-// Generated in 2019-03-17T22:54:32-07:00
+// Generated in 2019-03-26T12:59:35-07:00
 // REGENERATE THIS BY STARTING THE LOCAL BACKEND
 // AND THEN RUNNING `front % yarn generate`
 
@@ -48,51 +48,44 @@ export interface SpotifyCredentials {
 // Documents
 // ====================================================
 
-export type OnLoginVariables = {
-  user: FirebaseUser;
+export type RecentPlaysVariables = {
+  uid: string;
 };
 
-export type OnLoginMutation = {
-  __typename?: "Mutation";
-
-  onLogin: Maybe<OnLoginOnLogin>;
-};
-
-export type OnLoginOnLogin = {
-  __typename?: "BasicResponse";
-
-  ok: Maybe<boolean>;
-};
-
-export type PingVariables = {};
-
-export type PingQuery = {
+export type RecentPlaysQuery = {
   __typename?: "Query";
 
-  ping: Maybe<PingPing>;
+  recentPlays: RecentPlaysRecentPlays;
 };
 
-export type PingPing = {
-  __typename?: "BasicResponse";
+export type RecentPlaysRecentPlays = {
+  __typename?: "RecentPlaysResponse";
 
-  ok: Maybe<boolean>;
+  lastUpdate: Maybe<string>;
+
+  plays: RecentPlaysPlays[];
 };
 
-export type UpdateSpotifyAuthVariables = {
-  userId: string;
-  creds: SpotifyCredentials;
+export type RecentPlaysPlays = {
+  __typename?: "Play";
+
+  playedAt: string;
+
+  track: RecentPlaysTrack;
 };
 
-export type UpdateSpotifyAuthMutation = {
-  __typename?: "Mutation";
+export type RecentPlaysTrack = {
+  __typename?: "Track";
 
-  updateSpotifyAuth: Maybe<UpdateSpotifyAuthUpdateSpotifyAuth>;
+  name: string;
+
+  artists: RecentPlaysArtists[];
 };
 
-export type UpdateSpotifyAuthUpdateSpotifyAuth = {
-  __typename?: "BasicResponse";
+export type RecentPlaysArtists = {
+  __typename?: "Artist";
 
-  ok: Maybe<boolean>;
+  name: string;
 };
 
 import gql from "graphql-tag";
@@ -102,54 +95,27 @@ import * as ReactApolloHooks from "react-apollo-hooks";
 // Components
 // ====================================================
 
-export const OnLoginDocument = gql`
-  mutation OnLogin($user: FirebaseUser!) {
-    onLogin(user: $user) {
-      ok
+export const RecentPlaysDocument = gql`
+  query RecentPlays($uid: String!) {
+    recentPlays(uid: $uid) {
+      lastUpdate
+      plays {
+        playedAt
+        track {
+          name
+          artists {
+            name
+          }
+        }
+      }
     }
   }
 `;
-export function useOnLogin(
-  baseOptions?: ReactApolloHooks.MutationHookOptions<
-    OnLoginMutation,
-    OnLoginVariables
-  >
+export function useRecentPlays(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<RecentPlaysVariables>
 ) {
-  return ReactApolloHooks.useMutation<OnLoginMutation, OnLoginVariables>(
-    OnLoginDocument,
+  return ReactApolloHooks.useQuery<RecentPlaysQuery, RecentPlaysVariables>(
+    RecentPlaysDocument,
     baseOptions
   );
-}
-export const PingDocument = gql`
-  query Ping {
-    ping {
-      ok
-    }
-  }
-`;
-export function usePing(
-  baseOptions?: ReactApolloHooks.QueryHookOptions<PingVariables>
-) {
-  return ReactApolloHooks.useQuery<PingQuery, PingVariables>(
-    PingDocument,
-    baseOptions
-  );
-}
-export const UpdateSpotifyAuthDocument = gql`
-  mutation UpdateSpotifyAuth($userId: String!, $creds: SpotifyCredentials!) {
-    updateSpotifyAuth(userId: $userId, creds: $creds) {
-      ok
-    }
-  }
-`;
-export function useUpdateSpotifyAuth(
-  baseOptions?: ReactApolloHooks.MutationHookOptions<
-    UpdateSpotifyAuthMutation,
-    UpdateSpotifyAuthVariables
-  >
-) {
-  return ReactApolloHooks.useMutation<
-    UpdateSpotifyAuthMutation,
-    UpdateSpotifyAuthVariables
-  >(UpdateSpotifyAuthDocument, baseOptions);
 }

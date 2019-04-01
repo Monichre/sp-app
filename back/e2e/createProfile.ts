@@ -43,14 +43,16 @@ const uri = 'http://localhost:4000/createProfile'
 // const email = 'adnordenson@gmail.com'
 // const expectedName = 'Alex Nordenson'
 
-test('poke it', async () => {
-  const response = await rp({
-    method: 'POST',
-    uri,
-    body: { Foo: 'faz' },
-    json: true
-  })
+// not used
 
-  console.log('respose', response)
+// test('poke it', async () => {
+//   const response = await rp({
+//     method: 'POST',
+//     uri,
+//     body: { Foo: 'faz' },
+//     json: true
+//   })
 
-})
+//   console.log('respose', response)
+
+// })

@@ -1,4 +1,8 @@
 import { Resource } from '@google-cloud/resource'
+
+// not used atm
+
+
 // import { GoogleAuth, auth } from 'google-auth-library';
 
 // once we get this working, see how hard it is to use the http api

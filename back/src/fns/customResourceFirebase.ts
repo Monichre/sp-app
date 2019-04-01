@@ -1,6 +1,7 @@
 import { CloudFormationCustomResourceHandler } from "aws-lambda";
 import { createGCPWithFBAuth } from './createGCPWithFBAuth'
 
+
 // clean this shit up
 // TODO: handle resource-remove
 export const handler: CloudFormationCustomResourceHandler = async (event, context) => {

@@ -2,6 +2,8 @@ schema: http://localhost:4000/graphql
 overwrite: true
 generates:
   ./src/fns/graphql/types.d.ts:
+    config:
+      contextType: ./graphql#Context
     plugins:
       - time
       - add: '// REGENERATE THIS BY STARTING THE LOCAL SERVER'

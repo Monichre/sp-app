@@ -1,91 +1,62 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
-import * as firebase from 'firebase-admin'
 
-import { api } from './api'
+import { SpotifyApi } from '../../shared/SpotifyApi'
+import { TableUser } from '../../shared/tables/TableUser';
+import { verifyEnv } from '../../shared/env';
+import { QueueFetchSpotifyPlays } from '../../shared/queues';
+import { FirebaseAuth, UserAttrs } from '../../shared/FirebaseAuth';
 
-const uidFromSpotifyId = spotifyId => `spotify:${spotifyId}`
-
-// this will end up in our own typings for spotify api validation interface
-type SpotifyMeResult = {
-  display_name: string
-  email: string
-  id: string
-  images: {url: string}[]
-}
-
-// this firebase-related logic will likely end up being shared
-const firebaseAuth = async () => {
-  if (firebase.apps.length > 0) {
-    // in offline, the firebase app stays open and changes to env dont propagate
-    // if youre testing this fn, you may need:
-    // await firebase.apps[0].delete()
-    // dont deploy that anywhere meaningful!
-    return firebase.apps[0].auth()
-  }
-  const serviceAccount = {
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-  }
-  firebase.initializeApp({
-    credential: firebase.credential.cert(serviceAccount)
-  })
-  return firebase.auth()
-}
-
-const userUpdateRequestFromSpotify = ({display_name: displayName, email, images}: SpotifyMeResult) => {
-  const result: firebase.auth.UpdateRequest = { displayName, email }
-  if (images && images[0] && images[0].url) { result.photoURL = images[0].url }
-  return result
-}
-
-const userCreateRequestFromSpotify = (me: SpotifyMeResult) => ({
-  uid: uidFromSpotifyId(me.id),
-  ...userUpdateRequestFromSpotify(me)
-})
-
-// this is actually fairly specific to this handler
-// might be re-used if we do a script that imports old accounts
-// actually there is a more generic getOrCreateUser that would just take an email and the request args
-const getOrCreateUserFromSpotify = async (auth: firebase.auth.Auth, me: SpotifyMeResult) => {
-  try {
-    const existing = await auth.getUserByEmail(me.email) // or throw and catch
-    const req = userUpdateRequestFromSpotify(me)
-    await auth.updateUser(existing.uid, req)
-    return existing
-  } catch (err) {
-    console.log('caught err', err) // this should just be 'user exists' error
-    const req = userCreateRequestFromSpotify(me)
-    const user = await auth.createUser(req)
-    return user
-  }
-}
+// i doth mislike how many separate interests that this handler manages
+// suggests mebbe this should be broken out
+// what are the concerns we can seperate
 
 export const handler: APIGatewayProxyHandler = async (event) => {
-  // set up spotify api client
-  const spotify = api()
+  const env = verifyEnv({
+    DYNAMO_ENDPOINT: process.env.DYNAMO_ENDPOINT,
+    TABLE_TARGET: process.env.TABLE_TARGET,
+    QUEUE_TARGET: process.env.QUEUE_TARGET,
+    FRONTEND_CUSTOMAUTH_URI: process.env.FRONTEND_CUSTOMAUTH_URI,
+  })
+  const spotify = SpotifyApi() // we should really be passing spotify creds here imo
 
   // the use code from spotify grant to get acccess and refresh tokens from api
   const code = event.queryStringParameters['code']
-  const result = await spotify.authorizationCodeGrant(code)
-  const { body: { access_token, refresh_token }} = result
+  const { body: { access_token, refresh_token }} = await spotify.authorizationCodeGrant(code)
   spotify.setAccessToken(access_token)
   spotify.setRefreshToken(refresh_token)
-  // somwhere here is where we would save these external credentials for the user
-  // for future use by harvester
 
   // get the user info from spotify
   const { body: me } = await spotify.getMe()
 
-  // connect to firebase auth
-  const auth = await firebaseAuth()
-  // get an existing user by email or create a new user
-  // note: this will get more challenging
-  // when we have multiple auth sources beyond just spotify
-  // eg email, facebook, etc
-  // firebase auth users have to have a unique email
-  // but you can link multiple auth providers to a single user
-  const user = await getOrCreateUserFromSpotify(auth, me)
+  // get or create a user based on the result of that
+  const auth = await FirebaseAuth()
+  const userAttrs: UserAttrs = {
+    displayName: me.display_name,
+    email: me.email,
+    // photoUrl: me.images.length > 0 && me.images[0].url || 'no image',
+    spotifyId: me.id,
+  }
+  if (me.images.length > 0) { userAttrs.photoUrl = me.images[0].url }
+  const user = await auth.getOrCreate(userAttrs)
+
+  // update the user's credentials in the table for future use by harvest &c
+  const table = TableUser(env.DYNAMO_ENDPOINT, env.TABLE_TARGET)
+  const creds = {
+    uid: user.uid,
+    accessToken: access_token,
+    refreshToken: refresh_token,
+    spotifyId: me.id,
+  }
+  // console.log(`inserting new creds to ${env.DYNAMO_ENDPOINT}${env.TABLE_TARGET}: ${JSON.stringify(creds, null, 2)}`)
+  await table.setSpotifyCreds(creds)
+
+  // and trigger an immediate poll of their recentlyPlayed
+  // maybe this should be a ddb stream handler on update?
+  await QueueFetchSpotifyPlays.publish(env.QUEUE_TARGET, {
+    uid: user.uid,
+    accessToken: access_token,
+    refreshToken: refresh_token,
+  })
 
   // generate a customToken that we can give back to the front end
   // which it uses to authenticate the firebase user on the client
@@ -93,7 +64,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   return {
     statusCode: 302,
     headers: {
-      Location: `${process.env.FRONTEND_CUSTOMAUTH_URI}?customAccessToken=${customToken}`,      
+      Location: `${env.FRONTEND_CUSTOMAUTH_URI}?customAccessToken=${customToken}`,      
     },
     body: ""
   }

@@ -1,6 +1,8 @@
 import { makeExecutableSchema } from "graphql-tools";
 import { MutationResolvers } from "../types";
 
+// btw none of this is actually used anywhere
+
 const typeDefs = `
 type Query {
   dummy: String

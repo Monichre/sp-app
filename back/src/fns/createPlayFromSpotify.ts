@@ -1,5 +1,7 @@
 import { KinesisStreamHandler } from "aws-lambda";
 
+// not used atm
+
 export const handler: KinesisStreamHandler = async (event, context) => {
   // console.log('kinesis:', JSON.stringify(event, null, 2))
   const datas = event.Records.map(r => {

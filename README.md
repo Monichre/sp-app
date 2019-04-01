@@ -172,7 +172,7 @@ Most AWS resources that you add to serverless.yml will require some shenanigans 
 
 (explain madness with custom.cfref and .ref, need to update local.env)
 
-If you want to reference a resource in a lambda, pass it as a env variable to that lambda with a generic name.  e.g. TABLE_TARGET not TableProfile.
+If you want to reference a resource in a lambda, pass it as a env variable to that lambda with a generic name.  e.g. TABLE_TARGET not TableUser.
 
 #### Kinesis Streams
 

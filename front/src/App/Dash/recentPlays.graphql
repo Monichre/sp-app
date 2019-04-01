@@ -1,0 +1,14 @@
+query RecentPlays($uid: String!) {
+  recentPlays(uid: $uid) {
+    lastUpdate
+    plays {
+      playedAt
+      track {
+        name
+        artists {
+          name
+        }
+      }
+    }
+  }
+}

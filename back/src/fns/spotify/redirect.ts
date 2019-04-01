@@ -1,5 +1,5 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
-import { api } from './api'
+import { SpotifyApi } from '../../shared/SpotifyApi';
 
 const scopes = [
   'user-read-recently-played',
@@ -18,7 +18,7 @@ const scopes = [
 ]
 
 export const handler: APIGatewayProxyHandler = async (event) => {
-  const spotify = api()
+  const spotify = SpotifyApi()
   const state = 'test'
   const Location = spotify.createAuthorizeURL(scopes, state)
 
