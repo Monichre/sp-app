@@ -31,6 +31,10 @@ const PlayItem: React.SFC<{play: RecentPlaysPlays}> = ({play}) =>
     <Moment fromNow>
       {play.playedAt}
     </Moment>
+    <br/>
+    <Moment format='ddd D MMM h:mm a'>
+      {play.playedAt}
+    </Moment>
   </Card>
 
 // thought i needed this for graphql polling, dont

@@ -1,4 +1,4 @@
-// Generated in 2019-03-26T12:59:35-07:00
+// Generated in 2019-03-27T20:29:33-07:00
 // REGENERATE THIS BY STARTING THE LOCAL BACKEND
 // AND THEN RUNNING `front % yarn generate`
 
@@ -48,6 +48,24 @@ export interface SpotifyCredentials {
 // Documents
 // ====================================================
 
+export type PlaytimeSummaryVariables = {
+  uid: string;
+};
+
+export type PlaytimeSummaryQuery = {
+  __typename?: "Query";
+
+  playtimeSummary: PlaytimeSummaryPlaytimeSummary;
+};
+
+export type PlaytimeSummaryPlaytimeSummary = {
+  __typename?: "PlaytimeSummaryResponse";
+
+  today: number;
+
+  thisMonth: number;
+};
+
 export type RecentPlaysVariables = {
   uid: string;
 };
@@ -95,6 +113,22 @@ import * as ReactApolloHooks from "react-apollo-hooks";
 // Components
 // ====================================================
 
+export const PlaytimeSummaryDocument = gql`
+  query PlaytimeSummary($uid: String!) {
+    playtimeSummary(uid: $uid) {
+      today
+      thisMonth
+    }
+  }
+`;
+export function usePlaytimeSummary(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<PlaytimeSummaryVariables>
+) {
+  return ReactApolloHooks.useQuery<
+    PlaytimeSummaryQuery,
+    PlaytimeSummaryVariables
+  >(PlaytimeSummaryDocument, baseOptions);
+}
 export const RecentPlaysDocument = gql`
   query RecentPlays($uid: String!) {
     recentPlays(uid: $uid) {

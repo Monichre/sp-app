@@ -5,6 +5,9 @@ import { verifyEnv } from "../shared/env";
 import { QueueFetchSpotifyPlays } from "../shared/queues";
 import { TableUser } from '../shared/tables/TableUser';
 
+import { slog } from "./logger";
+const log = slog.child({handler: 'fetchSpotifyPlays', awsEvent: 'sqs'})
+
 // trimming off ms greatly reduces spurious repeat results from spotify api
 const sanitizeSpotifyPlayedAt = (p: string) => `${p.split('.')[0]}.000Z`
 
@@ -21,7 +24,7 @@ export const handler: SQSHandler = async (event) => {
     DYNAMO_ENDPOINT: process.env.DYNAMO_ENDPOINT,
     TABLE_TARGET: process.env.TABLE_TARGET,
     TABLE_USER: process.env.TABLE_USER,
-  })
+  }, log)
 
   // the queue message tells us about the user we're fetching for
   // we should only get one record per message, nu?
@@ -33,31 +36,36 @@ export const handler: SQSHandler = async (event) => {
   // for primate-testing onboarding workflow, put a 3-second delay in front of this
   // await wait(3000)
   
-  const { body: { items }} = await api.getMyRecentlyPlayedTracks()
+  const { body: { items }} = await api.getMyRecentlyPlayedTracks({ limit: 50 })
 
-  console.log('fetchSpotifyPlays: getMyRecentlyPlayedTracks results items count', items.length)
+  log.info(`api returned ${items.length} items`)
 
   // write all the results to the table
-  console.log(`Play table [${env.TABLE_TARGET}] at [${env.DYNAMO_ENDPOINT}]`)
+  log.info(`Play table [${env.TABLE_TARGET}] at [${env.DYNAMO_ENDPOINT}]`)
   const doc = new AWS.DynamoDB.DocumentClient({endpoint: env.DYNAMO_ENDPOINT})
   const TableName = env.TABLE_TARGET
   for (const item of items) {
     const playedAt = sanitizeSpotifyPlayedAt(item.played_at)
-
-    const result = await doc.put({
-      TableName,
-      Item: {
-        pk: uid,
-        sk: `track#${playedAt}`,
-        fk: `${item.track.id}#${playedAt}`,
-        playedAt,
-        track: JSON.stringify(item.track)
-      }
-    }).promise()
-    console.log('saved', JSON.stringify(item.track.name, null, 2))
+    // we should only write if the playedAt is more recent than the user's lastPlayedAt
+    try {
+      const result = await doc.put({
+        TableName,
+        Item: {
+          pk: uid,
+          sk: `track#${playedAt}`,
+          fk: `${item.track.id}#${playedAt}`,
+          playedAt,
+          track: JSON.stringify(item.track)
+        }
+      }).promise()
+      log.info(`saved ${item.track.name}`)
+    } catch (err) {
+      log.error('error writing api fetch result', err)
+    }
   }
 
   // update the user's credentials record with a lastUpdate
+  // THIS SHOULD BE THE LAST PLAYEDAT FROM THE NEWEST PLAY WE JUST WROTE
   const table = TableUser(env.DYNAMO_ENDPOINT, env.TABLE_USER)
   await table.setSpotifyLastUpdate(uid, new Date().toISOString())
 

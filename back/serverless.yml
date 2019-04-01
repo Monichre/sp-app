@@ -147,6 +147,7 @@ custom:
     QueueStartHarvestUser: ${env:QueueStartHarvestUser, self:custom.cfref.QueueStartHarvestUser}
     TableUser: ${env:TableUser, self:custom.cfref.TableUser}
     TablePlay: ${env:TablePlay, self:custom.cfref.TablePlay}
+    TableStat: ${env:TableStat, self:custom.cfref.TableStat}
     # StreamCreatePlayFromSpotify: ${env:StreamCreatePlayFromSpotify, self:custom.cfref.StreamCreatePlayFromSpotify}
 
   cfref:
@@ -158,6 +159,8 @@ custom:
       Ref: TableUser
     TablePlay:
       Ref: TablePlay
+    TableStat:
+      Ref: TableStat
     # StreamCreatePlayFromSpotify:
     #   Ref: StreamCreatePlayFromSpotify
 
@@ -196,6 +199,10 @@ custom:
       - table: ${self:custom.ref.TableUser}
         functions:
           - onProfileAdd
+      - table: ${self:custom.ref.TablePlay}
+        functions:
+          - onPlayUpdateStats
+
   webpack:
     # includeModules: true
     packager: 'yarn'
@@ -267,6 +274,7 @@ functions:
     environment:
       TABLE_PLAY: ${self:custom.ref.TablePlay}
       TABLE_USER: ${self:custom.ref.TableUser}
+      TABLE_STAT: ${self:custom.ref.TableStat}
       QUEUE_START_HARVEST_USER: ${self:custom.ref.QueueStartHarvestUser}
 
   graphiql:
@@ -404,7 +412,26 @@ functions:
     #     publish(QUEUE_TARGET, artistId)
 
 ################################################################################
-# functions: prototype harvest handlers
+# functions: stat cruncher
+################################################################################
+# this is WIP prototype of custom resource handler for spinning up firebase auth instances
+
+  onPlayUpdateStats:
+    events:
+      - stream:
+          type: dynamodb
+          arn:
+            Fn::GetAtt: [ TablePlay, StreamArn ]
+    handler: src/fns/onPlayUpdateStats.handler
+    layers:
+      - ${self:custom.LAYER_REF.${self:custom.config}}
+    environment:
+      TABLE_STAT: ${self:custom.ref.TableStat}
+
+
+
+################################################################################
+# functions: prototype custom resources
 ################################################################################
 # this is WIP prototype of custom resource handler for spinning up firebase auth instances
 
@@ -501,9 +528,10 @@ resources:
             KeyType: HASH
           - AttributeName: sk
             KeyType: RANGE
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+        BillingMode: PAY_PER_REQUEST
+        # ProvisionedThroughput:
+        #   ReadCapacityUnits: 1
+        #   WriteCapacityUnits: 1
         StreamSpecification:
           StreamViewType: NEW_AND_OLD_IMAGES
 
@@ -525,9 +553,10 @@ resources:
             KeyType: HASH
           - AttributeName: sk
             KeyType: RANGE
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+        BillingMode: PAY_PER_REQUEST
+        # ProvisionedThroughput:
+        #   ReadCapacityUnits: 1
+        #   WriteCapacityUnits: 1
         StreamSpecification:
           StreamViewType: NEW_AND_OLD_IMAGES
 
@@ -546,3 +575,52 @@ resources:
     #   Properties:
     #     Name: ${self:custom.ns}-StreamCreatePlayFromSpotify
     #     ShardCount: 1
+
+################################################################################
+# resources: stats
+################################################################################
+
+    TableStat:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.ns}-TableStat
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+          - AttributeName: playDurationMs
+            AttributeType: N
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        # ProvisionedThroughput:
+        #   ReadCapacityUnits: 1
+        #   WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
+        GlobalSecondaryIndexes:
+        - IndexName: GSIReverse
+          KeySchema:
+            - AttributeName: sk
+              KeyType: HASH
+            - AttributeName: pk
+              KeyType: RANGE
+          # BillingMode: PAY_PER_REQUEST
+          # ProvisionedThroughput:
+          #   ReadCapacityUnits: 1
+          #   WriteCapacityUnits: 1
+          Projection:
+            ProjectionType: ALL
+        LocalSecondaryIndexes:
+        - IndexName: LSIPlayDuration
+          KeySchema:
+            - AttributeName: pk
+              KeyType: HASH
+            - AttributeName: playDurationMs
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL

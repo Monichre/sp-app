@@ -1,4 +1,5 @@
 import * as AWS from 'aws-sdk';
+import * as winston from 'winston';
 
 type UserSpotifyAttrs = {
   accessToken: string
@@ -17,8 +18,8 @@ type UserSpotifyCreds = UserSpotifyAttrs & {
 
 type UserSpotifyCredsItem = KeyAttrs & UserSpotifyAttrs
 
-export const TableUser = (endpoint: string, TableName: string) => {
-  console.log(`Referencing table [${TableName}] at [${endpoint}]`)
+export const TableUser = (endpoint: string, TableName: string, log?: winston.Logger) => {
+  log && log.info(`Referencing table [${TableName}] at [${endpoint}]`)
   const doc = new AWS.DynamoDB.DocumentClient({endpoint})
 
   const encode = ({uid, ...vals}: UserSpotifyCreds): UserSpotifyCredsItem => ({
@@ -33,7 +34,7 @@ export const TableUser = (endpoint: string, TableName: string) => {
   })
     
   const setSpotifyCreds = async (obj: UserSpotifyCreds) => {
-    console.log(`saving spotify credentials for user ${obj.uid}`)
+    log && log.info(`saving spotify credentials for user ${obj.uid}`)
     await doc.put({
       TableName,
       Item: encode(obj)
@@ -52,7 +53,7 @@ export const TableUser = (endpoint: string, TableName: string) => {
       TableName,
       Key: { pk: uid, sk: 'spotify' },
     }).promise()
-    console.log('TableUser result', result)
+    log && log.debug('TableUser result', result)
     return decode(result.Item as UserSpotifyCredsItem)
   }
 
@@ -61,12 +62,12 @@ export const TableUser = (endpoint: string, TableName: string) => {
       TableName,
       Key: { pk: uid, sk: 'spotify' },
     }).promise()
-    console.log('TableUser result', result)
+    log && log.debug('TableUser result', result)
     return result.Item.lastUpdate
   }
 
   const setSpotifyLastUpdate = async (uid: string, lastUpdate: string ) => {
-    console.log(`updating lastUpdate for uid ${uid} to ${lastUpdate}`)
+    log && log.info(`updating lastUpdate for uid ${uid} to ${lastUpdate}`)
     await doc.update({
       TableName,
       Key: { pk: uid, sk: 'spotify' },

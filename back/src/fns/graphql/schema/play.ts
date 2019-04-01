@@ -38,7 +38,7 @@ const recentPlays: QueryResolvers.RecentPlaysResolver = async (_, {uid}, context
   // design notes:
   // - doing it this way wouldnt be as bad if we checked lastUpdate to make sure the data was really stale
   // - even better might be a heartbeat mutation (along with staleness check) to better regulate frequency?
-  console.log('publishing to queue', context.QUEUE_START_HARVEST_USER)
+  context.log.info(`publishing to queue ${context.QUEUE_START_HARVEST_USER}`)
   QueueStartHarvestUser.publish(context.QUEUE_START_HARVEST_USER, {
     uid,
   })
@@ -47,7 +47,7 @@ const recentPlays: QueryResolvers.RecentPlaysResolver = async (_, {uid}, context
   const doc = new AWS.DynamoDB.DocumentClient({endpoint: context.DYNAMO_ENDPOINT})
 
   const TableName = context.TABLE_PLAY
-  console.log('reading from ', TableName)
+  context.log.info('reading from ', {TableName})
   
   const results = await doc.query({
     TableName,
@@ -56,9 +56,9 @@ const recentPlays: QueryResolvers.RecentPlaysResolver = async (_, {uid}, context
     ExpressionAttributeValues: {
       ':p': uid,
       ':s': `track#`
-    }
+    },
+    Limit: 100,
   }).promise()
-  // console.log('results.Items[0]', results.Items[0])
   const plays = results.Items.map(i => {
     const { name, artists }: { name: string, artists: any[] } = JSON.parse(i.track)
     return {

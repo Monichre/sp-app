@@ -118,7 +118,7 @@ Builds and deploys the frontend to a **TARGET** that should match an already-dep
 - API_ENDPOINT and CONFIG from ssm params at /${sls-service}/target/${TARGET}/public
 - other eg public client ids from ssm at /${sls-service}/config/${CONFIG}/public
 
-# making changes
+# making changes / developer tips
 
 ## branching
 
@@ -149,6 +149,16 @@ And then there are three types of general branches:
   - this is what deploy to staging to test deployment
   - can have direct commits to fix issues, but needs to be merged back to `dev` if you do
 - `hotfix/xx` small changes to fix things in a release, have to get merged back to `dev` as well
+
+## "works locally, but not in cloud" common issues
+
+If you're adding new types of resources: you might need to update the iamRoles.  The error logs for a function will tell you exactly what perms they're missing.
+
+If you're adding new npm dependencies, you will need to make sure you add them -D in the `back` service and add them normally in the `back-layer` service.  Deploy a new `back-layer` for your deployment when you do this.
+
+Getting a CORS error in the front end?  Chances are that's a spurious error -- if the handler chokes, sometimes you'll see CORS errors.
+
+MAKE SURE YOU `await` all the async behavior in your handlers!  Locally, those will finish even if you don't await, because the serverless offline server is a single process.  In the cloud, those will cause strange hard-to-troubleshoot inconsistencies, as the promise's WONT resolve if the lambda function returns before they do.  AWAIT THOSE ASYNCS YO
 
 # Managing Deployed Stacks
 

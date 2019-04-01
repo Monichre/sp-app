@@ -7,6 +7,7 @@ export QueueStartHarvestUser=$QueueEndpoint/sp-app-back-local-QueueStartHarvestU
 export DynamoEndpoint=http://localhost:8888
 export TableUser=sp-app-back-local-TableUser
 export TablePlay=sp-app-back-local-TablePlay
+export TableStat=sp-app-back-local-TableStat
 
 # streams
 export StreamCreatePlayFromSpotify=sp-app-back-local-StreamCreatePlayFromSpotify

@@ -1,4 +1,4 @@
-// Generated in 2019-03-26T12:58:13-07:00
+// Generated in 2019-03-27T20:29:28-07:00
 // REGENERATE THIS BY STARTING THE LOCAL SERVER
 // AND THEN RUNNING `back % yarn generate`
 
@@ -56,6 +56,8 @@ export interface Query {
   ping?: Maybe<BasicResponse>;
 
   recentPlays: RecentPlaysResponse;
+
+  playtimeSummary: PlaytimeSummaryResponse;
 }
 
 export interface BasicResponse {
@@ -84,6 +86,12 @@ export interface Artist {
   name: string;
 }
 
+export interface PlaytimeSummaryResponse {
+  today: number;
+
+  thisMonth: number;
+}
+
 export interface Mutation {
   onLogin?: Maybe<BasicResponse>;
 
@@ -97,6 +105,9 @@ export interface Mutation {
 // ====================================================
 
 export interface RecentPlaysQueryArgs {
+  uid: string;
+}
+export interface PlaytimeSummaryQueryArgs {
   uid: string;
 }
 export interface OnLoginMutationArgs {
@@ -174,6 +185,12 @@ export namespace QueryResolvers {
       TypeParent,
       TContext
     >;
+
+    playtimeSummary?: PlaytimeSummaryResolver<
+      PlaytimeSummaryResponse,
+      TypeParent,
+      TContext
+    >;
   }
 
   export type DummyResolver<
@@ -197,6 +214,15 @@ export namespace QueryResolvers {
     TContext = Context
   > = Resolver<R, Parent, TContext, RecentPlaysArgs>;
   export interface RecentPlaysArgs {
+    uid: string;
+  }
+
+  export type PlaytimeSummaryResolver<
+    R = PlaytimeSummaryResponse,
+    Parent = {},
+    TContext = Context
+  > = Resolver<R, Parent, TContext, PlaytimeSummaryArgs>;
+  export interface PlaytimeSummaryArgs {
     uid: string;
   }
 }
@@ -285,6 +311,28 @@ export namespace ArtistResolvers {
   > = Resolver<R, Parent, TContext>;
 }
 
+export namespace PlaytimeSummaryResponseResolvers {
+  export interface Resolvers<
+    TContext = Context,
+    TypeParent = PlaytimeSummaryResponse
+  > {
+    today?: TodayResolver<number, TypeParent, TContext>;
+
+    thisMonth?: ThisMonthResolver<number, TypeParent, TContext>;
+  }
+
+  export type TodayResolver<
+    R = number,
+    Parent = PlaytimeSummaryResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type ThisMonthResolver<
+    R = number,
+    Parent = PlaytimeSummaryResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
 export namespace MutationResolvers {
   export interface Resolvers<TContext = Context, TypeParent = {}> {
     onLogin?: OnLoginResolver<Maybe<BasicResponse>, TypeParent, TContext>;
@@ -365,6 +413,9 @@ export type IResolvers<TContext = Context> = {
   Play?: PlayResolvers.Resolvers<TContext>;
   Track?: TrackResolvers.Resolvers<TContext>;
   Artist?: ArtistResolvers.Resolvers<TContext>;
+  PlaytimeSummaryResponse?: PlaytimeSummaryResponseResolvers.Resolvers<
+    TContext
+  >;
   Mutation?: MutationResolvers.Resolvers<TContext>;
 } & { [typeName: string]: never };
 
