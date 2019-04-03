@@ -1,4 +1,4 @@
-// Generated in 2019-03-27T20:29:33-07:00
+// Generated in 2019-04-01T21:40:29-07:00
 // REGENERATE THIS BY STARTING THE LOCAL BACKEND
 // AND THEN RUNNING `front % yarn generate`
 
@@ -47,6 +47,98 @@ export interface SpotifyCredentials {
 // ====================================================
 // Documents
 // ====================================================
+
+export type DashStatsVariables = {
+  uid: string;
+};
+
+export type DashStatsQuery = {
+  __typename?: "Query";
+
+  dashStats: DashStatsDashStats;
+};
+
+export type DashStatsDashStats = {
+  __typename?: "DashStatsResponse";
+
+  week: DashStatsWeek;
+
+  month: DashStatsMonth;
+
+  life: DashStatsLife;
+};
+
+export type DashStatsWeek = {
+  __typename?: "PeriodGlobalUserArtistPlaytimes";
+
+  global: DashStatsGlobal[];
+
+  user: DashStatsUser[];
+};
+
+export type DashStatsGlobal = {
+  __typename?: "ArtistPlaytime";
+
+  name: string;
+
+  playDurationMs: number;
+};
+
+export type DashStatsUser = {
+  __typename?: "ArtistPlaytime";
+
+  name: string;
+
+  playDurationMs: number;
+};
+
+export type DashStatsMonth = {
+  __typename?: "PeriodGlobalUserArtistPlaytimes";
+
+  global: DashStats_Global[];
+
+  user: DashStats_User[];
+};
+
+export type DashStats_Global = {
+  __typename?: "ArtistPlaytime";
+
+  name: string;
+
+  playDurationMs: number;
+};
+
+export type DashStats_User = {
+  __typename?: "ArtistPlaytime";
+
+  name: string;
+
+  playDurationMs: number;
+};
+
+export type DashStatsLife = {
+  __typename?: "PeriodGlobalUserArtistPlaytimes";
+
+  global: DashStats__Global[];
+
+  user: DashStats__User[];
+};
+
+export type DashStats__Global = {
+  __typename?: "ArtistPlaytime";
+
+  name: string;
+
+  playDurationMs: number;
+};
+
+export type DashStats__User = {
+  __typename?: "ArtistPlaytime";
+
+  name: string;
+
+  playDurationMs: number;
+};
 
 export type PlaytimeSummaryVariables = {
   uid: string;
@@ -113,6 +205,50 @@ import * as ReactApolloHooks from "react-apollo-hooks";
 // Components
 // ====================================================
 
+export const DashStatsDocument = gql`
+  query DashStats($uid: String!) {
+    dashStats(uid: $uid) {
+      week {
+        global {
+          name
+          playDurationMs
+        }
+        user {
+          name
+          playDurationMs
+        }
+      }
+      month {
+        global {
+          name
+          playDurationMs
+        }
+        user {
+          name
+          playDurationMs
+        }
+      }
+      life {
+        global {
+          name
+          playDurationMs
+        }
+        user {
+          name
+          playDurationMs
+        }
+      }
+    }
+  }
+`;
+export function useDashStats(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<DashStatsVariables>
+) {
+  return ReactApolloHooks.useQuery<DashStatsQuery, DashStatsVariables>(
+    DashStatsDocument,
+    baseOptions
+  );
+}
 export const PlaytimeSummaryDocument = gql`
   query PlaytimeSummary($uid: String!) {
     playtimeSummary(uid: $uid) {

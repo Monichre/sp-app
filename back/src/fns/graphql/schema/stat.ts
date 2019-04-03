@@ -7,6 +7,7 @@ import moment = require('moment');
 const typeDefs = `
 type Query {
   playtimeSummary(uid: String!): PlaytimeSummaryResponse!
+  dashStats(uid: String!): DashStatsResponse!
 }
 type Mutation {
   _: String
@@ -16,6 +17,23 @@ type PlaytimeSummaryResponse {
   today: Int!
   thisMonth: Int!
 }
+
+type ArtistPlaytime {
+  name: String!
+  playDurationMs: Int!
+}
+
+type PeriodGlobalUserArtistPlaytimes {
+  global: [ArtistPlaytime!]!
+  user: [ArtistPlaytime!]!
+}
+
+type DashStatsResponse {
+  week: PeriodGlobalUserArtistPlaytimes!
+  month: PeriodGlobalUserArtistPlaytimes!
+  life: PeriodGlobalUserArtistPlaytimes!
+}
+
 `
 
 const playtimeSummary: QueryResolvers.PlaytimeSummaryResolver = async (_, {uid}, context) => {
@@ -55,9 +73,51 @@ const playtimeSummary: QueryResolvers.PlaytimeSummaryResolver = async (_, {uid},
   }
 }
 
+const topArtistsFor = async (doc, TableName, uid: string, periodName, periodValue, Limit = 5) => {
+  const params = {
+    TableName,
+    Limit,
+    KeyConditionExpression: `pk = :pk`,
+    IndexName: 'LSIPlayDuration',
+    ScanIndexForward: false,
+    ExpressionAttributeValues: {
+      ':pk': [uid, 'artist', periodName, periodValue].join('#')
+    }
+  }
+  return await doc.query(params).promise()
+    .then(d => d.Items.map(i => ({name: i.artist.name, playDurationMs: i.playDurationMs})))
+}
+
+const dashStats: QueryResolvers.DashStatsResolver = async (_, {uid}, context) => {
+  console.log('dashStats')
+  const doc = new AWS.DynamoDB.DocumentClient({endpoint: context.DYNAMO_ENDPOINT})
+  const TableName = context.TABLE_STAT
+
+  const m = moment()
+  const day = m.format('YYYY-MM-DD')
+  const week = m.format('YYYY-WW')
+  const month = m.format('YYYY-MM')
+
+  return {
+    week: {
+      global: await topArtistsFor(doc, TableName, 'global', 'week', week),
+      user: await topArtistsFor(doc, TableName, uid, 'week', week),
+    },
+    month: {
+      global: await topArtistsFor(doc, TableName, 'global', 'month', month),
+      user: await topArtistsFor(doc, TableName, uid, 'month', month),
+    },
+    life: {
+      global: await topArtistsFor(doc, TableName, 'global', 'life', 'life'),
+      user: await topArtistsFor(doc, TableName, uid, 'life', 'life'),
+    }
+  }
+}
+
 const resolvers = {
   Query: {
     playtimeSummary,
+    dashStats,
   }
 }
 

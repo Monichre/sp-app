@@ -1,4 +1,4 @@
-// Generated in 2019-03-27T20:29:28-07:00
+// Generated in 2019-04-01T21:40:54-07:00
 // REGENERATE THIS BY STARTING THE LOCAL SERVER
 // AND THEN RUNNING `back % yarn generate`
 
@@ -58,6 +58,8 @@ export interface Query {
   recentPlays: RecentPlaysResponse;
 
   playtimeSummary: PlaytimeSummaryResponse;
+
+  dashStats: DashStatsResponse;
 }
 
 export interface BasicResponse {
@@ -92,6 +94,26 @@ export interface PlaytimeSummaryResponse {
   thisMonth: number;
 }
 
+export interface DashStatsResponse {
+  week: PeriodGlobalUserArtistPlaytimes;
+
+  month: PeriodGlobalUserArtistPlaytimes;
+
+  life: PeriodGlobalUserArtistPlaytimes;
+}
+
+export interface PeriodGlobalUserArtistPlaytimes {
+  global: ArtistPlaytime[];
+
+  user: ArtistPlaytime[];
+}
+
+export interface ArtistPlaytime {
+  name: string;
+
+  playDurationMs: number;
+}
+
 export interface Mutation {
   onLogin?: Maybe<BasicResponse>;
 
@@ -108,6 +130,9 @@ export interface RecentPlaysQueryArgs {
   uid: string;
 }
 export interface PlaytimeSummaryQueryArgs {
+  uid: string;
+}
+export interface DashStatsQueryArgs {
   uid: string;
 }
 export interface OnLoginMutationArgs {
@@ -191,6 +216,8 @@ export namespace QueryResolvers {
       TypeParent,
       TContext
     >;
+
+    dashStats?: DashStatsResolver<DashStatsResponse, TypeParent, TContext>;
   }
 
   export type DummyResolver<
@@ -223,6 +250,15 @@ export namespace QueryResolvers {
     TContext = Context
   > = Resolver<R, Parent, TContext, PlaytimeSummaryArgs>;
   export interface PlaytimeSummaryArgs {
+    uid: string;
+  }
+
+  export type DashStatsResolver<
+    R = DashStatsResponse,
+    Parent = {},
+    TContext = Context
+  > = Resolver<R, Parent, TContext, DashStatsArgs>;
+  export interface DashStatsArgs {
     uid: string;
   }
 }
@@ -333,6 +369,80 @@ export namespace PlaytimeSummaryResponseResolvers {
   > = Resolver<R, Parent, TContext>;
 }
 
+export namespace DashStatsResponseResolvers {
+  export interface Resolvers<
+    TContext = Context,
+    TypeParent = DashStatsResponse
+  > {
+    week?: WeekResolver<PeriodGlobalUserArtistPlaytimes, TypeParent, TContext>;
+
+    month?: MonthResolver<
+      PeriodGlobalUserArtistPlaytimes,
+      TypeParent,
+      TContext
+    >;
+
+    life?: LifeResolver<PeriodGlobalUserArtistPlaytimes, TypeParent, TContext>;
+  }
+
+  export type WeekResolver<
+    R = PeriodGlobalUserArtistPlaytimes,
+    Parent = DashStatsResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type MonthResolver<
+    R = PeriodGlobalUserArtistPlaytimes,
+    Parent = DashStatsResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type LifeResolver<
+    R = PeriodGlobalUserArtistPlaytimes,
+    Parent = DashStatsResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace PeriodGlobalUserArtistPlaytimesResolvers {
+  export interface Resolvers<
+    TContext = Context,
+    TypeParent = PeriodGlobalUserArtistPlaytimes
+  > {
+    global?: GlobalResolver<ArtistPlaytime[], TypeParent, TContext>;
+
+    user?: UserResolver<ArtistPlaytime[], TypeParent, TContext>;
+  }
+
+  export type GlobalResolver<
+    R = ArtistPlaytime[],
+    Parent = PeriodGlobalUserArtistPlaytimes,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type UserResolver<
+    R = ArtistPlaytime[],
+    Parent = PeriodGlobalUserArtistPlaytimes,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace ArtistPlaytimeResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = ArtistPlaytime> {
+    name?: NameResolver<string, TypeParent, TContext>;
+
+    playDurationMs?: PlayDurationMsResolver<number, TypeParent, TContext>;
+  }
+
+  export type NameResolver<
+    R = string,
+    Parent = ArtistPlaytime,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type PlayDurationMsResolver<
+    R = number,
+    Parent = ArtistPlaytime,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
 export namespace MutationResolvers {
   export interface Resolvers<TContext = Context, TypeParent = {}> {
     onLogin?: OnLoginResolver<Maybe<BasicResponse>, TypeParent, TContext>;
@@ -416,6 +526,11 @@ export type IResolvers<TContext = Context> = {
   PlaytimeSummaryResponse?: PlaytimeSummaryResponseResolvers.Resolvers<
     TContext
   >;
+  DashStatsResponse?: DashStatsResponseResolvers.Resolvers<TContext>;
+  PeriodGlobalUserArtistPlaytimes?: PeriodGlobalUserArtistPlaytimesResolvers.Resolvers<
+    TContext
+  >;
+  ArtistPlaytime?: ArtistPlaytimeResolvers.Resolvers<TContext>;
   Mutation?: MutationResolvers.Resolvers<TContext>;
 } & { [typeName: string]: never };
 

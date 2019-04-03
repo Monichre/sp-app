@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Home } from './Home';
 import { FirebaseContext } from '../comp/FirebaseContext';
 import { createFirebase } from './createFirebase';
@@ -7,6 +7,7 @@ import ApolloClient from 'apollo-boost'
 import { ApolloProvider } from 'react-apollo-hooks'
 import { CustomAuth } from './CustomAuth';
 import styled from 'styled-components';
+import { Loading } from '../comp/Loading';
 
 const client = new ApolloClient({
   uri: `${process.env.REACT_APP_API_ENDPOINT}/graphql`,
@@ -31,7 +32,6 @@ const BlackPage = styled.div`
 
 // react suspense isnt ready for async data loading in 16.8.x...
 // but somehow react-apollo-hooks supports it
-const Loading: React.SFC = () => <div>Loading...</div>
 
 export const App: React.SFC = () =>
   <FirebaseContext.Provider value={firebase}>
@@ -39,8 +39,10 @@ export const App: React.SFC = () =>
       <BlackPage>
         <React.Suspense fallback={<Loading/>}>
           <Router>
-            <Route exact path='/' component={Home}/>
-            <Route path='/customAuth' component={CustomAuth}/>
+            <Switch>
+              <Route path='/customAuth' component={CustomAuth}/>
+              <Route path='/' component={Home}/>
+            </Switch>
           </Router>
         </React.Suspense>
       </BlackPage>

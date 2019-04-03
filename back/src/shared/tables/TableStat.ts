@@ -11,6 +11,7 @@ export type Stat = {
   periodType: PeriodType,
   periodValue: string,
   statValue: number,
+  artist?: any,
 }
 
 export const TableStat = (endpoint: string, TableName: string) => {
@@ -32,19 +33,24 @@ export const TableStat = (endpoint: string, TableName: string) => {
     }
   }
 
-  const writeStat = async ({uid, relationType, relationKey, periodType, periodValue, statValue}: Stat) => {
+  const writeStat = async ({uid, relationType, relationKey, periodType, periodValue, statValue, artist}: Stat) => {
     const doc = new AWS.DynamoDB.DocumentClient({endpoint})
   
+    const UpdateExpression = artist ?
+      'ADD playDurationMs :val SET artist = :artist' :
+      'ADD playDurationMs :val'
+    const ExpressionAttributeValues = artist ?
+      { ':val': statValue, ':artist': artist } :
+      { ':val': statValue }
+
     return await doc.update({
       TableName,
       Key: {
         pk: makePk(uid, relationType, periodType, periodValue),
         sk: makeSk(uid, periodType, relationKey)
       },
-      UpdateExpression: 'ADD playDurationMs :val',
-      ExpressionAttributeValues: {
-        ':val': statValue
-      }
+      UpdateExpression,
+      ExpressionAttributeValues,
     }).promise()
   
   }

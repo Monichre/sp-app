@@ -38,6 +38,8 @@ const handleRecord = (env: Env) => async (record: DynamoDBRecord) => {
     } = track
     log.info(`track from play record ${name} ${playedAt}`, { uid, trackPlayedAt})
 
+    const artists = track.artists.map(a => ({name: a.name, id: a.id}))
+    log.info('artists for this track:', {artists})
     // WHEN WE IMPLEMENT ARTIST & GENRE STATS...
     // i think the handler prolly shouldnt have to know this much about how stats work
     // at the same time the stats engine shouldnt have to know that much about the plays?
@@ -66,6 +68,24 @@ const handleRecord = (env: Env) => async (record: DynamoDBRecord) => {
     // table.writeStat({uid, relationType: 'total', relationKey: 'total', periodType: 'moy', periodValue: moy, statValue: duration_ms})
     // table.writeStat({uid, relationType: 'total', relationKey: 'total', periodType: 'year', periodValue: year, statValue: duration_ms})
     await table.writeStat({uid, relationType: 'total', relationKey: 'total', periodType: 'life', periodValue: 'life', statValue: duration_ms})
+
+    await table.writeStat({uid: 'global', relationType: 'total', relationKey: 'total', periodType: 'day', periodValue: day, statValue: duration_ms})
+    await table.writeStat({uid: 'global', relationType: 'total', relationKey: 'total', periodType: 'week', periodValue: week, statValue: duration_ms})
+    await table.writeStat({uid: 'global', relationType: 'total', relationKey: 'total', periodType: 'month', periodValue: month, statValue: duration_ms})
+    await table.writeStat({uid: 'global', relationType: 'total', relationKey: 'total', periodType: 'life', periodValue: 'life', statValue: duration_ms})
+
+    for (const artist of artists) {
+      log.info('updating user and global stats for', {artist})
+      await table.writeStat({uid, relationType: 'artist', relationKey: artist.id, periodType: 'day', periodValue: day, statValue: duration_ms, artist})
+      await table.writeStat({uid, relationType: 'artist', relationKey: artist.id, periodType: 'week', periodValue: week, statValue: duration_ms, artist})
+      await table.writeStat({uid, relationType: 'artist', relationKey: artist.id, periodType: 'month', periodValue: month, statValue: duration_ms, artist})
+      await table.writeStat({uid, relationType: 'artist', relationKey: artist.id, periodType: 'life', periodValue: 'life', statValue: duration_ms, artist})
+
+      await table.writeStat({uid: 'global', relationType: 'artist', relationKey: artist.id, periodType: 'day', periodValue: day, statValue: duration_ms, artist})
+      await table.writeStat({uid: 'global', relationType: 'artist', relationKey: artist.id, periodType: 'week', periodValue: week, statValue: duration_ms, artist})
+      await table.writeStat({uid: 'global', relationType: 'artist', relationKey: artist.id, periodType: 'month', periodValue: month, statValue: duration_ms, artist})
+      await table.writeStat({uid: 'global', relationType: 'artist', relationKey: artist.id, periodType: 'life', periodValue: 'life', statValue: duration_ms, artist})
+    }
 
     return
   }

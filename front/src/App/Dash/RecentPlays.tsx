@@ -21,8 +21,8 @@ const CardAlert = styled(Card)`
 `
 
 const PlayItem: React.SFC<{play: RecentPlaysPlays}> = ({play}) =>
-  <Card>
-    <CardTitle data-test='play-item-track-name'>
+  <Card data-test='play-item'>
+    <CardTitle data-test='track-name'>
       {play.track.name}
     </CardTitle>
     <CardInfo>
@@ -53,6 +53,13 @@ const PlayItem: React.SFC<{play: RecentPlaysPlays}> = ({play}) =>
 //   }, [delay])
 // }
 
+const Note = styled.div`
+  padding: 0 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 300;
+  color: #AAA !important;
+`
+
 export const RecentPlays: React.SFC<{uid: string}> = ({uid}) => {
   const [pollInterval, setPollInterval] = useState(2000)
   const { data } = useRecentPlays({ variables: { uid }, suspend: true, pollInterval})
@@ -69,7 +76,7 @@ export const RecentPlays: React.SFC<{uid: string}> = ({uid}) => {
   }
   
   return <div data-test="play-timeline">
-    <div>Last Update: {lastUpdate || 'never'}</div>
+    <Note>Last Update: {lastUpdate || 'never'}</Note>
     {recentPlays.map((play, key) => <PlayItem {...{play, key}}/>)}
   </div>
 }

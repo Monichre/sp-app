@@ -1,0 +1,34 @@
+query DashStats($uid: String!) {
+  dashStats(uid: $uid) {
+    week {
+      global {
+        name
+        playDurationMs
+      }
+      user {
+        name
+        playDurationMs
+      }
+    }
+    month {
+      global {
+        name
+        playDurationMs
+      }
+      user {
+        name
+        playDurationMs
+      }
+    }
+    life {
+      global {
+        name
+        playDurationMs
+      }
+      user {
+        name
+        playDurationMs
+      }
+    }
+  }
+}
