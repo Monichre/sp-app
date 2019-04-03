@@ -20,8 +20,12 @@ const CardAlert = styled(Card)`
   background-color: #666;
 `
 
-const PlayItem: React.SFC<{play: RecentPlaysPlays}> = ({play}) =>
+const PlayItem: React.SFC<{play: RecentPlaysPlays}> = ({play}) => {
+  const img = play.track.album.images[2]
+  const imgUrl = img ? img.url : ''
+  return (
   <Card data-test='play-item'>
+   <img src={imgUrl}/>
     <CardTitle data-test='track-name'>
       {play.track.name}
     </CardTitle>
@@ -36,6 +40,8 @@ const PlayItem: React.SFC<{play: RecentPlaysPlays}> = ({play}) =>
       {play.playedAt}
     </Moment>
   </Card>
+  )
+}
 
 // thought i needed this for graphql polling, dont
 // may still need it for heartbeat mutation

@@ -1,4 +1,4 @@
-// Generated in 2019-04-01T21:40:54-07:00
+// Generated in 2019-04-02T22:53:29-07:00
 // REGENERATE THIS BY STARTING THE LOCAL SERVER
 // AND THEN RUNNING `back % yarn generate`
 
@@ -82,10 +82,22 @@ export interface Track {
   name: string;
 
   artists: Artist[];
+
+  album: Album;
 }
 
 export interface Artist {
   name: string;
+}
+
+export interface Album {
+  name: string;
+
+  images: (Maybe<Image>)[];
+}
+
+export interface Image {
+  url: string;
 }
 
 export interface PlaytimeSummaryResponse {
@@ -321,6 +333,8 @@ export namespace TrackResolvers {
     name?: NameResolver<string, TypeParent, TContext>;
 
     artists?: ArtistsResolver<Artist[], TypeParent, TContext>;
+
+    album?: AlbumResolver<Album, TypeParent, TContext>;
   }
 
   export type NameResolver<
@@ -330,6 +344,11 @@ export namespace TrackResolvers {
   > = Resolver<R, Parent, TContext>;
   export type ArtistsResolver<
     R = Artist[],
+    Parent = Track,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type AlbumResolver<
+    R = Album,
     Parent = Track,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
@@ -343,6 +362,37 @@ export namespace ArtistResolvers {
   export type NameResolver<
     R = string,
     Parent = Artist,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace AlbumResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = Album> {
+    name?: NameResolver<string, TypeParent, TContext>;
+
+    images?: ImagesResolver<(Maybe<Image>)[], TypeParent, TContext>;
+  }
+
+  export type NameResolver<
+    R = string,
+    Parent = Album,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type ImagesResolver<
+    R = (Maybe<Image>)[],
+    Parent = Album,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace ImageResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = Image> {
+    url?: UrlResolver<string, TypeParent, TContext>;
+  }
+
+  export type UrlResolver<
+    R = string,
+    Parent = Image,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
 }
@@ -523,6 +573,8 @@ export type IResolvers<TContext = Context> = {
   Play?: PlayResolvers.Resolvers<TContext>;
   Track?: TrackResolvers.Resolvers<TContext>;
   Artist?: ArtistResolvers.Resolvers<TContext>;
+  Album?: AlbumResolvers.Resolvers<TContext>;
+  Image?: ImageResolvers.Resolvers<TContext>;
   PlaytimeSummaryResponse?: PlaytimeSummaryResponseResolvers.Resolvers<
     TContext
   >;

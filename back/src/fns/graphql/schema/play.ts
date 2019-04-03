@@ -25,12 +25,21 @@ type Play {
 type Track {
   name: String!
   artists: [Artist!]!
+  album: Album!
 }
 
 type Artist {
   name: String!
 }
 
+type Album {
+  name: String!
+  images: [Image]!
+}
+
+type Image {
+  url: String!
+}
 `
 
 const recentPlays: QueryResolvers.RecentPlaysResolver = async (_, {uid}, context) => {
@@ -60,14 +69,15 @@ const recentPlays: QueryResolvers.RecentPlaysResolver = async (_, {uid}, context
     Limit: 100,
   }).promise()
   const plays = results.Items.map(i => {
-    const { name, artists }: { name: string, artists: any[] } = JSON.parse(i.track)
+    const { name, artists, album }: { name: string, artists: any[], album: any } = JSON.parse(i.track)
     return {
       playedAt: i.playedAt,
       track: {
         name,
         artists: (artists as any[]).map(a => ({
           name: a.name as string,
-        }))
+        })),
+        album,
       }
     }
   })

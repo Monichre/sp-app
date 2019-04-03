@@ -8,6 +8,11 @@ query RecentPlays($uid: String!) {
         artists {
           name
         }
+        album {
+          images {
+            url
+          }
+        }
       }
     }
   }

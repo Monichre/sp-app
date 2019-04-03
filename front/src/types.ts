@@ -1,4 +1,4 @@
-// Generated in 2019-04-01T21:40:29-07:00
+// Generated in 2019-04-02T22:54:05-07:00
 // REGENERATE THIS BY STARTING THE LOCAL BACKEND
 // AND THEN RUNNING `front % yarn generate`
 
@@ -190,12 +190,26 @@ export type RecentPlaysTrack = {
   name: string;
 
   artists: RecentPlaysArtists[];
+
+  album: RecentPlaysAlbum;
 };
 
 export type RecentPlaysArtists = {
   __typename?: "Artist";
 
   name: string;
+};
+
+export type RecentPlaysAlbum = {
+  __typename?: "Album";
+
+  images: (Maybe<RecentPlaysImages>)[];
+};
+
+export type RecentPlaysImages = {
+  __typename?: "Image";
+
+  url: string;
 };
 
 import gql from "graphql-tag";
@@ -275,6 +289,11 @@ export const RecentPlaysDocument = gql`
           name
           artists {
             name
+          }
+          album {
+            images {
+              url
+            }
           }
         }
       }
