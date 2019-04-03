@@ -1,6 +1,16 @@
 query PlaytimeSummary($uid: String!) {
   playtimeSummary(uid: $uid) {
-    today
-    thisMonth
+    day {
+      current
+      prev
+    }
+    week {
+      current
+      prev
+    }
+    month {
+      current
+      prev
+    }
   }
 }

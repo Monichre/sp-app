@@ -13,9 +13,15 @@ type Mutation {
   _: String
 }
 
+type PlaytimeSummaryPeriods {
+  current: Int!
+  prev: Int!
+}
+
 type PlaytimeSummaryResponse {
-  today: Int!
-  thisMonth: Int!
+  day: PlaytimeSummaryPeriods!
+  week: PlaytimeSummaryPeriods!
+  month: PlaytimeSummaryPeriods!
 }
 
 type ArtistPlaytime {
@@ -35,6 +41,21 @@ type DashStatsResponse {
 }
 
 `
+type StatKeys = {
+  uid: string,
+  periodType: string,
+  periodValue: string,
+}
+
+const getStat = async (doc: AWS.DynamoDB.DocumentClient, TableName: string, {uid, periodType, periodValue}: StatKeys) => {
+  return await doc.get({
+    TableName,
+    Key: {
+      pk: [uid, 'total', periodType, periodValue].join('#'),
+      sk: [uid, periodType, 'total'].join('#'),
+    }
+  }).promise().then(r => r.Item && r.Item.playDurationMs || 0)
+}
 
 const playtimeSummary: QueryResolvers.PlaytimeSummaryResolver = async (_, {uid}, context) => {
   const env = verifyEnv({
@@ -51,26 +72,45 @@ const playtimeSummary: QueryResolvers.PlaytimeSummaryResolver = async (_, {uid},
 
   const m = moment()
   const day = m.format('YYYY-MM-DD')
+  const yest = m.clone().subtract(1, 'days').format('YYYY-MM-DD')
+  const week = m.format('YYYY-WW')
+  const lastweek = m.clone().subtract(1, 'weeks').format('YYYY-WW')
   const month = m.format('YYYY-MM')
+  const lastMonth = m.clone().subtract(1, 'months').format('YYYY-MM')
 
-  const today = await doc.get({
-    TableName,
-    Key: {
-      pk: [uid, 'total', 'day', day].join('#'),
-      sk: [uid, 'day', 'total'].join('#'),
-    }
-  }).promise()
-  const thisMonth = await doc.get({
-    TableName,
-    Key: {
-      pk: [uid, 'total', 'month', month].join('#'),
-      sk: [uid, 'month', 'total'].join('#'),
-    }
-  }).promise()
   return {
-    today: today.Item.playDurationMs,
-    thisMonth: thisMonth.Item.playDurationMs,
+    day: {
+      current: await getStat(doc, TableName, {uid, periodType: 'day', periodValue: day}),
+      prev: await getStat(doc, TableName, {uid, periodType: 'day', periodValue: yest}),
+    },
+    week: {
+      current: await getStat(doc, TableName, {uid, periodType: 'week', periodValue: week}),
+      prev: await getStat(doc, TableName, {uid, periodType: 'week', periodValue: lastweek}),
+    },
+    month: {
+      current: await getStat(doc, TableName, {uid, periodType: 'month', periodValue: month}),
+      prev: await getStat(doc, TableName, {uid, periodType: 'month', periodValue: lastMonth}),
+    },
   }
+
+  // const today = await doc.get({
+  //   TableName,
+  //   Key: {
+  //     pk: [uid, 'total', 'day', day].join('#'),
+  //     sk: [uid, 'day', 'total'].join('#'),
+  //   }
+  // }).promise()
+  // const thisMonth = await doc.get({
+  //   TableName,
+  //   Key: {
+  //     pk: [uid, 'total', 'month', month].join('#'),
+  //     sk: [uid, 'month', 'total'].join('#'),
+  //   }
+  // }).promise()
+  // return {
+  //   today: today.Item.playDurationMs,
+  //   thisMonth: thisMonth.Item.playDurationMs,
+  // }
 }
 
 const topArtistsFor = async (doc, TableName, uid: string, periodName, periodValue, Limit = 5) => {

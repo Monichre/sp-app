@@ -1,4 +1,4 @@
-// Generated in 2019-04-02T22:54:05-07:00
+// Generated in 2019-04-02T23:36:10-07:00
 // REGENERATE THIS BY STARTING THE LOCAL BACKEND
 // AND THEN RUNNING `front % yarn generate`
 
@@ -153,9 +153,35 @@ export type PlaytimeSummaryQuery = {
 export type PlaytimeSummaryPlaytimeSummary = {
   __typename?: "PlaytimeSummaryResponse";
 
-  today: number;
+  day: PlaytimeSummaryDay;
 
-  thisMonth: number;
+  week: PlaytimeSummaryWeek;
+
+  month: PlaytimeSummaryMonth;
+};
+
+export type PlaytimeSummaryDay = {
+  __typename?: "PlaytimeSummaryPeriods";
+
+  current: number;
+
+  prev: number;
+};
+
+export type PlaytimeSummaryWeek = {
+  __typename?: "PlaytimeSummaryPeriods";
+
+  current: number;
+
+  prev: number;
+};
+
+export type PlaytimeSummaryMonth = {
+  __typename?: "PlaytimeSummaryPeriods";
+
+  current: number;
+
+  prev: number;
 };
 
 export type RecentPlaysVariables = {
@@ -266,8 +292,18 @@ export function useDashStats(
 export const PlaytimeSummaryDocument = gql`
   query PlaytimeSummary($uid: String!) {
     playtimeSummary(uid: $uid) {
-      today
-      thisMonth
+      day {
+        current
+        prev
+      }
+      week {
+        current
+        prev
+      }
+      month {
+        current
+        prev
+      }
     }
   }
 `;

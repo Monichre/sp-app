@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components'
 import moment from 'moment'
 import { usePlaytimeSummary } from '../../types';
+import { Loading } from '../../comp/Loading';
 
 const EvenRow = styled.div`
   display: flex;
@@ -45,15 +46,29 @@ const StatBlock = styled.div`
   }
 `
 
+const Note = styled.div`
+  margin-top: 0.5rem;
+  color: #888 !important;
+  font-size: 0.8rem;
+`
 
 const TimeStatBlock: React.SFC<{label: string, value: number}> = ({label, value}) =>
   <StatBlock>{value} <label>{label}</label></StatBlock>
 
-const TimeBlock: React.SFC<{title: string, duration: number}> = ({title, duration}) => {
-  const m = moment.duration(duration)
+type Durations = {
+  current: number
+  prev: number
+}
+
+const TimeBlock: React.SFC<{title: string, durations: Durations, label: string}> = ({title, durations: { current, prev }, label}) => {
+  const m = moment.duration(current)
   const hrs = m.hours()
   const mins = m.minutes()
   const secs = m.seconds()
+  const increase = (current - prev) > 0
+  const dm = moment.duration(current - prev)
+  const dhrs = Math.abs(dm.hours())
+  const dmins = Math.abs(dm.minutes())
 
   return (
     <OutlineBlock>
@@ -61,20 +76,22 @@ const TimeBlock: React.SFC<{title: string, duration: number}> = ({title, duratio
       <TimeStatBlock label='hrs' value={hrs}/>
       <TimeStatBlock label='mins' value={mins}/>
       <TimeStatBlock label='seconds' value={secs}/>
+      <Note>{increase ? 'Up' : 'Down'} {dhrs} hrs, {dmins} mins from {label}</Note>
     </OutlineBlock>
   )
 }
 
 export const PlaytimeSummary: React.SFC<{uid: string}> = ({uid}) => {
-  const { data } = usePlaytimeSummary({variables: { uid }, pollInterval: 10000})
+  const { data } = usePlaytimeSummary({variables: { uid }, pollInterval: 10000, suspend: true})
   console.log('data', data)
 
-  const todayMs = data && data.playtimeSummary && data.playtimeSummary.today || 0
-  const thisMonthMs = data && data.playtimeSummary && data.playtimeSummary.thisMonth || 0
+  if (!data || !data.playtimeSummary) { return <Loading/> } // due to suspense this should never happen, but i want to type-safe the thing
+  const { playtimeSummary: { day, week, month }} = data
   return (
     <SummaryBlock>
-      <TimeBlock title='Today' duration={todayMs}/>
-      <TimeBlock title='This Month' duration={thisMonthMs}/>
+      <TimeBlock title='Today' durations={day} label='yesterday'/>
+      <TimeBlock title='Week' durations={week} label='last week'/>
+      <TimeBlock title='Month' durations={month} label='last month'/>
     </SummaryBlock>
   )
 }

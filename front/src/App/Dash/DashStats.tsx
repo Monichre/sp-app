@@ -50,7 +50,7 @@ const ArtistRow: React.SFC<{artist: Artist}> = ({artist: {name, playDurationMs}}
     <h5 data-test='artist-row-name'>{name}</h5>
     <p>
       <span data-test='artist-row-hours'>{hrs}</span> hrs
-      <span data-test='artist-row-minutes'>{mins}</span> mins
+      &nbsp;<span data-test='artist-row-minutes'>{mins}</span> mins
     </p>
   </div>
 )}

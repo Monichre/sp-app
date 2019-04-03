@@ -1,4 +1,4 @@
-// Generated in 2019-04-02T22:53:29-07:00
+// Generated in 2019-04-02T23:35:11-07:00
 // REGENERATE THIS BY STARTING THE LOCAL SERVER
 // AND THEN RUNNING `back % yarn generate`
 
@@ -101,9 +101,17 @@ export interface Image {
 }
 
 export interface PlaytimeSummaryResponse {
-  today: number;
+  day: PlaytimeSummaryPeriods;
 
-  thisMonth: number;
+  week: PlaytimeSummaryPeriods;
+
+  month: PlaytimeSummaryPeriods;
+}
+
+export interface PlaytimeSummaryPeriods {
+  current: number;
+
+  prev: number;
 }
 
 export interface DashStatsResponse {
@@ -402,19 +410,48 @@ export namespace PlaytimeSummaryResponseResolvers {
     TContext = Context,
     TypeParent = PlaytimeSummaryResponse
   > {
-    today?: TodayResolver<number, TypeParent, TContext>;
+    day?: DayResolver<PlaytimeSummaryPeriods, TypeParent, TContext>;
 
-    thisMonth?: ThisMonthResolver<number, TypeParent, TContext>;
+    week?: WeekResolver<PlaytimeSummaryPeriods, TypeParent, TContext>;
+
+    month?: MonthResolver<PlaytimeSummaryPeriods, TypeParent, TContext>;
   }
 
-  export type TodayResolver<
-    R = number,
+  export type DayResolver<
+    R = PlaytimeSummaryPeriods,
     Parent = PlaytimeSummaryResponse,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
-  export type ThisMonthResolver<
-    R = number,
+  export type WeekResolver<
+    R = PlaytimeSummaryPeriods,
     Parent = PlaytimeSummaryResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type MonthResolver<
+    R = PlaytimeSummaryPeriods,
+    Parent = PlaytimeSummaryResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace PlaytimeSummaryPeriodsResolvers {
+  export interface Resolvers<
+    TContext = Context,
+    TypeParent = PlaytimeSummaryPeriods
+  > {
+    current?: CurrentResolver<number, TypeParent, TContext>;
+
+    prev?: PrevResolver<number, TypeParent, TContext>;
+  }
+
+  export type CurrentResolver<
+    R = number,
+    Parent = PlaytimeSummaryPeriods,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type PrevResolver<
+    R = number,
+    Parent = PlaytimeSummaryPeriods,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
 }
@@ -578,6 +615,7 @@ export type IResolvers<TContext = Context> = {
   PlaytimeSummaryResponse?: PlaytimeSummaryResponseResolvers.Resolvers<
     TContext
   >;
+  PlaytimeSummaryPeriods?: PlaytimeSummaryPeriodsResolvers.Resolvers<TContext>;
   DashStatsResponse?: DashStatsResponseResolvers.Resolvers<TContext>;
   PeriodGlobalUserArtistPlaytimes?: PeriodGlobalUserArtistPlaytimesResolvers.Resolvers<
     TContext
