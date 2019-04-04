@@ -1,6 +1,7 @@
 import * as AWS from 'aws-sdk';
+import * as R from 'ramda'
 import { SQSHandler } from "aws-lambda";
-import { SpotifyApi } from "../shared/SpotifyApi";
+import { SpotifyApi, SpotifyPlay, SpotifyArtist } from "../shared/SpotifyApi";
 import { verifyEnv } from "../shared/env";
 import { QueueFetchSpotifyPlays } from "../shared/queues";
 import { TableUser } from '../shared/tables/TableUser';
@@ -38,32 +39,61 @@ export const handler: SQSHandler = async (event) => {
   
   const { body: { items }} = await api.getMyRecentlyPlayedTracks({ limit: 50 })
 
-  log.info(`api returned ${items.length} items`)
+  if (items.length > 0) {
 
-  // write all the results to the table
-  log.info(`Play table [${env.TABLE_TARGET}] at [${env.DYNAMO_ENDPOINT}]`)
-  const doc = new AWS.DynamoDB.DocumentClient({endpoint: env.DYNAMO_ENDPOINT})
-  const TableName = env.TABLE_TARGET
-  for (const item of items) {
-    const playedAt = sanitizeSpotifyPlayedAt(item.played_at)
-    // we should only write if the playedAt is more recent than the user's lastPlayedAt
-    try {
-      const result = await doc.put({
-        TableName,
-        Item: {
-          pk: uid,
-          sk: `track#${playedAt}`,
-          fk: `${item.track.id}#${playedAt}`,
-          playedAt,
-          track: JSON.stringify(item.track)
-        }
-      }).promise()
-      log.info(`saved ${item.track.name}`)
-    } catch (err) {
-      log.error('error writing api fetch result', err)
+    log.info(`api returned ${items.length} items`)
+    // ok so here is where we really want to enrich the play records with addl artist data
+    // and/or cache the info
+    // first collect all unique artist ids from all the play records
+    // there's some ramda magic that will one-line that
+    const getArtistIds = R.compose(
+      R.uniq,
+      R.map(R.prop('id')),
+      R.flatten,
+      R.map(R.path(['track', 'artists'])),
+    )
+    const artistIds = getArtistIds(items)
+    log.warn('artist ids', { artistIds })
+
+    // make a getArtists call with all their ids to get the enrichment data (images, genres)
+    const { body: { artists }} = await api.getArtists(artistIds) as { body: { artists:  SpotifyArtist[] }}
+
+    // log.warn('got enriched artist data', {artists})
+    // return a play.map of artists to enriched artist data
+
+    const enrichedItems = items.map(i => ({
+      played_at: i.played_at,
+      track: {
+        ...i.track,
+        artists: i.track.artists.map(ta => artists.find(ea => ea.id === ta.id))
+      }
+    }))
+    // write all the results to the table
+    log.info(`Play table [${env.TABLE_TARGET}] at [${env.DYNAMO_ENDPOINT}]`)
+    const doc = new AWS.DynamoDB.DocumentClient({endpoint: env.DYNAMO_ENDPOINT})
+    const TableName = env.TABLE_TARGET
+    for (const item of enrichedItems) {
+      const playedAt = sanitizeSpotifyPlayedAt(item.played_at)
+      // we should only write if the playedAt is more recent than the user's lastPlayedAt
+      // and we should collect these and do a batch write
+      try {
+        const result = await doc.put({
+          TableName,
+          Item: {
+            pk: uid,
+            sk: `track#${playedAt}`,
+            fk: `${item.track.id}#${playedAt}`,
+            playedAt,
+            track: JSON.stringify(item.track)
+          }
+        }).promise()
+        log.info(`saved ${item.track.name}`)
+      } catch (err) {
+        log.error('error writing api fetch result', err)
+      }
     }
-  }
 
+  }
   // update the user's credentials record with a lastUpdate
   // THIS SHOULD BE THE LAST PLAYEDAT FROM THE NEWEST PLAY WE JUST WROTE
   const table = TableUser(env.DYNAMO_ENDPOINT, env.TABLE_USER)

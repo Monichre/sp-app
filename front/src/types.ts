@@ -1,4 +1,4 @@
-// Generated in 2019-04-02T23:36:10-07:00
+// Generated in 2019-04-03T12:43:31-07:00
 // REGENERATE THIS BY STARTING THE LOCAL BACKEND
 // AND THEN RUNNING `front % yarn generate`
 
@@ -60,6 +60,14 @@ export type DashStatsQuery = {
 
 export type DashStatsDashStats = {
   __typename?: "DashStatsResponse";
+
+  topArtists: DashStatsTopArtists;
+
+  topGenres: DashStatsTopGenres;
+};
+
+export type DashStatsTopArtists = {
+  __typename?: "UserArtistPlaytimes";
 
   week: DashStatsWeek;
 
@@ -133,6 +141,88 @@ export type DashStats__Global = {
 };
 
 export type DashStats__User = {
+  __typename?: "ArtistPlaytime";
+
+  name: string;
+
+  playDurationMs: number;
+};
+
+export type DashStatsTopGenres = {
+  __typename?: "UserArtistPlaytimes";
+
+  week: DashStats_Week;
+
+  month: DashStats_Month;
+
+  life: DashStats_Life;
+};
+
+export type DashStats_Week = {
+  __typename?: "PeriodGlobalUserArtistPlaytimes";
+
+  global: DashStats___Global[];
+
+  user: DashStats___User[];
+};
+
+export type DashStats___Global = {
+  __typename?: "ArtistPlaytime";
+
+  name: string;
+
+  playDurationMs: number;
+};
+
+export type DashStats___User = {
+  __typename?: "ArtistPlaytime";
+
+  name: string;
+
+  playDurationMs: number;
+};
+
+export type DashStats_Month = {
+  __typename?: "PeriodGlobalUserArtistPlaytimes";
+
+  global: DashStats____Global[];
+
+  user: DashStats____User[];
+};
+
+export type DashStats____Global = {
+  __typename?: "ArtistPlaytime";
+
+  name: string;
+
+  playDurationMs: number;
+};
+
+export type DashStats____User = {
+  __typename?: "ArtistPlaytime";
+
+  name: string;
+
+  playDurationMs: number;
+};
+
+export type DashStats_Life = {
+  __typename?: "PeriodGlobalUserArtistPlaytimes";
+
+  global: DashStats_____Global[];
+
+  user: DashStats_____User[];
+};
+
+export type DashStats_____Global = {
+  __typename?: "ArtistPlaytime";
+
+  name: string;
+
+  playDurationMs: number;
+};
+
+export type DashStats_____User = {
   __typename?: "ArtistPlaytime";
 
   name: string;
@@ -224,15 +314,25 @@ export type RecentPlaysArtists = {
   __typename?: "Artist";
 
   name: string;
+
+  genres: string[];
+
+  images: RecentPlaysImages[];
+};
+
+export type RecentPlaysImages = {
+  __typename?: "Image";
+
+  url: string;
 };
 
 export type RecentPlaysAlbum = {
   __typename?: "Album";
 
-  images: (Maybe<RecentPlaysImages>)[];
+  images: (Maybe<RecentPlays_Images>)[];
 };
 
-export type RecentPlaysImages = {
+export type RecentPlays_Images = {
   __typename?: "Image";
 
   url: string;
@@ -248,34 +348,68 @@ import * as ReactApolloHooks from "react-apollo-hooks";
 export const DashStatsDocument = gql`
   query DashStats($uid: String!) {
     dashStats(uid: $uid) {
-      week {
-        global {
-          name
-          playDurationMs
+      topArtists {
+        week {
+          global {
+            name
+            playDurationMs
+          }
+          user {
+            name
+            playDurationMs
+          }
         }
-        user {
-          name
-          playDurationMs
+        month {
+          global {
+            name
+            playDurationMs
+          }
+          user {
+            name
+            playDurationMs
+          }
+        }
+        life {
+          global {
+            name
+            playDurationMs
+          }
+          user {
+            name
+            playDurationMs
+          }
         }
       }
-      month {
-        global {
-          name
-          playDurationMs
+      topGenres {
+        week {
+          global {
+            name
+            playDurationMs
+          }
+          user {
+            name
+            playDurationMs
+          }
         }
-        user {
-          name
-          playDurationMs
+        month {
+          global {
+            name
+            playDurationMs
+          }
+          user {
+            name
+            playDurationMs
+          }
         }
-      }
-      life {
-        global {
-          name
-          playDurationMs
-        }
-        user {
-          name
-          playDurationMs
+        life {
+          global {
+            name
+            playDurationMs
+          }
+          user {
+            name
+            playDurationMs
+          }
         }
       }
     }
@@ -325,6 +459,10 @@ export const RecentPlaysDocument = gql`
           name
           artists {
             name
+            genres
+            images {
+              url
+            }
           }
           album {
             images {

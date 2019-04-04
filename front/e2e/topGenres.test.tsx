@@ -27,14 +27,14 @@ afterEach(async () => {
   await browser.close()
 })
 
-const expectTopArtists = async (sel: string, rows: {name: string, hours: number, minutes: number}[]) => {
-  const items = await page.$$(`${sel} > [data-test="artist-row"]`)
+const expectTopGenres = async (sel: string, rows: {name: string, hours: number, minutes: number}[]) => {
+  const items = await page.$$(`${sel} > [data-test="genre-row"]`)
   expect(items.length).toEqual(rows.length)
   for (let idx = 0; idx < rows.length; idx++) {
     const { name, hours, minutes } = rows[idx]
-    const foundName = await items[idx].$eval('[data-test="artist-row-name"]', el => el.textContent)
-    const foundHours = await items[idx].$eval('[data-test="artist-row-hours"]', el => el.textContent)
-    const foundMinutes = await items[idx].$eval('[data-test="artist-row-minutes"]', el => el.textContent)
+    const foundName = await items[idx].$eval('[data-test="genre-row-name"]', el => el.textContent)
+    const foundHours = await items[idx].$eval('[data-test="genre-row-hours"]', el => el.textContent)
+    const foundMinutes = await items[idx].$eval('[data-test="genre-row-minutes"]', el => el.textContent)
     expect(foundName).toEqual(name)
     expect(foundHours).toEqual(hours.toString())
     expect(foundMinutes).toEqual(minutes.toString())
@@ -42,16 +42,17 @@ const expectTopArtists = async (sel: string, rows: {name: string, hours: number,
 
 }
 
-describe('seeing top artist stats', () => {
+describe('seeing top genre stats', () => {
   for (const user of [users.NoHistory, users.WithHistory, users.BigHistory]) {
 
     describe(`user ${user.email} with ${user.description}`, () => {  
-      test(`i should see all global and ${user.topArtistsLife.length} personal top artists`, async () => {
+
+      test(`i should see all global and ${user.topGenresLife.length} personal top genres`, async () => {
         await signIn(page, URL, user)
         await page.waitForSelector('[data-test="top-artists-period-select"]')
         await page.select('[data-test="top-artists-period-select"]', '/life')
-        await expectTopArtists('[data-test="top-artists-global"]', globals.topArtists)
-        await expectTopArtists('[data-test="top-artists-personal"]', user.topArtistsLife)
+        await expectTopGenres('[data-test="top-genres-global"]', globals.topGenres)
+        await expectTopGenres('[data-test="top-genres-personal"]', user.topGenresLife)
       }, 30000)
     })
   

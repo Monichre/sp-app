@@ -7,6 +7,10 @@ query RecentPlays($uid: String!) {
         name
         artists {
           name
+          genres
+          images {
+            url
+          }
         }
         album {
           images {

@@ -1,8 +1,11 @@
+import * as R from 'ramda'
 import { DynamoDBStreamHandler, DynamoDBRecord } from "aws-lambda";
 import { verifyEnv } from "../shared/env";
 
 import { slog } from "./logger";
 import { TableStat } from "../shared/tables/TableStat";
+import { Artist } from './graphql/types';
+import { SpotifyArtist } from '../shared/SpotifyApi';
 
 const log = slog.child({handler: 'onPlayUpdateStats', awsEvent: 'ddbs'})
 
@@ -36,10 +39,11 @@ const handleRecord = (env: Env) => async (record: DynamoDBRecord) => {
       name,
       duration_ms
     } = track
-    log.info(`track from play record ${name} ${playedAt}`, { uid, trackPlayedAt})
+    log.info(`track from play record`, { uid, name, playedAt, trackPlayedAt})
 
-    const artists = track.artists.map(a => ({name: a.name, id: a.id}))
-    log.info('artists for this track:', {artists})
+    // const artists = track.artists.map(a => ({name: a.name, id: a.id}))
+    const artists = track.artists
+    // log.info('artists for this track:', {artists})
     // WHEN WE IMPLEMENT ARTIST & GENRE STATS...
     // i think the handler prolly shouldnt have to know this much about how stats work
     // at the same time the stats engine shouldnt have to know that much about the plays?
@@ -75,7 +79,7 @@ const handleRecord = (env: Env) => async (record: DynamoDBRecord) => {
     await table.writeStat({uid: 'global', relationType: 'total', relationKey: 'total', periodType: 'life', periodValue: 'life', statValue: duration_ms})
 
     for (const artist of artists) {
-      log.info('updating user and global stats for', {artist})
+      log.info('updating user and global stats for', {artist: artist.name})
       await table.writeStat({uid, relationType: 'artist', relationKey: artist.id, periodType: 'day', periodValue: day, statValue: duration_ms, artist})
       await table.writeStat({uid, relationType: 'artist', relationKey: artist.id, periodType: 'week', periodValue: week, statValue: duration_ms, artist})
       await table.writeStat({uid, relationType: 'artist', relationKey: artist.id, periodType: 'month', periodValue: month, statValue: duration_ms, artist})
@@ -87,11 +91,39 @@ const handleRecord = (env: Env) => async (record: DynamoDBRecord) => {
       await table.writeStat({uid: 'global', relationType: 'artist', relationKey: artist.id, periodType: 'life', periodValue: 'life', statValue: duration_ms, artist})
     }
 
+    // const artistGenres = R.compose<Artist[], string[]>(
+    //   R.flatten,
+    //   R.map<Artist, string>(R.prop('genres'))
+    // )
+    const g = (artists as SpotifyArtist[]).map((a: SpotifyArtist)=> a.genres)
+    const genres = R.uniq(R.flatten<string>(g))
+    // const artistGenres = R.compose<Artist[], string[]>(
+    //   R.flatten,
+    //   R.map(R.path(['genres']))
+    // )
+    // const genres = artistGenres(artists as Artist[]) as string[]
+
+    for (const genre of genres) {
+      log.info('updating user and global stats for', {genre})
+      await table.writeStat({uid, relationType: 'genre', relationKey: genre, periodType: 'day', periodValue: day, statValue: duration_ms, genre})
+      await table.writeStat({uid, relationType: 'genre', relationKey: genre, periodType: 'week', periodValue: week, statValue: duration_ms, genre})
+      await table.writeStat({uid, relationType: 'genre', relationKey: genre, periodType: 'month', periodValue: month, statValue: duration_ms, genre})
+      await table.writeStat({uid, relationType: 'genre', relationKey: genre, periodType: 'life', periodValue: 'life', statValue: duration_ms, genre})
+
+      await table.writeStat({uid: 'global', relationType: 'genre', relationKey: genre, periodType: 'day', periodValue: day, statValue: duration_ms, genre})
+      await table.writeStat({uid: 'global', relationType: 'genre', relationKey: genre, periodType: 'week', periodValue: week, statValue: duration_ms, genre})
+      await table.writeStat({uid: 'global', relationType: 'genre', relationKey: genre, periodType: 'month', periodValue: month, statValue: duration_ms, genre})
+      await table.writeStat({uid: 'global', relationType: 'genre', relationKey: genre, periodType: 'life', periodValue: 'life', statValue: duration_ms, genre})
+
+    }
     return
   }
   if (eventName === 'REMOVE') {
     log.info('Remove stat')
     return
+  }
+  if (eventName === 'MODIFY') {
+    log.warn('MODIFY:', { Keys, newImage: record.dynamodb.NewImage, oldImage: record.dynamodb.OldImage})
   }
   log.warn('unknown event', { eventName, Keys })
 }

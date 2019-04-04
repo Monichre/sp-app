@@ -41,6 +41,33 @@ export const globals = {
       hours: 0,
       minutes: 5,
     },
+  ],
+  topGenres: [
+    {
+      name: 'album rock',
+      hours: 1,
+      minutes: 43,
+    },
+    {
+      name: 'glam metal',
+      hours: 1,
+      minutes: 43,
+    },
+    {
+      name: 'hard rock',
+      hours: 1,
+      minutes: 43,
+    },
+    {
+      name: 'rock',
+      hours: 1,
+      minutes: 43,
+    },
+    {
+      name: 'sleaze rock',
+      hours: 1,
+      minutes: 19,
+    },
   ]
 }
 
@@ -52,6 +79,7 @@ export const users = {
     displayName: "sp test account",
     tracks: [],
     topArtistsLife: [],
+    topGenresLife: [],
   },
   WithHistory: {
     email: "sdebaun@sofia4ventura.com",
@@ -90,6 +118,33 @@ export const users = {
         name: 'invention_',
         hours: 0,
         minutes: 2,
+      },
+    ],
+    topGenresLife: [
+      {
+        name: 'comic',
+        hours: 0,
+        minutes: 14,
+      },
+      {
+        name: 'nerdcore',
+        hours: 0,
+        minutes: 14,
+      },
+      {
+        name: 'escape room',
+        hours: 0,
+        minutes: 3,
+      },
+      {
+        name: 'hip hop',
+        hours: 0,
+        minutes: 3,
+      },
+      {
+        name: 'hip pop',
+        hours: 0,
+        minutes: 3,
       },
     ]
   },
@@ -138,12 +193,51 @@ export const users = {
         hours: 0,
         minutes: 4,
       },
+    ],
+    topGenresLife: [
+      {
+        name: 'album rock',
+        hours: 1,
+        minutes: 43,
+      },
+      {
+        name: 'glam metal',
+        hours: 1,
+        minutes: 43,
+      },
+      {
+        name: 'hard rock',
+        hours: 1,
+        minutes: 43,
+      },
+      {
+        name: 'rock',
+        hours: 1,
+        minutes: 43,
+      },
+      {
+        name: 'sleaze rock',
+        hours: 1,
+        minutes: 19,
+      },
     ]
   }
 }
 
 export const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
+export const launchBrowser = async (watch: boolean = false) => {
+  if (watch) {
+    return await puppeteer.launch({
+      headless: false,
+      slowMo: 1,
+      args: [`--window-size=800,640`]
+    })
+  } else {
+    return await puppeteer.launch()
+  }
+
+}
 export const signIn = async (page: puppeteer.Page, URL: string, userInfo: UserInfo) => {
   // go to the home page
   await page.goto(URL)

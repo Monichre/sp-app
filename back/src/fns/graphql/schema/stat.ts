@@ -1,4 +1,5 @@
 import * as AWS from 'aws-sdk';
+import * as R from 'ramda';
 import { makeExecutableSchema } from "graphql-tools";
 import { QueryResolvers } from "../types";
 import { verifyEnv } from '../../../shared/env';
@@ -34,10 +35,14 @@ type PeriodGlobalUserArtistPlaytimes {
   user: [ArtistPlaytime!]!
 }
 
-type DashStatsResponse {
+type UserArtistPlaytimes {
   week: PeriodGlobalUserArtistPlaytimes!
   month: PeriodGlobalUserArtistPlaytimes!
   life: PeriodGlobalUserArtistPlaytimes!
+}
+type DashStatsResponse {
+  topArtists: UserArtistPlaytimes!
+  topGenres: UserArtistPlaytimes!
 }
 
 `
@@ -112,6 +117,15 @@ const playtimeSummary: QueryResolvers.PlaytimeSummaryResolver = async (_, {uid},
   //   thisMonth: thisMonth.Item.playDurationMs,
   // }
 }
+type StatRow = {
+  name: string,
+  playDurationMs: number,
+}
+
+const byTimeThenName = R.sortWith<StatRow>([
+  R.descend(R.prop('playDurationMs')),
+  R.ascend(R.prop('name'))
+])
 
 const topArtistsFor = async (doc, TableName, uid: string, periodName, periodValue, Limit = 5) => {
   const params = {
@@ -126,8 +140,26 @@ const topArtistsFor = async (doc, TableName, uid: string, periodName, periodValu
   }
   return await doc.query(params).promise()
     .then(d => d.Items.map(i => ({name: i.artist.name, playDurationMs: i.playDurationMs})))
+    .then(byTimeThenName)
 }
 
+const topGenresFor = async (doc, TableName, uid: string, periodName, periodValue, Limit = 5) => {
+  const params = {
+    TableName,
+    Limit,
+    KeyConditionExpression: `pk = :pk`,
+    IndexName: 'LSIPlayDuration',
+    ScanIndexForward: false,
+    ExpressionAttributeValues: {
+      ':pk': [uid, 'genre', periodName, periodValue].join('#')
+    }
+  }
+  return await doc.query(params).promise()
+    .then(d => d.Items.map(i => ({name: i.genre, playDurationMs: i.playDurationMs})))
+    .then(byTimeThenName)
+}
+
+// const dashStats = async (_, {uid}, context) => {
 const dashStats: QueryResolvers.DashStatsResolver = async (_, {uid}, context) => {
   console.log('dashStats')
   const doc = new AWS.DynamoDB.DocumentClient({endpoint: context.DYNAMO_ENDPOINT})
@@ -139,17 +171,33 @@ const dashStats: QueryResolvers.DashStatsResolver = async (_, {uid}, context) =>
   const month = m.format('YYYY-MM')
 
   return {
-    week: {
-      global: await topArtistsFor(doc, TableName, 'global', 'week', week),
-      user: await topArtistsFor(doc, TableName, uid, 'week', week),
+    topArtists: {
+      week: {
+        global: await topArtistsFor(doc, TableName, 'global', 'week', week),
+        user: await topArtistsFor(doc, TableName, uid, 'week', week),
+      },
+      month: {
+        global: await topArtistsFor(doc, TableName, 'global', 'month', month),
+        user: await topArtistsFor(doc, TableName, uid, 'month', month),
+      },
+      life: {
+        global: await topArtistsFor(doc, TableName, 'global', 'life', 'life'),
+        user: await topArtistsFor(doc, TableName, uid, 'life', 'life'),
+      }
     },
-    month: {
-      global: await topArtistsFor(doc, TableName, 'global', 'month', month),
-      user: await topArtistsFor(doc, TableName, uid, 'month', month),
-    },
-    life: {
-      global: await topArtistsFor(doc, TableName, 'global', 'life', 'life'),
-      user: await topArtistsFor(doc, TableName, uid, 'life', 'life'),
+    topGenres: {
+      week: {
+        global: await topGenresFor(doc, TableName, 'global', 'week', week),
+        user: await topGenresFor(doc, TableName, uid, 'week', week),
+      },
+      month: {
+        global: await topGenresFor(doc, TableName, 'global', 'month', month),
+        user: await topGenresFor(doc, TableName, uid, 'month', month),
+      },
+      life: {
+        global: await topGenresFor(doc, TableName, 'global', 'life', 'life'),
+        user: await topGenresFor(doc, TableName, uid, 'life', 'life'),
+      }
     }
   }
 }

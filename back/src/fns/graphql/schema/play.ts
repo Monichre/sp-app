@@ -1,6 +1,6 @@
 import * as AWS from 'aws-sdk';
 import { makeExecutableSchema } from "graphql-tools";
-import { QueryResolvers } from "../types";
+import { QueryResolvers, Image } from "../types";
 import { TableUser } from '../../../shared/tables/TableUser';
 import { QueueStartHarvestUser } from '../../../shared/queues';
 
@@ -30,6 +30,8 @@ type Track {
 
 type Artist {
   name: String!
+  genres: [String!]!
+  images: [Image!]!
 }
 
 type Album {
@@ -76,6 +78,8 @@ const recentPlays: QueryResolvers.RecentPlaysResolver = async (_, {uid}, context
         name,
         artists: (artists as any[]).map(a => ({
           name: a.name as string,
+          images: a.images as Image[],
+          genres: a.genres as string[]
         })),
         album,
       }

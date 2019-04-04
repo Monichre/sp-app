@@ -20,8 +20,21 @@ const CardAlert = styled(Card)`
   background-color: #666;
 `
 
+const AvatarImg = styled.img`
+  height: 2rem;
+  width: 2rem;
+  border-radius: 1rem;
+`
+
+const ArtistLabel: React.SFC<{artist: any}> = ({artist}) =>
+  <div>
+    <AvatarImg src={artist.images[0] && artist.images[0].url}/>
+    <div>{artist.name}</div>
+    {artist.genres.map((g: any, key: string) => <span {...{key}}>{g}&nbsp;</span>)}
+  </div>
+
 const PlayItem: React.SFC<{play: RecentPlaysPlays}> = ({play}) => {
-  const img = play.track.album.images[2]
+  const img = play.track.album.images[2] || play.track.album.images[0]
   const imgUrl = img ? img.url : ''
   return (
   <Card data-test='play-item'>
@@ -30,7 +43,7 @@ const PlayItem: React.SFC<{play: RecentPlaysPlays}> = ({play}) => {
       {play.track.name}
     </CardTitle>
     <CardInfo>
-      {play.track.artists.map((a: any, key: any) => <div {...{key}}>{a && a.name}</div>)}
+      {play.track.artists.map((artist: any, key: any) => <ArtistLabel {...{key, artist}}/>)}
     </CardInfo>
     <Moment fromNow>
       {play.playedAt}

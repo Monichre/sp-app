@@ -23,6 +23,7 @@ export type SpotifyAlbum = {
 export type SpotifyArtist = {
   id: string,
   name: string,
+  genres: string[]
 }
 
 type BodyResponse<T> = Promise<{ body: T }>
@@ -59,6 +60,7 @@ export const SpotifyApi = (accessToken?: string, refreshToken?: string) => {
   const setAccessToken = _api.setAccessToken.bind(_api)
   const setRefreshToken = _api.setRefreshToken.bind(_api)
   const createAuthorizeURL = _api.createAuthorizeURL.bind(_api)
+  const getArtists = _api.getArtists.bind(_api)
 
   type MeResult = {
     display_name: string
@@ -101,5 +103,6 @@ export const SpotifyApi = (accessToken?: string, refreshToken?: string) => {
     getMe,
     refreshAccessToken,    
     getMyRecentlyPlayedTracks,
+    getArtists,
   }
 }

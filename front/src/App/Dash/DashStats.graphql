@@ -1,33 +1,67 @@
 query DashStats($uid: String!) {
   dashStats(uid: $uid) {
-    week {
-      global {
-        name
-        playDurationMs
+    topArtists {
+      week {
+        global {
+          name
+          playDurationMs
+        }
+        user {
+          name
+          playDurationMs
+        }
       }
-      user {
-        name
-        playDurationMs
+      month {
+        global {
+          name
+          playDurationMs
+        }
+        user {
+          name
+          playDurationMs
+        }
+      }
+      life {
+        global {
+          name
+          playDurationMs
+        }
+        user {
+          name
+          playDurationMs
+        }
       }
     }
-    month {
-      global {
-        name
-        playDurationMs
+    topGenres {
+      week {
+        global {
+          name
+          playDurationMs
+        }
+        user {
+          name
+          playDurationMs
+        }
       }
-      user {
-        name
-        playDurationMs
+      month {
+        global {
+          name
+          playDurationMs
+        }
+        user {
+          name
+          playDurationMs
+        }
       }
-    }
-    life {
-      global {
-        name
-        playDurationMs
-      }
-      user {
-        name
-        playDurationMs
+      life {
+        global {
+          name
+          playDurationMs
+        }
+        user {
+          name
+          playDurationMs
+        }
       }
     }
   }

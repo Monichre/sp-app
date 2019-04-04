@@ -1,4 +1,4 @@
-// Generated in 2019-04-02T23:35:11-07:00
+// Generated in 2019-04-03T12:37:45-07:00
 // REGENERATE THIS BY STARTING THE LOCAL SERVER
 // AND THEN RUNNING `back % yarn generate`
 
@@ -88,16 +88,20 @@ export interface Track {
 
 export interface Artist {
   name: string;
+
+  genres: string[];
+
+  images: Image[];
+}
+
+export interface Image {
+  url: string;
 }
 
 export interface Album {
   name: string;
 
   images: (Maybe<Image>)[];
-}
-
-export interface Image {
-  url: string;
 }
 
 export interface PlaytimeSummaryResponse {
@@ -115,6 +119,12 @@ export interface PlaytimeSummaryPeriods {
 }
 
 export interface DashStatsResponse {
+  topArtists: UserArtistPlaytimes;
+
+  topGenres: UserArtistPlaytimes;
+}
+
+export interface UserArtistPlaytimes {
   week: PeriodGlobalUserArtistPlaytimes;
 
   month: PeriodGlobalUserArtistPlaytimes;
@@ -365,11 +375,37 @@ export namespace TrackResolvers {
 export namespace ArtistResolvers {
   export interface Resolvers<TContext = Context, TypeParent = Artist> {
     name?: NameResolver<string, TypeParent, TContext>;
+
+    genres?: GenresResolver<string[], TypeParent, TContext>;
+
+    images?: ImagesResolver<Image[], TypeParent, TContext>;
   }
 
   export type NameResolver<
     R = string,
     Parent = Artist,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type GenresResolver<
+    R = string[],
+    Parent = Artist,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type ImagesResolver<
+    R = Image[],
+    Parent = Artist,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace ImageResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = Image> {
+    url?: UrlResolver<string, TypeParent, TContext>;
+  }
+
+  export type UrlResolver<
+    R = string,
+    Parent = Image,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
 }
@@ -389,18 +425,6 @@ export namespace AlbumResolvers {
   export type ImagesResolver<
     R = (Maybe<Image>)[],
     Parent = Album,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-}
-
-export namespace ImageResolvers {
-  export interface Resolvers<TContext = Context, TypeParent = Image> {
-    url?: UrlResolver<string, TypeParent, TContext>;
-  }
-
-  export type UrlResolver<
-    R = string,
-    Parent = Image,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
 }
@@ -461,6 +485,28 @@ export namespace DashStatsResponseResolvers {
     TContext = Context,
     TypeParent = DashStatsResponse
   > {
+    topArtists?: TopArtistsResolver<UserArtistPlaytimes, TypeParent, TContext>;
+
+    topGenres?: TopGenresResolver<UserArtistPlaytimes, TypeParent, TContext>;
+  }
+
+  export type TopArtistsResolver<
+    R = UserArtistPlaytimes,
+    Parent = DashStatsResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type TopGenresResolver<
+    R = UserArtistPlaytimes,
+    Parent = DashStatsResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace UserArtistPlaytimesResolvers {
+  export interface Resolvers<
+    TContext = Context,
+    TypeParent = UserArtistPlaytimes
+  > {
     week?: WeekResolver<PeriodGlobalUserArtistPlaytimes, TypeParent, TContext>;
 
     month?: MonthResolver<
@@ -474,17 +520,17 @@ export namespace DashStatsResponseResolvers {
 
   export type WeekResolver<
     R = PeriodGlobalUserArtistPlaytimes,
-    Parent = DashStatsResponse,
+    Parent = UserArtistPlaytimes,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
   export type MonthResolver<
     R = PeriodGlobalUserArtistPlaytimes,
-    Parent = DashStatsResponse,
+    Parent = UserArtistPlaytimes,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
   export type LifeResolver<
     R = PeriodGlobalUserArtistPlaytimes,
-    Parent = DashStatsResponse,
+    Parent = UserArtistPlaytimes,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
 }
@@ -610,13 +656,14 @@ export type IResolvers<TContext = Context> = {
   Play?: PlayResolvers.Resolvers<TContext>;
   Track?: TrackResolvers.Resolvers<TContext>;
   Artist?: ArtistResolvers.Resolvers<TContext>;
-  Album?: AlbumResolvers.Resolvers<TContext>;
   Image?: ImageResolvers.Resolvers<TContext>;
+  Album?: AlbumResolvers.Resolvers<TContext>;
   PlaytimeSummaryResponse?: PlaytimeSummaryResponseResolvers.Resolvers<
     TContext
   >;
   PlaytimeSummaryPeriods?: PlaytimeSummaryPeriodsResolvers.Resolvers<TContext>;
   DashStatsResponse?: DashStatsResponseResolvers.Resolvers<TContext>;
+  UserArtistPlaytimes?: UserArtistPlaytimesResolvers.Resolvers<TContext>;
   PeriodGlobalUserArtistPlaytimes?: PeriodGlobalUserArtistPlaytimesResolvers.Resolvers<
     TContext
   >;
