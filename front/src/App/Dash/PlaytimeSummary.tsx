@@ -60,15 +60,26 @@ type Durations = {
   prev: number
 }
 
+const hrsAndMinsAndSecs = (durationMs: number) => {
+  const d = moment.duration(durationMs)
+  return {
+    hrs: Math.abs(Math.trunc(d.asHours())),
+    mins: Math.abs(d.minutes()),
+    secs: Math.abs(d.seconds()),
+  }
+}
+
 const TimeBlock: React.SFC<{title: string, durations: Durations, label: string}> = ({title, durations: { current, prev }, label}) => {
-  const m = moment.duration(current)
-  const hrs = m.hours()
-  const mins = m.minutes()
-  const secs = m.seconds()
+  // const m = moment.duration(current)
+  const { hrs, mins, secs } = hrsAndMinsAndSecs(current)
+  // const hrs = m.hours()
+  // const mins = m.minutes()
+  // const secs = m.seconds()
   const increase = (current - prev) > 0
-  const dm = moment.duration(current - prev)
-  const dhrs = Math.abs(dm.hours())
-  const dmins = Math.abs(dm.minutes())
+  // const dm = moment.duration(current - prev)
+  const { hrs: dhrs, mins: dmins } = hrsAndMinsAndSecs(current - prev)
+  // const dhrs = Math.abs(dm.hours())
+  // const dmins = Math.abs(dm.minutes())
 
   return (
     <OutlineBlock>

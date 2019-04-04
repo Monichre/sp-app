@@ -1,5 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
 import * as firebase from 'firebase';
+import { Observable } from 'apollo-link';
+import { FirebaseUser } from '../types';
+import { Subject } from 'rxjs'
 
 export const FirebaseContext = React.createContext<firebase.app.App | null>(null)
 
@@ -11,9 +14,17 @@ export const useFirebase = () => {
 
 export const useFirebaseAuth = () => useFirebase().auth()
 
+export type BasicUser = Pick<firebase.User, 'uid' | 'email' | 'displayName' | 'photoURL'>
+
 type useUserState = {
   isLoading: boolean,
-  user: firebase.User | null,
+  user: BasicUser | null,
+}
+
+const impersonations = new Subject<useUserState>();
+
+export const impersonate = (uid: string) => {
+  impersonations.next({isLoading: false, user: { uid, displayName: `Impersonated ${uid}`, photoURL: '', email: 'impersonated@none'}})
 }
 
 export const useUser = () => {
@@ -24,6 +35,10 @@ export const useUser = () => {
     const unsub = auth.onAuthStateChanged(authState => {
       console.log('new authState:', authState)
       return setState({ isLoading: false, user: authState })
+    })
+    const iUnsub = impersonations.subscribe(authState => {
+      console.log('impersonating authState', authState)
+      return setState(authState)
     })
     return unsub
   }, [auth])

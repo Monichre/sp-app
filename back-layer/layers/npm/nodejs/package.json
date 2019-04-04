@@ -16,6 +16,7 @@
     "moment": "^2.24.0",
     "ramda": "^0.26.1",
     "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.4.0",
     "spotify-web-api-node": "^4.0.0",
     "uuid": "^3.3.2",
     "winston": "^3.2.1"

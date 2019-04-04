@@ -59,6 +59,7 @@
     "ramda": "^0.26.1",
     "reflect-metadata": "^0.1.13",
     "request-promise": "^4.2.4",
+    "rxjs": "^6.4.0",
     "serverless-dynamodb-local": "0.2.35",
     "serverless-offline": "^4.8.1",
     "serverless-offline-kinesis": "^1.5.1",
