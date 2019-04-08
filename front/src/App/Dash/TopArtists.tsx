@@ -1,23 +1,24 @@
 import React from 'react';
 import styled from 'styled-components'
 import { RouteComponentProps, Switch, Route } from 'react-router';
-import { DashStatsDashStats, DashStatsTopArtists } from '../../types';
+import { DashStatsDashStats, DashStatsTopArtists, DashStatsGlobal } from '../../types';
 import moment from 'moment'
 
-const EvenRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-
-  & > * {
-    flex: 1
+const TwoColumns = styled.div`
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-column-gap: 2rem;
+  @media (max-width: 600px) {
+    grid-template-columns: 100%;
   }
+
+  align-items: start;
 `
 
 const Block = styled.div`
-padding: 0.5rem;
-margin: 0.5rem 0;
+// padding: 0.5rem;
+// margin: 0.5rem 0;
+margin-top: 1rem;
 `
 
 const hrsAndMins = (durationMs: number) => {
@@ -33,40 +34,107 @@ type Artist = {
   playDurationMs: number
 }
 
-const ArtistRow: React.SFC<{artist: Artist}> = ({artist: {name, playDurationMs}}) => {
+const bgSize = 16;
+
+const ArtistAvatar = styled.div<{src: string}>`
+  height: ${bgSize/2}rem;
+  width: ${bgSize/2}rem;
+  border-radius: ${bgSize/2/2}rem;
+  background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("${({src}) => src}");
+  `
+
+const ArtistName = styled.div`
+  font-size: ${bgSize/12}rem;
+  font-weight: 500;
+`
+
+const Artist = styled.div`
+display: flex;
+`
+
+const ArtistTime = styled.div`
+  display: flex;
+  align-items: baseline;
+  & > * {
+    margin-right: 0.5rem;
+  }
+`
+
+const ArtistInfo = styled.div`
+  margin-top: ${bgSize/16}rem;
+  margin-left: -${bgSize/2/2}rem;
+`
+
+const MajorValue = styled.div`
+  font-weight: 500;
+  font-size: 2rem;
+`
+
+const MinorValue = styled.div`
+font-size: 1.33rem;
+font-weight: 500;
+color: #64d6ee;
+`
+
+
+const ArtistItem: React.SFC<{artist: DashStatsGlobal}> = ({artist: {name, playDurationMs}}) => {
   const { hrs, mins } = hrsAndMins(playDurationMs)
-  return (<div data-test='artist-row'>
-    <h5 data-test='artist-row-name'>{name}</h5>
-    <p>
-      <span data-test='artist-row-hours'>{hrs}</span> hrs
-      &nbsp;<span data-test='artist-row-minutes'>{mins}</span> mins
-    </p>
-  </div>
-)}
+  return (
+    <Artist data-test='artist-row'>
+      <ArtistAvatar src={''}/>
+      <ArtistInfo>
+        <ArtistName data-test='artist-row-name'>{name}</ArtistName>
+        <ArtistTime>
+          <MajorValue data-test='artist-row-hours'>{hrs} hrs</MajorValue>
+          <MinorValue data-test='artist-row-minutes'>{mins} mins</MinorValue>
+        </ArtistTime>
+      </ArtistInfo>
+    </Artist>
+  )
+}
+
+const ArtistTimeGrid = styled.div`
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-row-gap: 1rem;
+  @media (max-width: 600px) {
+    grid-template-columns: 100%;
+  }
+`
+
+const Title = styled.div`
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 1.2rem;
+  padding-bottom: 10px;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #64d6ee;
+`
 
 const TopArtists: React.SFC<{global: Artist[], user: Artist[]}> = ({global, user}) => (
-  <EvenRow>
+  <TwoColumns>
     <div data-test='top-artists-global'>
-      <h3>On Soundpruf</h3>
-      { global.map((artist, key) => <ArtistRow {...{key, artist}}/>)}
+      <Title>Soundpruf Artists</Title>
+      <ArtistTimeGrid>
+      { global.map((artist, key) => <ArtistItem {...{key, artist}}/>)}
+      </ArtistTimeGrid>
     </div>
     <div data-test='top-artists-personal'>
-      <h3>Your Top</h3>
-      { user.map((artist, key) => <ArtistRow {...{key, artist}}/>)}
+      <Title>Your Artists</Title>
+      <ArtistTimeGrid>
+      { user.map((artist, key) => <ArtistItem {...{key, artist}}/>)}
+      </ArtistTimeGrid>
     </div>
-  </EvenRow>
+  </TwoColumns>
 )
 
-export const TopArtistPeriods: React.SFC<{stats: DashStatsTopArtists}> = ({stats}) => {
+import { DashStatsWeek, DashStatsMonth, DashStatsLife } from '../../types';
+type DashStatsPeriod = DashStatsWeek | DashStatsMonth | DashStatsLife
+
+export const TopArtistPeriods: React.SFC<{stats: DashStatsPeriod}> = ({stats}) => {
   return (
     <Block>
-    <h2>Top Artists</h2>
-
-    <Switch>
-      <Route path='/life' render={(props) => <TopArtists global={stats.life.global} user={stats.life.user}/>}/>
-      <Route path='/by-month' render={(props) => <TopArtists global={stats.month.global} user={stats.month.user}/>}/>
-      <Route path='/' render={(props) => <TopArtists global={stats.week.global} user={stats.week.user}/>}/>
-    </Switch>
+    <TopArtists global={stats.global} user={stats.user}/>
     </Block>
   )
 }

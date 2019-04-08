@@ -2,6 +2,7 @@ import React from 'react';
 import { useUser } from '../comp/FirebaseContext';
 import { Dash } from './Dash';
 import { SignIn } from './SignIn';
+import { Loading } from '../comp/Loading';
 
 // export const Home: React.SFC<HomeViewProps> = () => {
 //   const { user, isLoading } = useUser()
@@ -19,6 +20,6 @@ import { SignIn } from './SignIn';
 
 export const Home: React.SFC = () => {
   const { user, isLoading } = useUser()
-  if (isLoading) return <div>Logging in...</div>
+  if (isLoading) return <Loading/>
   return user ? <Dash/> : <SignIn/>
 }

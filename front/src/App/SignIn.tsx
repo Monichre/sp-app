@@ -42,12 +42,10 @@ const Hero = styled.div`
 
   h1 {
     font-weight: 700
-    font-family: "Fira Mono";
     text-transform: uppercase;
     font-size: 2rem;
     -webkit-font-smoothing: antialiased;
   }
-
 `
 
 const ButtonSpotifySignin: React.SFC = () =>

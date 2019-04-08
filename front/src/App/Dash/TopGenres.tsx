@@ -2,24 +2,27 @@ import React from 'react';
 import styled from 'styled-components'
 import { RouteComponentProps, Switch, Route } from 'react-router';
 import moment from 'moment'
-import { useDashStats, DashStatsTopGenres } from '../../types';
+import { useDashStats, DashStatsTopGenres, DashStats_Week, DashStats_Month, DashStats_Life } from '../../types';
 import { Loading } from '../../comp/Loading';
 import { DashStatsDashStats } from '../../types';
+import { statSync } from 'fs';
+import { VictoryPie, VictoryTheme } from 'victory';
 
 const Block = styled.div`
-  padding: 0.5rem;
-  margin: 0.5rem 0;
+  // padding: 0.5rem;
+  // margin: 0.5rem 0;
+  margin-top: 1rem;
 `
 
-const EvenRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-
-  & > * {
-    flex: 1
+const TwoColumns = styled.div`
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-column-gap: 2rem;
+  @media (max-width: 600px) {
+    grid-template-columns: 100%;
   }
+
+  align-items: start;
 `
 
 type Genre = {
@@ -46,29 +49,48 @@ const GenreRow: React.SFC<{artist: Genre}> = ({artist: {name, playDurationMs}}) 
   </div>
 )}
 
-export const TopGenres: React.SFC<{global: Genre[], user: Genre[]}> = ({global, user}) => (
-  <EvenRow>
+const Title = styled.div`
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 1.2rem;
+  padding-bottom: 10px;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #64d6ee;
+`
+
+
+
+export const TopGenres: React.SFC<{global: Genre[], user: Genre[]}> = ({global, user}) => {
+  const spt = global.reduce((a,x) => a + x.playDurationMs, 0)
+  const sp = global.map((s, x) => ({label: `${s.name}`, x, y: s.playDurationMs / spt}))
+  const ut = user.reduce((a,x) => a + x.playDurationMs, 0)
+  const u = user.map((s, x) => ({label: s.name, x, y: s.playDurationMs / ut}))
+  // const data = [
+  //   {label: 'foo', x:1, y: 100},
+  //   {label: 'bar', x:2, y: 50}
+  // ]
+  return (
+  <TwoColumns>
     <div data-test='top-genres-global'>
-      <h3>On Soundpruf</h3>
-      { global.map((artist, key) => <GenreRow {...{key, artist}}/>)}
+      <Title>Soundpruf Genres</Title>
+      <VictoryPie data={sp} theme={VictoryTheme.material}/>
+      {/* { global.map((artist, key) => <GenreRow {...{key, artist}}/>)} */}
     </div>
     <div data-test='top-genres-personal'>
-      <h3>Your Top</h3>
-      { user.map((artist, key) => <GenreRow {...{key, artist}}/>)}
+      <Title>Your Genres</Title>
+      <VictoryPie data={u} theme={VictoryTheme.material}/>
+      {/* { user.map((artist, key) => <GenreRow {...{key, artist}}/>)} */}
     </div>
-  </EvenRow>
-)
+  </TwoColumns>
+  )
+}
 
-export const TopGenrePeriods: React.SFC<{stats: DashStatsTopGenres}> = ({stats}) => {
+type DashStatsGenrePeriod = DashStats_Week | DashStats_Month | DashStats_Life;
+
+export const TopGenrePeriods: React.SFC<{stats: DashStatsGenrePeriod}> = ({stats}) => {
   return (
     <Block>
-    <h2>Top Genres</h2>
-
-    <Switch>
-      <Route path='/life' render={(props) => <TopGenres global={stats.life.global} user={stats.life.user}/>}/>
-      <Route path='/by-month' render={(props) => <TopGenres global={stats.month.global} user={stats.month.user}/>}/>
-      <Route path='/' render={(props) => <TopGenres global={stats.week.global} user={stats.week.user}/>}/>
-    </Switch>
+    <TopGenres global={stats.global} user={stats.user}/>
     </Block>
   )
 }

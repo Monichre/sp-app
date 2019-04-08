@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
 import { RouteComponentProps } from 'react-router';
-import { useDashStats } from '../../types';
+import { useDashStats, DashStatsWeek, DashStatsMonth, DashStatsLife } from '../../types';
 import { Loading } from '../../comp/Loading';
 import { TopGenrePeriods } from './TopGenres';
 import { TopArtistPeriods } from './TopArtists';
@@ -11,8 +11,8 @@ const Container = styled.div`
   padding: 0 0.5rem;
 `
 const Block = styled.div`
-  padding: 0.5rem;
-  margin: 0.5rem 0;
+  // padding: 0.5rem;
+  margin-bottom: 1rem;
 `
 
 const NavSelect = styled.select`
@@ -21,7 +21,12 @@ const NavSelect = styled.select`
   background-color: #666;
 `
 
-export const DashStats: React.SFC<RouteComponentProps & {uid: string}> = ({uid, history}) => {
+type DashStatsPeriod = DashStatsWeek | DashStatsMonth | DashStatsLife
+
+const ArtistPeriodStats: React.SFC<{stats: DashStatsPeriod}> = ({stats}) =>
+  <></>
+
+export const DashStats: React.SFC<RouteComponentProps<{period: string}> & {uid: string}> = ({uid, history, match}) => {
   const navTo = (path: string) => history.push(path)
   const { data } = useDashStats({variables: {uid}, suspend: true})
   if (!data || !data.dashStats) { return <Loading/>}
@@ -31,13 +36,13 @@ export const DashStats: React.SFC<RouteComponentProps & {uid: string}> = ({uid, 
     <Container>
       <Block>
         <NavSelect data-test='top-artists-period-select' onChange={e => navTo(e.target.value)}>
-          <option value='/'>This Week</option>
-          <option value='/by-month'>This Month</option>
-          <option value='/life' data-test='top-artists-period-select-life'>Lifetime</option>
+          <option value={`/insights/week`}>This Week</option>
+          <option value={`/insights/month`}>This Month</option>
+          <option value={`/insights/life`} data-test='top-artists-period-select-life'>Lifetime</option>
         </NavSelect>
       </Block>
-      <TopArtistPeriods stats={dashStats.topArtists}/>
-      <TopGenrePeriods stats={dashStats.topGenres}/>
+      <TopArtistPeriods stats={dashStats.topArtists[match.params.period as 'week' | 'month' | 'life']}/>
+      <TopGenrePeriods stats={dashStats.topGenres[match.params.period as 'week' | 'month' | 'life']}/>
     </Container>
   )
 }

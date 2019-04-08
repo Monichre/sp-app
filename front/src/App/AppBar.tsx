@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useUser, useAuthHandlers, BasicUser, impersonate } from '../comp/FirebaseContext';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components'
 import { Logo } from '../comp/Logo';
+import { Menu } from 'grommet-icons';
+import { MenuIcon } from '../comp/icons';
 
 type WithUserProps = {
   user: BasicUser
@@ -12,10 +13,10 @@ const AvatarImg = styled.img<{size: number}>`
   height: ${props => props.size}rem;
   width: ${props => props.size}rem;
   border-radius:  ${props => props.size * 0.25}rem;
-  border: 1px solid cyan;
 `
 
 const BetweenRow = styled.div`
+  padding: 0.5rem 0.5rem 0 0.5rem;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -31,8 +32,12 @@ const ButtonSignout: React.SFC = () => {
   return <button onClick={() => signOut()}>Sign Out</button>
 }
 
+const OffsetAvatarImg = styled(AvatarImg)`
+  margin-bottom: -1rem;
+`
+
 const UserInfo: React.SFC<WithUserProps> = ({user}) =>
-  <AvatarImg src={user.photoURL || ""} size={2.5}/>
+  <OffsetAvatarImg src={user.photoURL || ""} size={3}/>
 
 const ImpersonationBar: React.SFC = () => {
   return (
@@ -50,19 +55,72 @@ const ImpersonationBar: React.SFC = () => {
   )
 }
 
+const Dropdown = styled.div<{open: boolean}>`
+  position: absolute;
+  opacity: ${({open}) => open ? '100' : '0'};
+  visibility: ${({open}) => open ? 'visible' : 'hidden'};
+  transition: all 0.5s;
+  margin: 0;
+  right: 0;
+  padding: 0;
+  z-index: 30;
+  background-color: #AAA;
+  & > * {
+    position: relative;
+    cursor: pointer;
+  }
+`
+
+const DropdownMenu: React.SFC<{Component: React.SFC<{onClick: () => void}>}> = ({Component, children}) => {
+  const [open, setOpen] = useState(false)
+  console.log(open)
+  return (
+    <div>
+      <Component onClick={() => setOpen(!open)}/>
+      <Dropdown {...{open}}>
+        {children}
+      </Dropdown>
+    </div>
+  )
+}
+const FixedBar = styled.header`
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3rem;
+  width: 100%;
+  overflow: visible;
+  z-index: 20;
+  background-color: #121519;
+
+`
+
+const IconButton = styled.button`
+  background-color: transparent;
+  border: none;
+  display: block;
+`
+
+const UserMenuButton: React.SFC<{onClick: () => void}> = ({onClick}) =>
+  <IconButton {...{onClick}}><MenuIcon/></IconButton>
+
+const UserMenu: React.SFC = () =>
+  <DropdownMenu Component={UserMenuButton}>
+     <ButtonSignout/>
+  </DropdownMenu>
+
 export const AppBar: React.SFC = () => {
   const { user } = useUser()
   if (!user) { return <div>Logging in...</div>}
   const qryArg = window.location.href.split('?')[1]
   return (
-    <>
-      <PaddedBetweenRow>
-        <ButtonSignout/>
-        <Logo size={2}/>
+    <FixedBar>
+      <BetweenRow>
         <UserInfo {...{user}}/>
-      </PaddedBetweenRow>
+        <UserMenu/>
+      </BetweenRow>
       {qryArg == 'imp' && <ImpersonationBar/> || <></>}
-    </>
+    </FixedBar>
   )
 }
 

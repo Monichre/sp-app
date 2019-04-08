@@ -6,7 +6,7 @@ import { createFirebase } from "./createFirebase"
 import ApolloClient from "apollo-boost"
 import { ApolloProvider } from "react-apollo-hooks"
 import { CustomAuth } from "./CustomAuth"
-import styled from "styled-components"
+import { createGlobalStyle } from "styled-components"
 import { Loading } from "../comp/Loading"
 import { AppMetaTags } from "./AppMetaTags"
 
@@ -22,13 +22,26 @@ const firebase = createFirebase({
   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
 })
 
-const BlackPage = styled.div`
-  height: 100%;
-  * {
-    color: white;
+const GlobalStyle = createGlobalStyle`
+  html {
+    height: 100%;
   }
-  button {
-    background-color: #333;
+  body {
+    font-family: "Raleway", sans-serif;
+    color: #fff;
+    background-color: #121519;
+    background-image: url(/dots.png);
+    background-repeat: repeat;
+    background-size: 20px 20px;
+    background-blend-mode: color-dodge;
+    max-height: 100vh;
+    height: 100%;
+    overflow-x: hidden;
+    position: relative;
+    z-index: 10;
+  }
+  a {
+    color: white;
   }
 `
 
@@ -38,18 +51,17 @@ const BlackPage = styled.div`
 export const App: React.SFC = () => (
   <FirebaseContext.Provider value={firebase}>
     <ApolloProvider client={client}>
-      <BlackPage>
-        <AppMetaTags />
+      <GlobalStyle/>
+      <AppMetaTags />
 
-        <React.Suspense fallback={<Loading />}>
-          <Router>
-            <Switch>
-              <Route path="/customAuth" component={CustomAuth} />
-              <Route path="/" component={Home} />
-            </Switch>
-          </Router>
-        </React.Suspense>
-      </BlackPage>
+      <React.Suspense fallback={<Loading />}>
+        <Router>
+          <Switch>
+            <Route path="/customAuth" component={CustomAuth} />
+            <Route path="/" component={Home} />
+          </Switch>
+        </Router>
+      </React.Suspense>
     </ApolloProvider>
   </FirebaseContext.Provider>
 )
