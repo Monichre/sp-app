@@ -10,12 +10,22 @@ export type Stat = {
   relationKey: string,
   periodType: PeriodType,
   periodValue: string,
-  statValue: number,
-  artist?: any,
-  genre?: any
+  playDurationMs: number,
+  // artist?: any,
+  // genre?: any
+}
+
+export type StatTotal = Stat
+export type StatArtist = Stat & {
+  artist: { name: string, genres: string[] }
+}
+export type StatGenre = Stat & {
+  genre: string
 }
 
 export const TableStat = (endpoint: string, TableName: string) => {
+  const doc = new AWS.DynamoDB.DocumentClient({endpoint})
+
   const makePk = (uid: string, relationType: RelationType, periodType: PeriodType, periodValue: string) =>
     [uid, relationType, periodType, periodValue].join('#')
 
@@ -34,40 +44,79 @@ export const TableStat = (endpoint: string, TableName: string) => {
     }
   }
 
-  const writeStat = async ({uid, relationType, relationKey, periodType, periodValue, statValue, artist, genre}: Stat) => {
-    const doc = new AWS.DynamoDB.DocumentClient({endpoint})
-  
-    let UpdateExpression = artist ?
-      'ADD playDurationMs :val SET artist = :artist' :
-      'ADD playDurationMs :val'
-    UpdateExpression = genre ?
-      `${UpdateExpression} SET genre = :genre` :
-      UpdateExpression
-
-    const ExpressionAttributeValues = artist ?
-      { ':val': statValue, ':artist': artist } :
-      { ':val': statValue }
-
-    if (genre) {
-      ExpressionAttributeValues[':genre'] = genre
-    }
-
+  const writeTotalStat = async ({uid, relationType, relationKey, periodType, periodValue, playDurationMs}: StatTotal) => {
     return await doc.update({
       TableName,
       Key: {
         pk: makePk(uid, relationType, periodType, periodValue),
         sk: makeSk(uid, periodType, relationKey)
       },
-      UpdateExpression,
-      ExpressionAttributeValues,
+      UpdateExpression: 'ADD playDurationMs :v',
+      ExpressionAttributeValues: { ':v': playDurationMs },
     }).promise()
-  
   }
+
+  const writeArtistStat = async ({uid, relationType, relationKey, periodType, periodValue, playDurationMs, artist}: StatArtist) => {
+    return await doc.update({
+      TableName,
+      Key: {
+        pk: makePk(uid, relationType, periodType, periodValue),
+        sk: makeSk(uid, periodType, relationKey)
+      },
+      UpdateExpression: 'ADD playDurationMs :v SET artist = :a',
+      ExpressionAttributeValues: { ':v': playDurationMs, ':a': artist },
+    }).promise()
+  }
+
+  const writeGenreStat = async ({uid, relationType, relationKey, periodType, periodValue, playDurationMs, genre}: StatGenre) => {
+    return await doc.update({
+      TableName,
+      Key: {
+        pk: makePk(uid, relationType, periodType, periodValue),
+        sk: makeSk(uid, periodType, relationKey)
+      },
+      UpdateExpression: 'ADD playDurationMs :v SET genre = :g',
+      ExpressionAttributeValues: { ':v': playDurationMs, ':g': genre },
+    }).promise()
+  }
+
+  // const writeStat = async ({uid, relationType, relationKey, periodType, periodValue, statValue, artist, genre}: Stat) => {
+  //   const doc = new AWS.DynamoDB.DocumentClient({endpoint})
+  
+  //   let UpdateExpression = artist ?
+  //     'ADD playDurationMs :val SET artist = :artist' :
+  //     'ADD playDurationMs :val'
+  //   UpdateExpression = genre ?
+  //     `${UpdateExpression} SET genre = :genre` :
+  //     UpdateExpression
+
+  //   const ExpressionAttributeValues = artist ?
+  //     { ':val': statValue, ':artist': artist } :
+  //     { ':val': statValue }
+
+  //   if (genre) {
+  //     ExpressionAttributeValues[':genre'] = genre
+  //   }
+
+  //   return await doc.update({
+  //     TableName,
+  //     Key: {
+  //       pk: makePk(uid, relationType, periodType, periodValue),
+  //       sk: makeSk(uid, periodType, relationKey)
+  //     },
+  //     UpdateExpression,
+  //     ExpressionAttributeValues,
+  //   }).promise()
+  
+  // }
 
   return {
     makePk,
     makeSk,
     periodsFor,
-    writeStat
+    // writeStat
+    writeTotalStat,
+    writeArtistStat,
+    writeGenreStat,
   }
 }

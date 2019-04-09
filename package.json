@@ -5,20 +5,17 @@
   "scripts": {
     "check:target": "./bin/check-target.sh",
     "check:config": "./bin/check-config.sh",
-
     "deploy:all:test": "TARGET=test CONFIG=test yarn deploy:all",
     "deploy:all": "yarn check:target && yarn check:config && yarn deploy:_back-layer && yarn deploy:_back && yarn deploy:_front",
     "deploy:_back-layer": "cd back-layer && sls deploy && cd ..",
     "deploy:_back": "cd back && yarn deploy && cd ..",
     "deploy:_front": "cd front && yarn build && yarn deploy && cd ..",
-
     "install:all": "yarn install:_back-layer && yarn install:_back && yarn install:_front",
     "install:_back-layer": "cd back-layer/layers/npm/nodejs && yarn install && cd ../../../..",
     "install:_back": "cd back && yarn install && yarn install:extra && cd ..",
     "install:_front": "cd front && yarn install && cd ..",
     "start": "echo 'Dont `yarn start` here.  Read the docs.  You need to have four shells: first yarn start from back/ and then yarn start from front/'",
     "start:all": "yarn start",
-    
     "": ""
   }
 }

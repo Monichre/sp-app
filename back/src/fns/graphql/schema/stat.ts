@@ -161,7 +161,6 @@ const topGenresFor = async (doc, TableName, uid: string, periodName, periodValue
 
 // const dashStats = async (_, {uid}, context) => {
 const dashStats: QueryResolvers.DashStatsResolver = async (_, {uid}, context) => {
-  console.log('dashStats')
   const doc = new AWS.DynamoDB.DocumentClient({endpoint: context.DYNAMO_ENDPOINT})
   const TableName = context.TABLE_STAT
 
@@ -170,7 +169,7 @@ const dashStats: QueryResolvers.DashStatsResolver = async (_, {uid}, context) =>
   const week = m.format('YYYY-WW')
   const month = m.format('YYYY-MM')
 
-  return {
+  const result = {
     topArtists: {
       week: {
         global: await topArtistsFor(doc, TableName, 'global', 'week', week),
@@ -200,6 +199,7 @@ const dashStats: QueryResolvers.DashStatsResolver = async (_, {uid}, context) =>
       }
     }
   }
+  return result
 }
 
 const resolvers = {

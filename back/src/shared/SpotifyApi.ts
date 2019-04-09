@@ -1,30 +1,32 @@
-
+import * as R from 'ramda'
 import * as SpotifyWebApi from 'spotify-web-api-node'
+import * as t from 'io-ts'
+import { left } from 'fp-ts/lib/Either';
 
 // new versions incl user and client authd
 
-export type SpotifyPlay = {
-  played_at: string,
-  track: SpotifyTrack,
-}
+// export type SpotifyPlay = {
+//   played_at: string,
+//   track: SpotifyTrack,
+// }
 
-export type SpotifyTrack = {
-  id: string,
-  name: string,
-  duration_ms: number,
-  album: SpotifyAlbum,
-  artists: SpotifyArtist[],
-}
+// export type SpotifyTrack = {
+//   id: string,
+//   name: string,
+//   duration_ms: number,
+//   album: SpotifyAlbum,
+//   artists: SpotifyArtist[],
+// }
 
-export type SpotifyAlbum = {
-  name: string,
-}
+// export type SpotifyAlbum = {
+//   name: string,
+// }
 
-export type SpotifyArtist = {
-  id: string,
-  name: string,
-  genres: string[]
-}
+// export type SpotifyArtist = {
+//   id: string,
+//   name: string,
+//   genres: string[]
+// }
 
 type BodyResponse<T> = Promise<{ body: T }>
 
@@ -39,6 +41,71 @@ const spotifyClientCredentials = () => {
     redirectUri: SPOTIFY_REDIRECT_URI,
   }
 }
+
+const ResponseBody = <B extends t.Mixed>(body: B) =>
+  t.interface({ body })
+
+const SpotifyImage = t.type({
+  url: t.string,
+})
+export type TSpotifyImage = t.TypeOf<typeof SpotifyImage>
+
+const SpotifyAlbum = t.type({
+  id: t.string,
+})
+
+const SpotifyArtistTerse = t.type({
+  id: t.string,
+  name: t.string,
+})
+export type TSpotifyArtistTerse = t.TypeOf<typeof SpotifyArtistTerse>
+
+const SpotifyArtistVerbose = t.type({
+  id: t.string,
+  name: t.string,
+  genres: t.array(t.string),
+  images: t.array(SpotifyImage)
+})
+export type TSpotifyArtistVerbose = t.TypeOf<typeof SpotifyArtistVerbose>
+
+export const SpotifyTrack = t.type({
+  id: t.string,
+  duration_ms: t.number,
+  name: t.string,
+  artists: t.array(SpotifyArtistTerse),
+  album: SpotifyAlbum,
+})
+export type TSpotifyTrack = t.TypeOf<typeof SpotifyTrack>
+
+export const SpotifyTrackVerbose = t.type({
+  id: t.string,
+  duration_ms: t.number,
+  name: t.string,
+  artists: t.array(SpotifyArtistVerbose),
+  album: SpotifyAlbum,
+})
+export type TSpotifyTrackVerbose = t.TypeOf<typeof SpotifyTrackVerbose>
+
+export const SpotifyPlay = t.type({
+  played_at: t.string, // iso date string!
+  track: SpotifyTrack,
+})
+export type TSpotifyPlay = t.TypeOf<typeof SpotifyPlay>
+
+export const SpotifyPlayVerbose = t.type({
+  played_at: t.string, // iso date string!
+  track: SpotifyTrackVerbose,
+})
+export type TSpotifyPlayVerbose = t.TypeOf<typeof SpotifyPlayVerbose>
+
+const SpotifyGetMyRecentlyPlayedTracksResponse = ResponseBody(t.type({
+  items: t.array(SpotifyPlay)
+}))
+export type TSpotifyGetMyRecentlyPlayedTracksResponse = t.TypeOf<typeof SpotifyGetMyRecentlyPlayedTracksResponse>
+
+const SpotifyGetArtistsResponse = ResponseBody(t.type({
+  artists: t.array(SpotifyArtistVerbose)
+}))
 
 export const SpotifyApi = (accessToken?: string, refreshToken?: string) => {
   const _api = new SpotifyWebApi(spotifyClientCredentials())
@@ -60,7 +127,7 @@ export const SpotifyApi = (accessToken?: string, refreshToken?: string) => {
   const setAccessToken = _api.setAccessToken.bind(_api)
   const setRefreshToken = _api.setRefreshToken.bind(_api)
   const createAuthorizeURL = _api.createAuthorizeURL.bind(_api)
-  const getArtists = _api.getArtists.bind(_api)
+  // const getArtists = _api.getArtists.bind(_api)
 
   type MeResult = {
     display_name: string
@@ -77,21 +144,50 @@ export const SpotifyApi = (accessToken?: string, refreshToken?: string) => {
     return rethrow(() => _api.refreshAccessToken() as BodyResponse<RefreshAccessTokenResult>)
   }
 
-  type GetMyRecentlyPlayedTracksResult = { items: SpotifyPlay[] }
+  const getArtists = async (...args) => {
+    return rethrow(async () => {
+      let result: any
+      try {
+        result = await _api.getArtists(...args)
+
+      } catch (err) {
+        try {
+          const { body: { access_token } } = await refreshAccessToken()
+          console.log('new access token', access_token)
+          _api.setAccessToken(access_token)
+          result = await _api.getArtists(...args) // as BodyResponse<GetMyRecentlyPlayedTracksResult>
+        } catch (error) {
+          console.log('spotify api error', error)
+          return left<Error, TSpotifyArtistVerbose[]>(error)
+        }
+
+      }
+      return SpotifyGetArtistsResponse.decode(result).map(({body: { artists }})=>artists)
+    })
+  }
+
+  // type GetMyRecentlyPlayedTracksResult = { items: SpotifyPlay[] }
   const getMyRecentlyPlayedTracks = async (...args) => {
     return rethrow(async () => {
+      let result: any // t.TypeOf<typeof SpotifyGetMyRecentlyPlayedTracksResponse>
       try {
         console.log('getMyRecentlyPlayedTracks')
         // need to await this result to get the auth error
-        return await _api.getMyRecentlyPlayedTracks(...args) as BodyResponse<GetMyRecentlyPlayedTracksResult>
+        result = await _api.getMyRecentlyPlayedTracks(...args) // as BodyResponse<GetMyRecentlyPlayedTracksResult>
       } catch (err) {
-        console.log('refreshing access token')
-        // refresh access token then try one more time
-        const { body: { access_token } } = await refreshAccessToken()
-        console.log('new access token', access_token)
-        _api.setAccessToken(access_token)
-        return await _api.getMyRecentlyPlayedTracks(...args) as BodyResponse<GetMyRecentlyPlayedTracksResult>
+        try { // this is dumb as balls
+          console.log('refreshing access token')
+          // refresh access token then try one more time
+          const { body: { access_token } } = await refreshAccessToken()
+          console.log('new access token', access_token)
+          _api.setAccessToken(access_token)
+          result = await _api.getMyRecentlyPlayedTracks(...args) // as BodyResponse<GetMyRecentlyPlayedTracksResult>
+        } catch (error) {
+          console.log('spotify api error', error)
+          return left<Error, TSpotifyPlay[]>(error)
+        }
       }
+      return SpotifyGetMyRecentlyPlayedTracksResponse.decode(result).map(({body: { items }})=>items)
     })
   }
 

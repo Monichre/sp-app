@@ -13,6 +13,7 @@
     "graphql-playground-middleware-lambda": "^1.7.13",
     "graphql-tag": "^2.10.1",
     "graphql-tools": "^4.0.4",
+    "io-ts": "^1.8.5",
     "moment": "^2.24.0",
     "ramda": "^0.26.1",
     "reflect-metadata": "^0.1.13",

@@ -4,13 +4,16 @@ import * as AWS from 'aws-sdk';
 
 type PlayTrackAttrs = {
   uid: string
-  playedAt: string,
+  playedAt: string
   track: {
-    id: string,
-    name: string,
+    id: string
+    name: string
+    duration_ms: number
     artists: {
-      id: string,
+      id: string
       name: string
+      images: {url: string}[]
+      genres: string[]
     }[],
   }
 }
@@ -20,14 +23,29 @@ type KeyAttrs = {
   sk: string,
 }
 
-type PlayTrack = PlayTrackAttrs & {
+export type PlayTrack = PlayTrackAttrs & {
   uid: string
 }
 
-type PlayTrackItem = KeyAttrs & {
+export type PlayTrackItem = KeyAttrs & {
   fk: string,
   playedAt: string,
   track: string,
+}
+
+export type PlayTrackImage = {
+  pk: {
+    S: string
+  }
+  sk: {
+    S: string
+  }
+  playedAt: {
+    S: string
+  }
+  track: {
+    S: string
+  }
 }
 
 export const TablePlay = (endpoint: string, TableName: string) => {
@@ -41,10 +59,10 @@ export const TablePlay = (endpoint: string, TableName: string) => {
     track: JSON.stringify(track),
   })
 
-  const decode = ({pk, playedAt, track}: PlayTrackItem): PlayTrackAttrs => ({
-    uid: pk,
-    playedAt,
-    track: JSON.parse(track), 
+  const decode = (image: PlayTrackImage): PlayTrackAttrs => ({
+    uid: image.pk.S,
+    playedAt: image.playedAt.S,
+    track: JSON.parse(image.track.S), 
   })
     
   const setPlayTrack = async (obj: PlayTrack) => {

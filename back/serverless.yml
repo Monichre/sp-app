@@ -145,6 +145,7 @@ custom:
   ref:
     QueueHiFetchSpotifyPlays: ${env:QueueHiFetchSpotifyPlays, self:custom.cfref.QueueHiFetchSpotifyPlays}
     QueueStartHarvestUser: ${env:QueueStartHarvestUser, self:custom.cfref.QueueStartHarvestUser}
+    QueueEnrichPlayArtists: ${env:QueueEnrichPlayArtists, self:custom.cfref.QueueEnrichPlayArtists}
     TableUser: ${env:TableUser, self:custom.cfref.TableUser}
     TablePlay: ${env:TablePlay, self:custom.cfref.TablePlay}
     TableStat: ${env:TableStat, self:custom.cfref.TableStat}
@@ -155,6 +156,8 @@ custom:
       Ref: QueueHiFetchSpotifyPlays
     QueueStartHarvestUser:
       Ref: QueueStartHarvestUser
+    QueueEnrichPlayArtists:
+      Ref: QueueEnrichPlayArtists
     TableUser:
       Ref: TableUser
     TablePlay:
@@ -201,7 +204,9 @@ custom:
           - onProfileAdd
       - table: ${self:custom.ref.TablePlay}
         functions:
-          - onPlayUpdateStats
+          - onPlayUpdateTotalStats
+          - onPlayUpdateArtistStats
+          - onPlayUpdateGenreStats
 
   webpack:
     # includeModules: true
@@ -315,7 +320,7 @@ functions:
       - ${self:custom.LAYER_REF.${self:custom.config}}
 
 ################################################################################
-# functions: prototype harvest handlers
+# functions: DEMETER - harvesting play data from spotify
 ################################################################################
 
   # periodically called by frontend
@@ -358,15 +363,30 @@ functions:
       - sqs:
           arn:
             Fn::GetAtt: [ QueueHiFetchSpotifyPlays, Arn ]
-    handler: src/fns/fetchSpotifyPlays.handler
+    handler: src/fns/demeter/fetchSpotifyPlays.handler
     layers:
       - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
-      STALE_MS: 30000 # 30 sec
-      FETCH_COUNT: 2 # 2 songs
-      TABLE_TARGET: ${self:custom.ref.TablePlay}
+      # STALE_MS: 30000 # 30 sec
+      # FETCH_COUNT: 2 # 2 songs
+      QUEUE_ENRICH: ${self:custom.ref.QueueEnrichPlayArtists}
       TABLE_USER: ${self:custom.ref.TableUser}
       # STREAM_TARGET: ${self:custom.ref.StreamCreatePlayFromSpotify}
+      SPOTIFY_CLIENT_ID: ${ssm:${self:custom.ssmConfigPath}/SPOTIFY_CLIENT_ID}
+      SPOTIFY_CLIENT_SECRET: ${ssm:${self:custom.ssmConfigPath}/SPOTIFY_CLIENT_SECRET}
+      SPOTIFY_REDIRECT_URI: ${self:custom.SPOTIFY_REDIRECT_URI.${self:custom.config}}
+
+  enrichPlayArtists:
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt: [ QueueEnrichPlayArtists, Arn ]
+    handler: src/fns/demeter/enrichPlayArtists.handler
+    layers:
+      - ${self:custom.LAYER_REF.${self:custom.config}}
+    environment:
+      TABLE_PLAY: ${self:custom.ref.TablePlay}
+      TABLE_USER: ${self:custom.ref.TableUser}
       SPOTIFY_CLIENT_ID: ${ssm:${self:custom.ssmConfigPath}/SPOTIFY_CLIENT_ID}
       SPOTIFY_CLIENT_SECRET: ${ssm:${self:custom.ssmConfigPath}/SPOTIFY_CLIENT_SECRET}
       SPOTIFY_REDIRECT_URI: ${self:custom.SPOTIFY_REDIRECT_URI.${self:custom.config}}
@@ -416,19 +436,53 @@ functions:
 ################################################################################
 # this is WIP prototype of custom resource handler for spinning up firebase auth instances
 
-  onPlayUpdateStats:
+  # onPlayUpdateStats:
+  #   events:
+  #     - stream:
+  #         type: dynamodb
+  #         arn:
+  #           Fn::GetAtt: [ TablePlay, StreamArn ]
+  #   handler: src/fns/onPlayUpdateStats.handler
+  #   layers:
+  #     - ${self:custom.LAYER_REF.${self:custom.config}}
+  #   environment:
+  #     TABLE_STAT: ${self:custom.ref.TableStat}
+
+  onPlayUpdateTotalStats:
     events:
       - stream:
           type: dynamodb
           arn:
             Fn::GetAtt: [ TablePlay, StreamArn ]
-    handler: src/fns/onPlayUpdateStats.handler
+    handler: src/fns/florence/onPlayUpdateTotalStats.handler
     layers:
       - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
       TABLE_STAT: ${self:custom.ref.TableStat}
 
+  onPlayUpdateArtistStats:
+    events:
+      - stream:
+          type: dynamodb
+          arn:
+            Fn::GetAtt: [ TablePlay, StreamArn ]
+    handler: src/fns/florence/onPlayUpdateArtistStats.handler
+    layers:
+      - ${self:custom.LAYER_REF.${self:custom.config}}
+    environment:
+      TABLE_STAT: ${self:custom.ref.TableStat}
 
+  onPlayUpdateGenreStats:
+    events:
+      - stream:
+          type: dynamodb
+          arn:
+            Fn::GetAtt: [ TablePlay, StreamArn ]
+    handler: src/fns/florence/onPlayUpdateGenreStats.handler
+    layers:
+      - ${self:custom.LAYER_REF.${self:custom.config}}
+    environment:
+      TABLE_STAT: ${self:custom.ref.TableStat}
 
 ################################################################################
 # functions: prototype custom resources
@@ -442,7 +496,7 @@ functions:
 
 
 resources:
-  Description: stack experiments by stevo
+  Description: soundpruf back-end services
 
   Resources:
 
@@ -569,6 +623,11 @@ resources:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: ${self:custom.ns}-QueueHiFetchSpotifyPlays
+
+    QueueEnrichPlayArtists:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:custom.ns}-QueueEnrichPlayArtists
 
     # StreamCreatePlayFromSpotify:
     #   Type: AWS::Kinesis::Stream

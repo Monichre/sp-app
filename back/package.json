@@ -53,6 +53,7 @@
     "graphql-playground-middleware-lambda": "^1.7.13",
     "graphql-tag": "^2.10.1",
     "graphql-tools": "^4.0.4",
+    "io-ts": "^1.8.5",
     "jest": "^24.5.0",
     "kinesalite": "^2.0.0",
     "moment": "^2.24.0",

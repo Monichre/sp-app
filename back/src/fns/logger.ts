@@ -5,6 +5,11 @@ const handlerFormat = format(({awsEvent, handler, message, ...info}, opts) => ({
   message: `[${awsEvent || 'UNKNOWN AWS EVENT'}/${handler || 'UNKNOWN HANDLER'}] ${message}`
 }))
 
+console.log('TARGET', process.env.TARGET)
+const transp = process.env.TARGET==null ? // if null its local
+  [new transports.Console(), new transports.File({ filename: 'local.log' })] :
+  [new transports.Console()]
+
 export const slog = createLogger({
   level: 'info',
   format: format.combine(
@@ -18,7 +23,5 @@ export const slog = createLogger({
     format.colorize(),
     format.simple(),
 ),
-  transports: [
-    new transports.Console()
-  ]
+  transports: transp
 })
