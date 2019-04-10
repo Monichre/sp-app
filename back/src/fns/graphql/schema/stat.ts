@@ -25,8 +25,22 @@ type PlaytimeSummaryResponse {
   month: PlaytimeSummaryPeriods!
 }
 
-type ArtistPlaytime {
+type Image {
+  url: String!
+}
+type SpotifyUrl {
+  spotify: String!
+}
+
+type Artist {
   name: String!
+  images: [Image!]!
+  external_urls: SpotifyUrl!
+  genres: [String!]!
+}
+
+type ArtistPlaytime {
+  artist: Artist!
   playDurationMs: Float!
 }
 
@@ -40,9 +54,26 @@ type UserArtistPlaytimes {
   month: PeriodGlobalUserArtistPlaytimes!
   life: PeriodGlobalUserArtistPlaytimes!
 }
+
+type GenrePlaytime {
+  name: String!
+  playDurationMs: Float!
+}
+
+type UserGenrePeriodPlaytimes {
+  global: [GenrePlaytime!]!
+  user: [GenrePlaytime!]!
+}
+
+type UserGenrePlaytimes {
+  week: UserGenrePeriodPlaytimes!
+  month: UserGenrePeriodPlaytimes!
+  life: UserGenrePeriodPlaytimes!
+}
+
 type DashStatsResponse {
   topArtists: UserArtistPlaytimes!
-  topGenres: UserArtistPlaytimes!
+  topGenres: UserGenrePlaytimes!
 }
 
 `
@@ -139,7 +170,7 @@ const topArtistsFor = async (doc, TableName, uid: string, periodName, periodValu
     }
   }
   return await doc.query(params).promise()
-    .then(d => d.Items.map(i => ({name: i.artist.name, playDurationMs: i.playDurationMs})))
+    .then(d => d.Items.map(i => ({artist: i.artist, playDurationMs: i.playDurationMs})))
     .then(byTimeThenName)
 }
 

@@ -2,59 +2,16 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useRecentPlays, RecentPlaysPlays, RecentPlaysArtists, RecentPlaysAlbum, RecentPlaysTrack } from '../../types';
 import styled from 'styled-components'
 import Moment from 'react-moment'
+import { SpotifyLogoLink } from '../SpotifyLogoLink/SpotifyLogoLink';
 
 const Card = styled.div`
   padding: 1rem;
   margin: 0 0.5rem 0.25rem 0.5rem;
 `
 
-const CardTitle = styled.div`
-  font-size: 1.5rem;
-  font-weight: bold;
-`
-
-const CardInfo = styled.div`
-  font-style: italic;
-`
 const CardAlert = styled(Card)`
   background-color: #666;
 `
-
-const AvatarImg = styled.img`
-  height: 2rem;
-  width: 2rem;
-  border-radius: 1rem;
-`
-
-const ArtistLabel: React.SFC<{artist: any}> = ({artist}) =>
-  <div>
-    <AvatarImg src={artist.images[0] && artist.images[0].url}/>
-    <div>{artist.name}</div>
-    {artist.genres.map((g: any, key: string) => <span {...{key}}>{g}&nbsp;</span>)}
-  </div>
-
-const xPlayItem: React.SFC<{play: RecentPlaysPlays}> = ({play}) => {
-  const img = play.track.album.images[2] || play.track.album.images[0]
-  const imgUrl = img ? img.url : ''
-  return (
-  <Card data-test='play-item'>
-   <img src={imgUrl}/>
-    <CardTitle data-test='track-name'>
-      {play.track.name}
-    </CardTitle>
-    <CardInfo>
-      {play.track.artists.map((artist: any, key: any) => <ArtistLabel {...{key, artist}}/>)}
-    </CardInfo>
-    <Moment fromNow>
-      {play.playedAt}
-    </Moment>
-    <br/>
-    <Moment format='ddd D MMM h:mm a'>
-      {play.playedAt}
-    </Moment>
-  </Card>
-  )
-}
 
 const bgSize = 16
 
@@ -74,8 +31,11 @@ const ArtistAvatar = styled.div<{src: string}>`
   width: ${bgSize/2}rem;
   border-radius: ${bgSize/2/2}rem;
   background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("${({src}) => src}");
+  background-size: cover;
   `
 
+const ArtistInfo = styled.div`
+`
 const ArtistName = styled.div`
   font-size: ${bgSize/12}rem;
   font-weight: 500;
@@ -83,7 +43,7 @@ const ArtistName = styled.div`
 
 const Artist = styled.div`
   display: flex;
-  ${ArtistName} {
+  ${ArtistInfo} {
     margin-top: ${bgSize/16}rem;
     margin-left: -${bgSize/2/2}rem;
   }
@@ -116,6 +76,7 @@ const TrackAgo = styled.div`
 
 const PlayItem: React.SFC<{play: RecentPlaysPlays, className?: string}> = ({play: {playedAt, track}, className}) => {
   const artistImgUrl = track.artists[0].images[0] && track.artists[0].images[0].url || ''
+  const artistSpotifyUrl = track.artists[0] && track.artists[0].external_urls.spotify
   const albumImg = track.album.images[0] // this should be fixed in graphql return types
   const albumImgUrl = albumImg ? albumImg.url : ''
   return (
@@ -123,7 +84,10 @@ const PlayItem: React.SFC<{play: RecentPlaysPlays, className?: string}> = ({play
       <AlbumBackground {...{src: albumImgUrl}}/>
       <Artist>
         <ArtistAvatar src={artistImgUrl}/>
-        <ArtistName>{track.artists[0].name}</ArtistName>
+        <ArtistInfo>
+          <ArtistName>{track.artists[0].name}</ArtistName>
+          <SpotifyLogoLink href={artistSpotifyUrl}/>
+        </ArtistInfo>
       </Artist>
       <Track>
         <TrackName>{track.name}</TrackName>
@@ -136,21 +100,6 @@ const PlayItem: React.SFC<{play: RecentPlaysPlays, className?: string}> = ({play
     </Play>
   )
 }
-// thought i needed this for graphql polling, dont
-// may still need it for heartbeat mutation
-// const useInterval = (callback: () => any, delay: number) => {
-//   const callbackRef = useRef<()=>{}>()
-
-//   useEffect(() => {
-//     callbackRef.current = callback
-//   })
-
-//   useEffect(() => {
-//     const tick = () => callbackRef.current && callbackRef.current()
-//     const id = setInterval(tick, delay)
-//     return () => clearInterval(id)
-//   }, [delay])
-// }
 
 const Note = styled.div`
   padding: 0 1.5rem;
@@ -163,13 +112,13 @@ const PlayGrid = styled.div`
   display: grid;
   justify-items: center;
   grid-template-columns: 25% 25% 25% 25%;
-  @media (max-width: 1000px) {
+  @media (max-width: 1200px) {
     grid-template-columns: 33% 33% 33%;
   }
-  @media (max-width: 800px) {
+  @media (max-width: 1000px) {
     grid-template-columns: 50% 50%;
   }
-  @media (max-width: 600px) {
+  @media (max-width: 800px) {
     grid-template-columns: 100%;
   }
 `

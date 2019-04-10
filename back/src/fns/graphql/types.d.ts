@@ -1,4 +1,4 @@
-// Generated in 2019-04-09T16:55:40-07:00
+// Generated in 2019-04-09T17:42:23-07:00
 // REGENERATE THIS BY STARTING THE LOCAL SERVER
 // AND THEN RUNNING `back % yarn generate`
 
@@ -89,13 +89,19 @@ export interface Track {
 export interface Artist {
   name: string;
 
-  genres: string[];
-
   images: Image[];
+
+  external_urls: SpotifyUrl;
+
+  genres: string[];
 }
 
 export interface Image {
   url: string;
+}
+
+export interface SpotifyUrl {
+  spotify: string;
 }
 
 export interface Album {
@@ -121,7 +127,7 @@ export interface PlaytimeSummaryPeriods {
 export interface DashStatsResponse {
   topArtists: UserArtistPlaytimes;
 
-  topGenres: UserArtistPlaytimes;
+  topGenres: UserGenrePlaytimes;
 }
 
 export interface UserArtistPlaytimes {
@@ -139,6 +145,26 @@ export interface PeriodGlobalUserArtistPlaytimes {
 }
 
 export interface ArtistPlaytime {
+  artist: Artist;
+
+  playDurationMs: number;
+}
+
+export interface UserGenrePlaytimes {
+  week: UserGenrePeriodPlaytimes;
+
+  month: UserGenrePeriodPlaytimes;
+
+  life: UserGenrePeriodPlaytimes;
+}
+
+export interface UserGenrePeriodPlaytimes {
+  global: GenrePlaytime[];
+
+  user: GenrePlaytime[];
+}
+
+export interface GenrePlaytime {
   name: string;
 
   playDurationMs: number;
@@ -376,9 +402,11 @@ export namespace ArtistResolvers {
   export interface Resolvers<TContext = Context, TypeParent = Artist> {
     name?: NameResolver<string, TypeParent, TContext>;
 
-    genres?: GenresResolver<string[], TypeParent, TContext>;
-
     images?: ImagesResolver<Image[], TypeParent, TContext>;
+
+    external_urls?: ExternalUrlsResolver<SpotifyUrl, TypeParent, TContext>;
+
+    genres?: GenresResolver<string[], TypeParent, TContext>;
   }
 
   export type NameResolver<
@@ -386,13 +414,18 @@ export namespace ArtistResolvers {
     Parent = Artist,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
-  export type GenresResolver<
-    R = string[],
+  export type ImagesResolver<
+    R = Image[],
     Parent = Artist,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
-  export type ImagesResolver<
-    R = Image[],
+  export type ExternalUrlsResolver<
+    R = SpotifyUrl,
+    Parent = Artist,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type GenresResolver<
+    R = string[],
     Parent = Artist,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
@@ -406,6 +439,18 @@ export namespace ImageResolvers {
   export type UrlResolver<
     R = string,
     Parent = Image,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace SpotifyUrlResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = SpotifyUrl> {
+    spotify?: SpotifyResolver<string, TypeParent, TContext>;
+  }
+
+  export type SpotifyResolver<
+    R = string,
+    Parent = SpotifyUrl,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
 }
@@ -487,7 +532,7 @@ export namespace DashStatsResponseResolvers {
   > {
     topArtists?: TopArtistsResolver<UserArtistPlaytimes, TypeParent, TContext>;
 
-    topGenres?: TopGenresResolver<UserArtistPlaytimes, TypeParent, TContext>;
+    topGenres?: TopGenresResolver<UserGenrePlaytimes, TypeParent, TContext>;
   }
 
   export type TopArtistsResolver<
@@ -496,7 +541,7 @@ export namespace DashStatsResponseResolvers {
     TContext = Context
   > = Resolver<R, Parent, TContext>;
   export type TopGenresResolver<
-    R = UserArtistPlaytimes,
+    R = UserGenrePlaytimes,
     Parent = DashStatsResponse,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
@@ -559,6 +604,76 @@ export namespace PeriodGlobalUserArtistPlaytimesResolvers {
 
 export namespace ArtistPlaytimeResolvers {
   export interface Resolvers<TContext = Context, TypeParent = ArtistPlaytime> {
+    artist?: ArtistResolver<Artist, TypeParent, TContext>;
+
+    playDurationMs?: PlayDurationMsResolver<number, TypeParent, TContext>;
+  }
+
+  export type ArtistResolver<
+    R = Artist,
+    Parent = ArtistPlaytime,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type PlayDurationMsResolver<
+    R = number,
+    Parent = ArtistPlaytime,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace UserGenrePlaytimesResolvers {
+  export interface Resolvers<
+    TContext = Context,
+    TypeParent = UserGenrePlaytimes
+  > {
+    week?: WeekResolver<UserGenrePeriodPlaytimes, TypeParent, TContext>;
+
+    month?: MonthResolver<UserGenrePeriodPlaytimes, TypeParent, TContext>;
+
+    life?: LifeResolver<UserGenrePeriodPlaytimes, TypeParent, TContext>;
+  }
+
+  export type WeekResolver<
+    R = UserGenrePeriodPlaytimes,
+    Parent = UserGenrePlaytimes,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type MonthResolver<
+    R = UserGenrePeriodPlaytimes,
+    Parent = UserGenrePlaytimes,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type LifeResolver<
+    R = UserGenrePeriodPlaytimes,
+    Parent = UserGenrePlaytimes,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace UserGenrePeriodPlaytimesResolvers {
+  export interface Resolvers<
+    TContext = Context,
+    TypeParent = UserGenrePeriodPlaytimes
+  > {
+    global?: GlobalResolver<GenrePlaytime[], TypeParent, TContext>;
+
+    user?: UserResolver<GenrePlaytime[], TypeParent, TContext>;
+  }
+
+  export type GlobalResolver<
+    R = GenrePlaytime[],
+    Parent = UserGenrePeriodPlaytimes,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type UserResolver<
+    R = GenrePlaytime[],
+    Parent = UserGenrePeriodPlaytimes,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace GenrePlaytimeResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = GenrePlaytime> {
     name?: NameResolver<string, TypeParent, TContext>;
 
     playDurationMs?: PlayDurationMsResolver<number, TypeParent, TContext>;
@@ -566,12 +681,12 @@ export namespace ArtistPlaytimeResolvers {
 
   export type NameResolver<
     R = string,
-    Parent = ArtistPlaytime,
+    Parent = GenrePlaytime,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
   export type PlayDurationMsResolver<
     R = number,
-    Parent = ArtistPlaytime,
+    Parent = GenrePlaytime,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
 }
@@ -657,6 +772,7 @@ export type IResolvers<TContext = Context> = {
   Track?: TrackResolvers.Resolvers<TContext>;
   Artist?: ArtistResolvers.Resolvers<TContext>;
   Image?: ImageResolvers.Resolvers<TContext>;
+  SpotifyUrl?: SpotifyUrlResolvers.Resolvers<TContext>;
   Album?: AlbumResolvers.Resolvers<TContext>;
   PlaytimeSummaryResponse?: PlaytimeSummaryResponseResolvers.Resolvers<
     TContext
@@ -668,6 +784,11 @@ export type IResolvers<TContext = Context> = {
     TContext
   >;
   ArtistPlaytime?: ArtistPlaytimeResolvers.Resolvers<TContext>;
+  UserGenrePlaytimes?: UserGenrePlaytimesResolvers.Resolvers<TContext>;
+  UserGenrePeriodPlaytimes?: UserGenrePeriodPlaytimesResolvers.Resolvers<
+    TContext
+  >;
+  GenrePlaytime?: GenrePlaytimeResolvers.Resolvers<TContext>;
   Mutation?: MutationResolvers.Resolvers<TContext>;
 } & { [typeName: string]: never };
 

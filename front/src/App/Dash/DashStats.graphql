@@ -3,31 +3,79 @@ query DashStats($uid: String!) {
     topArtists {
       week {
         global {
-          name
+          artist {
+            name
+            images {
+              url
+            }
+            external_urls {
+              spotify
+            }
+          }
           playDurationMs
         }
         user {
-          name
+          artist {
+            name
+            images {
+              url
+            }
+            external_urls {
+              spotify
+            }
+          }
           playDurationMs
         }
       }
       month {
         global {
-          name
+          artist {
+            name
+            images {
+              url
+            }
+            external_urls {
+              spotify
+            }
+          }
           playDurationMs
         }
         user {
-          name
+          artist {
+            name
+            images {
+              url
+            }
+            external_urls {
+              spotify
+            }
+          }
           playDurationMs
         }
       }
       life {
         global {
-          name
+          artist {
+            name
+            images {
+              url
+            }
+            external_urls {
+              spotify
+            }
+          }
           playDurationMs
         }
         user {
-          name
+          artist {
+            name
+            images {
+              url
+            }
+            external_urls {
+              spotify
+            }
+          }
           playDurationMs
         }
       }

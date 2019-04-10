@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components'
-import { RouteComponentProps, Switch, Route } from 'react-router';
-import { DashStatsDashStats, DashStatsTopArtists, DashStatsGlobal } from '../../types';
+import { DashStatsGlobal } from '../../types';
 import moment from 'moment'
 
 const TwoColumns = styled.div`
@@ -16,9 +15,7 @@ const TwoColumns = styled.div`
 `
 
 const Block = styled.div`
-// padding: 0.5rem;
-// margin: 0.5rem 0;
-margin-top: 1rem;
+  margin-top: 1rem;
 `
 
 const hrsAndMins = (durationMs: number) => {
@@ -41,7 +38,8 @@ const ArtistAvatar = styled.div<{src: string}>`
   width: ${bgSize/2}rem;
   border-radius: ${bgSize/2/2}rem;
   background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("${({src}) => src}");
-  `
+  background-size: cover;
+`
 
 const ArtistName = styled.div`
   font-size: ${bgSize/12}rem;
@@ -77,17 +75,19 @@ color: #64d6ee;
 `
 
 
-const ArtistItem: React.SFC<{artist: DashStatsGlobal}> = ({artist: {name, playDurationMs}}) => {
+const ArtistStatItem: React.SFC<DashStatsGlobal> = ({artist: { name, images, external_urls: { spotify } }, playDurationMs}) => {
   const { hrs, mins } = hrsAndMins(playDurationMs)
+  const imgUrl = images && images[0] && images[0].url
   return (
     <Artist data-test='artist-row'>
-      <ArtistAvatar src={''}/>
+      <ArtistAvatar src={imgUrl}/>
       <ArtistInfo>
         <ArtistName data-test='artist-row-name'>{name}</ArtistName>
         <ArtistTime>
           <MajorValue data-test='artist-row-hours'>{hrs} hrs</MajorValue>
           <MinorValue data-test='artist-row-minutes'>{mins} mins</MinorValue>
         </ArtistTime>
+        <SpotifyLogoLink href={spotify}/>
       </ArtistInfo>
     </Artist>
   )
@@ -111,24 +111,25 @@ const Title = styled.div`
   border-bottom: 1px solid #64d6ee;
 `
 
-const TopArtists: React.SFC<{global: Artist[], user: Artist[]}> = ({global, user}) => (
+const TopArtists: React.SFC<{global: DashStatsGlobal[], user: DashStatsGlobal[]}> = ({global, user}) => (
   <TwoColumns>
     <div data-test='top-artists-global'>
       <Title>Soundpruf Artists</Title>
       <ArtistTimeGrid>
-      { global.map((artist, key) => <ArtistItem {...{key, artist}}/>)}
+      { global.map((stat, key) => <ArtistStatItem {...{key, ...stat}}/>)}
       </ArtistTimeGrid>
     </div>
     <div data-test='top-artists-personal'>
       <Title>Your Artists</Title>
       <ArtistTimeGrid>
-      { user.map((artist, key) => <ArtistItem {...{key, artist}}/>)}
+      { user.map((stat, key) => <ArtistStatItem {...{key, ...stat}}/>)}
       </ArtistTimeGrid>
     </div>
   </TwoColumns>
 )
 
 import { DashStatsWeek, DashStatsMonth, DashStatsLife } from '../../types';
+import { SpotifyLogoLink } from '../SpotifyLogoLink/SpotifyLogoLink';
 type DashStatsPeriod = DashStatsWeek | DashStatsMonth | DashStatsLife
 
 export const TopArtistPeriods: React.SFC<{stats: DashStatsPeriod}> = ({stats}) => {

@@ -30,8 +30,9 @@ type Track {
 
 type Artist {
   name: String!
-  genres: [String!]!
   images: [Image!]!
+  external_urls: SpotifyUrl!
+  genres: [String!]!
 }
 
 type Album {
@@ -41,6 +42,10 @@ type Album {
 
 type Image {
   url: String!
+}
+
+type SpotifyUrl {
+  spotify: String!
 }
 `
 
@@ -79,7 +84,8 @@ const recentPlays: QueryResolvers.RecentPlaysResolver = async (_, {uid}, context
         artists: (artists as any[]).map(a => ({
           name: a.name as string,
           images: a.images as Image[],
-          genres: a.genres as string[]
+          genres: a.genres as string[],
+          external_urls: a.external_urls as {spotify: string}
         })),
         album,
       }

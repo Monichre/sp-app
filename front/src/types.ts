@@ -1,4 +1,4 @@
-// Generated in 2019-04-03T12:43:31-07:00
+// Generated in 2019-04-09T18:26:42-07:00
 // REGENERATE THIS BY STARTING THE LOCAL BACKEND
 // AND THEN RUNNING `front % yarn generate`
 
@@ -87,17 +87,61 @@ export type DashStatsWeek = {
 export type DashStatsGlobal = {
   __typename?: "ArtistPlaytime";
 
-  name: string;
+  artist: DashStatsArtist;
 
   playDurationMs: number;
+};
+
+export type DashStatsArtist = {
+  __typename?: "Artist";
+
+  name: string;
+
+  images: DashStatsImages[];
+
+  external_urls: DashStatsExternalUrls;
+};
+
+export type DashStatsImages = {
+  __typename?: "Image";
+
+  url: string;
+};
+
+export type DashStatsExternalUrls = {
+  __typename?: "SpotifyUrl";
+
+  spotify: string;
 };
 
 export type DashStatsUser = {
   __typename?: "ArtistPlaytime";
 
-  name: string;
+  artist: DashStats_Artist;
 
   playDurationMs: number;
+};
+
+export type DashStats_Artist = {
+  __typename?: "Artist";
+
+  name: string;
+
+  images: DashStats_Images[];
+
+  external_urls: DashStats_ExternalUrls;
+};
+
+export type DashStats_Images = {
+  __typename?: "Image";
+
+  url: string;
+};
+
+export type DashStats_ExternalUrls = {
+  __typename?: "SpotifyUrl";
+
+  spotify: string;
 };
 
 export type DashStatsMonth = {
@@ -111,17 +155,61 @@ export type DashStatsMonth = {
 export type DashStats_Global = {
   __typename?: "ArtistPlaytime";
 
-  name: string;
+  artist: DashStats__Artist;
 
   playDurationMs: number;
+};
+
+export type DashStats__Artist = {
+  __typename?: "Artist";
+
+  name: string;
+
+  images: DashStats__Images[];
+
+  external_urls: DashStats__ExternalUrls;
+};
+
+export type DashStats__Images = {
+  __typename?: "Image";
+
+  url: string;
+};
+
+export type DashStats__ExternalUrls = {
+  __typename?: "SpotifyUrl";
+
+  spotify: string;
 };
 
 export type DashStats_User = {
   __typename?: "ArtistPlaytime";
 
-  name: string;
+  artist: DashStats___Artist;
 
   playDurationMs: number;
+};
+
+export type DashStats___Artist = {
+  __typename?: "Artist";
+
+  name: string;
+
+  images: DashStats___Images[];
+
+  external_urls: DashStats___ExternalUrls;
+};
+
+export type DashStats___Images = {
+  __typename?: "Image";
+
+  url: string;
+};
+
+export type DashStats___ExternalUrls = {
+  __typename?: "SpotifyUrl";
+
+  spotify: string;
 };
 
 export type DashStatsLife = {
@@ -135,21 +223,65 @@ export type DashStatsLife = {
 export type DashStats__Global = {
   __typename?: "ArtistPlaytime";
 
-  name: string;
+  artist: DashStats____Artist;
 
   playDurationMs: number;
+};
+
+export type DashStats____Artist = {
+  __typename?: "Artist";
+
+  name: string;
+
+  images: DashStats____Images[];
+
+  external_urls: DashStats____ExternalUrls;
+};
+
+export type DashStats____Images = {
+  __typename?: "Image";
+
+  url: string;
+};
+
+export type DashStats____ExternalUrls = {
+  __typename?: "SpotifyUrl";
+
+  spotify: string;
 };
 
 export type DashStats__User = {
   __typename?: "ArtistPlaytime";
 
-  name: string;
+  artist: DashStats_____Artist;
 
   playDurationMs: number;
 };
 
+export type DashStats_____Artist = {
+  __typename?: "Artist";
+
+  name: string;
+
+  images: DashStats_____Images[];
+
+  external_urls: DashStats_____ExternalUrls;
+};
+
+export type DashStats_____Images = {
+  __typename?: "Image";
+
+  url: string;
+};
+
+export type DashStats_____ExternalUrls = {
+  __typename?: "SpotifyUrl";
+
+  spotify: string;
+};
+
 export type DashStatsTopGenres = {
-  __typename?: "UserArtistPlaytimes";
+  __typename?: "UserGenrePlaytimes";
 
   week: DashStats_Week;
 
@@ -159,7 +291,7 @@ export type DashStatsTopGenres = {
 };
 
 export type DashStats_Week = {
-  __typename?: "PeriodGlobalUserArtistPlaytimes";
+  __typename?: "UserGenrePeriodPlaytimes";
 
   global: DashStats___Global[];
 
@@ -167,7 +299,7 @@ export type DashStats_Week = {
 };
 
 export type DashStats___Global = {
-  __typename?: "ArtistPlaytime";
+  __typename?: "GenrePlaytime";
 
   name: string;
 
@@ -175,7 +307,7 @@ export type DashStats___Global = {
 };
 
 export type DashStats___User = {
-  __typename?: "ArtistPlaytime";
+  __typename?: "GenrePlaytime";
 
   name: string;
 
@@ -183,7 +315,7 @@ export type DashStats___User = {
 };
 
 export type DashStats_Month = {
-  __typename?: "PeriodGlobalUserArtistPlaytimes";
+  __typename?: "UserGenrePeriodPlaytimes";
 
   global: DashStats____Global[];
 
@@ -191,7 +323,7 @@ export type DashStats_Month = {
 };
 
 export type DashStats____Global = {
-  __typename?: "ArtistPlaytime";
+  __typename?: "GenrePlaytime";
 
   name: string;
 
@@ -199,7 +331,7 @@ export type DashStats____Global = {
 };
 
 export type DashStats____User = {
-  __typename?: "ArtistPlaytime";
+  __typename?: "GenrePlaytime";
 
   name: string;
 
@@ -207,7 +339,7 @@ export type DashStats____User = {
 };
 
 export type DashStats_Life = {
-  __typename?: "PeriodGlobalUserArtistPlaytimes";
+  __typename?: "UserGenrePeriodPlaytimes";
 
   global: DashStats_____Global[];
 
@@ -215,7 +347,7 @@ export type DashStats_Life = {
 };
 
 export type DashStats_____Global = {
-  __typename?: "ArtistPlaytime";
+  __typename?: "GenrePlaytime";
 
   name: string;
 
@@ -223,7 +355,7 @@ export type DashStats_____Global = {
 };
 
 export type DashStats_____User = {
-  __typename?: "ArtistPlaytime";
+  __typename?: "GenrePlaytime";
 
   name: string;
 
@@ -318,12 +450,20 @@ export type RecentPlaysArtists = {
   genres: string[];
 
   images: RecentPlaysImages[];
+
+  external_urls: RecentPlaysExternalUrls;
 };
 
 export type RecentPlaysImages = {
   __typename?: "Image";
 
   url: string;
+};
+
+export type RecentPlaysExternalUrls = {
+  __typename?: "SpotifyUrl";
+
+  spotify: string;
 };
 
 export type RecentPlaysAlbum = {
@@ -351,31 +491,79 @@ export const DashStatsDocument = gql`
       topArtists {
         week {
           global {
-            name
+            artist {
+              name
+              images {
+                url
+              }
+              external_urls {
+                spotify
+              }
+            }
             playDurationMs
           }
           user {
-            name
+            artist {
+              name
+              images {
+                url
+              }
+              external_urls {
+                spotify
+              }
+            }
             playDurationMs
           }
         }
         month {
           global {
-            name
+            artist {
+              name
+              images {
+                url
+              }
+              external_urls {
+                spotify
+              }
+            }
             playDurationMs
           }
           user {
-            name
+            artist {
+              name
+              images {
+                url
+              }
+              external_urls {
+                spotify
+              }
+            }
             playDurationMs
           }
         }
         life {
           global {
-            name
+            artist {
+              name
+              images {
+                url
+              }
+              external_urls {
+                spotify
+              }
+            }
             playDurationMs
           }
           user {
-            name
+            artist {
+              name
+              images {
+                url
+              }
+              external_urls {
+                spotify
+              }
+            }
             playDurationMs
           }
         }
@@ -462,6 +650,9 @@ export const RecentPlaysDocument = gql`
             genres
             images {
               url
+            }
+            external_urls {
+              spotify
             }
           }
           album {

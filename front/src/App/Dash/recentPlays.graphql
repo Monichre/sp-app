@@ -11,6 +11,9 @@ query RecentPlays($uid: String!) {
           images {
             url
           }
+          external_urls {
+            spotify
+          }
         }
         album {
           images {
