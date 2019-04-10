@@ -15,8 +15,8 @@ type Mutation {
 }
 
 type PlaytimeSummaryPeriods {
-  current: Int!
-  prev: Int!
+  current: Float!
+  prev: Float!
 }
 
 type PlaytimeSummaryResponse {
@@ -27,7 +27,7 @@ type PlaytimeSummaryResponse {
 
 type ArtistPlaytime {
   name: String!
-  playDurationMs: Int!
+  playDurationMs: Float!
 }
 
 type PeriodGlobalUserArtistPlaytimes {
