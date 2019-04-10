@@ -1,11 +1,12 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components'
 import moment from 'moment'
-import { usePlaytimeSummary } from '../../types';
+import { usePlaytimeSummary, PlaytimeSummaryTopLifetimeArtists } from '../../types';
 import { Loading } from '../../comp/Loading';
 import { Ascend, Descend, Info, History } from 'grommet-icons'
 import { Music } from '../../comp/icons';
 import { NavLink } from 'react-router-dom';
+import { SpotifyLogoLink } from '../SpotifyLogoLink/SpotifyLogoLink';
 
 const EvenRow = styled.div`
   display: flex;
@@ -15,28 +16,6 @@ const EvenRow = styled.div`
 
   & > * {
     flex: 1
-  }
-`
-const SummaryGrid = styled.div`
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 1rem 0 2rem;
-  display: grid
-  align-items: end;
-  grid-column-gap: 0.5rem;
-  grid-row-gap: 0.5rem;
-  grid-template:
-  [row1-start] "welcome thisWeek thisWeek" [row1-end]
-  [row2-start] "today thisMonth nav" [row2-start]
-  / 50% 35% 15%
-@media (max-width: 800px) {
-    grid-template:
-    "welcome"
-    "today"
-    "thisWeek"
-    "thisMonth"
-    "nav"
-    / 100%
   }
 `
 
@@ -54,11 +33,17 @@ const BackgroundBlock = styled(Block)`
 `
 
 const BlockTitle = styled.div`
+  display: flex;
+  align-items: flex-end;
   text-transform: uppercase;
   font-weight: 500;
   font-size: 1.2rem;
   padding-bottom: 10px;
   border-bottom: 1px solid #64d6ee;
+
+  & > * {
+    margin-right: 0.5rem;
+  }
 `
 
 const StatBlock = styled.span`
@@ -176,11 +161,55 @@ const NavBlock: React.SFC<{className?: string}> = ({className}) =>
     </NavButton>
   </EvenRow>
 
+const ArtistTitle = styled.div`
+  display: flex;
+  align-items: baseline;
+  font-weight: 500;
+  font-size: 1.5rem;
+
+  & > * {
+    margin-right: 0.5rem;
+  }
+`
+
+const ImageBlock = styled(Block)<{src: string}>`
+  height: 100%;
+  // width: 100%;
+  background-image: url("${({src}) => src}");
+  background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("${({src}) => src}");
+  background-position: center center;
+  background-size: cover;
+  border-radius: 0.5rem;
+
+  & > * {
+    margin-bottom: 0.5rem;
+  }
+`
+
+const TopArtistBlock: React.SFC<{className?: string, stat: PlaytimeSummaryTopLifetimeArtists}> =
+  ({className, stat: { playDurationMs, artist: {name, images, external_urls: { spotify }}}}) => {
+    const { hrs, mins } = hrsAndMinsAndSecs(playDurationMs)
+    const imgUrl = images[0] && images[0].url
+    return (
+      <ImageBlock {...{className}} src={imgUrl}>
+        <LeftRow>
+          <MajorValue>{hrs} hrs</MajorValue>
+          <MinorValue>{mins} mins</MinorValue>
+        </LeftRow>
+        <ArtistTitle><div>{name}</div><SpotifyLogoLink href={spotify}/> </ArtistTitle>
+        <BlockTitle>Your All-time Top</BlockTitle>
+      </ImageBlock>
+    )
+  }
+
+const fName = (s: string) => s.split(' ')[0]
+
 const WelcomeBlock: React.SFC<{displayName: string | null, className?: string}> = ({displayName, className}) => {
-  const greet = displayName ? <span>Welcome, <span data-test="displayName">{displayName}</span>.</span> : "Welcome."
+  const greet = displayName ? <span>Welcome, <span data-test="displayName">{fName(displayName)}</span>.</span> : "Welcome."
   return (
     <HeroBlock {...{className}}>
-      { greet } Here's what you're listening to.
+      { greet }
+      <br/>Here are your latest listening stats.
     </HeroBlock>
   )
 }
@@ -190,25 +219,57 @@ const fadeIn = keyframes`
   to { opacity: 1; }
 `
 
+const SummaryGrid = styled.div`
+  margin-bottom: 1rem;
+  display: grid
+  align-items: end;
+  grid-column-gap: 0.5rem;
+  grid-row-gap: 0.5rem;
+  grid-template:
+  [row1-start] "welcome today today" [row1-end]
+  [row2-start] "topArtist thisWeek thisMonth" [row2-start]
+  / 2fr 1.5fr 1.5fr
+  @media (max-width: 1050px) {
+    grid-template:
+    "welcome welcome"
+    "today today"
+    "thisWeek thisMonth"
+    "topArtist topArtist"
+    / 1fr 1fr
+  }
+  @media (max-width: 660px) {
+    grid-template:
+    "welcome"
+    "today"
+    "thisWeek"
+    "thisMonth"
+    "topArtist"
+    / 1fr
+  }
+`
+
 const WelcomeGridArea = styled(WelcomeBlock)`grid-area:welcome; align-self: end;`
 const TodayGridArea = styled(TimeBlock)`grid-area: today; animation: ${fadeIn} 1s`
 const ThisWeekGridArea = styled(TimeBlock)`grid-area: thisWeek; animation: ${fadeIn} 1.5s`
 const ThisMonthGridArea = styled(TimeBlock)`grid-area: thisMonth; animation: ${fadeIn} 2s`
-const NavGridArea = styled(NavBlock)`grid-area: nav; align-self: start`
+const TopArtistGridArea = styled(TopArtistBlock)`grid-area: topArtist; animation: ${fadeIn} 3s`
+// const NavGridArea = styled(NavBlock)`grid-area: nav; align-self: start`
 
 export const PlaytimeSummary: React.SFC<{uid: string, displayName: string | null}> = ({uid, displayName}) => {
   const { data } = usePlaytimeSummary({variables: { uid }, pollInterval: 10000, suspend: true})
   console.log('data', data)
 
   if (!data || !data.playtimeSummary) { return <Loading/> } // due to suspense this should never happen, but i want to type-safe the thing
-  const { playtimeSummary: { day, week, month }} = data
+  const { playtimeSummary: { topLifetimeArtists, day, week, month }} = data
+  const stat = topLifetimeArtists[0]
   return (
     <SummaryGrid>
       <WelcomeGridArea {...{displayName}}/>
       <TodayGridArea title='Today' durations={day} label='yesterday'/>
       <ThisWeekGridArea title='This Week' durations={week} label='last week'/>
       <ThisMonthGridArea title='This Month' durations={month} label='last month'/>
-      <NavGridArea/>
+      {stat ? <TopArtistGridArea {...{stat}}/> : '' }
+      {/* <NavGridArea/> */}
     </SummaryGrid>
   )
 }

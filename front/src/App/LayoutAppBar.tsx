@@ -15,7 +15,7 @@ const animateGlow = keyframes`
 `
 
 const OffsetBody = styled.div`
-  margin: 3.0rem 1rem 0 1rem;
+  margin: 4.0rem 1rem 0 1rem;
 
   &:after {
     position: fixed;

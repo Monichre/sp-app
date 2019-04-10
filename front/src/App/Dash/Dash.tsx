@@ -6,6 +6,7 @@ import { PlaytimeSummary } from './PlaytimeSummary';
 import { Route, Switch, Redirect } from 'react-router';
 import { DashStats } from './DashStats';
 import { Loading } from '../../comp/Loading';
+import { DashNav } from './DashNav';
 
 // we are passing uid={user.uid} to the child components
 // when we would rather be just doing useUser() with a hook inside them (i think?)
@@ -20,6 +21,7 @@ export const Dash: React.SFC = () => {
   return (
     <LayoutAppBar>
       <PlaytimeSummary uid={user.uid} displayName={user.displayName}/>
+      <DashNav/>
       <React.Suspense fallback={<Loading/>}>
         <Switch>
           <Route path='/history' render={(props) => <RecentPlays {...props} uid={user.uid}/>}/>

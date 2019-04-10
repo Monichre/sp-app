@@ -1,4 +1,4 @@
-// Generated in 2019-04-09T18:26:42-07:00
+// Generated in 2019-04-09T20:19:53-07:00
 // REGENERATE THIS BY STARTING THE LOCAL BACKEND
 // AND THEN RUNNING `front % yarn generate`
 
@@ -375,11 +375,43 @@ export type PlaytimeSummaryQuery = {
 export type PlaytimeSummaryPlaytimeSummary = {
   __typename?: "PlaytimeSummaryResponse";
 
+  topLifetimeArtists: PlaytimeSummaryTopLifetimeArtists[];
+
   day: PlaytimeSummaryDay;
 
   week: PlaytimeSummaryWeek;
 
   month: PlaytimeSummaryMonth;
+};
+
+export type PlaytimeSummaryTopLifetimeArtists = {
+  __typename?: "ArtistPlaytime";
+
+  artist: PlaytimeSummaryArtist;
+
+  playDurationMs: number;
+};
+
+export type PlaytimeSummaryArtist = {
+  __typename?: "Artist";
+
+  name: string;
+
+  images: PlaytimeSummaryImages[];
+
+  external_urls: PlaytimeSummaryExternalUrls;
+};
+
+export type PlaytimeSummaryImages = {
+  __typename?: "Image";
+
+  url: string;
+};
+
+export type PlaytimeSummaryExternalUrls = {
+  __typename?: "SpotifyUrl";
+
+  spotify: string;
 };
 
 export type PlaytimeSummaryDay = {
@@ -614,6 +646,18 @@ export function useDashStats(
 export const PlaytimeSummaryDocument = gql`
   query PlaytimeSummary($uid: String!) {
     playtimeSummary(uid: $uid) {
+      topLifetimeArtists {
+        artist {
+          name
+          images {
+            url
+          }
+          external_urls {
+            spotify
+          }
+        }
+        playDurationMs
+      }
       day {
         current
         prev

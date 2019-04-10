@@ -1,5 +1,17 @@
 query PlaytimeSummary($uid: String!) {
   playtimeSummary(uid: $uid) {
+    topLifetimeArtists {
+      artist {
+        name
+        images {
+          url
+        }
+        external_urls {
+          spotify
+        }
+      }
+      playDurationMs
+    }
     day {
       current
       prev

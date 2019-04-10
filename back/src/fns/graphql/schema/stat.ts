@@ -20,6 +20,7 @@ type PlaytimeSummaryPeriods {
 }
 
 type PlaytimeSummaryResponse {
+  topLifetimeArtists: [ArtistPlaytime!]!
   day: PlaytimeSummaryPeriods!
   week: PlaytimeSummaryPeriods!
   month: PlaytimeSummaryPeriods!
@@ -114,7 +115,9 @@ const playtimeSummary: QueryResolvers.PlaytimeSummaryResolver = async (_, {uid},
   const month = m.format('YYYY-MM')
   const lastMonth = m.clone().subtract(1, 'months').format('YYYY-MM')
 
+  const topLifetimeArtists = await topArtistsFor(doc, TableName, uid, 'life', 'life', 1)
   return {
+    topLifetimeArtists,
     day: {
       current: await getStat(doc, TableName, {uid, periodType: 'day', periodValue: day}),
       prev: await getStat(doc, TableName, {uid, periodType: 'day', periodValue: yest}),

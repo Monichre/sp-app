@@ -1,4 +1,4 @@
-// Generated in 2019-04-09T17:42:23-07:00
+// Generated in 2019-04-09T20:18:25-07:00
 // REGENERATE THIS BY STARTING THE LOCAL SERVER
 // AND THEN RUNNING `back % yarn generate`
 
@@ -111,11 +111,19 @@ export interface Album {
 }
 
 export interface PlaytimeSummaryResponse {
+  topLifetimeArtists: ArtistPlaytime[];
+
   day: PlaytimeSummaryPeriods;
 
   week: PlaytimeSummaryPeriods;
 
   month: PlaytimeSummaryPeriods;
+}
+
+export interface ArtistPlaytime {
+  artist: Artist;
+
+  playDurationMs: number;
 }
 
 export interface PlaytimeSummaryPeriods {
@@ -142,12 +150,6 @@ export interface PeriodGlobalUserArtistPlaytimes {
   global: ArtistPlaytime[];
 
   user: ArtistPlaytime[];
-}
-
-export interface ArtistPlaytime {
-  artist: Artist;
-
-  playDurationMs: number;
 }
 
 export interface UserGenrePlaytimes {
@@ -479,6 +481,12 @@ export namespace PlaytimeSummaryResponseResolvers {
     TContext = Context,
     TypeParent = PlaytimeSummaryResponse
   > {
+    topLifetimeArtists?: TopLifetimeArtistsResolver<
+      ArtistPlaytime[],
+      TypeParent,
+      TContext
+    >;
+
     day?: DayResolver<PlaytimeSummaryPeriods, TypeParent, TContext>;
 
     week?: WeekResolver<PlaytimeSummaryPeriods, TypeParent, TContext>;
@@ -486,6 +494,11 @@ export namespace PlaytimeSummaryResponseResolvers {
     month?: MonthResolver<PlaytimeSummaryPeriods, TypeParent, TContext>;
   }
 
+  export type TopLifetimeArtistsResolver<
+    R = ArtistPlaytime[],
+    Parent = PlaytimeSummaryResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
   export type DayResolver<
     R = PlaytimeSummaryPeriods,
     Parent = PlaytimeSummaryResponse,
@@ -499,6 +512,25 @@ export namespace PlaytimeSummaryResponseResolvers {
   export type MonthResolver<
     R = PlaytimeSummaryPeriods,
     Parent = PlaytimeSummaryResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace ArtistPlaytimeResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = ArtistPlaytime> {
+    artist?: ArtistResolver<Artist, TypeParent, TContext>;
+
+    playDurationMs?: PlayDurationMsResolver<number, TypeParent, TContext>;
+  }
+
+  export type ArtistResolver<
+    R = Artist,
+    Parent = ArtistPlaytime,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type PlayDurationMsResolver<
+    R = number,
+    Parent = ArtistPlaytime,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
 }
@@ -598,25 +630,6 @@ export namespace PeriodGlobalUserArtistPlaytimesResolvers {
   export type UserResolver<
     R = ArtistPlaytime[],
     Parent = PeriodGlobalUserArtistPlaytimes,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-}
-
-export namespace ArtistPlaytimeResolvers {
-  export interface Resolvers<TContext = Context, TypeParent = ArtistPlaytime> {
-    artist?: ArtistResolver<Artist, TypeParent, TContext>;
-
-    playDurationMs?: PlayDurationMsResolver<number, TypeParent, TContext>;
-  }
-
-  export type ArtistResolver<
-    R = Artist,
-    Parent = ArtistPlaytime,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-  export type PlayDurationMsResolver<
-    R = number,
-    Parent = ArtistPlaytime,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
 }
@@ -777,13 +790,13 @@ export type IResolvers<TContext = Context> = {
   PlaytimeSummaryResponse?: PlaytimeSummaryResponseResolvers.Resolvers<
     TContext
   >;
+  ArtistPlaytime?: ArtistPlaytimeResolvers.Resolvers<TContext>;
   PlaytimeSummaryPeriods?: PlaytimeSummaryPeriodsResolvers.Resolvers<TContext>;
   DashStatsResponse?: DashStatsResponseResolvers.Resolvers<TContext>;
   UserArtistPlaytimes?: UserArtistPlaytimesResolvers.Resolvers<TContext>;
   PeriodGlobalUserArtistPlaytimes?: PeriodGlobalUserArtistPlaytimesResolvers.Resolvers<
     TContext
   >;
-  ArtistPlaytime?: ArtistPlaytimeResolvers.Resolvers<TContext>;
   UserGenrePlaytimes?: UserGenrePlaytimesResolvers.Resolvers<TContext>;
   UserGenrePeriodPlaytimes?: UserGenrePeriodPlaytimesResolvers.Resolvers<
     TContext
