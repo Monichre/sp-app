@@ -1,9 +1,9 @@
 import * as t from 'io-ts'
 import * as AWS from 'aws-sdk';
 import { SQSEvent } from "aws-lambda";
-import { SpotifyTrackVerbose, SpotifyTrack, SpotifyPlay } from './SpotifyApi';
-import { Message } from 'protobufjs';
+import { SpotifyPlay } from './SpotifyApi';
 import { isRight, isLeft } from 'fp-ts/lib/Either';
+import { decodeAll } from './validation';
 
 
 
@@ -12,6 +12,7 @@ const MessageEnrichPlayArtists = t.type({
     uid: t.string,
     accessToken: t.string,
     refreshToken: t.string,
+    utcOffset: t.number,
   }),
   plays: t.array(SpotifyPlay)
 })
@@ -26,22 +27,21 @@ export const QueueEnrichPlayArtists = {
     }).promise()  
   },
   extract: (e: SQSEvent) => {
-    const records = e.Records.map(r => JSON.parse(r.body)).map(MessageEnrichPlayArtists.decode)
-    const messages = records.filter(isRight).map(r => r.value)
-    const errors = records.filter(isLeft).map(r => r.value)
-    return {errors, messages}
+    return decodeAll(MessageEnrichPlayArtists, e.Records.map(r => JSON.parse(r.body)))
   }
 }
 
+const MessageFetchSpotifyPlays = t.type({
+  uid: t.string,
+  accessToken: t.string,
+  refreshToken: t.string,
+  utcOffset: t.number,
+})
 
-type QueueFetchSpotifyPlaysMessage = {
-  uid: string,
-  accessToken: string,
-  refreshToken: string,
-}
+export type TMessageFetchSpotifyPlays = t.TypeOf<typeof MessageFetchSpotifyPlays>
 
 export const QueueFetchSpotifyPlays = {
-  publish: async (QueueUrl: string, m: QueueFetchSpotifyPlaysMessage) => {
+  publish: async (QueueUrl: string, m: TMessageFetchSpotifyPlays) => {
     const sqs = new AWS.SQS()
     return sqs.sendMessage({
       QueueUrl,
@@ -49,18 +49,18 @@ export const QueueFetchSpotifyPlays = {
     }).promise()
   },
   extract: (e: SQSEvent) => {
-    const messages = e.Records.map(r => JSON.parse(r.body))
-    // do something to validate this shit
-    return messages as QueueFetchSpotifyPlaysMessage[]
+    return decodeAll(MessageFetchSpotifyPlays, e.Records.map(r => JSON.parse(r.body)))
   }
 }
 
-type QueueStartHarvestUserMessage = {
-  uid: string
-}
+const MessageStartHarvestUser = t.type({
+  uid: t.string,
+})
+
+export type TMessageStartHarvestUser = t.TypeOf<typeof MessageStartHarvestUser>
 
 export const QueueStartHarvestUser = {
-  publish: async (QueueUrl: string, m: QueueStartHarvestUserMessage) => {
+  publish: async (QueueUrl: string, m: TMessageStartHarvestUser) => {
     const sqs = new AWS.SQS()
     return sqs.sendMessage({
       QueueUrl,
@@ -68,8 +68,31 @@ export const QueueStartHarvestUser = {
     }).promise()
   },
   extract: (e: SQSEvent) => {
-    const messages = e.Records.map(r => JSON.parse(r.body))
-    // do something to validate this shit
-    return messages as QueueStartHarvestUserMessage[]
+    return decodeAll(MessageStartHarvestUser, e.Records.map(r => JSON.parse(r.body)))
+  }
+}
+
+const MessageValidationErrors = t.type({
+  uid: t.string,
+  paths: t.array(t.string),
+  context: t.any,
+})
+
+export type TMessageValidationErrors = t.TypeOf<typeof MessageValidationErrors>
+
+export const QueueValidationErrors = {
+  publish: async (QueueUrl: string, m: TMessageValidationErrors) => {
+    const sqs = new AWS.SQS()
+    return sqs.sendMessage({
+      QueueUrl,
+      MessageBody: JSON.stringify(m),
+    }).promise()
+  },
+  extract: (e: SQSEvent) => {
+    const parsed = e.Records.map(r => JSON.parse(r.body))
+    const decoded = parsed.map(MessageValidationErrors.decode)
+    const errors = decoded.filter(isLeft).map(r => r.value)
+    const messages = decoded.filter(isRight).map(r => r.value)
+    return { errors, messages }
   }
 }

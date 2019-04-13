@@ -3,6 +3,7 @@ export QueueEndpoint=https://sqs.us-east-1.amazonaws.com/726906999379
 export QueueHiFetchSpotifyPlays=$QueueEndpoint/sp-app-back-rc-QueueHiFetchSpotifyPlays
 export QueueStartHarvestUser=$QueueEndpoint/sp-app-back-rc-QueueStartHarvestUser
 export QueueEnrichPlayArtists=$QueueEndpoint/sp-app-back-rc-QueueEnrichPlayArtists
+export QueueValidationErrors=$QueueEndpoint/sp-app-back-rc-QueueValidationErrors
 
 # tables
 export DynamoEndpoint=https://dynamodb.us-east-1.amazonaws.com

@@ -15,7 +15,6 @@ const script = async () => {
 
   const items = JSON.parse(fs.readFileSync(process.argv[process.argv.length-1]).toString())
   log.info(`${items.length} items to put`)
-  // const items = require(process.argv[process.argv.length-1])
 
   for (const item of items) {
     await doc.put({
@@ -23,19 +22,6 @@ const script = async () => {
       Item: item
     }).promise()
   }
-
-  // const r = await doc.scan({
-  //   TableName: env.TABLE_PLAY
-  // }).promise()
-
-  // log.info(`${r.Items.length} items now in table`)
-
-  // const results = await doc.scan({
-  //   TableName: env.TABLE_USER,
-  // }).promise()
-  // log.info(`got ${results.Items.length} items back from scan`)
-  // console.log(JSON.stringify(results.Items, null, 2))
-
 }
 
 script()

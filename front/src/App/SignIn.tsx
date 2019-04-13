@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Logo } from '../comp/Logo';
+import moment from 'moment';
 
 const BetweenColumn = styled.div`
   display: flex;
@@ -48,10 +49,16 @@ const Hero = styled.div`
   }
 `
 
-const ButtonSpotifySignin: React.SFC = () =>
-  <button data-test='spotifyLogin' onClick={() => window.location.assign(`${process.env.REACT_APP_API_ENDPOINT}/spotify/redirect`)}>
-    Sign in with Spotify
-  </button>
+const ButtonSpotifySignin: React.SFC = () => {
+  const d = moment()
+  const utcOffset = d.utcOffset()
+  console.log(utcOffset)
+  return (
+    <button data-test='spotifyLogin' onClick={() => window.location.assign(`${process.env.REACT_APP_API_ENDPOINT}/spotify/redirect?utcOffset=${utcOffset}`)}>
+      Sign in with Spotify
+    </button>
+  )
+}
 
 export const SignIn: React.SFC = () =>
     <BetweenColumn>

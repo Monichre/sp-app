@@ -5,10 +5,13 @@ import { TableUser } from '../../shared/tables/TableUser';
 import { verifyEnv } from '../../shared/env';
 import { QueueFetchSpotifyPlays } from '../../shared/queues';
 import { FirebaseAuth, UserAttrs } from '../../shared/FirebaseAuth';
+import { slog } from '../logger';
 
 // i doth mislike how many separate interests that this handler manages
 // suggests mebbe this should be broken out
 // what are the concerns we can seperate
+
+const log = slog.child('spotify/callback')
 
 export const handler: APIGatewayProxyHandler = async (event) => {
   const env = verifyEnv({
@@ -16,8 +19,14 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     TABLE_TARGET: process.env.TABLE_TARGET,
     QUEUE_TARGET: process.env.QUEUE_TARGET,
     FRONTEND_CUSTOMAUTH_URI: process.env.FRONTEND_CUSTOMAUTH_URI,
+    SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID,
+    SPOTIFY_CLIENT_SECRET: process.env.SPOTIFY_CLIENT_SECRET,
+    SPOTIFY_REDIRECT_URI: process.env.SPOTIFY_REDIRECT_URI,
   })
-  const spotify = SpotifyApi() // we should really be passing spotify creds here imo
+  const spotify = SpotifyApi(env) // we should really be passing spotify creds here imo
+
+  const utcOffset = parseInt(event.queryStringParameters['state'])
+  log.info('qs params', { utcOffset })
 
   // the use code from spotify grant to get acccess and refresh tokens from api
   const code = event.queryStringParameters['code']
@@ -46,6 +55,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     accessToken: access_token,
     refreshToken: refresh_token,
     spotifyId: me.id,
+    utcOffset,
   }
   // console.log(`inserting new creds to ${env.DYNAMO_ENDPOINT}${env.TABLE_TARGET}: ${JSON.stringify(creds, null, 2)}`)
   await table.setSpotifyCreds(creds)
@@ -56,6 +66,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     uid: user.uid,
     accessToken: access_token,
     refreshToken: refresh_token,
+    utcOffset,
   })
 
   // generate a customToken that we can give back to the front end

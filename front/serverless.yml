@@ -23,13 +23,19 @@ custom:
 # Here, we should handle any wonkiness between offline and cloud
 
   target: ${env:TARGET, "local"}
-  # config: ${env:CONFIG, "local"}
+  config: ${env:CONFIG, "local"}
   region: ${env:REGION, "us-east-1"}
 
   ns: ${self:service}-${self:custom.target}
 
+  bucketName: # by config
+    local: no-such-thing
+    test: ${self:custom.ns}-frontend
+    live: live.soundpruf.com
+
   s3Sync:
-    - bucketName: ${self:custom.ns}-frontend
+    # - bucketName: ${self:custom.ns}-frontend
+    - bucketName: ${self:custom.bucketName.${self:custom.config}}
       localDir: ./build # make this .build
       acl: public-read
 
@@ -42,7 +48,7 @@ resources:
     BucketFrontend:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: ${self:custom.ns}-frontend
+        BucketName: ${self:custom.bucketName.${self:custom.config}}
         AccessControl: PublicRead
         WebsiteConfiguration:
           IndexDocument: index.html
@@ -50,6 +56,6 @@ resources:
 
   Outputs:
     SiteUrl:
-      Value: "http://${self:custom.ns}-frontend.s3-website-${self:custom.region}.amazonaws.com"
+      Value: "http://${self:custom.bucketName.${self:custom.config}}.s3-website-${self:custom.region}.amazonaws.com"
       Export:
         Name: "${self:custom.ns}-SiteUrl"

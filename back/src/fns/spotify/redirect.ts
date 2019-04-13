@@ -1,5 +1,6 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import { SpotifyApi } from '../../shared/SpotifyApi';
+import { verifyEnv } from '../../shared/env';
 
 const scopes = [
   'user-read-recently-played',
@@ -18,10 +19,18 @@ const scopes = [
 ]
 
 export const handler: APIGatewayProxyHandler = async (event) => {
-  const spotify = SpotifyApi()
-  const state = 'test'
-  const Location = spotify.createAuthorizeURL(scopes, state)
+  const env = verifyEnv({
+    SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID,
+    SPOTIFY_CLIENT_SECRET: process.env.SPOTIFY_CLIENT_SECRET,
+    SPOTIFY_REDIRECT_URI: process.env.SPOTIFY_REDIRECT_URI,
+  })
+  const spotify = SpotifyApi(env) // we should really be passing spotify creds here imo
 
+  const utcOffset = event.queryStringParameters['utcOffset']
+  console.log('utcOffset', utcOffset)
+  
+  const Location = spotify.createAuthorizeURL(scopes, utcOffset)
+  console.log('Location', Location)
   return {
     statusCode: 302,
     headers: {

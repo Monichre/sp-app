@@ -95,10 +95,11 @@ const getStat = async (doc: AWS.DynamoDB.DocumentClient, TableName: string, {uid
 }
 
 const playtimeSummary: QueryResolvers.PlaytimeSummaryResolver = async (_, {uid}, context) => {
+  const log = context.log.child({handler: `graphql/playtimeSummary/${uid}`})
   const env = verifyEnv({
     DYNAMO_ENDPOINT: process.env.DYNAMO_ENDPOINT,
     TABLE_STAT: process.env.TABLE_STAT,
-  })
+  }, log)
 
   // this should all be:
   // const { day, month } = table.periodsFor((new Date()).toISOString())
@@ -116,7 +117,7 @@ const playtimeSummary: QueryResolvers.PlaytimeSummaryResolver = async (_, {uid},
   const lastMonth = m.clone().subtract(1, 'months').format('YYYY-MM')
 
   const topLifetimeArtists = await topArtistsFor(doc, TableName, uid, 'life', 'life', 1)
-  return {
+  const response = {
     topLifetimeArtists,
     day: {
       current: await getStat(doc, TableName, {uid, periodType: 'day', periodValue: day}),
@@ -131,25 +132,8 @@ const playtimeSummary: QueryResolvers.PlaytimeSummaryResolver = async (_, {uid},
       prev: await getStat(doc, TableName, {uid, periodType: 'month', periodValue: lastMonth}),
     },
   }
-
-  // const today = await doc.get({
-  //   TableName,
-  //   Key: {
-  //     pk: [uid, 'total', 'day', day].join('#'),
-  //     sk: [uid, 'day', 'total'].join('#'),
-  //   }
-  // }).promise()
-  // const thisMonth = await doc.get({
-  //   TableName,
-  //   Key: {
-  //     pk: [uid, 'total', 'month', month].join('#'),
-  //     sk: [uid, 'month', 'total'].join('#'),
-  //   }
-  // }).promise()
-  // return {
-  //   today: today.Item.playDurationMs,
-  //   thisMonth: thisMonth.Item.playDurationMs,
-  // }
+  log.info('completed')
+  return response
 }
 type StatRow = {
   name: string,

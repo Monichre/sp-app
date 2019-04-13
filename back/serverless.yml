@@ -105,10 +105,23 @@ custom:
         - - "https://"
           - Ref: "ApiGatewayRestApi"
           - ".execute-api.${self:custom.region}.amazonaws.com/${self:custom.target}"
+    live:
+      Fn::Join:
+        - ""
+        - - "https://"
+          - Ref: "ApiGatewayRestApi"
+          - ".execute-api.${self:custom.region}.amazonaws.com/${self:custom.target}"
 
   SPOTIFY_REDIRECT_URI:
     local: "http://localhost:4000/spotify/callback"
     test:
+      Fn::Join:
+        - ""
+        - - "https://"
+          - Ref: "ApiGatewayRestApi"
+          - ".execute-api.${self:custom.region}.amazonaws.com/${self:custom.target}"
+          - "/spotify/callback"
+    live:
       Fn::Join:
         - ""
         - - "https://"
@@ -128,12 +141,23 @@ custom:
             - "-frontend"
             - ".s3-website-us-east-1.amazonaws.com"
             - "/customAuth"
+      live: "http://live.soundpruf.com/customAuth"
+        # Fn::Join:
+        #   - ""
+        #   - - "http://"
+        #     - "${self:custom.platform}"
+        #     - "-front-"
+        #     - "${self:custom.target}"
+        #     - "-frontend"
+        #     - ".s3-website-us-east-1.amazonaws.com"
+        #     - "/customAuth"
 
   # unify the below with the offline/online above
   LAYER_REF:
     local: "not used"
     # test: ${cf:sp-app-back-layer-${self:custom.target}.SpAppBackLayer${self:custom.target}NpmLayerExport, ""} # without this fallback i cant sls dynamodb install
     test: ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport, ""} # without this fallback i cant sls dynamodb install
+    live: ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport, ""} # without this fallback i cant sls dynamodb install
 
   # (because Ref: fns don't get run in `sls offline`)
   # this jiggery pokery is needed
@@ -146,6 +170,7 @@ custom:
     QueueHiFetchSpotifyPlays: ${env:QueueHiFetchSpotifyPlays, self:custom.cfref.QueueHiFetchSpotifyPlays}
     QueueStartHarvestUser: ${env:QueueStartHarvestUser, self:custom.cfref.QueueStartHarvestUser}
     QueueEnrichPlayArtists: ${env:QueueEnrichPlayArtists, self:custom.cfref.QueueEnrichPlayArtists}
+    QueueValidationErrors: ${env:QueueValidationErrors, self:custom.cfref.QueueValidationErrors}
     TableUser: ${env:TableUser, self:custom.cfref.TableUser}
     TablePlay: ${env:TablePlay, self:custom.cfref.TablePlay}
     TableStat: ${env:TableStat, self:custom.cfref.TableStat}
@@ -158,6 +183,8 @@ custom:
       Ref: QueueStartHarvestUser
     QueueEnrichPlayArtists:
       Ref: QueueEnrichPlayArtists
+    QueueValidationErrors:
+      Ref: QueueValidationErrors
     TableUser:
       Ref: TableUser
     TablePlay:
@@ -281,6 +308,7 @@ functions:
       TABLE_USER: ${self:custom.ref.TableUser}
       TABLE_STAT: ${self:custom.ref.TableStat}
       QUEUE_START_HARVEST_USER: ${self:custom.ref.QueueStartHarvestUser}
+      QUEUE_VALIDATION_ERRORS: ${self:custom.ref.QueueValidationErrors}
 
   graphiql:
     handler: src/fns/graphiql.handler
@@ -332,12 +360,13 @@ functions:
       - sqs:
           arn:
             Fn::GetAtt: [ QueueStartHarvestUser, Arn ]
-    handler: src/fns/startHarvestUser.handler
+    handler: src/fns/demeter/startHarvestUser.handler
     layers:
       - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
       TABLE_USER: ${self:custom.ref.TableUser}
       QUEUE_FETCH_SPOTIFY_PLAYS: ${self:custom.ref.QueueHiFetchSpotifyPlays}
+      QUEUE_VALIDATION_ERRORS: ${self:custom.ref.QueueValidationErrors}
 
   # scheduled job that triggers a harvest for all users
   # sends its triggers to a less time-sensitive queue
@@ -348,12 +377,13 @@ functions:
           path: startHarvestAllUsers
           method: post
           cors: true
-    handler: src/fns/startHarvestAllUsers.handler
+    handler: src/fns/demeter/startHarvestAllUsers.handler
     layers:
       - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
       TABLE_SOURCE: ${self:custom.ref.TableUser}
       QUEUE_TARGET: ${self:custom.ref.QueueHiFetchSpotifyPlays}
+      QUEUE_VALIDATION_ERRORS: ${self:custom.ref.QueueValidationErrors}
 
 
   # if the profile's external poll is stale
@@ -375,6 +405,7 @@ functions:
       SPOTIFY_CLIENT_ID: ${ssm:${self:custom.ssmConfigPath}/SPOTIFY_CLIENT_ID}
       SPOTIFY_CLIENT_SECRET: ${ssm:${self:custom.ssmConfigPath}/SPOTIFY_CLIENT_SECRET}
       SPOTIFY_REDIRECT_URI: ${self:custom.SPOTIFY_REDIRECT_URI.${self:custom.config}}
+      QUEUE_VALIDATION_ERRORS: ${self:custom.ref.QueueValidationErrors}
 
   enrichPlayArtists:
     events:
@@ -390,6 +421,7 @@ functions:
       SPOTIFY_CLIENT_ID: ${ssm:${self:custom.ssmConfigPath}/SPOTIFY_CLIENT_ID}
       SPOTIFY_CLIENT_SECRET: ${ssm:${self:custom.ssmConfigPath}/SPOTIFY_CLIENT_SECRET}
       SPOTIFY_REDIRECT_URI: ${self:custom.SPOTIFY_REDIRECT_URI.${self:custom.config}}
+      QUEUE_VALIDATION_ERRORS: ${self:custom.ref.QueueValidationErrors}
 
   # createPlayFromSpotify:
   #   events:
@@ -459,6 +491,7 @@ functions:
       - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
       TABLE_STAT: ${self:custom.ref.TableStat}
+      QUEUE_VALIDATION_ERRORS: ${self:custom.ref.QueueValidationErrors}
 
   onPlayUpdateArtistStats:
     events:
@@ -471,6 +504,7 @@ functions:
       - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
       TABLE_STAT: ${self:custom.ref.TableStat}
+      QUEUE_VALIDATION_ERRORS: ${self:custom.ref.QueueValidationErrors}
 
   onPlayUpdateGenreStats:
     events:
@@ -483,6 +517,23 @@ functions:
       - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
       TABLE_STAT: ${self:custom.ref.TableStat}
+      QUEUE_VALIDATION_ERRORS: ${self:custom.ref.QueueValidationErrors}
+
+################################################################################
+# functions: error queue
+################################################################################
+# this is WIP prototype of custom resource handler for spinning up firebase auth instances
+
+  errorToSlack:
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt: [ QueueValidationErrors, Arn ]
+    handler: src/fns/errorToSlack.handler
+    layers:
+      - ${self:custom.LAYER_REF.${self:custom.config}}
+    environment:
+      SLACK_WEBHOOK_URL: "https://hooks.slack.com/services/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"
 
 ################################################################################
 # functions: prototype custom resources
@@ -499,6 +550,15 @@ resources:
   Description: soundpruf back-end services
 
   Resources:
+
+################################################################################
+# resources: error queue
+################################################################################
+# 
+    QueueValidationErrors:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:custom.ns}-QueueValidationErrors
 
 ################################################################################
 # resources: DEPLOYMENT

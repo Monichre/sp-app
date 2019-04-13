@@ -75,30 +75,36 @@ const TrackAgo = styled.div`
 `
 
 const PlayItem: React.SFC<{play: RecentPlaysPlays, className?: string}> = ({play: {playedAt, track}, className}) => {
-  const artistImgUrl = track.artists[0].images[0] && track.artists[0].images[0].url || ''
-  const artistSpotifyUrl = track.artists[0] && track.artists[0].external_urls.spotify
-  const albumImg = track.album.images[0] // this should be fixed in graphql return types
-  const albumImgUrl = albumImg ? albumImg.url : ''
-  return (
-    <Play {...{className}}>
-      <AlbumBackground {...{src: albumImgUrl}}/>
-      <Artist>
-        <ArtistAvatar src={artistImgUrl}/>
-        <ArtistInfo>
-          <ArtistName>{track.artists[0].name}</ArtistName>
-          <SpotifyLogoLink href={artistSpotifyUrl}/>
-        </ArtistInfo>
-      </Artist>
-      <Track>
-        <TrackName>{track.name}</TrackName>
-        <TrackAgo>
-          <Moment fromNow>
-            {playedAt}
-          </Moment>
-        </TrackAgo>
-      </Track>
-    </Play>
-  )
+  try {
+    const artistImgUrl = track.artists[0] && track.artists[0].images[0] && track.artists[0].images[0].url || ''
+    const artistSpotifyUrl = track.artists[0] && track.artists[0].external_urls.spotify
+    const artistName = track.artists[0] && track.artists[0].name || 'Unnamed Artist'
+    const albumImg = track.album.images[0] // this should be fixed in graphql return types
+    const albumImgUrl = albumImg ? albumImg.url : ''
+    return (
+      <Play {...{className}}>
+        <AlbumBackground {...{src: albumImgUrl}}/>
+        <Artist>
+          <ArtistAvatar src={artistImgUrl}/>
+          <ArtistInfo>
+            <ArtistName>{artistName}</ArtistName>
+            { artistSpotifyUrl ? <SpotifyLogoLink href={artistSpotifyUrl}/> : ''}
+          </ArtistInfo>
+        </Artist>
+        <Track>
+          <TrackName>{track.name}</TrackName>
+          <TrackAgo>
+            <Moment fromNow>
+              {playedAt}
+            </Moment>
+          </TrackAgo>
+        </Track>
+      </Play>
+    )
+  } catch (err) {
+    throw new Error(`this is fu'd ${JSON.stringify(track, null, 2)}`)
+  }
+
 }
 
 const Note = styled.div`
@@ -125,7 +131,10 @@ const PlayGrid = styled.div`
 
 export const RecentPlays: React.SFC<{uid: string}> = ({uid}) => {
   const [pollInterval, setPollInterval] = useState(2000)
-  const { data } = useRecentPlays({ variables: { uid }, suspend: true, pollInterval})
+  const { data, error, errors } = useRecentPlays({ variables: { uid }, suspend: true, pollInterval})
+  if (error) { throw new Error(JSON.stringify(error)) }
+  if (errors) { throw new Error(JSON.stringify(errors)) }
+
   console.log('data', data)
   const recentPlays = data && data.recentPlays && data.recentPlays.plays || []
   const lastUpdate = data && data.recentPlays && data.recentPlays.lastUpdate

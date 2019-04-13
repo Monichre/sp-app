@@ -13,10 +13,12 @@ export type Context = {
   log: winston.Logger
 }
 
+const log = slog.child({handler: 'graphql', awsEvent: 'http'})
+
 const server = new ApolloServer({
   schema,
   context: () => ({
-    log: slog.child({handler: 'graphql', awsEvent: 'http'}),
+    log,
     ...verifyEnv({
       DYNAMO_ENDPOINT: process.env.DYNAMO_ENDPOINT,
       TABLE_PLAY: process.env.TABLE_PLAY,
@@ -24,7 +26,11 @@ const server = new ApolloServer({
       TABLE_STAT: process.env.TABLE_STAT,
       QUEUE_START_HARVEST_USER: process.env.QUEUE_START_HARVEST_USER,
     })
-  })
+  }),
+  formatError: error => {
+    log.error(error)
+    return error
+  }
 });
 
 export const handler = server.createHandler({

@@ -30,17 +30,17 @@ import { left } from 'fp-ts/lib/Either';
 
 type BodyResponse<T> = Promise<{ body: T }>
 
-const spotifyClientCredentials = () => {
-  const { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URI } = process.env
-  if (!SPOTIFY_CLIENT_ID || !SPOTIFY_CLIENT_SECRET || !SPOTIFY_REDIRECT_URI) {
-    throw new Error("Need SPOTIFY_* env vars")
-  }
-  return {
-    clientId: SPOTIFY_CLIENT_ID,
-    clientSecret: SPOTIFY_CLIENT_SECRET,
-    redirectUri: SPOTIFY_REDIRECT_URI,
-  }
-}
+// const spotifyClientCredentials = () => {
+//   const { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URI } = process.env
+//   if (!SPOTIFY_CLIENT_ID || !SPOTIFY_CLIENT_SECRET || !SPOTIFY_REDIRECT_URI) {
+//     throw new Error("Need SPOTIFY_* env vars")
+//   }
+//   return {
+//     clientId: SPOTIFY_CLIENT_ID,
+//     clientSecret: SPOTIFY_CLIENT_SECRET,
+//     redirectUri: SPOTIFY_REDIRECT_URI,
+//   }
+// }
 
 const ResponseBody = <B extends t.Mixed>(body: B) =>
   t.interface({ body })
@@ -52,6 +52,8 @@ export type TSpotifyImage = t.TypeOf<typeof SpotifyImage>
 
 const SpotifyAlbum = t.type({
   id: t.string,
+  name: t.string,
+  images: t.array(SpotifyImage)
 })
 
 const SpotifyArtistTerse = t.type({
@@ -64,7 +66,8 @@ const SpotifyArtistVerbose = t.type({
   id: t.string,
   name: t.string,
   genres: t.array(t.string),
-  images: t.array(SpotifyImage)
+  images: t.array(SpotifyImage),
+  external_urls: t.type({ spotify: t.string })
 })
 export type TSpotifyArtistVerbose = t.TypeOf<typeof SpotifyArtistVerbose>
 
@@ -107,8 +110,20 @@ const SpotifyGetArtistsResponse = ResponseBody(t.type({
   artists: t.array(SpotifyArtistVerbose)
 }))
 
-export const SpotifyApi = (accessToken?: string, refreshToken?: string) => {
-  const _api = new SpotifyWebApi(spotifyClientCredentials())
+export type SpotifyClientEnv = {
+  SPOTIFY_CLIENT_ID: string,
+  SPOTIFY_CLIENT_SECRET: string,
+  SPOTIFY_REDIRECT_URI: string,
+}
+
+const envToOptions = (env: SpotifyClientEnv) => ({
+  clientId: env.SPOTIFY_CLIENT_ID,
+  clientSecret: env.SPOTIFY_CLIENT_SECRET,
+  redirectUri: env.SPOTIFY_REDIRECT_URI,
+})
+
+export const SpotifyApi = (env: SpotifyClientEnv, accessToken?: string, refreshToken?: string) => {
+  const _api = new SpotifyWebApi(envToOptions(env))
   if (accessToken && refreshToken) {
     _api.setAccessToken(accessToken)
     _api.setRefreshToken(refreshToken)

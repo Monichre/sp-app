@@ -1,39 +1,53 @@
 import * as AWS from 'aws-sdk';
 import * as winston from 'winston';
+import * as t from 'io-ts';
+import { isRight, isLeft } from 'fp-ts/lib/Either';
+import { decodeAll, decodeOne } from '../validation';
 
-type UserSpotifyAttrs = {
-  accessToken: string
-  refreshToken: string
-  spotifyId: string
-}
+const DocUser = t.type({
+  pk: t.string,
+  sk: t.string,
+  uid: t.string,
+  accessToken: t.string,
+  refreshToken: t.string,
+  spotifyId: t.string,
+  utcOffset: t.number,
+})
 
-type KeyAttrs = {
-  pk: string,
-  sk: string,
-}
+type TDocUser = t.TypeOf<typeof DocUser>
 
-type UserSpotifyCreds = UserSpotifyAttrs & {
-  uid: string
-}
+const NewDocUser = t.type({
+  uid: t.string,
+  accessToken: t.string,
+  refreshToken: t.string,
+  spotifyId: t.string,
+  utcOffset: t.number,
+})
 
-type UserSpotifyCredsItem = KeyAttrs & UserSpotifyAttrs
+type TNewDocUser = t.TypeOf<typeof NewDocUser>
 
 export const TableUser = (endpoint: string, TableName: string, log?: winston.Logger) => {
   log && log.info(`Referencing table [${TableName}] at [${endpoint}]`)
   const doc = new AWS.DynamoDB.DocumentClient({endpoint})
 
-  const encode = ({uid, ...vals}: UserSpotifyCreds): UserSpotifyCredsItem => ({
-    pk: uid,
+  // newDoc
+  const encode = (u: TNewDocUser): TDocUser => ({
+    pk: u.uid,
     sk: 'spotify',
-    ...vals
+    ...u
   })
 
-  const decode = ({pk, sk, ...vals}: UserSpotifyCredsItem): UserSpotifyCreds => ({
-    uid: pk,
-    ...vals
-  })
+  // const decode = (obj: any): { errors: t.Errors, doc: TDocUser} => {
+  //   const decoded = ImagePlay.decode(obj)
+  //   const errors = decoded.isLeft() && decoded.value
+  //   const image = decoded.isRight() && decoded.value
+
+
+  //   uid: pk,
+  //   ...vals
+  // })
     
-  const setSpotifyCreds = async (obj: UserSpotifyCreds) => {
+  const setSpotifyCreds = async (obj: TNewDocUser) => {
     log && log.info(`saving spotify credentials for user ${obj.uid}`)
     await doc.put({
       TableName,
@@ -45,17 +59,37 @@ export const TableUser = (endpoint: string, TableName: string, log?: winston.Log
     const result = await doc.scan({
       TableName,
     }).promise()
-    return result.Items.map(decode)
+    return decodeAll(DocUser, result.Items)
   }
 
-  const getSpotifyCreds = async (uid: string) => {
+  const setUser = async (u: TNewDocUser) => {
+    await doc.put({
+      TableName,
+      Item: encode(u)
+    }).promise()
+  }
+
+  const getUser = async (uid: string) => {
     const result = await doc.get({
       TableName,
       Key: { pk: uid, sk: 'spotify' },
     }).promise()
-    log && log.debug('TableUser result', result)
-    return decode(result.Item as UserSpotifyCredsItem)
+    return decodeOne(DocUser, result.Item)
+    // log && log.debug('TableUser result', result)
+    // const decoded = DocUser.decode(result.Item)
+    // const user = decoded.isRight() && decoded.value
+    // const error = decoded.isLeft() && decoded.value
+    // return { user, error }
   }
+
+  // const getSpotifyCreds = async (uid: string) => {
+  //   const result = await doc.get({
+  //     TableName,
+  //     Key: { pk: uid, sk: 'spotify' },
+  //   }).promise()
+  //   log && log.debug('TableUser result', result)
+  //   return decode(result.Item as UserSpotifyCredsItem)
+  // }
 
   const getSpotifyLastUpdate = async (uid: string) => {
     const result = await doc.get({
@@ -80,10 +114,11 @@ export const TableUser = (endpoint: string, TableName: string, log?: winston.Log
 
   return {
     encode,
-    decode,
+    // decode,
+    getUser,
     setSpotifyCreds,
     getAllSpotifyCreds,
-    getSpotifyCreds,
+    // getSpotifyCreds,
     setSpotifyLastUpdate,
     getSpotifyLastUpdate
   }

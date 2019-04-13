@@ -295,6 +295,20 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
+"@slack/types@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@slack/types/-/types-1.0.0.tgz#1dc7a63b293c4911e474197585c3feda012df17a"
+  integrity sha512-IktC4uD/CHfLQcSitKSmjmRu4a6+Nf/KzfS6dTgUlDzENhh26l8aESKAuIpvYD5VOOE6NxDDIAdPJOXBvUGxlg==
+
+"@slack/webhook@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@slack/webhook/-/webhook-5.0.0.tgz#0044a3940afc16cbc607c71acdffddb9e9d4f161"
+  integrity sha512-cDj3kz3x9z9271xPNzlwb90DpKTYybG2OWPJHigJL8FegR80rzQyD0v4bGuStGGkHbAYDKE2BMpJambR55hnSg==
+  dependencies:
+    "@slack/types" "^1.0.0"
+    "@types/node" ">=8.9.0"
+    axios "^0.18.0"
+
 "@types/caseless@*":
   version "0.12.2"
   resolved "https://registry.yarnpkg.com/@types/caseless/-/caseless-0.12.2.tgz#f65d3d6389e01eeb458bd54dc8f52b95a9463bc8"
@@ -328,6 +342,11 @@
   version "11.11.5"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-11.11.5.tgz#0c57e12eb44d44e5b6735593925286553ee7cebf"
   integrity sha512-pz6wNe/XwyesgfVX7P6B0hY3TnTAYXk6KSTLdpQfbuq3be+hnMoCuFzE+yLTskPdBwmNiGRL2TAsnF09aRugvQ==
+
+"@types/node@>=8.9.0":
+  version "11.13.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-11.13.4.tgz#f83ec3c3e05b174b7241fadeb6688267fe5b22ca"
+  integrity sha512-+rabAZZ3Yn7tF/XPGHupKIL5EcAbrLxnTr/hgQICxbeuAfWtT0UZSfULE+ndusckBItcv4o6ZeOJplQikVcLvQ==
 
 "@types/node@^10.1.0":
   version "10.14.2"

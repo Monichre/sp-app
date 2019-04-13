@@ -4,8 +4,9 @@ import { verifyEnv } from "../../shared/env";
 
 import { slog } from "../logger";
 import { TableStat } from "../../shared/tables/TableStat";
-import { TablePlay, PlayTrackImage } from '../../shared/tables/TablePlay';
+import { TablePlay } from '../../shared/tables/TablePlay';
 // import { SpotifyArtist } from '../../shared/SpotifyApi';
+import { handleInvalid } from '../../shared/validation';
 
 const log = slog.child({handler: 'onPlayUpdateGenreStats', awsEvent: 'ddbs'})
 
@@ -13,6 +14,7 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
   const env = verifyEnv({
     DYNAMO_ENDPOINT: process.env.DYNAMO_ENDPOINT,
     TABLE_STAT: process.env.TABLE_STAT,
+    QUEUE_VALIDATION_ERRORS: process.env.QUEUE_VALIDATION_ERRORS,
   }, log)
   log.info(`${event.Records.length} records`)
   await Promise.all(event.Records.map(handleRecord(env)))
@@ -21,6 +23,7 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 type Env = {
   DYNAMO_ENDPOINT: string,
   TABLE_STAT: string
+  QUEUE_VALIDATION_ERRORS: string,
 }
 
 const handleRecord = (env: Env) => async (record: DynamoDBRecord) => {
@@ -29,7 +32,13 @@ const handleRecord = (env: Env) => async (record: DynamoDBRecord) => {
   if (eventName === 'INSERT') {
 
     const tablePlay = TablePlay(env.DYNAMO_ENDPOINT, "") // not actually writing anything, this is hacky af
-    const { playedAt, track, uid } = tablePlay.decode(record.dynamodb.NewImage as PlayTrackImage)
+    const { valid, invalid } = tablePlay.decode(record.dynamodb.NewImage)
+    if (invalid) {
+      handleInvalid(log, env.QUEUE_VALIDATION_ERRORS, invalid.errors, {handler: 'onPlayUpdateArtistStats', input: invalid.item })
+      return
+    }
+
+    const { playedAt, track, uid } = valid
     const { duration_ms: playDurationMs } = track
     log.info(`Updating Genre Stats ${track.name}`)
 
@@ -66,7 +75,8 @@ const handleRecord = (env: Env) => async (record: DynamoDBRecord) => {
     return
   }
   if (eventName === 'MODIFY') {
-    log.warn('modified play', { Keys, newImage: record.dynamodb.NewImage, oldImage: record.dynamodb.OldImage})
+    // log.warn('modified play', { Keys, newImage: record.dynamodb.NewImage, oldImage: record.dynamodb.OldImage})
+    log.warn('modified play', { Keys })
   }
   log.warn('unknown event', { eventName, Keys })
 }

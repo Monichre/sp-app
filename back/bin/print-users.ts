@@ -2,7 +2,7 @@ import * as AWS from 'aws-sdk';
 import { verifyEnv } from '../src/shared/env';
 import { slog } from '../src/fns/logger';
 
-const log = slog.child({handler: 'empty-ddb-plays', awsEvent: 'script'})
+const log = slog.child({handler: 'print-users', awsEvent: 'script'})
 
 const script = async () => {
   const env = verifyEnv({

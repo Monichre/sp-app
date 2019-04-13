@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "dependencies": {
     "@google-cloud/resource": "^0.9.1",
+    "@slack/webhook": "^5.0.0",
     "apollo-server-lambda": "^2.4.8",
     "aws-lambda": "^0.1.2",
     "epsagon": "^1.16.0",

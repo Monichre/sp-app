@@ -3,6 +3,7 @@ import { makeExecutableSchema } from "graphql-tools";
 import { QueryResolvers, Image } from "../types";
 import { TableUser } from '../../../shared/tables/TableUser';
 import { QueueStartHarvestUser } from '../../../shared/queues';
+import { TablePlay } from '../../../shared/tables/TablePlay';
 
 const typeDefs = `
 type Query {
@@ -54,48 +55,33 @@ const recentPlays: QueryResolvers.RecentPlaysResolver = async (_, {uid}, context
   // design notes:
   // - doing it this way wouldnt be as bad if we checked lastUpdate to make sure the data was really stale
   // - even better might be a heartbeat mutation (along with staleness check) to better regulate frequency?
-  context.log.info(`publishing to queue ${context.QUEUE_START_HARVEST_USER}`)
+  const log = context.log.child({handler: `graphql/recentPlays/${uid}`})
+  log.info(`message to QueueStartHarvestUser`, {queueName: context.QUEUE_START_HARVEST_USER})
   QueueStartHarvestUser.publish(context.QUEUE_START_HARVEST_USER, {
     uid,
   })
 
 
-  const doc = new AWS.DynamoDB.DocumentClient({endpoint: context.DYNAMO_ENDPOINT})
+  const tablePlay = TablePlay(context.DYNAMO_ENDPOINT, context.TABLE_PLAY)
+  const { docs, errors } = await tablePlay.getRecentPlays(uid, 100)
 
-  const TableName = context.TABLE_PLAY
-  context.log.info('reading from ', {TableName})
-  
-  const results = await doc.query({
-    TableName,
-    KeyConditionExpression: 'pk = :p and begins_with(sk, :s)',
-    ScanIndexForward: false,
-    ExpressionAttributeValues: {
-      ':p': uid,
-      ':s': `track#`
-    },
-    Limit: 100,
-  }).promise()
-  const plays = results.Items.map(i => {
-    const { name, artists, album }: { name: string, artists: any[], album: any } = JSON.parse(i.track)
+
+  if (errors.length > 0) {
+    log.error('errors in plays fetched from TablePlay', { errors })
+  }
+  log.info('from TablePlay', { count: docs.length })
+
+  try {
+    const plays = docs
+    const table = TableUser(context.DYNAMO_ENDPOINT, context.TABLE_USER)
+    const lastUpdate = await table.getSpotifyLastUpdate(uid)
+    log.info('returning', { lastUpdate, plays })
     return {
-      playedAt: i.playedAt,
-      track: {
-        name,
-        artists: (artists as any[]).map(a => ({
-          name: a.name as string,
-          images: a.images as Image[],
-          genres: a.genres as string[],
-          external_urls: a.external_urls as {spotify: string}
-        })),
-        album,
-      }
+      plays,
+      lastUpdate,
     }
-  })
-  const table = TableUser(context.DYNAMO_ENDPOINT, context.TABLE_USER)
-  const lastUpdate = await table.getSpotifyLastUpdate(uid)
-  return {
-    plays,
-    lastUpdate,
+  } catch (error) {
+    log.error('unable to format response', {error, docs})
   }
 }
 

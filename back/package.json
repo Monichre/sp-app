@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@google-cloud/resource": "^0.9.1",
+    "@slack/webhook": "^5.0.0",
     "@types/aws-lambda": "^8.10.23",
     "@types/graphql": "^14.0.7",
     "@types/jest": "^24.0.11",

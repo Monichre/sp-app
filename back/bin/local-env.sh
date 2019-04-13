@@ -3,6 +3,7 @@ export QueueEndpoint=http://0.0.0.0:9324/queue
 export QueueHiFetchSpotifyPlays=$QueueEndpoint/sp-app-back-local-QueueHiFetchSpotifyPlays
 export QueueStartHarvestUser=$QueueEndpoint/sp-app-back-local-QueueStartHarvestUser
 export QueueEnrichPlayArtists=$QueueEndpoint/sp-app-back-local-QueueEnrichPlayArtists
+export QueueValidationErrors=$QueueEndpoint/sp-app-back-local-QueueValidationErrors
 
 # tables
 export DynamoEndpoint=http://localhost:8888
