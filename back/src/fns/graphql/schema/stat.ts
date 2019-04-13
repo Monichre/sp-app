@@ -1,7 +1,7 @@
 import * as AWS from 'aws-sdk';
 import * as R from 'ramda';
 import { makeExecutableSchema } from "graphql-tools";
-import { QueryResolvers } from "../types";
+import { QueryResolvers, DashStatsResponse, ArtistStatsResponse, ArtistStatsPeriod, ArtistStatsPeriodUser, Artist } from "../types";
 import { verifyEnv } from '../../../shared/env';
 import moment = require('moment');
 
@@ -9,6 +9,7 @@ const typeDefs = `
 type Query {
   playtimeSummary(uid: String!): PlaytimeSummaryResponse!
   dashStats(uid: String!): DashStatsResponse!
+  artistStats(uid: String!, id: String!): ArtistStatsResponse!
 }
 type Mutation {
   _: String
@@ -34,6 +35,7 @@ type SpotifyUrl {
 }
 
 type Artist {
+  id: String!
   name: String!
   images: [Image!]!
   external_urls: SpotifyUrl!
@@ -77,6 +79,21 @@ type DashStatsResponse {
   topGenres: UserGenrePlaytimes!
 }
 
+type ArtistStatsPeriodUser {
+  period: String!
+  playDurationMs: Float!
+}
+
+type ArtistStatsPeriod {
+  global: [ArtistStatsPeriodUser!]!
+  personal: [ArtistStatsPeriodUser!]!
+}
+
+type ArtistStatsResponse {
+  artist: Artist!
+  past30d: ArtistStatsPeriod!
+  past12w: ArtistStatsPeriod!
+}
 `
 type StatKeys = {
   uid: string,
@@ -96,6 +113,7 @@ const getStat = async (doc: AWS.DynamoDB.DocumentClient, TableName: string, {uid
 
 const playtimeSummary: QueryResolvers.PlaytimeSummaryResolver = async (_, {uid}, context) => {
   const log = context.log.child({handler: `graphql/playtimeSummary/${uid}`})
+  log.info('called by', { uid })
   const env = verifyEnv({
     DYNAMO_ENDPOINT: process.env.DYNAMO_ENDPOINT,
     TABLE_STAT: process.env.TABLE_STAT,
@@ -135,17 +153,35 @@ const playtimeSummary: QueryResolvers.PlaytimeSummaryResolver = async (_, {uid},
   log.info('completed')
   return response
 }
-type StatRow = {
+type TopGenresRow = {
   name: string,
   playDurationMs: number,
 }
 
-const byTimeThenName = R.sortWith<StatRow>([
+type TopArtistsRow = {
+  artist: Artist,
+  playDurationMs: number,
+}
+
+type ArtistPeriodsRow = {
+  period: string,
+  playDurationMs: number,
+}
+
+const byTimeThenGenreName = R.sortWith<TopGenresRow>([
   R.descend(R.prop('playDurationMs')),
   R.ascend(R.prop('name'))
 ])
 
-const topArtistsFor = async (doc, TableName, uid: string, periodName, periodValue, Limit = 5) => {
+const byTimeThenArtistName = R.sortWith<TopArtistsRow>([
+  R.descend(R.prop('playDurationMs')),
+  R.ascend(R.path(['artist', 'name']))
+])
+
+const byPeriod = R.sortWith<ArtistPeriodsRow>([
+  R.ascend(R.path(['period']))
+])
+const topArtistsFor = async (doc: AWS.DynamoDB.DocumentClient, TableName, uid: string, periodName, periodValue, Limit = 5) => {
   const params = {
     TableName,
     Limit,
@@ -158,10 +194,10 @@ const topArtistsFor = async (doc, TableName, uid: string, periodName, periodValu
   }
   return await doc.query(params).promise()
     .then(d => d.Items.map(i => ({artist: i.artist, playDurationMs: i.playDurationMs})))
-    .then(byTimeThenName)
+    .then(byTimeThenArtistName)
 }
 
-const topGenresFor = async (doc, TableName, uid: string, periodName, periodValue, Limit = 5) => {
+const topGenresFor = async (doc: AWS.DynamoDB.DocumentClient, TableName, uid: string, periodName, periodValue, Limit = 5) => {
   const params = {
     TableName,
     Limit,
@@ -174,7 +210,7 @@ const topGenresFor = async (doc, TableName, uid: string, periodName, periodValue
   }
   return await doc.query(params).promise()
     .then(d => d.Items.map(i => ({name: i.genre, playDurationMs: i.playDurationMs})))
-    .then(byTimeThenName)
+    .then(byTimeThenGenreName)
 }
 
 // const dashStats = async (_, {uid}, context) => {
@@ -183,11 +219,10 @@ const dashStats: QueryResolvers.DashStatsResolver = async (_, {uid}, context) =>
   const TableName = context.TABLE_STAT
 
   const m = moment()
-  const day = m.format('YYYY-MM-DD')
   const week = m.format('YYYY-WW')
   const month = m.format('YYYY-MM')
 
-  const result = {
+  const result: DashStatsResponse = {
     topArtists: {
       week: {
         global: await topArtistsFor(doc, TableName, 'global', 'week', week),
@@ -204,27 +239,134 @@ const dashStats: QueryResolvers.DashStatsResolver = async (_, {uid}, context) =>
     },
     topGenres: {
       week: {
-        global: await topGenresFor(doc, TableName, 'global', 'week', week),
-        user: await topGenresFor(doc, TableName, uid, 'week', week),
+        global: await topGenresFor(doc, TableName, 'global', 'week', week, 10),
+        user: await topGenresFor(doc, TableName, uid, 'week', week, 10),
       },
       month: {
-        global: await topGenresFor(doc, TableName, 'global', 'month', month),
-        user: await topGenresFor(doc, TableName, uid, 'month', month),
+        global: await topGenresFor(doc, TableName, 'global', 'month', month, 10),
+        user: await topGenresFor(doc, TableName, uid, 'month', month, 10),
       },
       life: {
-        global: await topGenresFor(doc, TableName, 'global', 'life', 'life'),
-        user: await topGenresFor(doc, TableName, uid, 'life', 'life'),
+        global: await topGenresFor(doc, TableName, 'global', 'life', 'life', 10),
+        user: await topGenresFor(doc, TableName, uid, 'life', 'life', 10),
       }
     }
   }
   return result
 }
 
+const artistStatsLife = async (doc: AWS.DynamoDB.DocumentClient, TableName, uid: string, id: string) => {
+  const pk = [uid, 'artist', 'life', 'life'].join('#')
+  const sk = [uid, 'life', id].join('#')
+  const params = {
+    TableName,
+    Key: {
+      pk,
+      sk,
+    },
+  }
+  // console.log('artistStatsLife params', params)
+  const result = await doc.get(params).promise()
+    .then(d => d.Item)
+    .then(i => ({
+      artist: i.artist,
+      playDurationMs: i.playDurationMs,
+    }))
+  return result
+}
+
+const artistStatsFor = async (doc: AWS.DynamoDB.DocumentClient, TableName, uid: string, id: string, periodType: string, startPeriod: string, endPeriod: string) => {
+  const sk = [uid, periodType, id].join('#')
+  const startPk = [uid, 'artist', periodType, startPeriod].join('#')
+  const endPk = [uid, 'artist', periodType, endPeriod].join('#')
+  // console.log('getting stats for', { sk, startPk, endPk })
+
+  const params = {
+    TableName,
+    // Limit,
+    KeyConditionExpression: `sk = :sk and pk BETWEEN :s and :e`,
+    IndexName: 'GSIReverse',
+    // ScanIndexForward: false,
+    ExpressionAttributeValues: {
+      ':sk': sk,
+      ':s': startPk,
+      ':e': endPk
+    }
+  }
+  const result = await doc.query(params).promise()
+    .then(d => d.Items.map(i => ({
+      artist: i.artist,
+      period: i.pk.split('#')[3],
+      playDurationMs: i.playDurationMs
+    })))
+    .then(byPeriod)
+  // console.log('artistStatsFor', uid, id, result)
+  return result
+}
+
+const fill = (length: number) => Array.apply(null, { length }).map(Number.call, Number)
+
+const fillDays = (stats: ArtistStatsPeriodUser[]) => {
+  const periods = fill(30).map((_, i) => moment().subtract(i, 'days').format('YYYY-MM-DD'))
+  const filledStats = periods.map(period => ({
+    period,
+    playDurationMs: stats.find(s => s.period == period) ? stats.find(s => s.period == period).playDurationMs : 0
+  }))
+  // console.log('fillDays filledStats', filledStats)
+  return filledStats
+}
+
+const fillWeeks = (stats: ArtistStatsPeriodUser[]) => {
+  const periods = fill(12).map((_, i) => moment().subtract(i, 'weeks').format('YYYY-WW'))
+  return periods.map(period => ({
+    period,
+    playDurationMs: stats.find(s => s.period == period) ? stats.find(s => s.period == period).playDurationMs : 0
+  }))
+}
+
+const artistStats: QueryResolvers.ArtistStatsResolver = async (_, {uid, id}, context) => {
+  const log = context.log.child({handler: `graphql/artistStats/${uid}/${id}`})
+  log.info('called by', { uid, artistId: id })
+  const doc = new AWS.DynamoDB.DocumentClient({endpoint: context.DYNAMO_ENDPOINT})
+  const TableName = context.TABLE_STAT
+
+  const m = moment()
+  const day = m.format('YYYY-MM-DD')
+  const week = m.format('YYYY-WW')
+
+  const m30d = moment().subtract(30, 'days')
+  const m30dDay = m30d.format('YYYY-MM-DD')
+
+  const m12w = moment().subtract(12, 'weeks')
+  const m12wWeek = m12w.format('YYYY-WW')
+
+  const lifeStats = await artistStatsLife(doc, TableName, 'global', id)
+  log.info('artistStatsFor', {TableName, uid, id, day, m30dDay, week, m12wWeek})
+  const past30d = {
+    global: byPeriod(fillDays(await artistStatsFor(doc, TableName, 'global', id, 'day', m30dDay, day))),
+    personal: byPeriod(fillDays(await artistStatsFor(doc, TableName, uid, id, 'day', m30dDay, day))),
+  }
+  const past12w = {
+    global: byPeriod(fillWeeks(await artistStatsFor(doc, TableName, 'global', id, 'week', m12wWeek, week))),
+    personal: byPeriod(fillWeeks(await artistStatsFor(doc, TableName, uid, id, 'week', m12wWeek, week))),
+  }
+  // log.info('returning', { past30d, past12w })
+  const artist = lifeStats.artist
+  const response: ArtistStatsResponse = {
+    artist,
+    past30d,
+    past12w,
+  }
+  return response
+}
+
 const resolvers = {
   Query: {
     playtimeSummary,
     dashStats,
+    artistStats,
   }
 }
 
 export const schema = makeExecutableSchema({typeDefs, resolvers})
+

@@ -1,12 +1,12 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components'
 import moment from 'moment'
-import { usePlaytimeSummary, PlaytimeSummaryTopLifetimeArtists } from '../../types';
-import { Loading } from '../../comp/Loading';
+import { usePlaytimeSummary, PlaytimeSummaryTopLifetimeArtists } from '../../../types';
+import { Loading } from '../../../comp/Loading';
 import { Ascend, Descend, Info, History } from 'grommet-icons'
-import { Music } from '../../comp/icons';
+import { Music } from '../../../comp/icons';
 import { NavLink } from 'react-router-dom';
-import { SpotifyLogoLink } from '../SpotifyLogoLink/SpotifyLogoLink';
+import { SpotifyLogoLink } from '../../SpotifyLogoLink/SpotifyLogoLink';
 
 const EvenRow = styled.div`
   display: flex;
@@ -133,34 +133,6 @@ const HeroBlock = styled(Block)`
   // padding: 0 0 1rem 0;
 `
 
-
-const NavButton = styled(NavLink)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 0.7rem;
-  text-decoration: none;
-  &.active {
-    background-color: #555;
-  }
-  padding-top: 1rem;
-  & > * {
-    margin-bottom: 1rem;
-  }
-`
-
-const NavBlock: React.SFC<{className?: string}> = ({className}) =>
-  <EvenRow {...{className}}>
-    <NavButton data-test='link-insights' to='/insights'>
-      <Info color='white'/>
-      <div>Insights</div>
-    </NavButton>
-    <NavButton data-test='link-history' to='/history'>
-      <History color='white'/>
-      <div>History</div>
-    </NavButton>
-  </EvenRow>
-
 const ArtistTitle = styled.div`
   display: flex;
   align-items: baseline;
@@ -172,7 +144,17 @@ const ArtistTitle = styled.div`
   }
 `
 
-const ImageBlock = styled(Block)<{src: string}>`
+const NavBlock = styled(NavLink)`
+display: block;
+text-decoration: none;
+padding: 1rem;
+margin: 0rem;
+& > * {
+  margin-bottom: 1rem;
+}
+`
+
+const ImageBlock = styled(NavBlock)<{src: string}>`
   height: 100%;
   // width: 100%;
   background-image: url("${({src}) => src}");
@@ -187,11 +169,11 @@ const ImageBlock = styled(Block)<{src: string}>`
 `
 
 const TopArtistBlock: React.SFC<{className?: string, stat: PlaytimeSummaryTopLifetimeArtists}> =
-  ({className, stat: { playDurationMs, artist: {name, images, external_urls: { spotify }}}}) => {
+  ({className, stat: { playDurationMs, artist: {id, name, images, external_urls: { spotify }}}}) => {
     const { hrs, mins } = hrsAndMinsAndSecs(playDurationMs)
     const imgUrl = images[0] && images[0].url
     return (
-      <ImageBlock {...{className}} src={imgUrl}>
+      <ImageBlock {...{className}} src={imgUrl} to={`/artist/${id}`}>
         <LeftRow>
           <MajorValue>{hrs} hrs</MajorValue>
           <MinorValue>{mins} mins</MinorValue>
@@ -255,7 +237,7 @@ const ThisMonthGridArea = styled(TimeBlock)`grid-area: thisMonth; animation: ${f
 const TopArtistGridArea = styled(TopArtistBlock)`grid-area: topArtist; animation: ${fadeIn} 3s`
 // const NavGridArea = styled(NavBlock)`grid-area: nav; align-self: start`
 
-export const PlaytimeSummary: React.SFC<{uid: string, displayName: string | null}> = ({uid, displayName}) => {
+export const DashSummary: React.SFC<{uid: string, displayName: string | null}> = ({uid, displayName}) => {
   const { data } = usePlaytimeSummary({variables: { uid }, pollInterval: 10000, suspend: true})
   console.log('data', data)
 

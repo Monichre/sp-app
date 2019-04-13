@@ -4,6 +4,7 @@ query DashStats($uid: String!) {
       week {
         global {
           artist {
+            id
             name
             images {
               url
@@ -16,6 +17,7 @@ query DashStats($uid: String!) {
         }
         user {
           artist {
+            id
             name
             images {
               url
@@ -30,6 +32,7 @@ query DashStats($uid: String!) {
       month {
         global {
           artist {
+            id
             name
             images {
               url
@@ -42,6 +45,7 @@ query DashStats($uid: String!) {
         }
         user {
           artist {
+            id
             name
             images {
               url
@@ -56,6 +60,7 @@ query DashStats($uid: String!) {
       life {
         global {
           artist {
+            id
             name
             images {
               url
@@ -68,6 +73,7 @@ query DashStats($uid: String!) {
         }
         user {
           artist {
+            id
             name
             images {
               url

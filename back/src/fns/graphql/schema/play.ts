@@ -30,6 +30,7 @@ type Track {
 }
 
 type Artist {
+  id: String!
   name: String!
   images: [Image!]!
   external_urls: SpotifyUrl!

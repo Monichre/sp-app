@@ -39,6 +39,6 @@ const NavTab = styled(NavLink)`
 
 export const DashNav: React.SFC = () =>
   <NavBar>
-    <NavTab to='/insights'><Info color='white'/><div>Insights</div></NavTab>
-    <NavTab to='/history'><div>History</div><History color='white'/></NavTab>
+    <NavTab to='/dash/insights'><Info color='white'/><div>Insights</div></NavTab>
+    <NavTab to='/dash/history'><div>History</div><History color='white'/></NavTab>
   </NavBar>

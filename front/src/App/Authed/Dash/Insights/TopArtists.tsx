@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components'
-import { DashStatsGlobal } from '../../types';
+import { DashStatsGlobal } from '../../../../types';
 import moment from 'moment'
 
 const TwoColumns = styled.div`
@@ -46,8 +46,9 @@ const ArtistName = styled.div`
   font-weight: 500;
 `
 
-const Artist = styled.div`
+const Artist = styled(NavLink)`
 display: flex;
+text-decoration: none;
 `
 
 const ArtistTime = styled.div`
@@ -75,11 +76,11 @@ color: #64d6ee;
 `
 
 
-const ArtistStatItem: React.SFC<DashStatsGlobal> = ({artist: { name, images, external_urls: { spotify } }, playDurationMs}) => {
+const ArtistStatItem: React.SFC<DashStatsGlobal> = ({artist: { id, name, images, external_urls: { spotify } }, playDurationMs}) => {
   const { hrs, mins } = hrsAndMins(playDurationMs)
   const imgUrl = images && images[0] && images[0].url
   return (
-    <Artist data-test='artist-row'>
+    <Artist data-test='artist-row' to={`/artist/${id}`}>
       <ArtistAvatar src={imgUrl}/>
       <ArtistInfo>
         <ArtistName data-test='artist-row-name'>{name}</ArtistName>
@@ -128,8 +129,9 @@ const TopArtists: React.SFC<{global: DashStatsGlobal[], user: DashStatsGlobal[]}
   </TwoColumns>
 )
 
-import { DashStatsWeek, DashStatsMonth, DashStatsLife } from '../../types';
-import { SpotifyLogoLink } from '../SpotifyLogoLink/SpotifyLogoLink';
+import { DashStatsWeek, DashStatsMonth, DashStatsLife } from '../../../../types';
+import { SpotifyLogoLink } from '../../../SpotifyLogoLink/SpotifyLogoLink';
+import { NavLink } from 'react-router-dom';
 type DashStatsPeriod = DashStatsWeek | DashStatsMonth | DashStatsLife
 
 export const TopArtistPeriods: React.SFC<{stats: DashStatsPeriod}> = ({stats}) => {

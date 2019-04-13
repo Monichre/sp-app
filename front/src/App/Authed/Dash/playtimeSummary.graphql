@@ -2,6 +2,7 @@ query PlaytimeSummary($uid: String!) {
   playtimeSummary(uid: $uid) {
     topLifetimeArtists {
       artist {
+        id
         name
         images {
           url

@@ -1,4 +1,4 @@
-// Generated in 2019-04-09T20:18:25-07:00
+// Generated in 2019-04-09T22:32:59-07:00
 // REGENERATE THIS BY STARTING THE LOCAL SERVER
 // AND THEN RUNNING `back % yarn generate`
 
@@ -60,6 +60,8 @@ export interface Query {
   playtimeSummary: PlaytimeSummaryResponse;
 
   dashStats: DashStatsResponse;
+
+  artistStats: ArtistStatsResponse;
 }
 
 export interface BasicResponse {
@@ -87,6 +89,8 @@ export interface Track {
 }
 
 export interface Artist {
+  id: string;
+
   name: string;
 
   images: Image[];
@@ -172,6 +176,26 @@ export interface GenrePlaytime {
   playDurationMs: number;
 }
 
+export interface ArtistStatsResponse {
+  artist: Artist;
+
+  past30d: ArtistStatsPeriod;
+
+  past12w: ArtistStatsPeriod;
+}
+
+export interface ArtistStatsPeriod {
+  global: ArtistStatsPeriodUser[];
+
+  personal: ArtistStatsPeriodUser[];
+}
+
+export interface ArtistStatsPeriodUser {
+  period: string;
+
+  playDurationMs: number;
+}
+
 export interface Mutation {
   onLogin?: Maybe<BasicResponse>;
 
@@ -192,6 +216,11 @@ export interface PlaytimeSummaryQueryArgs {
 }
 export interface DashStatsQueryArgs {
   uid: string;
+}
+export interface ArtistStatsQueryArgs {
+  uid: string;
+
+  id: string;
 }
 export interface OnLoginMutationArgs {
   user: FirebaseUser;
@@ -276,6 +305,12 @@ export namespace QueryResolvers {
     >;
 
     dashStats?: DashStatsResolver<DashStatsResponse, TypeParent, TContext>;
+
+    artistStats?: ArtistStatsResolver<
+      ArtistStatsResponse,
+      TypeParent,
+      TContext
+    >;
   }
 
   export type DummyResolver<
@@ -318,6 +353,17 @@ export namespace QueryResolvers {
   > = Resolver<R, Parent, TContext, DashStatsArgs>;
   export interface DashStatsArgs {
     uid: string;
+  }
+
+  export type ArtistStatsResolver<
+    R = ArtistStatsResponse,
+    Parent = {},
+    TContext = Context
+  > = Resolver<R, Parent, TContext, ArtistStatsArgs>;
+  export interface ArtistStatsArgs {
+    uid: string;
+
+    id: string;
   }
 }
 
@@ -402,6 +448,8 @@ export namespace TrackResolvers {
 
 export namespace ArtistResolvers {
   export interface Resolvers<TContext = Context, TypeParent = Artist> {
+    id?: IdResolver<string, TypeParent, TContext>;
+
     name?: NameResolver<string, TypeParent, TContext>;
 
     images?: ImagesResolver<Image[], TypeParent, TContext>;
@@ -411,6 +459,11 @@ export namespace ArtistResolvers {
     genres?: GenresResolver<string[], TypeParent, TContext>;
   }
 
+  export type IdResolver<
+    R = string,
+    Parent = Artist,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
   export type NameResolver<
     R = string,
     Parent = Artist,
@@ -704,6 +757,79 @@ export namespace GenrePlaytimeResolvers {
   > = Resolver<R, Parent, TContext>;
 }
 
+export namespace ArtistStatsResponseResolvers {
+  export interface Resolvers<
+    TContext = Context,
+    TypeParent = ArtistStatsResponse
+  > {
+    artist?: ArtistResolver<Artist, TypeParent, TContext>;
+
+    past30d?: Past30dResolver<ArtistStatsPeriod, TypeParent, TContext>;
+
+    past12w?: Past12wResolver<ArtistStatsPeriod, TypeParent, TContext>;
+  }
+
+  export type ArtistResolver<
+    R = Artist,
+    Parent = ArtistStatsResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type Past30dResolver<
+    R = ArtistStatsPeriod,
+    Parent = ArtistStatsResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type Past12wResolver<
+    R = ArtistStatsPeriod,
+    Parent = ArtistStatsResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace ArtistStatsPeriodResolvers {
+  export interface Resolvers<
+    TContext = Context,
+    TypeParent = ArtistStatsPeriod
+  > {
+    global?: GlobalResolver<ArtistStatsPeriodUser[], TypeParent, TContext>;
+
+    personal?: PersonalResolver<ArtistStatsPeriodUser[], TypeParent, TContext>;
+  }
+
+  export type GlobalResolver<
+    R = ArtistStatsPeriodUser[],
+    Parent = ArtistStatsPeriod,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type PersonalResolver<
+    R = ArtistStatsPeriodUser[],
+    Parent = ArtistStatsPeriod,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace ArtistStatsPeriodUserResolvers {
+  export interface Resolvers<
+    TContext = Context,
+    TypeParent = ArtistStatsPeriodUser
+  > {
+    period?: PeriodResolver<string, TypeParent, TContext>;
+
+    playDurationMs?: PlayDurationMsResolver<number, TypeParent, TContext>;
+  }
+
+  export type PeriodResolver<
+    R = string,
+    Parent = ArtistStatsPeriodUser,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type PlayDurationMsResolver<
+    R = number,
+    Parent = ArtistStatsPeriodUser,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
 export namespace MutationResolvers {
   export interface Resolvers<TContext = Context, TypeParent = {}> {
     onLogin?: OnLoginResolver<Maybe<BasicResponse>, TypeParent, TContext>;
@@ -802,6 +928,9 @@ export type IResolvers<TContext = Context> = {
     TContext
   >;
   GenrePlaytime?: GenrePlaytimeResolvers.Resolvers<TContext>;
+  ArtistStatsResponse?: ArtistStatsResponseResolvers.Resolvers<TContext>;
+  ArtistStatsPeriod?: ArtistStatsPeriodResolvers.Resolvers<TContext>;
+  ArtistStatsPeriodUser?: ArtistStatsPeriodUserResolvers.Resolvers<TContext>;
   Mutation?: MutationResolvers.Resolvers<TContext>;
 } & { [typeName: string]: never };
 

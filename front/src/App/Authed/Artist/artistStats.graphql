@@ -1,0 +1,35 @@
+query ArtistStats($uid: String!, $id: String!) {
+  artistStats(uid: $uid, id: $id) {
+    artist {
+      id
+      name
+      images {
+        url
+      }
+      external_urls {
+        spotify
+      }
+      genres
+    }
+    past30d {
+      global {
+        period
+        playDurationMs
+      }
+      personal {
+        period
+        playDurationMs
+      }
+    }
+    past12w {
+      global {
+        period
+        playDurationMs
+      }
+      personal {
+        period
+        playDurationMs
+      }
+    }
+  }
+}

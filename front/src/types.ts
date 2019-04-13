@@ -1,4 +1,4 @@
-// Generated in 2019-04-09T20:19:53-07:00
+// Generated in 2019-04-09T22:44:40-07:00
 // REGENERATE THIS BY STARTING THE LOCAL BACKEND
 // AND THEN RUNNING `front % yarn generate`
 
@@ -48,6 +48,175 @@ export interface SpotifyCredentials {
 // Documents
 // ====================================================
 
+export type ArtistStatsVariables = {
+  uid: string;
+  id: string;
+};
+
+export type ArtistStatsQuery = {
+  __typename?: "Query";
+
+  artistStats: ArtistStatsArtistStats;
+};
+
+export type ArtistStatsArtistStats = {
+  __typename?: "ArtistStatsResponse";
+
+  artist: ArtistStatsArtist;
+
+  past30d: ArtistStatsPast30d;
+
+  past12w: ArtistStatsPast12w;
+};
+
+export type ArtistStatsArtist = {
+  __typename?: "Artist";
+
+  id: string;
+
+  name: string;
+
+  images: ArtistStatsImages[];
+
+  external_urls: ArtistStatsExternalUrls;
+
+  genres: string[];
+};
+
+export type ArtistStatsImages = {
+  __typename?: "Image";
+
+  url: string;
+};
+
+export type ArtistStatsExternalUrls = {
+  __typename?: "SpotifyUrl";
+
+  spotify: string;
+};
+
+export type ArtistStatsPast30d = {
+  __typename?: "ArtistStatsPeriod";
+
+  global: ArtistStatsGlobal[];
+
+  personal: ArtistStatsPersonal[];
+};
+
+export type ArtistStatsGlobal = {
+  __typename?: "ArtistStatsPeriodUser";
+
+  period: string;
+
+  playDurationMs: number;
+};
+
+export type ArtistStatsPersonal = {
+  __typename?: "ArtistStatsPeriodUser";
+
+  period: string;
+
+  playDurationMs: number;
+};
+
+export type ArtistStatsPast12w = {
+  __typename?: "ArtistStatsPeriod";
+
+  global: ArtistStats_Global[];
+
+  personal: ArtistStats_Personal[];
+};
+
+export type ArtistStats_Global = {
+  __typename?: "ArtistStatsPeriodUser";
+
+  period: string;
+
+  playDurationMs: number;
+};
+
+export type ArtistStats_Personal = {
+  __typename?: "ArtistStatsPeriodUser";
+
+  period: string;
+
+  playDurationMs: number;
+};
+
+export type RecentPlaysVariables = {
+  uid: string;
+};
+
+export type RecentPlaysQuery = {
+  __typename?: "Query";
+
+  recentPlays: RecentPlaysRecentPlays;
+};
+
+export type RecentPlaysRecentPlays = {
+  __typename?: "RecentPlaysResponse";
+
+  lastUpdate: Maybe<string>;
+
+  plays: RecentPlaysPlays[];
+};
+
+export type RecentPlaysPlays = {
+  __typename?: "Play";
+
+  playedAt: string;
+
+  track: RecentPlaysTrack;
+};
+
+export type RecentPlaysTrack = {
+  __typename?: "Track";
+
+  name: string;
+
+  artists: RecentPlaysArtists[];
+
+  album: RecentPlaysAlbum;
+};
+
+export type RecentPlaysArtists = {
+  __typename?: "Artist";
+
+  id: string;
+
+  name: string;
+
+  genres: string[];
+
+  images: RecentPlaysImages[];
+
+  external_urls: RecentPlaysExternalUrls;
+};
+
+export type RecentPlaysImages = {
+  __typename?: "Image";
+
+  url: string;
+};
+
+export type RecentPlaysExternalUrls = {
+  __typename?: "SpotifyUrl";
+
+  spotify: string;
+};
+
+export type RecentPlaysAlbum = {
+  __typename?: "Album";
+
+  images: (Maybe<RecentPlays_Images>)[];
+};
+
+export type RecentPlays_Images = {
+  __typename?: "Image";
+
+  url: string;
+};
+
 export type DashStatsVariables = {
   uid: string;
 };
@@ -95,6 +264,8 @@ export type DashStatsGlobal = {
 export type DashStatsArtist = {
   __typename?: "Artist";
 
+  id: string;
+
   name: string;
 
   images: DashStatsImages[];
@@ -124,6 +295,8 @@ export type DashStatsUser = {
 
 export type DashStats_Artist = {
   __typename?: "Artist";
+
+  id: string;
 
   name: string;
 
@@ -163,6 +336,8 @@ export type DashStats_Global = {
 export type DashStats__Artist = {
   __typename?: "Artist";
 
+  id: string;
+
   name: string;
 
   images: DashStats__Images[];
@@ -192,6 +367,8 @@ export type DashStats_User = {
 
 export type DashStats___Artist = {
   __typename?: "Artist";
+
+  id: string;
 
   name: string;
 
@@ -231,6 +408,8 @@ export type DashStats__Global = {
 export type DashStats____Artist = {
   __typename?: "Artist";
 
+  id: string;
+
   name: string;
 
   images: DashStats____Images[];
@@ -260,6 +439,8 @@ export type DashStats__User = {
 
 export type DashStats_____Artist = {
   __typename?: "Artist";
+
+  id: string;
 
   name: string;
 
@@ -395,6 +576,8 @@ export type PlaytimeSummaryTopLifetimeArtists = {
 export type PlaytimeSummaryArtist = {
   __typename?: "Artist";
 
+  id: string;
+
   name: string;
 
   images: PlaytimeSummaryImages[];
@@ -438,78 +621,6 @@ export type PlaytimeSummaryMonth = {
   prev: number;
 };
 
-export type RecentPlaysVariables = {
-  uid: string;
-};
-
-export type RecentPlaysQuery = {
-  __typename?: "Query";
-
-  recentPlays: RecentPlaysRecentPlays;
-};
-
-export type RecentPlaysRecentPlays = {
-  __typename?: "RecentPlaysResponse";
-
-  lastUpdate: Maybe<string>;
-
-  plays: RecentPlaysPlays[];
-};
-
-export type RecentPlaysPlays = {
-  __typename?: "Play";
-
-  playedAt: string;
-
-  track: RecentPlaysTrack;
-};
-
-export type RecentPlaysTrack = {
-  __typename?: "Track";
-
-  name: string;
-
-  artists: RecentPlaysArtists[];
-
-  album: RecentPlaysAlbum;
-};
-
-export type RecentPlaysArtists = {
-  __typename?: "Artist";
-
-  name: string;
-
-  genres: string[];
-
-  images: RecentPlaysImages[];
-
-  external_urls: RecentPlaysExternalUrls;
-};
-
-export type RecentPlaysImages = {
-  __typename?: "Image";
-
-  url: string;
-};
-
-export type RecentPlaysExternalUrls = {
-  __typename?: "SpotifyUrl";
-
-  spotify: string;
-};
-
-export type RecentPlaysAlbum = {
-  __typename?: "Album";
-
-  images: (Maybe<RecentPlays_Images>)[];
-};
-
-export type RecentPlays_Images = {
-  __typename?: "Image";
-
-  url: string;
-};
-
 import gql from "graphql-tag";
 import * as ReactApolloHooks from "react-apollo-hooks";
 
@@ -517,6 +628,88 @@ import * as ReactApolloHooks from "react-apollo-hooks";
 // Components
 // ====================================================
 
+export const ArtistStatsDocument = gql`
+  query ArtistStats($uid: String!, $id: String!) {
+    artistStats(uid: $uid, id: $id) {
+      artist {
+        id
+        name
+        images {
+          url
+        }
+        external_urls {
+          spotify
+        }
+        genres
+      }
+      past30d {
+        global {
+          period
+          playDurationMs
+        }
+        personal {
+          period
+          playDurationMs
+        }
+      }
+      past12w {
+        global {
+          period
+          playDurationMs
+        }
+        personal {
+          period
+          playDurationMs
+        }
+      }
+    }
+  }
+`;
+export function useArtistStats(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<ArtistStatsVariables>
+) {
+  return ReactApolloHooks.useQuery<ArtistStatsQuery, ArtistStatsVariables>(
+    ArtistStatsDocument,
+    baseOptions
+  );
+}
+export const RecentPlaysDocument = gql`
+  query RecentPlays($uid: String!) {
+    recentPlays(uid: $uid) {
+      lastUpdate
+      plays {
+        playedAt
+        track {
+          name
+          artists {
+            id
+            name
+            genres
+            images {
+              url
+            }
+            external_urls {
+              spotify
+            }
+          }
+          album {
+            images {
+              url
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+export function useRecentPlays(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<RecentPlaysVariables>
+) {
+  return ReactApolloHooks.useQuery<RecentPlaysQuery, RecentPlaysVariables>(
+    RecentPlaysDocument,
+    baseOptions
+  );
+}
 export const DashStatsDocument = gql`
   query DashStats($uid: String!) {
     dashStats(uid: $uid) {
@@ -524,6 +717,7 @@ export const DashStatsDocument = gql`
         week {
           global {
             artist {
+              id
               name
               images {
                 url
@@ -536,6 +730,7 @@ export const DashStatsDocument = gql`
           }
           user {
             artist {
+              id
               name
               images {
                 url
@@ -550,6 +745,7 @@ export const DashStatsDocument = gql`
         month {
           global {
             artist {
+              id
               name
               images {
                 url
@@ -562,6 +758,7 @@ export const DashStatsDocument = gql`
           }
           user {
             artist {
+              id
               name
               images {
                 url
@@ -576,6 +773,7 @@ export const DashStatsDocument = gql`
         life {
           global {
             artist {
+              id
               name
               images {
                 url
@@ -588,6 +786,7 @@ export const DashStatsDocument = gql`
           }
           user {
             artist {
+              id
               name
               images {
                 url
@@ -648,6 +847,7 @@ export const PlaytimeSummaryDocument = gql`
     playtimeSummary(uid: $uid) {
       topLifetimeArtists {
         artist {
+          id
           name
           images {
             url
@@ -680,40 +880,4 @@ export function usePlaytimeSummary(
     PlaytimeSummaryQuery,
     PlaytimeSummaryVariables
   >(PlaytimeSummaryDocument, baseOptions);
-}
-export const RecentPlaysDocument = gql`
-  query RecentPlays($uid: String!) {
-    recentPlays(uid: $uid) {
-      lastUpdate
-      plays {
-        playedAt
-        track {
-          name
-          artists {
-            name
-            genres
-            images {
-              url
-            }
-            external_urls {
-              spotify
-            }
-          }
-          album {
-            images {
-              url
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-export function useRecentPlays(
-  baseOptions?: ReactApolloHooks.QueryHookOptions<RecentPlaysVariables>
-) {
-  return ReactApolloHooks.useQuery<RecentPlaysQuery, RecentPlaysVariables>(
-    RecentPlaysDocument,
-    baseOptions
-  );
 }
