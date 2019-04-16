@@ -2,17 +2,28 @@ import * as AWS from 'aws-sdk';
 import * as winston from 'winston';
 import * as t from 'io-ts';
 import { decodeAll, decodeOne } from '../validation';
+import * as R from 'ramda';
+import { renameKeysWith } from 'ramda-adjunct'
 
 const DocUserDerived = t.type({
   pk: t.string,
   sk: t.string,
 })
-const DocUserRequired = t.type({
+const DocUserKeySource = t.type({
   uid: t.string,
+})
+const DocUserRequired = t.type({
+  // uid: t.string,
   email: t.string,
   accessToken: t.string,
   refreshToken: t.string,
   spotifyId: t.string,
+  utcOffset: t.number,
+})
+const DocUserUpdate = t.partial({
+  email: t.string,
+  accessToken: t.string,
+  refreshToken: t.string,
   utcOffset: t.number,
 })
 const DocUserOptional = t.partial({
@@ -22,11 +33,18 @@ const DocUserOptional = t.partial({
   totalUpdates: t.number,
 })
 
-const DocUser = t.intersection([DocUserRequired, DocUserDerived, DocUserOptional])
+const DocUser = t.intersection([DocUserKeySource, DocUserRequired, DocUserDerived, DocUserOptional])
 export type TDocUser = t.TypeOf<typeof DocUser>
 
-const NewDocUser = t.intersection([DocUserRequired, DocUserOptional])
+const NewDocUser = t.intersection([DocUserKeySource, DocUserRequired, DocUserOptional])
 export type TNewDocUser = t.TypeOf<typeof NewDocUser>
+
+const UpdateDocUser = t.intersection([DocUserKeySource, DocUserUpdate, DocUserOptional])
+export type TUpdateDocUser = t.TypeOf<typeof UpdateDocUser>
+
+// const renameKeys = R.curry((keysMap, obj) =>
+//   R.reduce((acc, key) => R.assoc(keysMap[key] || key, obj[key], acc), {}, R.keys(obj))
+// );
 
 export const TableUser = (endpoint: string, TableName: string, log?: winston.Logger) => {
   log && log.info(`Referencing table [${TableName}] at [${endpoint}]`)
@@ -71,6 +89,18 @@ export const TableUser = (endpoint: string, TableName: string, log?: winston.Log
     return decodeOne(DocUser, result.Item)
   }
 
+  const updateUser = async (obj: TUpdateDocUser) => {
+    const { uid } = obj
+    const UpdateExpression = 'SET ' + Object.keys(obj).map(k => `${k} = :${k}`).join(', ')
+    const ExpressionAttributeValues = renameKeysWith(k => `:${k}`, obj)
+    await doc.update({
+      TableName,
+      Key: { pk: uid, sk: 'spotify' },
+      UpdateExpression,
+      ExpressionAttributeValues,
+    }).promise()
+  }
+
   const getSpotifyLastUpdate = async (uid: string) => {
     const result = await doc.get({
       TableName,
@@ -97,6 +127,7 @@ export const TableUser = (endpoint: string, TableName: string, log?: winston.Log
     encode,
     getUser,
     putUser,
+    updateUser,
     getAllSpotifyCreds,
     updateSpotifyLastUpdate,
     getSpotifyLastUpdate

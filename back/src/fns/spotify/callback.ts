@@ -61,7 +61,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     photoURL: fbUser.photoURL
   }
   // console.log(`inserting new creds to ${env.DYNAMO_ENDPOINT}${env.TABLE_TARGET}: ${JSON.stringify(creds, null, 2)}`)
-  await table.putUser(user)
+  await table.updateUser(user)
 
   // and trigger an immediate poll of their recentlyPlayed
   // maybe this should be a ddb stream handler on update?
