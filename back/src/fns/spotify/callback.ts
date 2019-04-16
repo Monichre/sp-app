@@ -46,24 +46,27 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     spotifyId: me.id,
   }
   if (me.images.length > 0) { userAttrs.photoUrl = me.images[0].url }
-  const user = await auth.getOrCreate(userAttrs)
+  const fbUser = await auth.getOrCreate(userAttrs)
 
   // update the user's credentials in the table for future use by harvest &c
   const table = TableUser(env.DYNAMO_ENDPOINT, env.TABLE_TARGET)
-  const creds = {
-    uid: user.uid,
+  const user = {
+    uid: fbUser.uid,
+    email: fbUser.email,
     accessToken: access_token,
     refreshToken: refresh_token,
     spotifyId: me.id,
     utcOffset,
+    displayName: fbUser.displayName,
+    photoURL: fbUser.photoURL
   }
   // console.log(`inserting new creds to ${env.DYNAMO_ENDPOINT}${env.TABLE_TARGET}: ${JSON.stringify(creds, null, 2)}`)
-  await table.setSpotifyCreds(creds)
+  await table.putUser(user)
 
   // and trigger an immediate poll of their recentlyPlayed
   // maybe this should be a ddb stream handler on update?
   await QueueFetchSpotifyPlays.publish(env.QUEUE_TARGET, {
-    uid: user.uid,
+    uid: fbUser.uid,
     accessToken: access_token,
     refreshToken: refresh_token,
     utcOffset,
@@ -71,7 +74,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
 
   // generate a customToken that we can give back to the front end
   // which it uses to authenticate the firebase user on the client
-  const customToken = await auth.createCustomToken(user.uid)
+  const customToken = await auth.createCustomToken(fbUser.uid)
   return {
     statusCode: 302,
     headers: {

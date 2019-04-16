@@ -1,60 +1,58 @@
-import * as AWS from 'aws-sdk';
 import * as R from 'ramda'
-import { SQSHandler } from "aws-lambda";
+import { SQSHandler, SQSEvent } from "aws-lambda";
 import { SpotifyApi, TSpotifyTrack, TSpotifyPlay, TSpotifyArtistTerse, TSpotifyArtistVerbose } from "../../shared/SpotifyApi";
-import { verifyEnv } from "../../shared/env";
-import { QueueFetchSpotifyPlays, QueueEnrichPlayArtists, TMessageEnrichPlayArtists } from "../../shared/queues";
+import { QueueEnrichPlayArtists, TMessageEnrichPlayArtists } from "../../shared/queues";
 import { TableUser } from '../../shared/tables/TableUser';
+import * as t from 'io-ts';
 
 import { slog } from "../logger";
 import moment = require('moment');
 import { TablePlay } from '../../shared/tables/TablePlay';
-import { Errors } from 'io-ts';
-import { handleInvalid } from '../../shared/validation';
+import { handleInvalid, decodeAll } from '../../shared/validation';
 const log = slog.child({handler: 'enrichPlayArtists', awsEvent: 'sqs'})
 
 // trimming off ms greatly reduces spurious repeat results from spotify api
-// const sanitizeSpotifyPlayedAt = (p: string) => `${p.split('.')[0]}.000Z`
-
-// const sanitizeSpotifyPlayedAt = (p: string) => `${p.split('.')[0]}.000Z`
-
 const restringDate = (p: string) => new Date(p).toISOString()
 const resetMs = (p: string) => `${p.split('.')[0]}.000Z`
-
 const sanitizeSpotifyPlayedAt = R.compose(resetMs, restringDate)
 
-const wait = async (ms) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(resolve, ms)
-  })
+const HandlerEnv = t.type({
+  DYNAMO_ENDPOINT: t.string,
+  TABLE_PLAY: t.string,
+  TABLE_USER: t.string,
+  QUEUE_VALIDATION_ERRORS: t.string,
+  SPOTIFY_CLIENT_ID: t.string,
+  SPOTIFY_CLIENT_SECRET: t.string,
+  SPOTIFY_REDIRECT_URI: t.string,
+})
+type THandlerEnv = t.TypeOf<typeof HandlerEnv>
+
+const decodeEnv = <T>(decoder: t.Decoder<any, T>, env: any): { valid: T | null, invalid: t.Errors | null} => {
+  const decoded = decoder.decode(env)
+  const valid = decoded.isRight() && decoded.value
+  const invalid = decoded.isLeft() && decoded.value
+  return { valid, invalid }
 }
 
-type TEnv = {
-  DYNAMO_ENDPOINT: string
-  TABLE_PLAY: string
-  TABLE_USER: string
-  QUEUE_VALIDATION_ERRORS: string,
-  SPOTIFY_CLIENT_ID: string,
-  SPOTIFY_CLIENT_SECRET: string,
-  SPOTIFY_REDIRECT_URI: string,
-}
+// WIP
+// const extractRecords = (event: SQSEvent) => event.Records
+
+// const makeHandler = (envDecoder: t.Decoder<any, any>, msgDecoder: t.Decoder<any, any>) =>
+//   async (event) => {
+//     const { valid: env, invalid } = decodeEnv(envDecoder, process.env)
+//     if (invalid) { throw new Error(`handler env missing vars ${JSON.stringify(invalid)}`)}
+//     const { valids, invalids } = decodeAll(msgDecoder, extractRecords(event))
+//     await Promise.all(invalids.map(i => handleInvalid(log, env.QUEUE_VALIDATION_ERRORS, i.errors, { handler: 'fetchSpotifyPlays', input: i.item })))
+//     await Promise.all(valids.map(handleMessage(env)))
+//   }
 
 export const handler: SQSHandler = async (event) => {
   // ALWAYS DO THIS FIRST -- with sls offline, discovered some cases where process.env vars clobber each other
   // which is a particularly savory flavor of hell let me tell you
-  const env = verifyEnv({
-    DYNAMO_ENDPOINT: process.env.DYNAMO_ENDPOINT,
-    TABLE_PLAY: process.env.TABLE_PLAY,
-    TABLE_USER: process.env.TABLE_USER,
-    QUEUE_VALIDATION_ERRORS: process.env.QUEUE_VALIDATION_ERRORS,
-    SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID,
-    SPOTIFY_CLIENT_SECRET: process.env.SPOTIFY_CLIENT_SECRET,
-    SPOTIFY_REDIRECT_URI: process.env.SPOTIFY_REDIRECT_URI,
-  }, log)
+  const { valid: env, invalid } = decodeEnv(HandlerEnv, process.env)
+  if (invalid) { throw new Error(`handler env missing vars ${JSON.stringify(invalid)}`)}
 
   // the queue message tells us about the user we're fetching for
-  // we should only get one record per message, nu?
-  // const { uid , accessToken, refreshToken } = QueueFetchSpotifyPlays.extract(event)[0]
   const { valids, invalids } = QueueEnrichPlayArtists.extract(event)
   await Promise.all(invalids.map(i => handleInvalid(log, env.QUEUE_VALIDATION_ERRORS, i.errors, { handler: 'fetchSpotifyPlays', input: i.item })))
   await Promise.all(valids.map(handleMessage(env)))
@@ -77,19 +75,18 @@ const pluckArtistIdsFromPlays = R.compose<
   R.pluck('track'),
 )
 
-const localizeDatestring = (utcOffset: number) => (dts: string) => {
+export const localizeDatestring = (utcOffset: number) => (dts: string) => {
+  const utcf = moment.utc(dts).utcOffset(utcOffset, false).toISOString(true)
+  // none of the other ones do what we want -- leaving here for reference
   // const localt = moment(dts).utcOffset(utcOffset, true).toISOString(true)
   // const localf = moment(dts).utcOffset(utcOffset, false).toISOString(true)
   // const utct = moment.utc(dts).utcOffset(utcOffset, true).toISOString(true)
-  const utcf = moment.utc(dts).utcOffset(utcOffset, false).toISOString(true)
   // const pzt = moment.parseZone(dts).utcOffset(utcOffset, true).toISOString(true)
   // const pzf = moment.parseZone(dts).utcOffset(utcOffset, false).toISOString(true)
-
-  // log.info('localized time', {utcOffset, dts, localt, localf, utct, utcf, pzt, pzf})
   return utcf
 }
 
-const handleMessage = (env: TEnv) => async ({
+const handleMessage = (env: THandlerEnv) => async ({
   user: { uid, accessToken, refreshToken, utcOffset },
   plays,
 }: TMessageEnrichPlayArtists) => {
@@ -141,7 +138,7 @@ const handleMessage = (env: TEnv) => async ({
     try {
       const playedAt =  localizeToMe(sanitizeSpotifyPlayedAt(play.played_at))
 
-      await tablePlay.setPlayTrack({
+      await tablePlay.putPlay({
         playedAt,
         uid,
         track: play.track,
@@ -152,5 +149,5 @@ const handleMessage = (env: TEnv) => async ({
   }
 
   const table = TableUser(env.DYNAMO_ENDPOINT, env.TABLE_USER)
-  await table.setSpotifyLastUpdate(uid, new Date().toISOString())
+  await table.updateSpotifyLastUpdate(uid, new Date().toISOString())
 }

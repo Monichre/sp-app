@@ -1,55 +1,15 @@
-// Generated in 2019-04-09T22:32:59-07:00
+// Generated in 2019-04-14T12:03:04-07:00
 // REGENERATE THIS BY STARTING THE LOCAL SERVER
 // AND THEN RUNNING `back % yarn generate`
 
 export type Maybe<T> = T | null;
-
-export interface FirebaseUser {
-  uid: string;
-
-  displayName?: Maybe<string>;
-
-  photoURL?: Maybe<string>;
-
-  email?: Maybe<string>;
-
-  emailVerified: boolean;
-
-  phoneNumber?: Maybe<string>;
-
-  isAnonymous: boolean;
-
-  providerData: (Maybe<FirebaseUserProviderData>)[];
-}
-
-export interface FirebaseUserProviderData {
-  uid: string;
-
-  displayName?: Maybe<string>;
-
-  photoURL?: Maybe<string>;
-
-  email?: Maybe<string>;
-
-  phoneNumber?: Maybe<string>;
-
-  providerId: string;
-}
-
-export interface SpotifyCredentials {
-  spotifyId: string;
-
-  accessToken: string;
-
-  refreshToken: string;
-}
 
 // ====================================================
 // Types
 // ====================================================
 
 export interface Query {
-  dummy?: Maybe<string>;
+  getUserInfo: UserInfoResponse;
 
   _?: Maybe<string>;
 
@@ -62,6 +22,20 @@ export interface Query {
   dashStats: DashStatsResponse;
 
   artistStats: ArtistStatsResponse;
+}
+
+export interface UserInfoResponse {
+  uid: string;
+
+  email: string;
+
+  lastUpdate?: Maybe<string>;
+
+  displayName?: Maybe<string>;
+
+  photoURL?: Maybe<string>;
+
+  initialHarvestComplete?: Maybe<boolean>;
 }
 
 export interface BasicResponse {
@@ -197,10 +171,6 @@ export interface ArtistStatsPeriodUser {
 }
 
 export interface Mutation {
-  onLogin?: Maybe<BasicResponse>;
-
-  updateSpotifyAuth?: Maybe<BasicResponse>;
-
   _?: Maybe<string>;
 }
 
@@ -208,6 +178,9 @@ export interface Mutation {
 // Arguments
 // ====================================================
 
+export interface GetUserInfoQueryArgs {
+  uid: string;
+}
 export interface RecentPlaysQueryArgs {
   uid: string;
 }
@@ -221,14 +194,6 @@ export interface ArtistStatsQueryArgs {
   uid: string;
 
   id: string;
-}
-export interface OnLoginMutationArgs {
-  user: FirebaseUser;
-}
-export interface UpdateSpotifyAuthMutationArgs {
-  userId: string;
-
-  creds?: Maybe<SpotifyCredentials>;
 }
 
 import { GraphQLResolveInfo } from "graphql";
@@ -286,7 +251,7 @@ export type DirectiveResolverFn<TResult, TArgs = {}, TContext = {}> = (
 
 export namespace QueryResolvers {
   export interface Resolvers<TContext = Context, TypeParent = {}> {
-    dummy?: DummyResolver<Maybe<string>, TypeParent, TContext>;
+    getUserInfo?: GetUserInfoResolver<UserInfoResponse, TypeParent, TContext>;
 
     _?: _Resolver<Maybe<string>, TypeParent, TContext>;
 
@@ -313,11 +278,15 @@ export namespace QueryResolvers {
     >;
   }
 
-  export type DummyResolver<
-    R = Maybe<string>,
+  export type GetUserInfoResolver<
+    R = UserInfoResponse,
     Parent = {},
     TContext = Context
-  > = Resolver<R, Parent, TContext>;
+  > = Resolver<R, Parent, TContext, GetUserInfoArgs>;
+  export interface GetUserInfoArgs {
+    uid: string;
+  }
+
   export type _Resolver<
     R = Maybe<string>,
     Parent = {},
@@ -365,6 +334,60 @@ export namespace QueryResolvers {
 
     id: string;
   }
+}
+
+export namespace UserInfoResponseResolvers {
+  export interface Resolvers<
+    TContext = Context,
+    TypeParent = UserInfoResponse
+  > {
+    uid?: UidResolver<string, TypeParent, TContext>;
+
+    email?: EmailResolver<string, TypeParent, TContext>;
+
+    lastUpdate?: LastUpdateResolver<Maybe<string>, TypeParent, TContext>;
+
+    displayName?: DisplayNameResolver<Maybe<string>, TypeParent, TContext>;
+
+    photoURL?: PhotoUrlResolver<Maybe<string>, TypeParent, TContext>;
+
+    initialHarvestComplete?: InitialHarvestCompleteResolver<
+      Maybe<boolean>,
+      TypeParent,
+      TContext
+    >;
+  }
+
+  export type UidResolver<
+    R = string,
+    Parent = UserInfoResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type EmailResolver<
+    R = string,
+    Parent = UserInfoResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type LastUpdateResolver<
+    R = Maybe<string>,
+    Parent = UserInfoResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type DisplayNameResolver<
+    R = Maybe<string>,
+    Parent = UserInfoResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type PhotoUrlResolver<
+    R = Maybe<string>,
+    Parent = UserInfoResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type InitialHarvestCompleteResolver<
+    R = Maybe<boolean>,
+    Parent = UserInfoResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
 }
 
 export namespace BasicResponseResolvers {
@@ -832,35 +855,7 @@ export namespace ArtistStatsPeriodUserResolvers {
 
 export namespace MutationResolvers {
   export interface Resolvers<TContext = Context, TypeParent = {}> {
-    onLogin?: OnLoginResolver<Maybe<BasicResponse>, TypeParent, TContext>;
-
-    updateSpotifyAuth?: UpdateSpotifyAuthResolver<
-      Maybe<BasicResponse>,
-      TypeParent,
-      TContext
-    >;
-
     _?: _Resolver<Maybe<string>, TypeParent, TContext>;
-  }
-
-  export type OnLoginResolver<
-    R = Maybe<BasicResponse>,
-    Parent = {},
-    TContext = Context
-  > = Resolver<R, Parent, TContext, OnLoginArgs>;
-  export interface OnLoginArgs {
-    user: FirebaseUser;
-  }
-
-  export type UpdateSpotifyAuthResolver<
-    R = Maybe<BasicResponse>,
-    Parent = {},
-    TContext = Context
-  > = Resolver<R, Parent, TContext, UpdateSpotifyAuthArgs>;
-  export interface UpdateSpotifyAuthArgs {
-    userId: string;
-
-    creds?: Maybe<SpotifyCredentials>;
   }
 
   export type _Resolver<
@@ -905,6 +900,7 @@ export interface DeprecatedDirectiveArgs {
 
 export type IResolvers<TContext = Context> = {
   Query?: QueryResolvers.Resolvers<TContext>;
+  UserInfoResponse?: UserInfoResponseResolvers.Resolvers<TContext>;
   BasicResponse?: BasicResponseResolvers.Resolvers<TContext>;
   RecentPlaysResponse?: RecentPlaysResponseResolvers.Resolvers<TContext>;
   Play?: PlayResolvers.Resolvers<TContext>;

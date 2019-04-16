@@ -1,10 +1,10 @@
 import React from 'react';
-import { BasicUser } from '../../../comp/FirebaseContext';
-import { RecentPlays } from './History/History';
-import { DashSummary } from './DashSummary';
+import { BasicUser } from '../../../FirebaseContext';
+import { History } from './History/History';
+import { DashSummary } from './DashSummary/DashSummary';
 import { Route, Switch, Redirect, RouteComponentProps } from 'react-router';
 import { Insights } from './Insights/Insights';
-import { Loading } from '../../../comp/Loading';
+import { Loading } from '../../../../shared/Loading';
 import { DashNav } from './DashNav';
 
 // we are passing uid={user.uid} to the child components
@@ -13,9 +13,6 @@ import { DashNav } from './DashNav';
 // otherwise we have to put this isLoading bullshit all over the place to get type safety
 // when we dont really need it
 export const Dash: React.SFC<RouteComponentProps & {user: BasicUser}> = ({user}) => {
-  // useUserChange(user => !user && window.location.replace('/'))
-  // const { user, isLoading } = useUser()
-  // if (isLoading) { return <Loading/> }
   if (!user) { return <div>User not found!</div>}
   return (
     <>
@@ -23,7 +20,7 @@ export const Dash: React.SFC<RouteComponentProps & {user: BasicUser}> = ({user})
       <DashNav/>
       <React.Suspense fallback={<Loading/>}>
         <Switch>
-          <Route path='/dash/history' render={(props) => <RecentPlays {...props} uid={user.uid}/>}/>
+          <Route path='/dash/history' render={(props) => <History {...props} uid={user.uid}/>}/>
           <Route path='/dash/insights/:period' render={(props) => <Insights {...props} uid={user.uid}/>}/>
           <Redirect from='/' exact to='/dash/insights/week'/>
           <Redirect from='/dash' exact to='/dash/insights/week'/>

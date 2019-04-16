@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 import { Info, History } from 'grommet-icons';
 import { NavLink } from 'react-router-dom';
 

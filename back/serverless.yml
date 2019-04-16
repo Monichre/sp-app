@@ -142,20 +142,10 @@ custom:
             - ".s3-website-us-east-1.amazonaws.com"
             - "/customAuth"
       live: "http://live.soundpruf.com/customAuth"
-        # Fn::Join:
-        #   - ""
-        #   - - "http://"
-        #     - "${self:custom.platform}"
-        #     - "-front-"
-        #     - "${self:custom.target}"
-        #     - "-frontend"
-        #     - ".s3-website-us-east-1.amazonaws.com"
-        #     - "/customAuth"
 
   # unify the below with the offline/online above
   LAYER_REF:
     local: "not used"
-    # test: ${cf:sp-app-back-layer-${self:custom.target}.SpAppBackLayer${self:custom.target}NpmLayerExport, ""} # without this fallback i cant sls dynamodb install
     test: ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport, ""} # without this fallback i cant sls dynamodb install
     live: ${cf:sp-app-back-layer-${self:custom.target}.NpmLayerExport, ""} # without this fallback i cant sls dynamodb install
 
@@ -174,7 +164,6 @@ custom:
     TableUser: ${env:TableUser, self:custom.cfref.TableUser}
     TablePlay: ${env:TablePlay, self:custom.cfref.TablePlay}
     TableStat: ${env:TableStat, self:custom.cfref.TableStat}
-    # StreamCreatePlayFromSpotify: ${env:StreamCreatePlayFromSpotify, self:custom.cfref.StreamCreatePlayFromSpotify}
 
   cfref:
     QueueHiFetchSpotifyPlays:
@@ -226,9 +215,6 @@ custom:
     port: 8888
     pollForever: true
     streams:
-      - table: ${self:custom.ref.TableUser}
-        functions:
-          - onProfileAdd
       - table: ${self:custom.ref.TablePlay}
         functions:
           - onPlayUpdateTotalStats
@@ -236,7 +222,6 @@ custom:
           - onPlayUpdateGenreStats
 
   webpack:
-    # includeModules: true
     packager: 'yarn'
 
   serverless-offline-kinesis:
@@ -321,33 +306,6 @@ functions:
           cors: true
 
 ################################################################################
-# functions: prototype profile handlers
-################################################################################
-# these arent used for any real features
-# they were really just a poc for the infrastrucure and devops
-  createProfile:
-    events:
-      - http:
-          path: createProfile
-          method: post
-          cors: true
-    handler: src/fns/createProfile.handler
-    layers:
-      - ${self:custom.LAYER_REF.${self:custom.config}}
-    environment:
-      TABLE_TARGET: ${self:custom.ref.TableUser}
-
-  onProfileAdd:
-    events:
-      - stream:
-          type: dynamodb
-          arn:
-            Fn::GetAtt: [ TableUser, StreamArn ]
-    handler: src/fns/onProfileAdd.handler
-    layers:
-      - ${self:custom.LAYER_REF.${self:custom.config}}
-
-################################################################################
 # functions: DEMETER - harvesting play data from spotify
 ################################################################################
 
@@ -386,8 +344,7 @@ functions:
       QUEUE_VALIDATION_ERRORS: ${self:custom.ref.QueueValidationErrors}
 
 
-  # if the profile's external poll is stale
-  # run it and feed the response into a stream
+  # fetch latest plays for user and feed them to enrich
   fetchSpotifyPlaysHI:
     events:
       - sqs:
@@ -397,16 +354,14 @@ functions:
     layers:
       - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
-      # STALE_MS: 30000 # 30 sec
-      # FETCH_COUNT: 2 # 2 songs
       QUEUE_ENRICH: ${self:custom.ref.QueueEnrichPlayArtists}
       TABLE_USER: ${self:custom.ref.TableUser}
-      # STREAM_TARGET: ${self:custom.ref.StreamCreatePlayFromSpotify}
       SPOTIFY_CLIENT_ID: ${ssm:${self:custom.ssmConfigPath}/SPOTIFY_CLIENT_ID}
       SPOTIFY_CLIENT_SECRET: ${ssm:${self:custom.ssmConfigPath}/SPOTIFY_CLIENT_SECRET}
       SPOTIFY_REDIRECT_URI: ${self:custom.SPOTIFY_REDIRECT_URI.${self:custom.config}}
       QUEUE_VALIDATION_ERRORS: ${self:custom.ref.QueueValidationErrors}
 
+  # get artist, genre data from spotify for each play
   enrichPlayArtists:
     events:
       - sqs:
@@ -423,62 +378,11 @@ functions:
       SPOTIFY_REDIRECT_URI: ${self:custom.SPOTIFY_REDIRECT_URI.${self:custom.config}}
       QUEUE_VALIDATION_ERRORS: ${self:custom.ref.QueueValidationErrors}
 
-  # createPlayFromSpotify:
-  #   events:
-  #     - stream:
-  #         type: kinesis
-  #         startingPosition: LATEST
-  #         arn:
-  #           Fn::GetAtt: [StreamCreatePlayFromSpotify, Arn]
-  #   environment:
-  #     TABLE_TARGET: 'plays'
-  #   handler: src/fns/createPlayFromSpotify.handler
-  #   layers:
-  #     - ${self:custom.LAYER_REF.${self:custom.config}}
-
-  # design notes for rest of harvest
-  # onPlayUpdateStats:
-  #   events:
-  #     - stream:
-  #         type: dynamodb
-  #         arn:
-  #           Fn::GetAtt: [DYN_Play, LatestArn]
-  #   environment:
-  #     TABLE_TARGET:
-  #       Fn::GetAttr: [DYN_Stat, Uri]
-  #   # handler: (rec) =>
-  #   #   if pk.includes('PLAY#') and sk == 'DETAIL':
-  #   #     DBStat(TABLE_TARGET).updateForPlay(play)
-
-  # OnArtistFetchSpotify:
-  #   events:
-  #     - stream:
-  #         type: dynamodb
-  #         arn:
-  #           Fn::GetAtt: [DYN_Play, LatestArn]
-  #   environment:
-  #     QUEUE_TARGET:
-  #       Fn::GetAttr: [SQS_FetchSpotifyArtist, Uri]
-    # handler: (rec) =>
-    #   if pk.includes('ARTIST#') && sk == 'DETAIL' then
-    #     publish(QUEUE_TARGET, artistId)
-
 ################################################################################
-# functions: stat cruncher
+# functions: FLORENCE: stat cruncher
 ################################################################################
-# this is WIP prototype of custom resource handler for spinning up firebase auth instances
-
-  # onPlayUpdateStats:
-  #   events:
-  #     - stream:
-  #         type: dynamodb
-  #         arn:
-  #           Fn::GetAtt: [ TablePlay, StreamArn ]
-  #   handler: src/fns/onPlayUpdateStats.handler
-  #   layers:
-  #     - ${self:custom.LAYER_REF.${self:custom.config}}
-  #   environment:
-  #     TABLE_STAT: ${self:custom.ref.TableStat}
+# all of these trigger on ddb streams on TablePlay
+# and update various axes of stats for the play that was just recorded
 
   onPlayUpdateTotalStats:
     events:
@@ -522,8 +426,8 @@ functions:
 ################################################################################
 # functions: error queue
 ################################################################################
-# this is WIP prototype of custom resource handler for spinning up firebase auth instances
-
+# eventually break this out to be target-aware
+# so i dont freak out when dev errors show up in slack
   errorToSlack:
     events:
       - sqs:
@@ -540,10 +444,10 @@ functions:
 ################################################################################
 # this is WIP prototype of custom resource handler for spinning up firebase auth instances
 
-  customResource:
-    handler: src/fns/customResourceFirebase.handler
-    layers:
-      - ${self:custom.LAYER_REF.${self:custom.config}}
+  # customResource:
+  #   handler: src/fns/customResourceFirebase.handler
+  #   layers:
+  #     - ${self:custom.LAYER_REF.${self:custom.config}}
 
 
 resources:
@@ -615,14 +519,14 @@ resources:
 ################################################################################
 
     # need proper gcp creds to complete this
-    TestCustomResource:
-      Type: Custom::MyCustomResourceType
-      Properties:
-        ServiceToken:
-          Fn::GetAtt: [CustomResourceLambdaFunction, Arn]
-        GCPProjectId: gcp-${self:custom.ns}
-        GCPFolderName: sp-auth
-        TestInput: myInput
+    # TestCustomResource:
+    #   Type: Custom::MyCustomResourceType
+    #   Properties:
+    #     ServiceToken:
+    #       Fn::GetAtt: [CustomResourceLambdaFunction, Arn]
+    #     GCPProjectId: gcp-${self:custom.ns}
+    #     GCPFolderName: sp-auth
+    #     TestInput: myInput
 
 ################################################################################
 # resources: USER INFO
@@ -643,9 +547,6 @@ resources:
           - AttributeName: sk
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
-        # ProvisionedThroughput:
-        #   ReadCapacityUnits: 1
-        #   WriteCapacityUnits: 1
         StreamSpecification:
           StreamViewType: NEW_AND_OLD_IMAGES
 
@@ -668,9 +569,6 @@ resources:
           - AttributeName: sk
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
-        # ProvisionedThroughput:
-        #   ReadCapacityUnits: 1
-        #   WriteCapacityUnits: 1
         StreamSpecification:
           StreamViewType: NEW_AND_OLD_IMAGES
 
@@ -689,6 +587,7 @@ resources:
       Properties:
         QueueName: ${self:custom.ns}-QueueEnrichPlayArtists
 
+    # example of a kinesis stream what we aint usin
     # StreamCreatePlayFromSpotify:
     #   Type: AWS::Kinesis::Stream
     #   Properties:
@@ -716,9 +615,6 @@ resources:
           - AttributeName: sk
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
-        # ProvisionedThroughput:
-        #   ReadCapacityUnits: 1
-        #   WriteCapacityUnits: 1
         StreamSpecification:
           StreamViewType: NEW_AND_OLD_IMAGES
         GlobalSecondaryIndexes:
@@ -728,10 +624,6 @@ resources:
               KeyType: HASH
             - AttributeName: pk
               KeyType: RANGE
-          # BillingMode: PAY_PER_REQUEST
-          # ProvisionedThroughput:
-          #   ReadCapacityUnits: 1
-          #   WriteCapacityUnits: 1
           Projection:
             ProjectionType: ALL
         LocalSecondaryIndexes:

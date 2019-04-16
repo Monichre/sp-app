@@ -5,9 +5,7 @@ import { SpotifyPlay } from './SpotifyApi';
 import { isRight, isLeft } from 'fp-ts/lib/Either';
 import { decodeAll } from './validation';
 
-
-
-const MessageEnrichPlayArtists = t.type({
+export const MessageEnrichPlayArtists = t.type({
   user: t.type({
     uid: t.string,
     accessToken: t.string,

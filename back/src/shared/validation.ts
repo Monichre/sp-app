@@ -2,20 +2,17 @@ import { Errors } from "io-ts";
 import winston = require("winston");
 import * as t from 'io-ts'
 import { QueueValidationErrors } from "./queues";
-import * as R from 'ramda'
 
 export const errorPaths = (e: Errors) => e.map(ee => ee.context.map(({key}) => key).join('.'))
 
 export const handleInvalid = async (log: winston.Logger, QueueUrl: string, errors: t.Errors, context: any = {}, uid = 'n/a') => {
   const paths = errorPaths(errors)
-  // for (const error of errors) {
-    log.error('validation failed', {paths, context, uid})
-    await QueueValidationErrors.publish(QueueUrl, {
-      uid,
-      paths: errorPaths(errors),
-      context
-    })
-  // }
+  log.error('validation failed', {paths, context, uid})
+  await QueueValidationErrors.publish(QueueUrl, {
+    uid,
+    paths: errorPaths(errors),
+    context
+  })
 }
 
 export const decodeAll = <T>(decoder: t.Decoder<unknown, T>, items: any[]) => {

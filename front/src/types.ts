@@ -1,48 +1,8 @@
-// Generated in 2019-04-09T22:44:40-07:00
+// Generated in 2019-04-14T12:11:36-07:00
 // REGENERATE THIS BY STARTING THE LOCAL BACKEND
 // AND THEN RUNNING `front % yarn generate`
 
 export type Maybe<T> = T | null;
-
-export interface FirebaseUser {
-  uid: string;
-
-  displayName?: Maybe<string>;
-
-  photoURL?: Maybe<string>;
-
-  email?: Maybe<string>;
-
-  emailVerified: boolean;
-
-  phoneNumber?: Maybe<string>;
-
-  isAnonymous: boolean;
-
-  providerData: (Maybe<FirebaseUserProviderData>)[];
-}
-
-export interface FirebaseUserProviderData {
-  uid: string;
-
-  displayName?: Maybe<string>;
-
-  photoURL?: Maybe<string>;
-
-  email?: Maybe<string>;
-
-  phoneNumber?: Maybe<string>;
-
-  providerId: string;
-}
-
-export interface SpotifyCredentials {
-  spotifyId: string;
-
-  accessToken: string;
-
-  refreshToken: string;
-}
 
 // ====================================================
 // Documents
@@ -621,6 +581,32 @@ export type PlaytimeSummaryMonth = {
   prev: number;
 };
 
+export type GetUserInfoVariables = {
+  uid: string;
+};
+
+export type GetUserInfoQuery = {
+  __typename?: "Query";
+
+  getUserInfo: GetUserInfoGetUserInfo;
+};
+
+export type GetUserInfoGetUserInfo = {
+  __typename?: "UserInfoResponse";
+
+  uid: string;
+
+  email: string;
+
+  displayName: Maybe<string>;
+
+  lastUpdate: Maybe<string>;
+
+  photoURL: Maybe<string>;
+
+  initialHarvestComplete: Maybe<boolean>;
+};
+
 import gql from "graphql-tag";
 import * as ReactApolloHooks from "react-apollo-hooks";
 
@@ -880,4 +866,24 @@ export function usePlaytimeSummary(
     PlaytimeSummaryQuery,
     PlaytimeSummaryVariables
   >(PlaytimeSummaryDocument, baseOptions);
+}
+export const GetUserInfoDocument = gql`
+  query GetUserInfo($uid: String!) {
+    getUserInfo(uid: $uid) {
+      uid
+      email
+      displayName
+      lastUpdate
+      photoURL
+      initialHarvestComplete
+    }
+  }
+`;
+export function useGetUserInfo(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<GetUserInfoVariables>
+) {
+  return ReactApolloHooks.useQuery<GetUserInfoQuery, GetUserInfoVariables>(
+    GetUserInfoDocument,
+    baseOptions
+  );
 }

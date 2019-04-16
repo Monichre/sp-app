@@ -1,0 +1,10 @@
+query GetUserInfo($uid: String!) {
+  getUserInfo(uid: $uid) {
+    uid
+    email
+    displayName
+    lastUpdate
+    photoURL
+    initialHarvestComplete
+  }
+}

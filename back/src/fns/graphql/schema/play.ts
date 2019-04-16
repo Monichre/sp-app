@@ -52,16 +52,7 @@ type SpotifyUrl {
 `
 
 const recentPlays: QueryResolvers.RecentPlaysResolver = async (_, {uid}, context) => {
-  // so this is a terrible thing to do: push a fetch task every time the query is run
-  // design notes:
-  // - doing it this way wouldnt be as bad if we checked lastUpdate to make sure the data was really stale
-  // - even better might be a heartbeat mutation (along with staleness check) to better regulate frequency?
   const log = context.log.child({handler: `graphql/recentPlays/${uid}`})
-  log.info(`message to QueueStartHarvestUser`, {queueName: context.QUEUE_START_HARVEST_USER})
-  QueueStartHarvestUser.publish(context.QUEUE_START_HARVEST_USER, {
-    uid,
-  })
-
 
   const tablePlay = TablePlay(context.DYNAMO_ENDPOINT, context.TABLE_PLAY)
   const { docs, errors } = await tablePlay.getRecentPlays(uid, 100)

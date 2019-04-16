@@ -5,7 +5,7 @@ const handlerFormat = format(({awsEvent, handler, message, ...info}, opts) => ({
   message: `[${awsEvent || 'UNKNOWN AWS EVENT'}/${handler || 'UNKNOWN HANDLER'}] ${message}`
 }))
 
-console.log('TARGET', process.env.TARGET)
+// this should switch on local/cloud flag
 const transp = process.env.TARGET==null ? // if null its local
   [new transports.Console(), new transports.File({ filename: 'local.log' })] :
   [new transports.Console()]

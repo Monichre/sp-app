@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { useFirebaseAuth } from '../comp/FirebaseContext';
+import { useFirebaseAuth } from './FirebaseContext';
 import * as queryString from 'query-string'
 
 export const CustomAuth: React.SFC<RouteComponentProps> = ({history, location}) => {

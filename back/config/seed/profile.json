@@ -1,5 +1,6 @@
 [
   {
+    "email": "notreal@dummy.com",
     "sk": "spotify",
     "spotifyId": "xnx2fj5o8x2fgl1hdr10jjars",
     "pk": "spotify:xnx2fj5o8x2fgl1hdr10jjars",
@@ -10,6 +11,7 @@
     "utcOffset": -420
   },
   {
+    "email": "notreal@dummy.com",
     "sk": "spotify",
     "spotifyId": "a0rcusksyscdoa1f7ylnot6c8",
     "pk": "spotify:a0rcusksyscdoa1f7ylnot6c8",
@@ -20,6 +22,7 @@
     "utcOffset": -420
   },
   {
+    "email": "notreal@dummy.com",
     "sk": "spotify",
     "spotifyId": "yw19fznedr2b4dxo55cmjz11h",
     "pk": "spotify:yw19fznedr2b4dxo55cmjz11h",

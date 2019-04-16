@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Logo } from '../comp/Logo';
+import { Logo } from '../../shared/Logo';
 import moment from 'moment';
 
 const BetweenColumn = styled.div`

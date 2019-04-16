@@ -1,22 +1,11 @@
-import * as AWS from 'aws-sdk';
-import * as R from 'ramda'
 import { SQSHandler } from "aws-lambda";
 import { SpotifyApi } from "../../shared/SpotifyApi";
 import { verifyEnv } from "../../shared/env";
 import { QueueFetchSpotifyPlays, QueueEnrichPlayArtists } from "../../shared/queues";
-import { TableUser } from '../../shared/tables/TableUser';
 
 import { slog } from "../logger";
 import { handleInvalid } from '../../shared/validation';
 const log = slog.child({handler: 'fetchSpotifyPlays', awsEvent: 'sqs'})
-
-const wait = async (ms) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(resolve, ms)
-  })
-}
-
-// const errorPath = (e: Errors) => e.map(ee => ee.context.map(({key}) => key).join('.'))
 
 export const handler: SQSHandler = async (event) => {
   // ALWAYS DO THIS FIRST -- with sls offline, discovered some cases where process.env vars clobber each other
@@ -41,9 +30,7 @@ export const handler: SQSHandler = async (event) => {
   // we should only get one record per message, nu?
   // dont be a jackass, split this out into handleEvent for individual valids
   const { uid , accessToken, refreshToken, utcOffset } = valids[0]
-  // const { uid , accessToken, refreshToken, utcOffset } = 
 
-  // use the spotify api to get recent plays
   const api = SpotifyApi(env, accessToken, refreshToken)
 
   // for primate-testing onboarding workflow, put a 3-second delay in front of this
@@ -66,19 +53,4 @@ export const handler: SQSHandler = async (event) => {
     })
   }
 
-  // update the user's credentials record with a lastUpdate
-  // THIS SHOULD BE THE LAST PLAYEDAT FROM THE NEWEST PLAY WE JUST WROTE
-  const table = TableUser(env.DYNAMO_ENDPOINT, env.TABLE_USER)
-  await table.setSpotifyLastUpdate(uid, new Date().toISOString())
-
-
-  // YAGNI
-  // const kin = process.env.STAGE==='local' ?
-  //   new AWS.Kinesis({endpoint:'http://localhost:4567'}) :
-  //   new AWS.Kinesis()
-  
-  // await kin.putRecords({
-  //   Records: fakeResponse.map(r => ({ Data: JSON.stringify(r), PartitionKey: r.track.trackid.toString()})),
-  //   StreamName: process.env.STREAM_TARGET,
-  // }, () => {}).promise()
 }

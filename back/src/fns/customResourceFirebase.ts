@@ -1,6 +1,7 @@
 import { CloudFormationCustomResourceHandler } from "aws-lambda";
 import { createGCPWithFBAuth } from './createGCPWithFBAuth'
 
+// not used atm
 
 // clean this shit up
 // TODO: handle resource-remove

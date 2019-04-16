@@ -4,6 +4,9 @@ import { makeExecutableSchema } from "graphql-tools";
 import { QueryResolvers, DashStatsResponse, ArtistStatsResponse, ArtistStatsPeriod, ArtistStatsPeriodUser, Artist } from "../types";
 import { verifyEnv } from '../../../shared/env';
 import moment = require('moment');
+import { TableUser } from '../../../shared/tables/TableUser';
+import { TableStat } from '../../../shared/tables/TableStat';
+import { localizeDatestring } from '../../demeter/enrichPlayArtists';
 
 const typeDefs = `
 type Query {
@@ -126,13 +129,25 @@ const playtimeSummary: QueryResolvers.PlaytimeSummaryResolver = async (_, {uid},
   const doc = new AWS.DynamoDB.DocumentClient({endpoint: env.DYNAMO_ENDPOINT})
   const TableName = env.TABLE_STAT
 
-  const m = moment()
-  const day = m.format('YYYY-MM-DD')
-  const yest = m.clone().subtract(1, 'days').format('YYYY-MM-DD')
-  const week = m.format('YYYY-WW')
-  const lastweek = m.clone().subtract(1, 'weeks').format('YYYY-WW')
-  const month = m.format('YYYY-MM')
-  const lastMonth = m.clone().subtract(1, 'months').format('YYYY-MM')
+  const tableUser = TableUser(context.DYNAMO_ENDPOINT, context.TABLE_USER)
+  const { valid, invalid } = await tableUser.getUser(uid)
+  if (invalid) { throw new Error(`user info invalid for uid ${uid}`) }
+  const { utcOffset } = valid
+
+  const tableStat = TableStat(context.DYNAMO_ENDPOINT, context.TABLE_STAT)
+  const { day, week, month } = tableStat.periodsFor(localizeDatestring(utcOffset)(moment().toISOString(true)))
+  const { day: yest } = tableStat.periodsFor(localizeDatestring(utcOffset)(moment().subtract(1, 'days').toISOString(true)))
+  const { week: lastWeek } = tableStat.periodsFor(localizeDatestring(utcOffset)(moment().subtract(1, 'weeks').toISOString(true)))
+  const { month: lastMonth } = tableStat.periodsFor(localizeDatestring(utcOffset)(moment().subtract(1, 'months').toISOString(true)))
+
+  // , week: lastWeek, month: lastMonth
+  // const m = moment()
+  // const day = m.format('YYYY-MM-DD')
+  // const yest = m.clone().subtract(1, 'days').format('YYYY-MM-DD')
+  // const week = m.format('YYYY-WW')
+  // const lastweek = m.clone().subtract(1, 'weeks').format('YYYY-WW')
+  // const month = m.format('YYYY-MM')
+  // const lastMonth = m.clone().subtract(1, 'months').format('YYYY-MM')
 
   const topLifetimeArtists = await topArtistsFor(doc, TableName, uid, 'life', 'life', 1)
   const response = {
@@ -143,7 +158,7 @@ const playtimeSummary: QueryResolvers.PlaytimeSummaryResolver = async (_, {uid},
     },
     week: {
       current: await getStat(doc, TableName, {uid, periodType: 'week', periodValue: week}),
-      prev: await getStat(doc, TableName, {uid, periodType: 'week', periodValue: lastweek}),
+      prev: await getStat(doc, TableName, {uid, periodType: 'week', periodValue: lastWeek}),
     },
     month: {
       current: await getStat(doc, TableName, {uid, periodType: 'month', periodValue: month}),
@@ -218,9 +233,17 @@ const dashStats: QueryResolvers.DashStatsResolver = async (_, {uid}, context) =>
   const doc = new AWS.DynamoDB.DocumentClient({endpoint: context.DYNAMO_ENDPOINT})
   const TableName = context.TABLE_STAT
 
-  const m = moment()
-  const week = m.format('YYYY-WW')
-  const month = m.format('YYYY-MM')
+  const tableStat = TableStat(context.DYNAMO_ENDPOINT, context.TABLE_STAT)
+
+  const tableUser = TableUser(context.DYNAMO_ENDPOINT, context.TABLE_USER)
+  const { valid, invalid } = await tableUser.getUser(uid)
+  if (invalid) { throw new Error(`user info invalid for uid ${uid}`) }
+  const { utcOffset } = valid
+
+  const { week, month } = tableStat.periodsFor(localizeDatestring(utcOffset)(moment().toISOString(true)))
+  // const m = moment()
+  // const week = m.format('YYYY-WW')
+  // const month = m.format('YYYY-MM')
 
   const result: DashStatsResponse = {
     topArtists: {

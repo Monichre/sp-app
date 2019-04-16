@@ -1,6 +1,5 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
-import { AppBar } from './AppBar';
 
 const animateGlow = keyframes`
   0% {
@@ -45,8 +44,7 @@ const OffsetBody = styled.div`
   }
 `
 
-export const LayoutAppBar: React.SFC = ({children}) =>
+export const AuthedLayout: React.SFC = ({children}) =>
   <OffsetBody>
-    <AppBar/>
     {children}
   </OffsetBody>

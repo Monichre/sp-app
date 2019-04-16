@@ -67,6 +67,7 @@ const handleRecord = (env: Env) => async (record: DynamoDBRecord) => {
   if (eventName === 'MODIFY') {
     // log.warn('modified play', { Keys, newImage: record.dynamodb.NewImage, oldImage: record.dynamodb.OldImage})
     log.warn('modified play', { Keys })
+    return
   }
   log.warn('unknown event', { eventName, Keys })
 }

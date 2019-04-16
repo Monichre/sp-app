@@ -5,7 +5,6 @@ import { verifyEnv } from "../../shared/env";
 import { slog } from "../logger";
 import { TableStat } from "../../shared/tables/TableStat";
 import { TablePlay } from '../../shared/tables/TablePlay';
-// import { SpotifyArtist } from '../../shared/SpotifyApi';
 import { handleInvalid } from '../../shared/validation';
 
 const log = slog.child({handler: 'onPlayUpdateGenreStats', awsEvent: 'ddbs'})
@@ -52,22 +51,19 @@ const handleRecord = (env: Env) => async (record: DynamoDBRecord) => {
     const table = TableStat(env.DYNAMO_ENDPOINT, env.TABLE_STAT)
     const { day, week, month } = table.periodsFor(playedAt)
 
-    for (const genre of genres) {
-      if (!genre) {
-        log.warn(`empty genre from track ${track.name}.  Artists: ${JSON.stringify(artists, null, 2)}`)
-      } else {
-        // log.info('updating user and global stats for', {genre})
-        await table.writeGenreStat({uid, relationType: 'genre', relationKey: genre, periodType: 'day', periodValue: day, playDurationMs, genre})
-        await table.writeGenreStat({uid, relationType: 'genre', relationKey: genre, periodType: 'week', periodValue: week, playDurationMs, genre})
-        await table.writeGenreStat({uid, relationType: 'genre', relationKey: genre, periodType: 'month', periodValue: month, playDurationMs, genre})
-        await table.writeGenreStat({uid, relationType: 'genre', relationKey: genre, periodType: 'life', periodValue: 'life', playDurationMs, genre})
+    const promises = R.flatten(genres.map(genre => ([
+      table.writeGenreStat({uid, relationType: 'genre', relationKey: genre, periodType: 'day', periodValue: day, playDurationMs, genre}),
+      table.writeGenreStat({uid, relationType: 'genre', relationKey: genre, periodType: 'week', periodValue: week, playDurationMs, genre}),
+      table.writeGenreStat({uid, relationType: 'genre', relationKey: genre, periodType: 'month', periodValue: month, playDurationMs, genre}),
+      table.writeGenreStat({uid, relationType: 'genre', relationKey: genre, periodType: 'life', periodValue: 'life', playDurationMs, genre}),
+      table.writeGenreStat({uid: 'global', relationType: 'genre', relationKey: genre, periodType: 'day', periodValue: day, playDurationMs, genre}),
+      table.writeGenreStat({uid: 'global', relationType: 'genre', relationKey: genre, periodType: 'week', periodValue: week, playDurationMs, genre}),
+      table.writeGenreStat({uid: 'global', relationType: 'genre', relationKey: genre, periodType: 'month', periodValue: month, playDurationMs, genre}),
+      table.writeGenreStat({uid: 'global', relationType: 'genre', relationKey: genre, periodType: 'life', periodValue: 'life', playDurationMs, genre}),
+    ])))
 
-        await table.writeGenreStat({uid: 'global', relationType: 'genre', relationKey: genre, periodType: 'day', periodValue: day, playDurationMs, genre})
-        await table.writeGenreStat({uid: 'global', relationType: 'genre', relationKey: genre, periodType: 'week', periodValue: week, playDurationMs, genre})
-        await table.writeGenreStat({uid: 'global', relationType: 'genre', relationKey: genre, periodType: 'month', periodValue: month, playDurationMs, genre})
-        await table.writeGenreStat({uid: 'global', relationType: 'genre', relationKey: genre, periodType: 'life', periodValue: 'life', playDurationMs, genre})
-      }
-    }
+    await Promise.all(promises)
+    log.info('finished all genre stat updates')
     return
   }
   if (eventName === 'REMOVE') {
@@ -77,6 +73,7 @@ const handleRecord = (env: Env) => async (record: DynamoDBRecord) => {
   if (eventName === 'MODIFY') {
     // log.warn('modified play', { Keys, newImage: record.dynamodb.NewImage, oldImage: record.dynamodb.OldImage})
     log.warn('modified play', { Keys })
+    return
   }
   log.warn('unknown event', { eventName, Keys })
 }

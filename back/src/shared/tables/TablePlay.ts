@@ -2,6 +2,7 @@ import * as AWS from 'aws-sdk';
 import * as t from 'io-ts';
 import { isRight, isLeft } from 'fp-ts/lib/Either';
 
+// doc decoders used for input/output for aws docclient
 const DocPlayTrackArtist = t.type({
   id: t.string,
   name: t.string,
@@ -23,24 +24,25 @@ const DocPlayTrack = t.type({
   })
 })
 
-const DocPlay = t.type({
+const DocPlayDerived = t.type({
   pk: t.string,
   sk: t.string,
   fk: t.string,
+})
+
+const DocPlayRequired = t.type({
   uid: t.string,
   playedAt: t.string,
   track: DocPlayTrack,
 })
 
-const NewDocPlay = t.type({
-  uid: t.string,
-  playedAt: t.string,
-  track: DocPlayTrack,
-})
-
+const DocPlay = t.intersection([DocPlayRequired, DocPlayDerived])
 export type TDocPlay = t.TypeOf<typeof DocPlay>
+
+const NewDocPlay = DocPlayRequired
 export type TNewDocPlay = t.TypeOf<typeof NewDocPlay>
 
+// image decoders used for ddb streams
 const ImagePlay = t.type({
   pk: t.type({
     S: t.string,
@@ -122,53 +124,6 @@ const ImagePlay = t.type({
 })
 
 export type TImagePlay = t.TypeOf<typeof ImagePlay>
-// not used yet
-
-// type PlayTrackAttrs = {
-//   uid: string
-//   playedAt: string
-//   track: {
-//     id: string
-//     name: string
-//     duration_ms: number
-//     artists: {
-//       id: string
-//       name: string
-//       images: {url: string}[]
-//       genres: string[]
-//     }[],
-//   }
-// }
-
-// type KeyAttrs = {
-//   pk: string,
-//   sk: string,
-// }
-
-// export type PlayTrack = PlayTrackAttrs & {
-//   uid: string
-// }
-
-// export type PlayTrackItem = KeyAttrs & {
-//   fk: string,
-//   playedAt: string,
-//   track: string,
-// }
-
-// export type PlayTrackImage = {
-//   pk: {
-//     S: string
-//   }
-//   sk: {
-//     S: string
-//   }
-//   playedAt: {
-//     S: string
-//   }
-//   track: {
-//     S: string
-//   }
-// }
 
 export const TablePlay = (endpoint: string, TableName: string) => {
   const doc = new AWS.DynamoDB.DocumentClient({endpoint})
@@ -216,7 +171,7 @@ export const TablePlay = (endpoint: string, TableName: string) => {
     return { valid, invalid }
   }
     
-  const setPlayTrack = async (obj: TNewDocPlay) => {
+  const putPlay = async (obj: TNewDocPlay) => {
     await doc.put({
       TableName,
       Item: encode(obj)
@@ -243,7 +198,7 @@ export const TablePlay = (endpoint: string, TableName: string) => {
   return {
     encode,
     decode,
-    setPlayTrack,
+    putPlay,
     getRecentPlays,
   }
 }

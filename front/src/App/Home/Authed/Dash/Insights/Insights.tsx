@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components'
 import { RouteComponentProps } from 'react-router';
-import { useDashStats } from '../../../../types';
-import { Loading } from '../../../../comp/Loading';
-import { TopGenrePeriods } from './TopGenres';
-import { TopArtistPeriods } from './TopArtists';
+import { useDashStats } from '../../../../../types';
+import { Loading } from '../../../../../shared/Loading';
+import { TopGenres } from './TopGenres';
+import { TopArtists } from './TopArtists';
 
 const Block = styled.div`
   // padding: 0.5rem;
@@ -32,7 +32,7 @@ const NavSelect = styled.select`
 
 export const Insights: React.SFC<RouteComponentProps<{period: string}> & {uid: string}> = ({uid, history, match}) => {
   const navTo = (path: string) => history.push(path)
-  const { data } = useDashStats({variables: {uid}, suspend: true})
+  const { data } = useDashStats({variables: {uid}, suspend: true, pollInterval: 6000})
   if (!data || !data.dashStats) { return <Loading/>}
   const { dashStats } = data
   console.log('dashStats', dashStats)
@@ -45,8 +45,8 @@ export const Insights: React.SFC<RouteComponentProps<{period: string}> & {uid: s
           <option value={`/dash/insights/life`} data-test='top-artists-period-select-life'>Lifetime</option>
         </NavSelect>
       </Block>
-      <TopArtistPeriods stats={dashStats.topArtists[match.params.period as 'week' | 'month' | 'life']}/>
-      <TopGenrePeriods stats={dashStats.topGenres[match.params.period as 'week' | 'month' | 'life']}/>
+      <TopArtists stats={dashStats.topArtists[match.params.period as 'week' | 'month' | 'life']}/>
+      <TopGenres stats={dashStats.topGenres[match.params.period as 'week' | 'month' | 'life']}/>
     </>
   )
 }

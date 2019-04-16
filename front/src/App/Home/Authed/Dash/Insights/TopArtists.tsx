@@ -1,14 +1,13 @@
 import React from 'react';
 import styled from 'styled-components'
-import { DashStatsGlobal } from '../../../../types';
-import moment from 'moment'
+import { DashStatsGlobal } from '../../../../../types';
 
 const TwoColumns = styled.div`
   display: grid;
-  grid-template-columns: 50% 50%;
+  grid-template-columns: 1fr 1fr;
   grid-column-gap: 2rem;
   @media (max-width: 600px) {
-    grid-template-columns: 100%;
+    grid-template-columns: 1fr;
   }
 
   align-items: start;
@@ -17,14 +16,6 @@ const TwoColumns = styled.div`
 const Block = styled.div`
   margin-top: 1rem;
 `
-
-const hrsAndMins = (durationMs: number) => {
-  const d = moment.duration(durationMs)
-  return {
-    hrs: Math.trunc(d.asHours()),
-    mins: d.minutes(),
-  }
-}
 
 type Artist = {
   name: string
@@ -77,7 +68,7 @@ color: #64d6ee;
 
 
 const ArtistStatItem: React.SFC<DashStatsGlobal> = ({artist: { id, name, images, external_urls: { spotify } }, playDurationMs}) => {
-  const { hrs, mins } = hrsAndMins(playDurationMs)
+  const { hrs, mins } = hrsAndMinsAndSecs(playDurationMs)
   const imgUrl = images && images[0] && images[0].url
   return (
     <Artist data-test='artist-row' to={`/artist/${id}`}>
@@ -112,7 +103,7 @@ const Title = styled.div`
   border-bottom: 1px solid #64d6ee;
 `
 
-const TopArtists: React.SFC<{global: DashStatsGlobal[], user: DashStatsGlobal[]}> = ({global, user}) => (
+const TopArtistsPeriod: React.SFC<{global: DashStatsGlobal[], user: DashStatsGlobal[]}> = ({global, user}) => (
   <TwoColumns>
     <div data-test='top-artists-global'>
       <Title>Soundpruf Artists</Title>
@@ -129,15 +120,16 @@ const TopArtists: React.SFC<{global: DashStatsGlobal[], user: DashStatsGlobal[]}
   </TwoColumns>
 )
 
-import { DashStatsWeek, DashStatsMonth, DashStatsLife } from '../../../../types';
-import { SpotifyLogoLink } from '../../../SpotifyLogoLink/SpotifyLogoLink';
+import { DashStatsWeek, DashStatsMonth, DashStatsLife } from '../../../../../types';
+import { SpotifyLogoLink } from '../../../../../shared/SpotifyLogoLink/SpotifyLogoLink';
 import { NavLink } from 'react-router-dom';
+import { hrsAndMinsAndSecs } from '../../../../../lib/durationFormats';
 type DashStatsPeriod = DashStatsWeek | DashStatsMonth | DashStatsLife
 
-export const TopArtistPeriods: React.SFC<{stats: DashStatsPeriod}> = ({stats}) => {
+export const TopArtists: React.SFC<{stats: DashStatsPeriod}> = ({stats}) => {
   return (
     <Block>
-    <TopArtists global={stats.global} user={stats.user}/>
+    <TopArtistsPeriod global={stats.global} user={stats.user}/>
     </Block>
   )
 }

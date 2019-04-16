@@ -1,46 +1,8 @@
-import * as R from 'ramda'
 import * as SpotifyWebApi from 'spotify-web-api-node'
 import * as t from 'io-ts'
 import { left } from 'fp-ts/lib/Either';
 
-// new versions incl user and client authd
-
-// export type SpotifyPlay = {
-//   played_at: string,
-//   track: SpotifyTrack,
-// }
-
-// export type SpotifyTrack = {
-//   id: string,
-//   name: string,
-//   duration_ms: number,
-//   album: SpotifyAlbum,
-//   artists: SpotifyArtist[],
-// }
-
-// export type SpotifyAlbum = {
-//   name: string,
-// }
-
-// export type SpotifyArtist = {
-//   id: string,
-//   name: string,
-//   genres: string[]
-// }
-
 type BodyResponse<T> = Promise<{ body: T }>
-
-// const spotifyClientCredentials = () => {
-//   const { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URI } = process.env
-//   if (!SPOTIFY_CLIENT_ID || !SPOTIFY_CLIENT_SECRET || !SPOTIFY_REDIRECT_URI) {
-//     throw new Error("Need SPOTIFY_* env vars")
-//   }
-//   return {
-//     clientId: SPOTIFY_CLIENT_ID,
-//     clientSecret: SPOTIFY_CLIENT_SECRET,
-//     redirectUri: SPOTIFY_REDIRECT_URI,
-//   }
-// }
 
 const ResponseBody = <B extends t.Mixed>(body: B) =>
   t.interface({ body })
@@ -142,7 +104,6 @@ export const SpotifyApi = (env: SpotifyClientEnv, accessToken?: string, refreshT
   const setAccessToken = _api.setAccessToken.bind(_api)
   const setRefreshToken = _api.setRefreshToken.bind(_api)
   const createAuthorizeURL = _api.createAuthorizeURL.bind(_api)
-  // const getArtists = _api.getArtists.bind(_api)
 
   type MeResult = {
     display_name: string
@@ -181,7 +142,6 @@ export const SpotifyApi = (env: SpotifyClientEnv, accessToken?: string, refreshT
     })
   }
 
-  // type GetMyRecentlyPlayedTracksResult = { items: SpotifyPlay[] }
   const getMyRecentlyPlayedTracks = async (...args) => {
     return rethrow(async () => {
       let result: any // t.TypeOf<typeof SpotifyGetMyRecentlyPlayedTracksResponse>

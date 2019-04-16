@@ -1,36 +1,37 @@
 import * as AWS from 'aws-sdk';
 import * as winston from 'winston';
 import * as t from 'io-ts';
-import { isRight, isLeft } from 'fp-ts/lib/Either';
 import { decodeAll, decodeOne } from '../validation';
 
-const DocUser = t.type({
+const DocUserDerived = t.type({
   pk: t.string,
   sk: t.string,
+})
+const DocUserRequired = t.type({
   uid: t.string,
+  email: t.string,
   accessToken: t.string,
   refreshToken: t.string,
   spotifyId: t.string,
   utcOffset: t.number,
 })
-
-type TDocUser = t.TypeOf<typeof DocUser>
-
-const NewDocUser = t.type({
-  uid: t.string,
-  accessToken: t.string,
-  refreshToken: t.string,
-  spotifyId: t.string,
-  utcOffset: t.number,
+const DocUserOptional = t.partial({
+  lastUpdate: t.string,
+  displayName: t.string,
+  photoURL: t.string,
+  totalUpdates: t.number,
 })
 
-type TNewDocUser = t.TypeOf<typeof NewDocUser>
+const DocUser = t.intersection([DocUserRequired, DocUserDerived, DocUserOptional])
+export type TDocUser = t.TypeOf<typeof DocUser>
+
+const NewDocUser = t.intersection([DocUserRequired, DocUserOptional])
+export type TNewDocUser = t.TypeOf<typeof NewDocUser>
 
 export const TableUser = (endpoint: string, TableName: string, log?: winston.Logger) => {
   log && log.info(`Referencing table [${TableName}] at [${endpoint}]`)
   const doc = new AWS.DynamoDB.DocumentClient({endpoint})
 
-  // newDoc
   const encode = (u: TNewDocUser): TDocUser => ({
     pk: u.uid,
     sk: 'spotify',
@@ -47,7 +48,7 @@ export const TableUser = (endpoint: string, TableName: string, log?: winston.Log
   //   ...vals
   // })
     
-  const setSpotifyCreds = async (obj: TNewDocUser) => {
+  const putUser = async (obj: TNewDocUser) => {
     log && log.info(`saving spotify credentials for user ${obj.uid}`)
     await doc.put({
       TableName,
@@ -62,34 +63,13 @@ export const TableUser = (endpoint: string, TableName: string, log?: winston.Log
     return decodeAll(DocUser, result.Items)
   }
 
-  const setUser = async (u: TNewDocUser) => {
-    await doc.put({
-      TableName,
-      Item: encode(u)
-    }).promise()
-  }
-
   const getUser = async (uid: string) => {
     const result = await doc.get({
       TableName,
       Key: { pk: uid, sk: 'spotify' },
     }).promise()
     return decodeOne(DocUser, result.Item)
-    // log && log.debug('TableUser result', result)
-    // const decoded = DocUser.decode(result.Item)
-    // const user = decoded.isRight() && decoded.value
-    // const error = decoded.isLeft() && decoded.value
-    // return { user, error }
   }
-
-  // const getSpotifyCreds = async (uid: string) => {
-  //   const result = await doc.get({
-  //     TableName,
-  //     Key: { pk: uid, sk: 'spotify' },
-  //   }).promise()
-  //   log && log.debug('TableUser result', result)
-  //   return decode(result.Item as UserSpotifyCredsItem)
-  // }
 
   const getSpotifyLastUpdate = async (uid: string) => {
     const result = await doc.get({
@@ -100,13 +80,14 @@ export const TableUser = (endpoint: string, TableName: string, log?: winston.Log
     return result.Item.lastUpdate
   }
 
-  const setSpotifyLastUpdate = async (uid: string, lastUpdate: string ) => {
+  const updateSpotifyLastUpdate = async (uid: string, lastUpdate: string ) => {
     log && log.info(`updating lastUpdate for uid ${uid} to ${lastUpdate}`)
     await doc.update({
       TableName,
       Key: { pk: uid, sk: 'spotify' },
-      UpdateExpression: 'set lastUpdate = :lastUpdate',
+      UpdateExpression: 'ADD totalUpdates :v SET lastUpdate = :lastUpdate',
       ExpressionAttributeValues: {
+        ":v": 1,
         ':lastUpdate': lastUpdate,
       }
     }).promise()
@@ -114,12 +95,10 @@ export const TableUser = (endpoint: string, TableName: string, log?: winston.Log
 
   return {
     encode,
-    // decode,
     getUser,
-    setSpotifyCreds,
+    putUser,
     getAllSpotifyCreds,
-    // getSpotifyCreds,
-    setSpotifyLastUpdate,
+    updateSpotifyLastUpdate,
     getSpotifyLastUpdate
   }
 }

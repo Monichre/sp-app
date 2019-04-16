@@ -4,7 +4,7 @@ import { verifyEnv } from "../../shared/env";
 import { slog } from "../logger";
 import { TableStat } from "../../shared/tables/TableStat";
 import { TablePlay } from '../../shared/tables/TablePlay';
-import { errorPaths, decodeOne, handleInvalid } from '../../shared/validation';
+import { handleInvalid } from '../../shared/validation';
 
 const log = slog.child({handler: 'onPlayUpdateArtistStats', awsEvent: 'ddbs'})
 
@@ -67,6 +67,7 @@ const handleRecord = (env: Env) => async (record: DynamoDBRecord) => {
   if (eventName === 'MODIFY') {
     // log.warn('modified play', { Keys, newImage: record.dynamodb.NewImage, oldImage: record.dynamodb.OldImage})
     log.warn('modified play', { Keys })
+    return
   }
   log.warn('unknown event', { eventName, Keys })
 }

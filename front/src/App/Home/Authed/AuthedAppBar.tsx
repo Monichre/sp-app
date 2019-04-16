@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
-import { useUser, useAuthHandlers, BasicUser, impersonate } from '../comp/FirebaseContext';
+import { useUser, useAuthHandlers, BasicUser, impersonate } from '../../FirebaseContext';
 import styled from 'styled-components'
-import { Logo } from '../comp/Logo';
-import { Menu } from 'grommet-icons';
-import { MenuIcon } from '../comp/icons';
+import { MenuIcon } from '../../../shared/icons';
 
 type WithUserProps = {
   user: BasicUser
@@ -27,7 +25,7 @@ const PaddedBetweenRow = styled(BetweenRow)`
   padding: 0.25rem 0.25rem 0.25rem 0.5rem;
 `
 
-const ButtonSignout: React.SFC = () => {
+export const ButtonSignout: React.SFC = () => {
   const { signOut } = useAuthHandlers()
   return <button onClick={() => signOut()}>Sign Out</button>
 }
@@ -109,9 +107,9 @@ const UserMenu: React.SFC = () =>
      <ButtonSignout/>
   </DropdownMenu>
 
-export const AppBar: React.SFC = () => {
+export const AuthedAppBar: React.SFC = () => {
   const { user } = useUser()
-  if (!user) { return <div>Logging in...</div>}
+  if (!user) { return <></>}
   const qryArg = window.location.href.split('?')[1]
   return (
     <FixedBar>

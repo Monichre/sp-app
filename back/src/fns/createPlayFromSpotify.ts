@@ -1,5 +1,6 @@
 import { KinesisStreamHandler } from "aws-lambda";
 
+// example kinesis handler
 // not used atm
 
 export const handler: KinesisStreamHandler = async (event, context) => {

@@ -11,8 +11,6 @@ export type Stat = {
   periodType: PeriodType,
   periodValue: string,
   playDurationMs: number,
-  // artist?: any,
-  // genre?: any
 }
 
 export type StatTotal = Stat
@@ -33,7 +31,7 @@ export const TableStat = (endpoint: string, TableName: string) => {
     [uid, periodType, relationKey].join('#')
 
   const periodsFor = (isoDateString: string) => {
-    const m = moment(isoDateString)
+    const m = moment.parseZone(isoDateString)
     return {
       day: m.format('YYYY-MM-DD'),
       dow: m.format('d'),
@@ -80,41 +78,10 @@ export const TableStat = (endpoint: string, TableName: string) => {
     }).promise()
   }
 
-  // const writeStat = async ({uid, relationType, relationKey, periodType, periodValue, statValue, artist, genre}: Stat) => {
-  //   const doc = new AWS.DynamoDB.DocumentClient({endpoint})
-  
-  //   let UpdateExpression = artist ?
-  //     'ADD playDurationMs :val SET artist = :artist' :
-  //     'ADD playDurationMs :val'
-  //   UpdateExpression = genre ?
-  //     `${UpdateExpression} SET genre = :genre` :
-  //     UpdateExpression
-
-  //   const ExpressionAttributeValues = artist ?
-  //     { ':val': statValue, ':artist': artist } :
-  //     { ':val': statValue }
-
-  //   if (genre) {
-  //     ExpressionAttributeValues[':genre'] = genre
-  //   }
-
-  //   return await doc.update({
-  //     TableName,
-  //     Key: {
-  //       pk: makePk(uid, relationType, periodType, periodValue),
-  //       sk: makeSk(uid, periodType, relationKey)
-  //     },
-  //     UpdateExpression,
-  //     ExpressionAttributeValues,
-  //   }).promise()
-  
-  // }
-
   return {
     makePk,
     makeSk,
     periodsFor,
-    // writeStat
     writeTotalStat,
     writeArtistStat,
     writeGenreStat,
