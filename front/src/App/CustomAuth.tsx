@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { useFirebaseAuth } from './FirebaseContext';
 import * as queryString from 'query-string'
+import LogRocket from 'logrocket'
 
 export const CustomAuth: React.SFC<RouteComponentProps> = ({history, location}) => {
   const customAccessToken = queryString.parse(location.search).customAccessToken as string
@@ -10,6 +11,14 @@ export const CustomAuth: React.SFC<RouteComponentProps> = ({history, location}) 
     auth.signInWithCustomToken(customAccessToken)
       .then(result => {
         console.log('logged in with custom token', result)
+        if (result.user) {
+          return LogRocket.identify(result.user.uid, {
+            name: result.user.displayName || 'N/A',
+            email: result.user.email || 'N/A',
+          })
+        }
+      })
+      .then(() => {
         history.replace('/')
       })
   })

@@ -21,6 +21,7 @@
     "graphql": "^14.1.1",
     "graphql-tag": "^2.10.1",
     "grommet-icons": "^4.2.0",
+    "logrocket": "^0.6.20",
     "moment": "^2.24.0",
     "query-string": "^6.4.0",
     "ramda": "^0.26.1",

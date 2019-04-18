@@ -515,6 +515,13 @@ resources:
         Type: String
         Value: ${ssm:${self:custom.ssmConfigPath}/FIREBASE_PROJECT_ID}
 
+    ParameterLogrocketAppId:
+      Type: AWS::SSM::Parameter
+      Properties:
+        Name: ${self:custom.ssmTargetPath}/public/LOGROCKET_APP_ID
+        Type: String
+        Value: ${ssm:${self:custom.ssmConfigPath}/LOGROCKET_APP_ID}
+
 ################################################################################
 # resources: prototype USER AUTH
 ################################################################################

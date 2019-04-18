@@ -1,6 +1,7 @@
 import React from 'react';
 import { ButtonSignout } from './Authed/AuthedAppBar';
 import styled from 'styled-components';
+import LogRocket from 'logrocket'
 
 const ErrorPage = styled.div`
   text-align: center;
@@ -30,6 +31,7 @@ export class ErrorBoundary extends React.Component<{}, {error: Error | null, err
       error,
       errorInfo
     })
+    LogRocket.captureException(error, { extra: { errorInfo }})
     console.log(error, errorInfo);
   }
 

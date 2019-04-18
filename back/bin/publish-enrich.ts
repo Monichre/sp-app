@@ -17,13 +17,14 @@ const script = async () => {
   // const doc = new AWS.DynamoDB.DocumentClient({endpoint: env.DYNAMO_ENDPOINT, region: 'us-east-1'})
 
   const items = JSON.parse(fs.readFileSync(process.argv[process.argv.length-1]).toString())
-  log.info(`${items.length} items to publish`)
+  const total = items.length
+  log.info(`${total} items to publish`)
   // const items = require(process.argv[process.argv.length-1])
 
   const tableUser = TableUser(env.DYNAMO_ENDPOINT, env.TABLE_USER, log)
   const credCache: {[k: string]: { accessToken: string, refreshToken: string, utcOffset: number}} = {}
 
-  const uids = R.uniq<string>(items.map(i => i.uid))
+  const uids = R.uniq<string>(items.map(i => i.uid || i.pk))
   for (const uid of uids) {
     const { valid, invalid } = await tableUser.getUser(uid)
     if (valid) {
@@ -34,6 +35,7 @@ const script = async () => {
     }
   }
 
+  let count = 0
   for (const item of items) {
     const uid = item.pk as string
     
@@ -45,7 +47,7 @@ const script = async () => {
     const { accessToken, refreshToken, utcOffset } = user
     
     const playedAt = item.playedAt as string
-    const track = JSON.parse(item.track)
+    // const track = JSON.parse(item.track)
     await QueueEnrichPlayArtists.publish(env.QUEUE_ENRICH, {
       user: {
         uid,
@@ -53,8 +55,10 @@ const script = async () => {
         refreshToken,
         utcOffset,
       },
-      plays: [ { played_at: playedAt, track }],
+      plays: [ { played_at: playedAt, track: item.track }],
     })
+    count += 1
+    console.log(`published ${count}/${total}`)
   }
   // for (const item of items) {
   //   await doc.put({

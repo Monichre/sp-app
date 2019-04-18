@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import * as firebase from 'firebase';
 import { Subject } from 'rxjs'
+import LogRocket from 'logrocket'
 
 // should be AuthContext and return uid or nothing
 
@@ -70,6 +71,13 @@ export const useUser = () => {
     
     const unsub = auth.onAuthStateChanged(authState => {
       console.log('new authState:', authState)
+      if (authState) {
+        LogRocket.identify(authState.uid, {
+          name: authState.displayName || 'N/A',
+          email: authState.email || 'N/A',
+        })
+      }
+
       return setState({ isLoading: false, user: authState })
     })
     const iUnsub = impersonations.subscribe(authState => {
