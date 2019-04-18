@@ -47,7 +47,7 @@ export const FirebaseAuth = () => {
       await _auth.updateUser(existing.uid, attrs)
       return existing
     } catch (err) {
-      console.log('caught err', err) // this should just be 'user exists' error
+      console.log('user does not exist, creating', err) // this should just be 'user exists' error
       const user = await _auth.createUser({
         uid: uidFromSpotifyId(attrs.spotifyId),
         ...attrs

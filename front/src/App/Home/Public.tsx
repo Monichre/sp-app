@@ -2,7 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 import { Logo } from '../../shared/Logo';
 import moment from 'moment';
-import { Link } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router';
+import { SignIn } from './SignIn'
+import { TAndC } from './TAndC';
+import { Privacy } from './Privacy';
 
 const BetweenColumn = styled.div`
   display: flex;
@@ -61,23 +64,9 @@ const ButtonSpotifySignin: React.SFC = () => {
   )
 }
 
-export const SignIn: React.SFC = () =>
-    <BetweenColumn>
-      <CenteredPage>
-        <Hero>
-          <Logo size={3}/>
-          <h1>soundpruf</h1>
-          <ButtonSpotifySignin/>
-        </Hero>
-      </CenteredPage>
-      <LeftRowPadded>
-        <Link to='/terms-and-conditions'>
-          Terms and Conditions
-        </Link>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <Link to='/privacy-policy'>
-          Privacy Policy
-        </Link>
-      </LeftRowPadded>
-    </BetweenColumn>
-  
+export const Public: React.SFC = () =>
+  <Switch>
+    <Route path='/terms-and-conditions' component={TAndC}/>
+    <Route path='/privacy-policy' component={Privacy}/>
+    <Route path='/' component={SignIn}/>
+  </Switch>

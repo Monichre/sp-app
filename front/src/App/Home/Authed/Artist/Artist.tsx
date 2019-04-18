@@ -6,6 +6,7 @@ import { BasicUser } from '../../../FirebaseContext';
 import { Previous } from 'grommet-icons';
 import { SpotifyLogoLink } from '../../../../shared/SpotifyLogoLink/SpotifyLogoLink';
 import { ResponsiveContainer, LineChart, XAxis, Line, CartesianGrid, YAxis, Label } from 'recharts'
+import { BackLink } from '../../../../shared/BackLink';
 
 const statToHours = ({period, playDurationMs}: ArtistStatsPersonal | ArtistStatsGlobal) => ({
   period,
@@ -48,10 +49,10 @@ const ArtistStatsOverTime: React.SFC<{title: string, subtitle:string, personal: 
           <Label position='insideTopLeft' angle={90} offset={10} stroke='#64d6ee' >you</Label>
         </YAxis>
         <YAxis yAxisId='right' stroke='#CCC' orientation='right'>
-          <Label position='insideBottomRight' angle={90} offset={10} stroke='#43a4cc' strokeOpacity={0.5}>world</Label>
+          <Label position='insideBottomRight' angle={90} offset={10} stroke='#057713' strokeOpacity={0.5}>world</Label>
         </YAxis>
-        <CartesianGrid stroke='#CCC'/>
-        <Line type='step' dataKey='global' stroke='#43a4cc' strokeWidth={8} strokeOpacity={0.5} yAxisId='right'/>
+        {/* <CartesianGrid stroke='#CCC'/> */}
+        <Line type='step' dataKey='global' stroke='#057713' strokeWidth={8} strokeOpacity={0.5} yAxisId='right'/>
         <Line type='step' dataKey='personal' stroke='#64d6ee' strokeWidth={2} strokeOpacity={1} yAxisId='left'/>
       </LineChart>
       </ResponsiveContainer>
@@ -82,11 +83,11 @@ const ArtistTitle = styled.div`
   }
 `
 
-const Back = styled(Previous)`
-  cursor: pointer;
-`
-const BackLink: React.SFC = () =>
-  <Back onClick={() => window.history.back()} color='white' size='3rem'/>
+// const Back = styled(Previous)`
+//   cursor: pointer;
+// `
+// const BackLink: React.SFC = () =>
+//   <Back onClick={() => window.history.back()} color='white' size='3rem'/>
 
 export const Artist: React.SFC<RouteComponentProps<{id: string}> & {user: BasicUser}> = ({user: { uid }, match: { params: { id }}}) => {
   const artistStats = useArtistStats({ variables: { id, uid }, suspend: true})

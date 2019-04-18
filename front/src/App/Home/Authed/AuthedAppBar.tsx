@@ -35,7 +35,7 @@ const OffsetAvatarImg = styled(AvatarImg)`
 `
 
 const UserInfo: React.SFC<WithUserProps> = ({user}) =>
-  <OffsetAvatarImg src={user.photoURL || ""} size={3}/>
+  user.photoURL ? <OffsetAvatarImg src={user.photoURL || ""} size={3}/> : <div>&nbsp;</div>
 
 const ImpersonationBar: React.SFC = () => {
   return (

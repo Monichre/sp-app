@@ -269,6 +269,7 @@ functions:
       FIREBASE_PRIVATE_KEY: ${ssm:${self:custom.ssmConfigPath}/FIREBASE_PRIVATE_KEY}
       FRONTEND_CUSTOMAUTH_URI: ${self:custom.FRONTEND_CUSTOMAUTH_URI.${self:custom.config}}
       QUEUE_TARGET: ${self:custom.ref.QueueHiFetchSpotifyPlays}
+      QUEUE_VALIDATION_ERRORS: ${self:custom.ref.QueueValidationErrors}
     events:
       - http:
           path: "spotify/callback"

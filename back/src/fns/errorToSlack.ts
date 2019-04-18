@@ -11,9 +11,12 @@ export const handler: SQSHandler = async (event, context) => {
     SLACK_WEBHOOK_URL: process.env.SLACK_WEBHOOK_URL,
   }, log)
   const hook = new IncomingWebhook(env.SLACK_WEBHOOK_URL)
+  log.info('records found', { count: event.Records.length })
   for (const r of event.Records) {
-    hook.send({
-      text: JSON.stringify(JSON.parse(r.body), null, 2) // pretty-print plskthx
+    const text = JSON.stringify(JSON.parse(r.body), null, 2) // pretty-print plskthx
+    await hook.send({
+      text,
     })
+    log.info('sent notice', {text})
   }
 }

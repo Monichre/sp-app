@@ -91,8 +91,10 @@ export const TableUser = (endpoint: string, TableName: string, log?: winston.Log
 
   const updateUser = async (obj: TUpdateDocUser) => {
     const { uid } = obj
-    const UpdateExpression = 'SET ' + Object.keys(obj).map(k => `${k} = :${k}`).join(', ')
-    const ExpressionAttributeValues = renameKeysWith(k => `:${k}`, obj)
+    const nonNullKeys = Object.keys(obj).filter(k => obj[k])
+    const UpdateExpression = 'SET ' + nonNullKeys.map(k => `${k} = :${k}`).join(', ')
+    const nonNullObj = R.pickAll(nonNullKeys, obj)
+    const ExpressionAttributeValues = renameKeysWith(k => `:${k}`, nonNullObj)
     await doc.update({
       TableName,
       Key: { pk: uid, sk: 'spotify' },
