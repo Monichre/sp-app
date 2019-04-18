@@ -15,7 +15,7 @@ export const handleInvalid = async (log: winston.Logger, QueueUrl: string, error
   })
 }
 
-export const decodeAll = <T>(decoder: t.Decoder<unknown, T>, items: any[]) => {
+export const decodeAll = <T>(decoder: t.Decoder<any, T>, items: any[]) => {
   const valids: T[] = []
   const invalids: { item: any, errors: t.Errors}[] = []
   for (const item of items) {
@@ -29,7 +29,7 @@ export const decodeAll = <T>(decoder: t.Decoder<unknown, T>, items: any[]) => {
   return { valids, invalids }
 }
 
-export const decodeOne = <T>(decoder: t.Decoder<unknown, T>, item: any) => {
+export const decodeOne = <T>(decoder: t.Decoder<any, T>, item: any) => {
   const decoded = decoder.decode(item)
   const valid = decoded.isRight() && decoded.value
   const invalid = decoded.isLeft() && { item, errors: decoded.value }
