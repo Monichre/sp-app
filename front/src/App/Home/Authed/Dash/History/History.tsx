@@ -21,16 +21,38 @@ const Note = styled.div`
 
 const HistoryGrid = styled.div`
   display: grid;
+  margin: 0 auto;
   justify-items: center;
-  grid-template-columns: 25% 25% 25% 25%;
-  @media (max-width: 1200px) {
-    grid-template-columns: 33% 33% 33%;
+  max-width: 760px;
+  grid-template-columns: 1fr;
+
+  @media (min-width: 760px) {
+    background-image: linear-gradient(to right, rgba(0,0,0,0) 49.5%, rgba(100,214,238,1) 50%, rgba(0,0,0,0) 50.5%);
+    background-position: 0 8rem;
+
+    & > *:nth-child(odd) > * {
+      margin-bottom: -6rem;
+      // background: red;
+      justify-self: start;
+      // border: 1px solid blue;
+    }
+  
+    & > *:nth-child(even) > * {
+      margin-bottom: -6rem;
+      // background: blue;
+      justify-self: end;
+      // border: 1px solid red;
+    }  
   }
-  @media (max-width: 1000px) {
-    grid-template-columns: 50% 50%;
-  }
-  @media (max-width: 800px) {
-    grid-template-columns: 100%;
+`
+
+const HistoryRow = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 100%;
+  @media (min-width: 760px) {
+    background-image: radial-gradient(circle, rgb(100,214,238,1) 1%, rgb(0,0,0,0) 2%);
+    background-position: 0 1rem;
   }
 `
 
@@ -54,7 +76,11 @@ export const History: React.SFC<{uid: string}> = ({uid}) => {
   
   return <div data-test="play-timeline">
     <HistoryGrid>
-      {recentPlays.map((play, key) => <HistoryCard {...{play, key}}/>)}
+      {recentPlays.map((play, key) => 
+        <HistoryRow {...{key}}>
+          <HistoryCard {...{play}}/>
+        </HistoryRow>
+      )}
     </HistoryGrid>
     <Note>Last Update: {lastUpdate || 'never'}</Note>
   </div>

@@ -63,9 +63,15 @@ const TrackName = styled.div`
   max-width: ${bgSize}rem;
 `
 
-const TrackAgo = styled.div`
+const TrackWhen = styled.div`
   font-weight: 300;
   color: #64d6ee;
+`
+
+const TrackAgo = styled.div`
+  font-weight: 300;
+  font-size: 0.8rem;
+  color: #aaa;
 `
 
 export const HistoryCard: React.SFC<{play: RecentPlaysPlays, className?: string}> = ({play: {playedAt, track}, className}) => {
@@ -88,6 +94,11 @@ export const HistoryCard: React.SFC<{play: RecentPlaysPlays, className?: string}
         </Artist> : ''}
         <Track>
           <TrackName>{track.name}</TrackName>
+          <TrackWhen>
+            <Moment format='hh:mma | ddd D MMM'>
+              {playedAt}
+            </Moment>
+          </TrackWhen>
           <TrackAgo>
             <Moment fromNow>
               {playedAt}
