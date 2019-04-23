@@ -12,6 +12,11 @@ export const CustomAuth: React.SFC<RouteComponentProps> = ({history, location}) 
       .then(result => {
         console.log('logged in with custom token', result)
         if (result.user) {
+          //@ts-ignore
+          FS.identify(result.user.uid, {
+            displayName: result.user.displayName || 'N/A',
+            email: result.user.email || 'N/A',
+          })
           return LogRocket.identify(result.user.uid, {
             name: result.user.displayName || 'N/A',
             email: result.user.email || 'N/A',
