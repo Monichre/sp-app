@@ -60,14 +60,14 @@ const MajorValue = styled.div`
   font-size: 2rem;
 `
 
-const MinorValue = styled.div`
+const MinorValue = styled.div<{color?: string}>`
 font-size: 1.33rem;
 font-weight: 500;
-color: #64d6ee;
+color: ${({color}) => color || '#64d6ee'};
 `
 
 
-const ArtistStatItem: React.SFC<DashStatsGlobal> = ({artist: { id, name, images, external_urls: { spotify } }, playDurationMs}) => {
+const ArtistStatItem: React.SFC<DashStatsGlobal & {color?: string}> = ({color, artist: { id, name, images, external_urls: { spotify } }, playDurationMs}) => {
   const { hrs, mins } = hrsAndMinsAndSecs(playDurationMs)
   const imgUrl = images && images[0] && images[0].url
   return (
@@ -77,7 +77,7 @@ const ArtistStatItem: React.SFC<DashStatsGlobal> = ({artist: { id, name, images,
         <ArtistName data-test='artist-row-name'>{name}</ArtistName>
         <ArtistTime>
           <MajorValue data-test='artist-row-hours'>{hrs} hrs</MajorValue>
-          <MinorValue data-test='artist-row-minutes'>{mins} mins</MinorValue>
+          <MinorValue {...{color}} data-test='artist-row-minutes'>{mins} mins</MinorValue>
         </ArtistTime>
         <SpotifyLogoLink href={spotify}/>
       </ArtistInfo>
@@ -94,21 +94,21 @@ const ArtistTimeGrid = styled.div`
   }
 `
 
-const Title = styled.div`
+const Title = styled.div<{color?: string}>`
   text-transform: uppercase;
   font-weight: 500;
   font-size: 1.2rem;
   padding-bottom: 10px;
   margin-bottom: 1rem;
-  border-bottom: 1px solid #64d6ee;
+  border-bottom: 1px solid ${({color}) => color || '#64d6ee'};
 `
 
 const TopArtistsPeriod: React.SFC<{global: DashStatsGlobal[], user: DashStatsGlobal[]}> = ({global, user}) => (
   <TwoColumns>
     <div data-test='top-artists-global'>
-      <Title>Soundpruf Artists</Title>
+      <Title color='#67BF72'>Soundpruf Artists</Title>
       <ArtistTimeGrid>
-      { global.map((stat, key) => <ArtistStatItem {...{key, ...stat}}/>)}
+      { global.map((stat, key) => <ArtistStatItem color='#67BF72' {...{key, ...stat}}/>)}
       </ArtistTimeGrid>
     </div>
     <div data-test='top-artists-personal'>

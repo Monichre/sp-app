@@ -5,6 +5,7 @@ import { useDashStats } from '../../../../../types';
 import { Loading } from '../../../../../shared/Loading';
 import { TopGenres } from './TopGenres';
 import { TopArtists } from './TopArtists';
+import { EmergingArtist } from './EmergingArtist/EmergingArtist';
 
 const Block = styled.div`
   // padding: 0.5rem;
@@ -47,6 +48,7 @@ export const Insights: React.SFC<RouteComponentProps<{period: string}> & {uid: s
       </Block>
       <TopArtists stats={dashStats.topArtists[match.params.period as 'week' | 'month' | 'life']}/>
       <TopGenres stats={dashStats.topGenres[match.params.period as 'week' | 'month' | 'life']}/>
+      <EmergingArtist/>
     </>
   )
 }

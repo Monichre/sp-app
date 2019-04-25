@@ -23,13 +23,13 @@ type Genre = {
   playDurationMs: number
 }
 
-const Title = styled.div`
+const Title = styled.div<{color?: string}>`
   text-transform: uppercase;
   font-weight: 500;
   font-size: 1.2rem;
   padding-bottom: 10px;
   margin-bottom: 1rem;
-  border-bottom: 1px solid #64d6ee;
+  border-bottom: 1px solid ${({color}) => color || '#64d6ee'};
 `
 
 const statToHours = ({name, playDurationMs}: Genre) => ({
@@ -37,17 +37,17 @@ const statToHours = ({name, playDurationMs}: Genre) => ({
   playDurationMs: playDurationMs / (1000 * 60 * 60)
 })
 
-const GenreChart: React.SFC<{stats: Genre[]}> = ({stats}) =>
+const GenreChart: React.SFC<{stats: Genre[], color: string}> = ({stats, color}) =>
   <ResponsiveContainer width='100%' height={500}>
     <BarChart layout='vertical' data={stats}>
-      <CartesianGrid stroke='#999'/>
+      {/* <CartesianGrid stroke='#999'/> */}
       <XAxis height={40} type='number' stroke='#ccc' orientation='top'>
         <Label position='insideTopLeft' offset={0} stroke='#ccc'>hours</Label>
       </XAxis>
-      <YAxis width={100} dataKey='name' type='category' stroke='#64d6ee'/>
+      <YAxis width={100} dataKey='name' type='category' stroke={color}/>
       {/* <Tooltip /> */}
       {/* <Legend /> */}
-      <Bar dataKey='playDurationMs' fill='#64d6ee'/>
+      <Bar dataKey='playDurationMs' fill={color}/>
     </BarChart>
   </ResponsiveContainer>
 
@@ -61,12 +61,12 @@ export const TopGenresPeriod: React.SFC<{global: Genre[], user: Genre[]}> = ({gl
   return (
   <TwoColumns>
     <div data-test='top-genres-global'>
-      <Title>Soundpruf Genres</Title>
-      <GenreChart stats={global.map(statToHours)}/>
+      <Title color='#67BF72'>Soundpruf Genres</Title>
+      <GenreChart color='#67BF72' stats={global.map(statToHours)}/>
     </div>
     <div data-test='top-genres-personal'>
       <Title>Your Genres</Title>
-      <GenreChart stats={user.map(statToHours)}/>
+      <GenreChart color='#64d6ee' stats={user.map(statToHours)}/>
     </div>
   </TwoColumns>
   )
