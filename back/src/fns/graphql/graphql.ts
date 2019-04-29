@@ -13,21 +13,29 @@ export type Context = {
   log: winston.Logger
 }
 
-const log = slog.child({handler: 'graphql', awsEvent: 'http'})
+// const log = slog.child({handler: 'graphql', awsEvent: 'http'})
 
 const server = new ApolloServer({
   schema,
-  context: () => ({
-    log,
-    ...verifyEnv({
-      DYNAMO_ENDPOINT: process.env.DYNAMO_ENDPOINT,
-      TABLE_PLAY: process.env.TABLE_PLAY,
-      TABLE_USER: process.env.TABLE_USER,
-      TABLE_STAT: process.env.TABLE_STAT,
-      QUEUE_START_HARVEST_USER: process.env.QUEUE_START_HARVEST_USER,
-    })
-  }),
+  context: ({event}) => {
+    const { query, ...body} = JSON.parse(event.body)
+    // const prettyQuery = (query as string).replace(RegExp('\n', 'g'), "\n")
+    // log.info(query + JSON.stringify({ ...body }, null, 2))
+    const log = slog.child({handler: `graphql/${body && body.operationName}`, awsEvent: 'http'})
+    log.info('request', body)
+    return {
+      log,
+      ...verifyEnv({
+        DYNAMO_ENDPOINT: process.env.DYNAMO_ENDPOINT,
+        TABLE_PLAY: process.env.TABLE_PLAY,
+        TABLE_USER: process.env.TABLE_USER,
+        TABLE_STAT: process.env.TABLE_STAT,
+        QUEUE_START_HARVEST_USER: process.env.QUEUE_START_HARVEST_USER,
+      })
+    }
+  },
   formatError: error => {
+    const log = slog.child({handler: 'graphql', awsEvent: 'http'})
     log.error(error)
     return error
   }

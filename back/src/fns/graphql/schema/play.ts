@@ -67,7 +67,7 @@ const recentPlays: QueryResolvers.RecentPlaysResolver = async (_, {uid}, context
     const plays = docs
     const table = TableUser(context.DYNAMO_ENDPOINT, context.TABLE_USER)
     const lastUpdate = await table.getSpotifyLastUpdate(uid)
-    log.info('returning', { lastUpdate, plays })
+    log.info('returning', { lastUpdate, count: plays.length })
     return {
       plays,
       lastUpdate,
