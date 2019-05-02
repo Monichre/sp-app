@@ -5,16 +5,16 @@ import { TableUser } from '../../shared/tables/TableUser';
 import { verifyEnv } from '../../shared/env';
 import { QueueFetchSpotifyPlays, QueueValidationErrors } from '../../shared/queues';
 import { FirebaseAuth, UserAttrs } from '../../shared/FirebaseAuth';
-import { slog } from '../logger';
+import { makeLogger, TLogger } from '../logger';
 import * as winston  from 'winston';
 
 // i doth mislike how many separate interests that this handler manages
 // suggests mebbe this should be broken out
 // what are the concerns we can seperate
 
-const log = slog.child({handler: 'spotify/callback', awsEvent: 'http'})
+// const log = slog.child({handler: 'spotify/callback', awsEvent: 'http'})
 
-export const handleError = async (log: winston.Logger, QueueUrl: string, error: Error, context: any = {}, uid = 'n/a') => {
+export const handleError = async (log: TLogger, QueueUrl: string, error: Error, context: any = {}, uid = 'n/a') => {
   // const paths = errorPaths(errors)
   log.error('user sign in failed', {error, context, uid})
   const paths = [JSON.stringify(error, null, 2)]
@@ -27,6 +27,7 @@ export const handleError = async (log: winston.Logger, QueueUrl: string, error: 
 }
 
 export const handler: APIGatewayProxyHandler = async (event) => {
+  const log = makeLogger({handler: 'spotify/callback', awsEvent: 'http'})
   let uid = 'n/a'
   let context = { event }
 

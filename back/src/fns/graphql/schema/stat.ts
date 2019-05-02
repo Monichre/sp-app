@@ -115,7 +115,7 @@ const getStat = async (doc: AWS.DynamoDB.DocumentClient, TableName: string, {uid
 }
 
 const playtimeSummary: QueryResolvers.PlaytimeSummaryResolver = async (_, {uid}, context) => {
-  const log = context.log.child({handler: `graphql/playtimeSummary/${uid}`})
+  const log = context.log
   log.info('called by', { uid })
   const env = verifyEnv({
     DYNAMO_ENDPOINT: process.env.DYNAMO_ENDPOINT,
@@ -348,7 +348,7 @@ const fillWeeks = (stats: ArtistStatsPeriodUser[]) => {
 }
 
 const artistStats: QueryResolvers.ArtistStatsResolver = async (_, {uid, id}, context) => {
-  const log = context.log.child({handler: `graphql/artistStats/${uid}/${id}`})
+  const log = context.log
   log.info('called by', { uid, artistId: id })
   const doc = new AWS.DynamoDB.DocumentClient({endpoint: context.DYNAMO_ENDPOINT})
   const TableName = context.TABLE_STAT

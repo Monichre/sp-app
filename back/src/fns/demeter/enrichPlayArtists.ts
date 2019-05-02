@@ -5,11 +5,12 @@ import { QueueEnrichPlayArtists, TMessageEnrichPlayArtists } from "../../shared/
 import { TableUser } from '../../shared/tables/TableUser';
 import * as t from 'io-ts';
 
-import { slog } from "../logger";
+import { makeLogger, TLogger } from "../logger";
 import moment = require('moment');
 import { TablePlay } from '../../shared/tables/TablePlay';
 import { handleInvalid, decodeAll } from '../../shared/validation';
-const log = slog.child({handler: 'enrichPlayArtists', awsEvent: 'sqs'})
+import winston = require('winston');
+// const log = slog.child({handler: 'enrichPlayArtists', awsEvent: 'sqs'})
 
 // trimming off ms greatly reduces spurious repeat results from spotify api
 const restringDate = (p: string) => new Date(p).toISOString()
@@ -47,6 +48,7 @@ const decodeEnv = <T>(decoder: t.Decoder<any, T>, env: any): { valid: T | null, 
 //   }
 
 export const handler: SQSHandler = async (event) => {
+  const log = makeLogger({handler: 'enrichPlayArtists', awsEvent: 'sqs'})
   // ALWAYS DO THIS FIRST -- with sls offline, discovered some cases where process.env vars clobber each other
   // which is a particularly savory flavor of hell let me tell you
   const { valid: env, invalid } = decodeEnv(HandlerEnv, process.env)
@@ -55,7 +57,8 @@ export const handler: SQSHandler = async (event) => {
   // the queue message tells us about the user we're fetching for
   const { valids, invalids } = QueueEnrichPlayArtists.extract(event)
   await Promise.all(invalids.map(i => handleInvalid(log, env.QUEUE_VALIDATION_ERRORS, i.errors, { handler: 'fetchSpotifyPlays', input: i.item })))
-  await Promise.all(valids.map(handleMessage(env)))
+  await Promise.all(valids.map(handleMessage(env, log)))
+  log.close()
 }
 
 type Flattenable<T> = ReadonlyArray<T> | ReadonlyArray<T[]> | ReadonlyArray<ReadonlyArray<T>>
@@ -86,7 +89,7 @@ export const localizeDatestring = (utcOffset: number) => (dts: string) => {
   return utcf
 }
 
-const handleMessage = (env: THandlerEnv) => async ({
+const handleMessage = (env: THandlerEnv, log: TLogger) => async ({
   user: { uid, accessToken, refreshToken, utcOffset },
   plays,
 }: TMessageEnrichPlayArtists) => {

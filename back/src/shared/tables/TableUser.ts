@@ -4,6 +4,7 @@ import * as t from 'io-ts';
 import { decodeAll, decodeOne } from '../validation';
 import * as R from 'ramda';
 import { renameKeysWith } from 'ramda-adjunct'
+import { TLogger } from '../../fns/logger';
 
 const DocUserDerived = t.type({
   pk: t.string,
@@ -46,7 +47,7 @@ export type TUpdateDocUser = t.TypeOf<typeof UpdateDocUser>
 //   R.reduce((acc, key) => R.assoc(keysMap[key] || key, obj[key], acc), {}, R.keys(obj))
 // );
 
-export const TableUser = (endpoint: string, TableName: string, log?: winston.Logger) => {
+export const TableUser = (endpoint: string, TableName: string, log?: TLogger) => {
   log && log.info(`Referencing table [${TableName}] at [${endpoint}]`)
   const doc = new AWS.DynamoDB.DocumentClient({endpoint})
 

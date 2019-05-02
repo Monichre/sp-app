@@ -37,7 +37,8 @@ const isOlderThan = (olderSeconds: number, dts: string) =>
     moment().subtract(olderSeconds, 'seconds').isAfter(dts)
 
 const getUserInfo: QueryResolvers.GetUserInfoResolver = async (_, {uid}, context) => {
-  const log = context.log.child({handler: `graphql/getUserInfo/${uid}`})
+  const log = context.log
+  log.info(uid)
   const tablePlay = TableUser(context.DYNAMO_ENDPOINT, context.TABLE_USER)
   const { valid, invalid } = await tablePlay.getUser(uid)
 

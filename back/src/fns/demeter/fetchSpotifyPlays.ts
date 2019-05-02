@@ -3,13 +3,14 @@ import { SpotifyApi } from "../../shared/SpotifyApi";
 import { verifyEnv } from "../../shared/env";
 import { QueueFetchSpotifyPlays, QueueEnrichPlayArtists } from "../../shared/queues";
 
-import { slog } from "../logger";
+import { makeLogger } from "../logger";
 import { handleInvalid } from '../../shared/validation';
-const log = slog.child({handler: 'fetchSpotifyPlays', awsEvent: 'sqs'})
+// const log = slog.child({handler: 'fetchSpotifyPlays', awsEvent: 'sqs'})
 
 export const handler: SQSHandler = async (event) => {
   // ALWAYS DO THIS FIRST -- with sls offline, discovered some cases where process.env vars clobber each other
   // which is a particularly savory flavor of hell let me tell you
+  const log = makeLogger({handler: 'fetchSpotifyPlays', awsEvent: 'sqs'})
   const env = verifyEnv({
     DYNAMO_ENDPOINT: process.env.DYNAMO_ENDPOINT,
     QUEUE_ENRICH: process.env.QUEUE_ENRICH,
@@ -47,10 +48,11 @@ export const handler: SQSHandler = async (event) => {
   log.info(`api returned ${items.length} items`)
 
   if (items.length > 0) {
-    QueueEnrichPlayArtists.publish(env.QUEUE_ENRICH, {
+    await QueueEnrichPlayArtists.publish(env.QUEUE_ENRICH, {
       user: { uid, accessToken, refreshToken, utcOffset },
       plays: items,
     })
   }
 
+  log.close()
 }

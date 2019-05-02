@@ -1,8 +1,8 @@
 import * as AWS from 'aws-sdk';
 import { verifyEnv } from '../src/shared/env';
-import { slog } from '../src/fns/logger';
+import { makeLogger } from '../src/fns/logger';
 
-const log = slog.child({handler: 'print-plays', awsEvent: 'script'})
+const log = makeLogger({handler: 'print-plays', awsEvent: 'script'})
 
 const scanAll = async (doc: AWS.DynamoDB.DocumentClient, TableName: string) => {
   let ExclusiveStartKey = null

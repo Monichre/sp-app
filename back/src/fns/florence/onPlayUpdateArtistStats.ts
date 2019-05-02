@@ -1,21 +1,24 @@
 import { DynamoDBStreamHandler, DynamoDBRecord } from "aws-lambda";
 import { verifyEnv } from "../../shared/env";
 
-import { slog } from "../logger";
+import { makeLogger, TLogger } from "../logger";
 import { TableStat } from "../../shared/tables/TableStat";
 import { TablePlay } from '../../shared/tables/TablePlay';
 import { handleInvalid } from '../../shared/validation';
+import winston = require("winston");
 
-const log = slog.child({handler: 'onPlayUpdateArtistStats', awsEvent: 'ddbs'})
+// const log = slog.child({handler: 'onPlayUpdateArtistStats', awsEvent: 'ddbs'})
 
 export const handler: DynamoDBStreamHandler = async (event, context) => {
+  const log = makeLogger({handler: 'onPlayUpdateArtistStats', awsEvent: 'ddbs'})
   const env = verifyEnv({
     DYNAMO_ENDPOINT: process.env.DYNAMO_ENDPOINT,
     TABLE_STAT: process.env.TABLE_STAT,
     QUEUE_VALIDATION_ERRORS: process.env.QUEUE_VALIDATION_ERRORS,
   }, log)
   log.info(`${event.Records.length} records`)
-  await Promise.all(event.Records.map(handleRecord(env)))
+  await Promise.all(event.Records.map(handleRecord(env, log)))
+  log.close()
 }
 
 type Env = {
@@ -24,7 +27,7 @@ type Env = {
   QUEUE_VALIDATION_ERRORS: string,
 }
 
-const handleRecord = (env: Env) => async (record: DynamoDBRecord) => {
+const handleRecord = (env: Env, log: TLogger) => async (record: DynamoDBRecord) => {
   const { eventName, dynamodb: { Keys } } = record
   log.info(eventName, Keys)
   if (eventName === 'INSERT') {

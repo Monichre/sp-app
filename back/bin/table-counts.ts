@@ -1,11 +1,11 @@
 import * as AWS from 'aws-sdk';
 import * as fs from 'fs';
 import { verifyEnv } from '../src/shared/env';
-import { slog } from '../src/fns/logger';
+import { makeLogger } from '../src/fns/logger';
 import { QueueEnrichPlayArtists } from '../src/shared/queues';
 import { TableUser } from '../src/shared/tables/TableUser';
 
-const log = slog.child({handler: 'publish-enrich', awsEvent: 'script'})
+const log = makeLogger({handler: 'publish-enrich', awsEvent: 'script'})
 
 const script = async () => {
   const env = verifyEnv({

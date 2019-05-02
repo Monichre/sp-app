@@ -52,7 +52,8 @@ type SpotifyUrl {
 `
 
 const recentPlays: QueryResolvers.RecentPlaysResolver = async (_, {uid}, context) => {
-  const log = context.log.child({handler: `graphql/recentPlays/${uid}`})
+  const log = context.log
+  log.info(uid)
 
   const tablePlay = TablePlay(context.DYNAMO_ENDPOINT, context.TABLE_PLAY)
   const { docs, errors } = await tablePlay.getRecentPlays(uid, 100)

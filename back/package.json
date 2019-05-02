@@ -15,7 +15,7 @@
     "start:second": "kinesalite",
     "start:last": "./bin/free-port.sh 8888; ./bin/create-streams.sh && AWS_REGION=us-east-1 yarn start:_sls",
     "start:_sls": "source bin/local-env.sh && sls offline start --seed=all",
-    "start:_sqs": "java -Dconfig.file=config/elasticmq.conf -Dlogback.configurationFile=config/elasticmq.logback.xml -jar .devdep/elasticmq-server-0.14.6.jar",
+    "start:_sqs": "./bin/free-port.sh 9324; java -Dconfig.file=config/elasticmq.conf -Dlogback.configurationFile=config/elasticmq.logback.xml -jar .devdep/elasticmq-server-0.14.6.jar",
     "deploy": "yarn check:target && yarn check:config && sls deploy",
     "deploy:test": "TARGET=test CONFIG=test yarn deploy",
     "e2e": "TARGET=local CONFIG=local yarn jest:_run",

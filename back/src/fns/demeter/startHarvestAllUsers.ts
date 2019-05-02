@@ -2,12 +2,13 @@ import { ScheduledEvent, APIGatewayEvent, APIGatewayProxyResult, Handler } from 
 import { verifyEnv } from "../../shared/env";
 import { TableUser } from "../../shared/tables/TableUser";
 import { QueueFetchSpotifyPlays } from "../../shared/queues";
-import { slog } from "../logger";
+import { makeLogger } from "../logger";
 import { handleInvalid } from "../../shared/validation";
 
-const log = slog.child({awsEvent: 'sqs|http', handler: 'startHarvestAllUsers'})
+// const log = slog.child({awsEvent: 'sqs|http', handler: 'startHarvestAllUsers'})
 
 export const handler: Handler<ScheduledEvent | APIGatewayEvent, void | APIGatewayProxyResult> = async (event, context) => {
+  const log = makeLogger({awsEvent: 'sqs|http', handler: 'startHarvestAllUsers'})
   const env = verifyEnv({
     DYNAMO_ENDPOINT: process.env.DYNAMO_ENDPOINT,
     TABLE_SOURCE: process.env.TABLE_SOURCE,
@@ -36,6 +37,7 @@ export const handler: Handler<ScheduledEvent | APIGatewayEvent, void | APIGatewa
       }, null, 2)
     }  
   }
+  log.close()
 
 }
 

@@ -2,10 +2,11 @@ import { Errors } from "io-ts";
 import winston = require("winston");
 import * as t from 'io-ts'
 import { QueueValidationErrors } from "./queues";
+import { TLogger } from "../fns/logger";
 
 export const errorPaths = (e: Errors) => e.map(ee => ee.context.map(({key}) => key).join('.'))
 
-export const handleInvalid = async (log: winston.Logger, QueueUrl: string, errors: t.Errors, context: any = {}, uid = 'n/a') => {
+export const handleInvalid = async (log: TLogger, QueueUrl: string, errors: t.Errors, context: any = {}, uid = 'n/a') => {
   const paths = errorPaths(errors)
   log.error('validation failed', {paths, context, uid})
   await QueueValidationErrors.publish(QueueUrl, {

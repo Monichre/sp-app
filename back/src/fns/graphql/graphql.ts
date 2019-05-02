@@ -2,7 +2,7 @@ import { ApolloServer } from 'apollo-server-lambda'
 import { schema } from './schema'
 import { verifyEnv } from '../../shared/env';
 import * as winston from 'winston'
-import { slog } from '../logger';
+import { makeLogger, TLogger } from '../logger';
 
 export type Context = {
   DYNAMO_ENDPOINT: string
@@ -10,7 +10,7 @@ export type Context = {
   TABLE_USER: string
   TABLE_STAT: string
   QUEUE_START_HARVEST_USER: string
-  log: winston.Logger
+  log: TLogger
 }
 
 // const log = slog.child({handler: 'graphql', awsEvent: 'http'})
@@ -21,7 +21,7 @@ const server = new ApolloServer({
     const { query, ...body} = JSON.parse(event.body)
     // const prettyQuery = (query as string).replace(RegExp('\n', 'g'), "\n")
     // log.info(query + JSON.stringify({ ...body }, null, 2))
-    const log = slog.child({handler: `graphql/${body && body.operationName}`, awsEvent: 'http'})
+    const log = makeLogger({handler: `graphql/${body && body.operationName}`, awsEvent: 'http'})
     log.info('request', body)
     return {
       log,
@@ -35,8 +35,9 @@ const server = new ApolloServer({
     }
   },
   formatError: error => {
-    const log = slog.child({handler: 'graphql', awsEvent: 'http'})
+    const log = makeLogger({handler: 'graphql', awsEvent: 'http'})
     log.error(error)
+    log.close()
     return error
   }
 });

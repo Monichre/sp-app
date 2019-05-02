@@ -1,9 +1,9 @@
 import * as AWS from 'aws-sdk';
 import * as fs from 'fs';
 import { verifyEnv } from '../src/shared/env';
-import { slog } from '../src/fns/logger';
+import { makeLogger } from '../src/fns/logger';
 
-const log = slog.child({handler: 'put-users', awsEvent: 'script'})
+const log = makeLogger({handler: 'put-users', awsEvent: 'script'})
 
 const script = async () => {
   const env = verifyEnv({

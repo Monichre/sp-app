@@ -1,12 +1,13 @@
 import { SQSHandler } from "aws-lambda";
 import { verifyEnv } from "../shared/env";
 
-import { slog } from "./logger";
+import { makeLogger } from "./logger";
 import { IncomingWebhook } from '@slack/webhook'
 
-const log = slog.child({handler: 'errorsToSlack', awsEvent: 'sqs'})
+// const log = slog.child({handler: 'errorsToSlack', awsEvent: 'sqs'})
 
 export const handler: SQSHandler = async (event, context) => {
+  const log = makeLogger({handler: 'errorsToSlack', awsEvent: 'sqs'})
   const env = verifyEnv({
     SLACK_WEBHOOK_URL: process.env.SLACK_WEBHOOK_URL,
   }, log)
