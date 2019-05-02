@@ -8,6 +8,7 @@ import { handleInvalid } from '../../shared/validation';
 // const log = slog.child({handler: 'fetchSpotifyPlays', awsEvent: 'sqs'})
 
 export const handler: SQSHandler = async (event) => {
+  console.log('handler started')
   // ALWAYS DO THIS FIRST -- with sls offline, discovered some cases where process.env vars clobber each other
   // which is a particularly savory flavor of hell let me tell you
   const log = makeLogger({handler: 'fetchSpotifyPlays', awsEvent: 'sqs'})
