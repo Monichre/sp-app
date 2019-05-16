@@ -17,5 +17,11 @@
     "start": "echo 'Dont `yarn start` here.  Read the docs.  You need to have four shells: first yarn start from back/ and then yarn start from front/'",
     "start:all": "yarn start",
     "": ""
+  },
+  "devDependencies": {
+    "typescript": "3.3.3333"
+  },
+  "dependencies": {
+    "react-icons": "^3.6.1"
   }
 }

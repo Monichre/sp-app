@@ -1,0 +1,59 @@
+fragment ArtistFragment on Artist {
+    id
+    name
+    images {
+      url
+    }
+    external_urls {
+      spotify
+    }
+}
+
+fragment TimescopeStatsFragment on TimescopeStats {
+  timeseries {
+    label
+    values {
+      period
+      personal
+      group
+    }
+  }
+  personal {
+    ...PerspectiveStatsFragment
+  }
+  group {
+    ...PerspectiveStatsFragment
+  }
+}
+
+fragment PerspectiveStatsFragment on PerspectiveStats {
+  current {
+    hrs
+    mins
+  }
+  delta {
+    direction
+    hrs
+    mins
+  }
+}
+
+query InsightsArtistStats($uid: String!, $artistId: String!) {
+  insightsArtistStats(uid: $uid, gid: "global", artistId: $artistId) {
+    artist {
+      ...ArtistFragment
+    }
+    today {
+      ...TimescopeStatsFragment
+    }
+    thisWeek {
+      ...TimescopeStatsFragment
+    }
+    thisMonth {
+      ...TimescopeStatsFragment
+    }
+    lifetime {
+      ...TimescopeStatsFragment
+    }
+  }
+}

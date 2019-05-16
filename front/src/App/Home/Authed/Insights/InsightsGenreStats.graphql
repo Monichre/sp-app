@@ -1,0 +1,46 @@
+fragment TimescopeGenreStatsFragment on TimescopeStats {
+  timeseries {
+    label
+    values {
+      period
+      personal
+      group
+    }
+  }
+  personal {
+    ...PerspectiveGenreStatsFragment
+  }
+  group {
+    ...PerspectiveGenreStatsFragment
+  }
+}
+
+fragment PerspectiveGenreStatsFragment on PerspectiveStats {
+  current {
+    hrs
+    mins
+  }
+  delta {
+    direction
+    hrs
+    mins
+  }
+}
+
+query InsightsGenreStats($uid: String!, $genre: String!) {
+  insightsGenreStats(uid: $uid, gid: "global", genre: $genre) {
+    genre
+    today {
+      ...TimescopeGenreStatsFragment
+    }
+    thisWeek {
+      ...TimescopeGenreStatsFragment
+    }
+    thisMonth {
+      ...TimescopeGenreStatsFragment
+    }
+    lifetime {
+      ...TimescopeGenreStatsFragment
+    }
+  }
+}

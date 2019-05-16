@@ -1,6 +1,6 @@
 import React from 'react';
 import { BasicUser } from '../../../FirebaseContext';
-import { History } from './History/History';
+import { History } from '../History/History';
 import { DashSummary } from './DashSummary/DashSummary';
 import { Route, Switch, Redirect, RouteComponentProps } from 'react-router';
 import { Insights } from './Insights/Insights';

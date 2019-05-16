@@ -1,11 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Logo } from '../../shared/Logo';
+import { Logo } from '../../../shared/Logo';
 import moment from 'moment';
-import { Route, Switch, Redirect } from 'react-router';
-import { SignIn } from './SignIn'
-import { TAndC } from './TAndC';
-import { Privacy } from './Privacy';
+import { Link } from 'react-router-dom';
 
 const BetweenColumn = styled.div`
   display: flex;
@@ -53,20 +50,44 @@ const Hero = styled.div`
   }
 `
 
+const Button = styled.button`
+  background-color: #333;
+  border: 1px solid #64d6ee;
+  border-radius: 0.5rem;
+  color: #64d6ee;
+  font-weight: bold;
+  font-size: 1.25rem;
+  padding: 1rem;
+  margin-top: 1.5rem;
+`
+
 const ButtonSpotifySignin: React.SFC = () => {
   const d = moment()
   const utcOffset = d.utcOffset()
   console.log(utcOffset)
   return (
-    <button data-test='spotifyLogin' onClick={() => window.location.assign(`${process.env.REACT_APP_API_ENDPOINT}/spotify/redirect?utcOffset=${utcOffset}`)}>
+    <Button data-test='spotifyLogin' onClick={() => window.location.assign(`${process.env.REACT_APP_API_ENDPOINT}/spotify/redirect?utcOffset=${utcOffset}`)}>
       Sign in with Spotify
-    </button>
+    </Button>
   )
 }
 
-export const Public: React.SFC = () =>
-  <Switch>
-    <Route path='/terms-and-conditions' component={TAndC}/>
-    <Route path='/privacy-policy' component={Privacy}/>
-    <Route path='/' component={SignIn}/>
-  </Switch>
+export const SignIn: React.SFC = () =>
+    <BetweenColumn>
+      <CenteredPage>
+        <Hero>
+          <Logo size={12}/>
+          <ButtonSpotifySignin/>
+        </Hero>
+      </CenteredPage>
+      <LeftRowPadded>
+        <Link to='/terms-and-conditions'>
+          Terms and Conditions
+        </Link>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <Link to='/privacy-policy'>
+          Privacy Policy
+        </Link>
+      </LeftRowPadded>
+    </BetweenColumn>
+  

@@ -1,8 +1,8 @@
 import React from 'react';
-import { RecentPlaysPlays } from '../../../../../types';
+import { RecentPlaysPlays } from '../../../../types';
 import styled from 'styled-components'
 import Moment from 'react-moment'
-import { SpotifyLogoLink } from '../../../../../shared/SpotifyLogoLink/SpotifyLogoLink';
+import { SpotifyLogoLink } from '../../../../shared/SpotifyLogoLink/SpotifyLogoLink';
 import { NavLink } from 'react-router-dom';
 
 const bgSize = 16
@@ -85,7 +85,7 @@ export const HistoryCard: React.SFC<{play: RecentPlaysPlays, className?: string}
     return (
       <Play {...{className}}>
         <AlbumBackground {...{src: albumImgUrl}}/>
-        {artistId ? <Artist to={`/artist/${artistId}`}>
+        {artistId ? <Artist to={`/insights/lifetime/global/personal/artists/${artistId}`}>
           <ArtistAvatar src={artistImgUrl}/>
           <ArtistInfo>
             <ArtistName>{artistName}</ArtistName>

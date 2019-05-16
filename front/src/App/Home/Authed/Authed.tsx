@@ -1,20 +1,50 @@
 import React from 'react';
+import styled from 'styled-components'
 import { Route, Switch, Redirect } from 'react-router';
 import { Loading } from '../../../shared/Loading';
-import { useGetUserInfo, GetUserInfoGetUserInfo } from '../../../types';
+import { useGetUserInfo } from '../../../types';
 import { ErrorFallback } from '../ErrorBoundary';
-import { AuthedLayout } from './AuthedLayout';
-import { AuthedAppBar } from './AuthedAppBar';
 import { OnboardingMessage } from './AuthedOnboardingMessage'
-import { Artist } from './Artist/Artist';
-import { Dash } from './Dash/Dash';
+import { Insights } from './Insights/Insights';
+import { largeQuery, notLargeQuery } from '../../../shared/media';
+import { DummyRouted } from '../../../shared/debug/DummyRouted';
+import { NavMenu, NavMenuView } from './NavMenu';
+import { Profile } from './Profile/Profile';
+import { History } from './History/History';
 
-const AuthedRoutes: React.SFC<{user: GetUserInfoGetUserInfo}> = ({user}) =>
-  <Switch>
-    <Route path='/dash' render={(props) => <Dash {...props} user={user}/>}/>
-    <Route path='/artist/:id' render={(props) => <Artist {...props} user={user}/>}/>
-    <Redirect from='/' exact to='/dash'/>
-  </Switch>
+const SIDEBAR_WIDTH = 200
+
+const AuthedView = styled.div`
+  height: 100%;
+  width: 100%;
+  // display: flex;
+  // flex-direction: column;
+  // align-items: center;
+  ${largeQuery`
+    padding-left: ${SIDEBAR_WIDTH}px;
+  `}
+  ${NavMenuView} {
+    position: fixed;
+    display: flex;
+    ${largeQuery`
+      flex-direction: column;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: ${SIDEBAR_WIDTH}px;
+    `}
+    ${notLargeQuery`
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      position: fixed;
+      left: 0;
+      right: 0;
+      width: 100%;
+      bottom: 0;
+    `}
+  }
+`
 
 export const Authed: React.SFC<{user: {uid: string}}> = ({user: firebaseUser}) => {
   const result = useGetUserInfo({ variables: { uid: firebaseUser.uid }, pollInterval: 4000, suspend: true})
@@ -23,13 +53,20 @@ export const Authed: React.SFC<{user: {uid: string}}> = ({user: firebaseUser}) =
   console.log('userInfo', user)
   // if (!user) { throw new Error('No user found!')} // error boundary not handling this properly???
 
+  if (!user.initialHarvestComplete) { return <OnboardingMessage/> }
   return (
-    <AuthedLayout>
-      <AuthedAppBar/>
+    <AuthedView>
+        <NavMenu/>
       <React.Suspense fallback={<Loading/>}>
-        {user.initialHarvestComplete ? <AuthedRoutes {...{user}}/> : <OnboardingMessage/> }
+        <Switch>
+          <Route path='/insights/:timeScope/:groupId/:perspective' render={(props) => <Insights {...props} uid={user.uid}/>}/>
+          <Route path='/history' render={(props) => <History {...props} uid={user.uid}/>}/>
+          <Route path='/profile' render={(props) => <Profile {...props}/>}/>
+          <Redirect from='/' to='/insights/thisWeek/global/personal'/>
+        </Switch>
       </React.Suspense>
-    </AuthedLayout>
+    </AuthedView>
   )
 }
+
 

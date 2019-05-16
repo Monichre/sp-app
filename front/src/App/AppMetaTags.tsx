@@ -63,6 +63,10 @@ export const AppMetaTags = () => (
       property="article:tag"
       content="Soundpruf. What music you listen to matters. Now you can prove it."
     />
+    {/* FONTS */}
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet"></link>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet"></link>
+
     <script>
       {`
       window["_fs_debug"] = false

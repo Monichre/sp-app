@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useRecentPlays } from '../../../../../types';
+import { useRecentPlays } from '../../../../types';
 import styled from 'styled-components'
 import { HistoryCard } from './HistoryCard';
+import { Container } from '../../../../shared/ui';
 
 const Card = styled.div`
   padding: 1rem;
@@ -21,9 +22,11 @@ const Note = styled.div`
 
 const HistoryGrid = styled.div`
   display: grid;
-  margin: 0 auto;
-  justify-items: center;
+  margin: 2rem 1rem;
+  // margin-top: 2rem;
+  // align-items: center;
   max-width: 760px;
+  width: 100%;
   grid-template-columns: 1fr;
 
   @media (min-width: 760px) {
@@ -47,12 +50,22 @@ const HistoryGrid = styled.div`
 `
 
 const HistoryRow = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
+  // display: flex;
+  // flex-direction: row;
+  // display: grid;
+  // grid-template-columns: 1fr;
   width: 100%;
+  // align-items: center;
+  @media (max-width: 759px) {
+    display: flex;
+    flex-direction: row;  
+    justify-content: center;
+  }
   @media (min-width: 760px) {
-    background-image: radial-gradient(circle, rgb(100,214,238,1) 1%, rgb(0,0,0,0) 2%);
-    background-position: 0 1rem;
+    display: grid;
+    grid-template-columns: 1fr;
+      background-image: radial-gradient(circle, rgb(100,214,238,1) 1%, rgb(0,0,0,0) 2%);
+    background-position: 0 0rem;
   }
 `
 
@@ -74,8 +87,8 @@ export const History: React.SFC<{uid: string}> = ({uid}) => {
     return <CardAlert data-test="alert-no-history">You don't seem to have any history in spotify.  Go listen to something!</CardAlert>
   }
   
-  return <div data-test="play-timeline">
-    <HistoryGrid>
+  return <Container>
+    <HistoryGrid data-test="play-timeline">
       {recentPlays.map((play, key) => 
         <HistoryRow {...{key}}>
           <HistoryCard {...{play}}/>
@@ -83,5 +96,5 @@ export const History: React.SFC<{uid: string}> = ({uid}) => {
       )}
     </HistoryGrid>
     <Note>Last Update: {lastUpdate || 'never'}</Note>
-  </div>
+    </Container>
 }

@@ -3,11 +3,11 @@ import { mergeSchemas } from 'graphql-tools';
 import { schema as user } from './user'
 import { schema as ping } from './ping'
 import { schema as play } from './play'
-import { schema as stat } from './stat'
+import { statSchema } from './stat/index'
 
 export const schema = mergeSchemas({schemas: [
   user,
   ping,
   play,
-  stat,
+  statSchema,
 ]})

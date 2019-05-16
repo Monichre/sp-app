@@ -1,0 +1,33 @@
+
+query InsightsGenres($uid: String!) {
+  insightsGenres(uid: $uid, gid: "global") {
+    today {
+      ...TimescopeTopGenresFragment
+    }
+    thisWeek {
+      ...TimescopeTopGenresFragment
+    }
+    thisMonth {
+      ...TimescopeTopGenresFragment
+    }
+    lifetime {
+      ...TimescopeTopGenresFragment
+    }
+  }
+}
+
+fragment TimescopeTopGenresFragment on TimescopeTopGenres {
+  personal {
+    ...GenresFragment
+  }
+  group {
+    ...GenresFragment
+  }
+}
+
+fragment GenresFragment on TopGenreStat {
+  personal
+  group
+  genre
+}
+

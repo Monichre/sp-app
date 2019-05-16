@@ -1,0 +1,100 @@
+query InsightsStats($uid: String!) {
+  insightsStats(uid: $uid, gid: "global") {
+    today {
+      personal {
+        current {
+          hrs
+          mins
+        }
+        delta {
+          direction
+          hrs
+          mins
+        }
+      }
+      group {
+        current {
+          hrs
+          mins
+        }
+        delta {
+          direction
+          hrs
+          mins
+        }
+      }
+    }
+    thisWeek {
+      personal {
+        current {
+          hrs
+          mins
+        }
+        delta {
+          direction
+          hrs
+          mins
+        }
+      }
+      group {
+        current {
+          hrs
+          mins
+        }
+        delta {
+          direction
+          hrs
+          mins
+        }
+      }
+    }
+    thisMonth {
+      personal {
+        current {
+          hrs
+          mins
+        }
+        delta {
+          direction
+          hrs
+          mins
+        }
+      }
+      group {
+        current {
+          hrs
+          mins
+        }
+        delta {
+          direction
+          hrs
+          mins
+        }
+      }
+    }
+    lifetime {
+      personal {
+        current {
+          hrs
+          mins
+        }
+        delta {
+          direction
+          hrs
+          mins
+        }
+      }
+      group {
+        current {
+          hrs
+          mins
+        }
+        delta {
+          direction
+          hrs
+          mins
+        }
+      }
+    }
+  }
+}

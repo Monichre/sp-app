@@ -1,11 +1,12 @@
 import { createGlobalStyle } from "styled-components"
+import { BODY_FONT } from "../shared/media";
 
 export const GlobalStyle = createGlobalStyle`
   html {
     height: 100%;
   }
   body {
-    font-family: "Raleway", sans-serif;
+    font-family: "${BODY_FONT}", sans-serif;
     color: #fff;
     background-color: #121519;
     background-image: url(/dots.png);

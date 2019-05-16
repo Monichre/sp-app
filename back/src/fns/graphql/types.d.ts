@@ -1,4 +1,4 @@
-// Generated in 2019-04-14T12:03:04-07:00
+// Generated in 2019-05-09T12:15:52-07:00
 // REGENERATE THIS BY STARTING THE LOCAL SERVER
 // AND THEN RUNNING `back % yarn generate`
 
@@ -17,11 +17,17 @@ export interface Query {
 
   recentPlays: RecentPlaysResponse;
 
-  playtimeSummary: PlaytimeSummaryResponse;
+  insightsStats: InsightsStatsResponse;
 
-  dashStats: DashStatsResponse;
+  insightsDash: InsightsDashResponse;
 
-  artistStats: ArtistStatsResponse;
+  insightsArtists: InsightsArtistsResponse;
+
+  insightsGenres: InsightsGenresResponse;
+
+  insightsArtistStats: InsightsArtistStatsResponse;
+
+  insightsGenreStats: InsightsGenreStatsResponse;
 }
 
 export interface UserInfoResponse {
@@ -88,86 +94,152 @@ export interface Album {
   images: (Maybe<Image>)[];
 }
 
-export interface PlaytimeSummaryResponse {
-  topLifetimeArtists: ArtistPlaytime[];
+export interface InsightsStatsResponse {
+  today: TimescopeStats;
 
-  day: PlaytimeSummaryPeriods;
+  thisWeek: TimescopeStats;
 
-  week: PlaytimeSummaryPeriods;
+  thisMonth: TimescopeStats;
 
-  month: PlaytimeSummaryPeriods;
+  lifetime: TimescopeStats;
 }
 
-export interface ArtistPlaytime {
-  artist: Artist;
+export interface TimescopeStats {
+  timeseries: Timeseries;
 
-  playDurationMs: number;
+  personal: PerspectiveStats;
+
+  group: PerspectiveStats;
 }
 
-export interface PlaytimeSummaryPeriods {
-  current: number;
+export interface Timeseries {
+  label: string;
 
-  prev: number;
+  values: TimeseriesValue[];
 }
 
-export interface DashStatsResponse {
-  topArtists: UserArtistPlaytimes;
-
-  topGenres: UserGenrePlaytimes;
-}
-
-export interface UserArtistPlaytimes {
-  week: PeriodGlobalUserArtistPlaytimes;
-
-  month: PeriodGlobalUserArtistPlaytimes;
-
-  life: PeriodGlobalUserArtistPlaytimes;
-}
-
-export interface PeriodGlobalUserArtistPlaytimes {
-  global: ArtistPlaytime[];
-
-  user: ArtistPlaytime[];
-}
-
-export interface UserGenrePlaytimes {
-  week: UserGenrePeriodPlaytimes;
-
-  month: UserGenrePeriodPlaytimes;
-
-  life: UserGenrePeriodPlaytimes;
-}
-
-export interface UserGenrePeriodPlaytimes {
-  global: GenrePlaytime[];
-
-  user: GenrePlaytime[];
-}
-
-export interface GenrePlaytime {
-  name: string;
-
-  playDurationMs: number;
-}
-
-export interface ArtistStatsResponse {
-  artist: Artist;
-
-  past30d: ArtistStatsPeriod;
-
-  past12w: ArtistStatsPeriod;
-}
-
-export interface ArtistStatsPeriod {
-  global: ArtistStatsPeriodUser[];
-
-  personal: ArtistStatsPeriodUser[];
-}
-
-export interface ArtistStatsPeriodUser {
+export interface TimeseriesValue {
   period: string;
 
-  playDurationMs: number;
+  personal: number;
+
+  group: number;
+}
+
+export interface PerspectiveStats {
+  current: Duration;
+
+  delta?: Maybe<Delta>;
+}
+
+export interface Duration {
+  hrs: number;
+
+  mins?: Maybe<number>;
+}
+
+export interface Delta {
+  hrs: number;
+
+  mins?: Maybe<number>;
+
+  direction?: Maybe<string>;
+}
+
+export interface InsightsDashResponse {
+  today: TimescopeTops;
+
+  thisWeek: TimescopeTops;
+
+  thisMonth: TimescopeTops;
+
+  lifetime: TimescopeTops;
+}
+
+export interface TimescopeTops {
+  timeSeries: Timeseries;
+
+  personal: PerspectiveTops;
+
+  group: PerspectiveTops;
+}
+
+export interface PerspectiveTops {
+  artists: TopArtistStat[];
+
+  genres: TopGenreStat[];
+}
+
+export interface TopArtistStat {
+  personal: number;
+
+  group: number;
+
+  artist: Artist;
+}
+
+export interface TopGenreStat {
+  personal: number;
+
+  group: number;
+
+  genre: string;
+}
+
+export interface InsightsArtistsResponse {
+  today: TimescopeTopArtists;
+
+  thisWeek: TimescopeTopArtists;
+
+  thisMonth: TimescopeTopArtists;
+
+  lifetime: TimescopeTopArtists;
+}
+
+export interface TimescopeTopArtists {
+  personal: TopArtistStat[];
+
+  group: TopArtistStat[];
+}
+
+export interface InsightsGenresResponse {
+  today: TimescopeTopGenres;
+
+  thisWeek: TimescopeTopGenres;
+
+  thisMonth: TimescopeTopGenres;
+
+  lifetime: TimescopeTopGenres;
+}
+
+export interface TimescopeTopGenres {
+  personal: TopGenreStat[];
+
+  group: TopGenreStat[];
+}
+
+export interface InsightsArtistStatsResponse {
+  artist: Artist;
+
+  today: TimescopeStats;
+
+  thisWeek: TimescopeStats;
+
+  thisMonth: TimescopeStats;
+
+  lifetime: TimescopeStats;
+}
+
+export interface InsightsGenreStatsResponse {
+  genre: string;
+
+  today: TimescopeStats;
+
+  thisWeek: TimescopeStats;
+
+  thisMonth: TimescopeStats;
+
+  lifetime: TimescopeStats;
 }
 
 export interface Mutation {
@@ -184,16 +256,39 @@ export interface GetUserInfoQueryArgs {
 export interface RecentPlaysQueryArgs {
   uid: string;
 }
-export interface PlaytimeSummaryQueryArgs {
-  uid: string;
-}
-export interface DashStatsQueryArgs {
-  uid: string;
-}
-export interface ArtistStatsQueryArgs {
+export interface InsightsStatsQueryArgs {
   uid: string;
 
-  id: string;
+  gid: string;
+}
+export interface InsightsDashQueryArgs {
+  uid: string;
+
+  gid: string;
+}
+export interface InsightsArtistsQueryArgs {
+  uid: string;
+
+  gid: string;
+}
+export interface InsightsGenresQueryArgs {
+  uid: string;
+
+  gid: string;
+}
+export interface InsightsArtistStatsQueryArgs {
+  uid: string;
+
+  gid: string;
+
+  artistId: string;
+}
+export interface InsightsGenreStatsQueryArgs {
+  uid: string;
+
+  gid: string;
+
+  genre: string;
 }
 
 import { GraphQLResolveInfo } from "graphql";
@@ -263,16 +358,38 @@ export namespace QueryResolvers {
       TContext
     >;
 
-    playtimeSummary?: PlaytimeSummaryResolver<
-      PlaytimeSummaryResponse,
+    insightsStats?: InsightsStatsResolver<
+      InsightsStatsResponse,
       TypeParent,
       TContext
     >;
 
-    dashStats?: DashStatsResolver<DashStatsResponse, TypeParent, TContext>;
+    insightsDash?: InsightsDashResolver<
+      InsightsDashResponse,
+      TypeParent,
+      TContext
+    >;
 
-    artistStats?: ArtistStatsResolver<
-      ArtistStatsResponse,
+    insightsArtists?: InsightsArtistsResolver<
+      InsightsArtistsResponse,
+      TypeParent,
+      TContext
+    >;
+
+    insightsGenres?: InsightsGenresResolver<
+      InsightsGenresResponse,
+      TypeParent,
+      TContext
+    >;
+
+    insightsArtistStats?: InsightsArtistStatsResolver<
+      InsightsArtistStatsResponse,
+      TypeParent,
+      TContext
+    >;
+
+    insightsGenreStats?: InsightsGenreStatsResolver<
+      InsightsGenreStatsResponse,
       TypeParent,
       TContext
     >;
@@ -306,33 +423,74 @@ export namespace QueryResolvers {
     uid: string;
   }
 
-  export type PlaytimeSummaryResolver<
-    R = PlaytimeSummaryResponse,
+  export type InsightsStatsResolver<
+    R = InsightsStatsResponse,
     Parent = {},
     TContext = Context
-  > = Resolver<R, Parent, TContext, PlaytimeSummaryArgs>;
-  export interface PlaytimeSummaryArgs {
+  > = Resolver<R, Parent, TContext, InsightsStatsArgs>;
+  export interface InsightsStatsArgs {
     uid: string;
+
+    gid: string;
   }
 
-  export type DashStatsResolver<
-    R = DashStatsResponse,
+  export type InsightsDashResolver<
+    R = InsightsDashResponse,
     Parent = {},
     TContext = Context
-  > = Resolver<R, Parent, TContext, DashStatsArgs>;
-  export interface DashStatsArgs {
+  > = Resolver<R, Parent, TContext, InsightsDashArgs>;
+  export interface InsightsDashArgs {
     uid: string;
+
+    gid: string;
   }
 
-  export type ArtistStatsResolver<
-    R = ArtistStatsResponse,
+  export type InsightsArtistsResolver<
+    R = InsightsArtistsResponse,
     Parent = {},
     TContext = Context
-  > = Resolver<R, Parent, TContext, ArtistStatsArgs>;
-  export interface ArtistStatsArgs {
+  > = Resolver<R, Parent, TContext, InsightsArtistsArgs>;
+  export interface InsightsArtistsArgs {
     uid: string;
 
-    id: string;
+    gid: string;
+  }
+
+  export type InsightsGenresResolver<
+    R = InsightsGenresResponse,
+    Parent = {},
+    TContext = Context
+  > = Resolver<R, Parent, TContext, InsightsGenresArgs>;
+  export interface InsightsGenresArgs {
+    uid: string;
+
+    gid: string;
+  }
+
+  export type InsightsArtistStatsResolver<
+    R = InsightsArtistStatsResponse,
+    Parent = {},
+    TContext = Context
+  > = Resolver<R, Parent, TContext, InsightsArtistStatsArgs>;
+  export interface InsightsArtistStatsArgs {
+    uid: string;
+
+    gid: string;
+
+    artistId: string;
+  }
+
+  export type InsightsGenreStatsResolver<
+    R = InsightsGenreStatsResponse,
+    Parent = {},
+    TContext = Context
+  > = Resolver<R, Parent, TContext, InsightsGenreStatsArgs>;
+  export interface InsightsGenreStatsArgs {
+    uid: string;
+
+    gid: string;
+
+    genre: string;
   }
 }
 
@@ -552,303 +710,511 @@ export namespace AlbumResolvers {
   > = Resolver<R, Parent, TContext>;
 }
 
-export namespace PlaytimeSummaryResponseResolvers {
+export namespace InsightsStatsResponseResolvers {
   export interface Resolvers<
     TContext = Context,
-    TypeParent = PlaytimeSummaryResponse
+    TypeParent = InsightsStatsResponse
   > {
-    topLifetimeArtists?: TopLifetimeArtistsResolver<
-      ArtistPlaytime[],
-      TypeParent,
-      TContext
-    >;
+    today?: TodayResolver<TimescopeStats, TypeParent, TContext>;
 
-    day?: DayResolver<PlaytimeSummaryPeriods, TypeParent, TContext>;
+    thisWeek?: ThisWeekResolver<TimescopeStats, TypeParent, TContext>;
 
-    week?: WeekResolver<PlaytimeSummaryPeriods, TypeParent, TContext>;
+    thisMonth?: ThisMonthResolver<TimescopeStats, TypeParent, TContext>;
 
-    month?: MonthResolver<PlaytimeSummaryPeriods, TypeParent, TContext>;
+    lifetime?: LifetimeResolver<TimescopeStats, TypeParent, TContext>;
   }
 
-  export type TopLifetimeArtistsResolver<
-    R = ArtistPlaytime[],
-    Parent = PlaytimeSummaryResponse,
+  export type TodayResolver<
+    R = TimescopeStats,
+    Parent = InsightsStatsResponse,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
-  export type DayResolver<
-    R = PlaytimeSummaryPeriods,
-    Parent = PlaytimeSummaryResponse,
+  export type ThisWeekResolver<
+    R = TimescopeStats,
+    Parent = InsightsStatsResponse,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
-  export type WeekResolver<
-    R = PlaytimeSummaryPeriods,
-    Parent = PlaytimeSummaryResponse,
+  export type ThisMonthResolver<
+    R = TimescopeStats,
+    Parent = InsightsStatsResponse,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
-  export type MonthResolver<
-    R = PlaytimeSummaryPeriods,
-    Parent = PlaytimeSummaryResponse,
+  export type LifetimeResolver<
+    R = TimescopeStats,
+    Parent = InsightsStatsResponse,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
 }
 
-export namespace ArtistPlaytimeResolvers {
-  export interface Resolvers<TContext = Context, TypeParent = ArtistPlaytime> {
-    artist?: ArtistResolver<Artist, TypeParent, TContext>;
+export namespace TimescopeStatsResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = TimescopeStats> {
+    timeseries?: TimeseriesResolver<Timeseries, TypeParent, TContext>;
 
-    playDurationMs?: PlayDurationMsResolver<number, TypeParent, TContext>;
+    personal?: PersonalResolver<PerspectiveStats, TypeParent, TContext>;
+
+    group?: GroupResolver<PerspectiveStats, TypeParent, TContext>;
   }
 
-  export type ArtistResolver<
-    R = Artist,
-    Parent = ArtistPlaytime,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-  export type PlayDurationMsResolver<
-    R = number,
-    Parent = ArtistPlaytime,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-}
-
-export namespace PlaytimeSummaryPeriodsResolvers {
-  export interface Resolvers<
-    TContext = Context,
-    TypeParent = PlaytimeSummaryPeriods
-  > {
-    current?: CurrentResolver<number, TypeParent, TContext>;
-
-    prev?: PrevResolver<number, TypeParent, TContext>;
-  }
-
-  export type CurrentResolver<
-    R = number,
-    Parent = PlaytimeSummaryPeriods,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-  export type PrevResolver<
-    R = number,
-    Parent = PlaytimeSummaryPeriods,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-}
-
-export namespace DashStatsResponseResolvers {
-  export interface Resolvers<
-    TContext = Context,
-    TypeParent = DashStatsResponse
-  > {
-    topArtists?: TopArtistsResolver<UserArtistPlaytimes, TypeParent, TContext>;
-
-    topGenres?: TopGenresResolver<UserGenrePlaytimes, TypeParent, TContext>;
-  }
-
-  export type TopArtistsResolver<
-    R = UserArtistPlaytimes,
-    Parent = DashStatsResponse,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-  export type TopGenresResolver<
-    R = UserGenrePlaytimes,
-    Parent = DashStatsResponse,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-}
-
-export namespace UserArtistPlaytimesResolvers {
-  export interface Resolvers<
-    TContext = Context,
-    TypeParent = UserArtistPlaytimes
-  > {
-    week?: WeekResolver<PeriodGlobalUserArtistPlaytimes, TypeParent, TContext>;
-
-    month?: MonthResolver<
-      PeriodGlobalUserArtistPlaytimes,
-      TypeParent,
-      TContext
-    >;
-
-    life?: LifeResolver<PeriodGlobalUserArtistPlaytimes, TypeParent, TContext>;
-  }
-
-  export type WeekResolver<
-    R = PeriodGlobalUserArtistPlaytimes,
-    Parent = UserArtistPlaytimes,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-  export type MonthResolver<
-    R = PeriodGlobalUserArtistPlaytimes,
-    Parent = UserArtistPlaytimes,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-  export type LifeResolver<
-    R = PeriodGlobalUserArtistPlaytimes,
-    Parent = UserArtistPlaytimes,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-}
-
-export namespace PeriodGlobalUserArtistPlaytimesResolvers {
-  export interface Resolvers<
-    TContext = Context,
-    TypeParent = PeriodGlobalUserArtistPlaytimes
-  > {
-    global?: GlobalResolver<ArtistPlaytime[], TypeParent, TContext>;
-
-    user?: UserResolver<ArtistPlaytime[], TypeParent, TContext>;
-  }
-
-  export type GlobalResolver<
-    R = ArtistPlaytime[],
-    Parent = PeriodGlobalUserArtistPlaytimes,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-  export type UserResolver<
-    R = ArtistPlaytime[],
-    Parent = PeriodGlobalUserArtistPlaytimes,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-}
-
-export namespace UserGenrePlaytimesResolvers {
-  export interface Resolvers<
-    TContext = Context,
-    TypeParent = UserGenrePlaytimes
-  > {
-    week?: WeekResolver<UserGenrePeriodPlaytimes, TypeParent, TContext>;
-
-    month?: MonthResolver<UserGenrePeriodPlaytimes, TypeParent, TContext>;
-
-    life?: LifeResolver<UserGenrePeriodPlaytimes, TypeParent, TContext>;
-  }
-
-  export type WeekResolver<
-    R = UserGenrePeriodPlaytimes,
-    Parent = UserGenrePlaytimes,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-  export type MonthResolver<
-    R = UserGenrePeriodPlaytimes,
-    Parent = UserGenrePlaytimes,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-  export type LifeResolver<
-    R = UserGenrePeriodPlaytimes,
-    Parent = UserGenrePlaytimes,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-}
-
-export namespace UserGenrePeriodPlaytimesResolvers {
-  export interface Resolvers<
-    TContext = Context,
-    TypeParent = UserGenrePeriodPlaytimes
-  > {
-    global?: GlobalResolver<GenrePlaytime[], TypeParent, TContext>;
-
-    user?: UserResolver<GenrePlaytime[], TypeParent, TContext>;
-  }
-
-  export type GlobalResolver<
-    R = GenrePlaytime[],
-    Parent = UserGenrePeriodPlaytimes,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-  export type UserResolver<
-    R = GenrePlaytime[],
-    Parent = UserGenrePeriodPlaytimes,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-}
-
-export namespace GenrePlaytimeResolvers {
-  export interface Resolvers<TContext = Context, TypeParent = GenrePlaytime> {
-    name?: NameResolver<string, TypeParent, TContext>;
-
-    playDurationMs?: PlayDurationMsResolver<number, TypeParent, TContext>;
-  }
-
-  export type NameResolver<
-    R = string,
-    Parent = GenrePlaytime,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-  export type PlayDurationMsResolver<
-    R = number,
-    Parent = GenrePlaytime,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-}
-
-export namespace ArtistStatsResponseResolvers {
-  export interface Resolvers<
-    TContext = Context,
-    TypeParent = ArtistStatsResponse
-  > {
-    artist?: ArtistResolver<Artist, TypeParent, TContext>;
-
-    past30d?: Past30dResolver<ArtistStatsPeriod, TypeParent, TContext>;
-
-    past12w?: Past12wResolver<ArtistStatsPeriod, TypeParent, TContext>;
-  }
-
-  export type ArtistResolver<
-    R = Artist,
-    Parent = ArtistStatsResponse,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-  export type Past30dResolver<
-    R = ArtistStatsPeriod,
-    Parent = ArtistStatsResponse,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-  export type Past12wResolver<
-    R = ArtistStatsPeriod,
-    Parent = ArtistStatsResponse,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-}
-
-export namespace ArtistStatsPeriodResolvers {
-  export interface Resolvers<
-    TContext = Context,
-    TypeParent = ArtistStatsPeriod
-  > {
-    global?: GlobalResolver<ArtistStatsPeriodUser[], TypeParent, TContext>;
-
-    personal?: PersonalResolver<ArtistStatsPeriodUser[], TypeParent, TContext>;
-  }
-
-  export type GlobalResolver<
-    R = ArtistStatsPeriodUser[],
-    Parent = ArtistStatsPeriod,
+  export type TimeseriesResolver<
+    R = Timeseries,
+    Parent = TimescopeStats,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
   export type PersonalResolver<
-    R = ArtistStatsPeriodUser[],
-    Parent = ArtistStatsPeriod,
+    R = PerspectiveStats,
+    Parent = TimescopeStats,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type GroupResolver<
+    R = PerspectiveStats,
+    Parent = TimescopeStats,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
 }
 
-export namespace ArtistStatsPeriodUserResolvers {
-  export interface Resolvers<
-    TContext = Context,
-    TypeParent = ArtistStatsPeriodUser
-  > {
+export namespace TimeseriesResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = Timeseries> {
+    label?: LabelResolver<string, TypeParent, TContext>;
+
+    values?: ValuesResolver<TimeseriesValue[], TypeParent, TContext>;
+  }
+
+  export type LabelResolver<
+    R = string,
+    Parent = Timeseries,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type ValuesResolver<
+    R = TimeseriesValue[],
+    Parent = Timeseries,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace TimeseriesValueResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = TimeseriesValue> {
     period?: PeriodResolver<string, TypeParent, TContext>;
 
-    playDurationMs?: PlayDurationMsResolver<number, TypeParent, TContext>;
+    personal?: PersonalResolver<number, TypeParent, TContext>;
+
+    group?: GroupResolver<number, TypeParent, TContext>;
   }
 
   export type PeriodResolver<
     R = string,
-    Parent = ArtistStatsPeriodUser,
+    Parent = TimeseriesValue,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
-  export type PlayDurationMsResolver<
+  export type PersonalResolver<
     R = number,
-    Parent = ArtistStatsPeriodUser,
+    Parent = TimeseriesValue,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type GroupResolver<
+    R = number,
+    Parent = TimeseriesValue,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace PerspectiveStatsResolvers {
+  export interface Resolvers<
+    TContext = Context,
+    TypeParent = PerspectiveStats
+  > {
+    current?: CurrentResolver<Duration, TypeParent, TContext>;
+
+    delta?: DeltaResolver<Maybe<Delta>, TypeParent, TContext>;
+  }
+
+  export type CurrentResolver<
+    R = Duration,
+    Parent = PerspectiveStats,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type DeltaResolver<
+    R = Maybe<Delta>,
+    Parent = PerspectiveStats,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace DurationResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = Duration> {
+    hrs?: HrsResolver<number, TypeParent, TContext>;
+
+    mins?: MinsResolver<Maybe<number>, TypeParent, TContext>;
+  }
+
+  export type HrsResolver<
+    R = number,
+    Parent = Duration,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type MinsResolver<
+    R = Maybe<number>,
+    Parent = Duration,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace DeltaResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = Delta> {
+    hrs?: HrsResolver<number, TypeParent, TContext>;
+
+    mins?: MinsResolver<Maybe<number>, TypeParent, TContext>;
+
+    direction?: DirectionResolver<Maybe<string>, TypeParent, TContext>;
+  }
+
+  export type HrsResolver<
+    R = number,
+    Parent = Delta,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type MinsResolver<
+    R = Maybe<number>,
+    Parent = Delta,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type DirectionResolver<
+    R = Maybe<string>,
+    Parent = Delta,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace InsightsDashResponseResolvers {
+  export interface Resolvers<
+    TContext = Context,
+    TypeParent = InsightsDashResponse
+  > {
+    today?: TodayResolver<TimescopeTops, TypeParent, TContext>;
+
+    thisWeek?: ThisWeekResolver<TimescopeTops, TypeParent, TContext>;
+
+    thisMonth?: ThisMonthResolver<TimescopeTops, TypeParent, TContext>;
+
+    lifetime?: LifetimeResolver<TimescopeTops, TypeParent, TContext>;
+  }
+
+  export type TodayResolver<
+    R = TimescopeTops,
+    Parent = InsightsDashResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type ThisWeekResolver<
+    R = TimescopeTops,
+    Parent = InsightsDashResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type ThisMonthResolver<
+    R = TimescopeTops,
+    Parent = InsightsDashResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type LifetimeResolver<
+    R = TimescopeTops,
+    Parent = InsightsDashResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace TimescopeTopsResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = TimescopeTops> {
+    timeSeries?: TimeSeriesResolver<Timeseries, TypeParent, TContext>;
+
+    personal?: PersonalResolver<PerspectiveTops, TypeParent, TContext>;
+
+    group?: GroupResolver<PerspectiveTops, TypeParent, TContext>;
+  }
+
+  export type TimeSeriesResolver<
+    R = Timeseries,
+    Parent = TimescopeTops,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type PersonalResolver<
+    R = PerspectiveTops,
+    Parent = TimescopeTops,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type GroupResolver<
+    R = PerspectiveTops,
+    Parent = TimescopeTops,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace PerspectiveTopsResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = PerspectiveTops> {
+    artists?: ArtistsResolver<TopArtistStat[], TypeParent, TContext>;
+
+    genres?: GenresResolver<TopGenreStat[], TypeParent, TContext>;
+  }
+
+  export type ArtistsResolver<
+    R = TopArtistStat[],
+    Parent = PerspectiveTops,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type GenresResolver<
+    R = TopGenreStat[],
+    Parent = PerspectiveTops,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace TopArtistStatResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = TopArtistStat> {
+    personal?: PersonalResolver<number, TypeParent, TContext>;
+
+    group?: GroupResolver<number, TypeParent, TContext>;
+
+    artist?: ArtistResolver<Artist, TypeParent, TContext>;
+  }
+
+  export type PersonalResolver<
+    R = number,
+    Parent = TopArtistStat,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type GroupResolver<
+    R = number,
+    Parent = TopArtistStat,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type ArtistResolver<
+    R = Artist,
+    Parent = TopArtistStat,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace TopGenreStatResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = TopGenreStat> {
+    personal?: PersonalResolver<number, TypeParent, TContext>;
+
+    group?: GroupResolver<number, TypeParent, TContext>;
+
+    genre?: GenreResolver<string, TypeParent, TContext>;
+  }
+
+  export type PersonalResolver<
+    R = number,
+    Parent = TopGenreStat,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type GroupResolver<
+    R = number,
+    Parent = TopGenreStat,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type GenreResolver<
+    R = string,
+    Parent = TopGenreStat,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace InsightsArtistsResponseResolvers {
+  export interface Resolvers<
+    TContext = Context,
+    TypeParent = InsightsArtistsResponse
+  > {
+    today?: TodayResolver<TimescopeTopArtists, TypeParent, TContext>;
+
+    thisWeek?: ThisWeekResolver<TimescopeTopArtists, TypeParent, TContext>;
+
+    thisMonth?: ThisMonthResolver<TimescopeTopArtists, TypeParent, TContext>;
+
+    lifetime?: LifetimeResolver<TimescopeTopArtists, TypeParent, TContext>;
+  }
+
+  export type TodayResolver<
+    R = TimescopeTopArtists,
+    Parent = InsightsArtistsResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type ThisWeekResolver<
+    R = TimescopeTopArtists,
+    Parent = InsightsArtistsResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type ThisMonthResolver<
+    R = TimescopeTopArtists,
+    Parent = InsightsArtistsResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type LifetimeResolver<
+    R = TimescopeTopArtists,
+    Parent = InsightsArtistsResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace TimescopeTopArtistsResolvers {
+  export interface Resolvers<
+    TContext = Context,
+    TypeParent = TimescopeTopArtists
+  > {
+    personal?: PersonalResolver<TopArtistStat[], TypeParent, TContext>;
+
+    group?: GroupResolver<TopArtistStat[], TypeParent, TContext>;
+  }
+
+  export type PersonalResolver<
+    R = TopArtistStat[],
+    Parent = TimescopeTopArtists,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type GroupResolver<
+    R = TopArtistStat[],
+    Parent = TimescopeTopArtists,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace InsightsGenresResponseResolvers {
+  export interface Resolvers<
+    TContext = Context,
+    TypeParent = InsightsGenresResponse
+  > {
+    today?: TodayResolver<TimescopeTopGenres, TypeParent, TContext>;
+
+    thisWeek?: ThisWeekResolver<TimescopeTopGenres, TypeParent, TContext>;
+
+    thisMonth?: ThisMonthResolver<TimescopeTopGenres, TypeParent, TContext>;
+
+    lifetime?: LifetimeResolver<TimescopeTopGenres, TypeParent, TContext>;
+  }
+
+  export type TodayResolver<
+    R = TimescopeTopGenres,
+    Parent = InsightsGenresResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type ThisWeekResolver<
+    R = TimescopeTopGenres,
+    Parent = InsightsGenresResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type ThisMonthResolver<
+    R = TimescopeTopGenres,
+    Parent = InsightsGenresResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type LifetimeResolver<
+    R = TimescopeTopGenres,
+    Parent = InsightsGenresResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace TimescopeTopGenresResolvers {
+  export interface Resolvers<
+    TContext = Context,
+    TypeParent = TimescopeTopGenres
+  > {
+    personal?: PersonalResolver<TopGenreStat[], TypeParent, TContext>;
+
+    group?: GroupResolver<TopGenreStat[], TypeParent, TContext>;
+  }
+
+  export type PersonalResolver<
+    R = TopGenreStat[],
+    Parent = TimescopeTopGenres,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type GroupResolver<
+    R = TopGenreStat[],
+    Parent = TimescopeTopGenres,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace InsightsArtistStatsResponseResolvers {
+  export interface Resolvers<
+    TContext = Context,
+    TypeParent = InsightsArtistStatsResponse
+  > {
+    artist?: ArtistResolver<Artist, TypeParent, TContext>;
+
+    today?: TodayResolver<TimescopeStats, TypeParent, TContext>;
+
+    thisWeek?: ThisWeekResolver<TimescopeStats, TypeParent, TContext>;
+
+    thisMonth?: ThisMonthResolver<TimescopeStats, TypeParent, TContext>;
+
+    lifetime?: LifetimeResolver<TimescopeStats, TypeParent, TContext>;
+  }
+
+  export type ArtistResolver<
+    R = Artist,
+    Parent = InsightsArtistStatsResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type TodayResolver<
+    R = TimescopeStats,
+    Parent = InsightsArtistStatsResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type ThisWeekResolver<
+    R = TimescopeStats,
+    Parent = InsightsArtistStatsResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type ThisMonthResolver<
+    R = TimescopeStats,
+    Parent = InsightsArtistStatsResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type LifetimeResolver<
+    R = TimescopeStats,
+    Parent = InsightsArtistStatsResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace InsightsGenreStatsResponseResolvers {
+  export interface Resolvers<
+    TContext = Context,
+    TypeParent = InsightsGenreStatsResponse
+  > {
+    genre?: GenreResolver<string, TypeParent, TContext>;
+
+    today?: TodayResolver<TimescopeStats, TypeParent, TContext>;
+
+    thisWeek?: ThisWeekResolver<TimescopeStats, TypeParent, TContext>;
+
+    thisMonth?: ThisMonthResolver<TimescopeStats, TypeParent, TContext>;
+
+    lifetime?: LifetimeResolver<TimescopeStats, TypeParent, TContext>;
+  }
+
+  export type GenreResolver<
+    R = string,
+    Parent = InsightsGenreStatsResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type TodayResolver<
+    R = TimescopeStats,
+    Parent = InsightsGenreStatsResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type ThisWeekResolver<
+    R = TimescopeStats,
+    Parent = InsightsGenreStatsResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type ThisMonthResolver<
+    R = TimescopeStats,
+    Parent = InsightsGenreStatsResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type LifetimeResolver<
+    R = TimescopeStats,
+    Parent = InsightsGenreStatsResponse,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
 }
@@ -909,24 +1275,30 @@ export type IResolvers<TContext = Context> = {
   Image?: ImageResolvers.Resolvers<TContext>;
   SpotifyUrl?: SpotifyUrlResolvers.Resolvers<TContext>;
   Album?: AlbumResolvers.Resolvers<TContext>;
-  PlaytimeSummaryResponse?: PlaytimeSummaryResponseResolvers.Resolvers<
+  InsightsStatsResponse?: InsightsStatsResponseResolvers.Resolvers<TContext>;
+  TimescopeStats?: TimescopeStatsResolvers.Resolvers<TContext>;
+  Timeseries?: TimeseriesResolvers.Resolvers<TContext>;
+  TimeseriesValue?: TimeseriesValueResolvers.Resolvers<TContext>;
+  PerspectiveStats?: PerspectiveStatsResolvers.Resolvers<TContext>;
+  Duration?: DurationResolvers.Resolvers<TContext>;
+  Delta?: DeltaResolvers.Resolvers<TContext>;
+  InsightsDashResponse?: InsightsDashResponseResolvers.Resolvers<TContext>;
+  TimescopeTops?: TimescopeTopsResolvers.Resolvers<TContext>;
+  PerspectiveTops?: PerspectiveTopsResolvers.Resolvers<TContext>;
+  TopArtistStat?: TopArtistStatResolvers.Resolvers<TContext>;
+  TopGenreStat?: TopGenreStatResolvers.Resolvers<TContext>;
+  InsightsArtistsResponse?: InsightsArtistsResponseResolvers.Resolvers<
     TContext
   >;
-  ArtistPlaytime?: ArtistPlaytimeResolvers.Resolvers<TContext>;
-  PlaytimeSummaryPeriods?: PlaytimeSummaryPeriodsResolvers.Resolvers<TContext>;
-  DashStatsResponse?: DashStatsResponseResolvers.Resolvers<TContext>;
-  UserArtistPlaytimes?: UserArtistPlaytimesResolvers.Resolvers<TContext>;
-  PeriodGlobalUserArtistPlaytimes?: PeriodGlobalUserArtistPlaytimesResolvers.Resolvers<
+  TimescopeTopArtists?: TimescopeTopArtistsResolvers.Resolvers<TContext>;
+  InsightsGenresResponse?: InsightsGenresResponseResolvers.Resolvers<TContext>;
+  TimescopeTopGenres?: TimescopeTopGenresResolvers.Resolvers<TContext>;
+  InsightsArtistStatsResponse?: InsightsArtistStatsResponseResolvers.Resolvers<
     TContext
   >;
-  UserGenrePlaytimes?: UserGenrePlaytimesResolvers.Resolvers<TContext>;
-  UserGenrePeriodPlaytimes?: UserGenrePeriodPlaytimesResolvers.Resolvers<
+  InsightsGenreStatsResponse?: InsightsGenreStatsResponseResolvers.Resolvers<
     TContext
   >;
-  GenrePlaytime?: GenrePlaytimeResolvers.Resolvers<TContext>;
-  ArtistStatsResponse?: ArtistStatsResponseResolvers.Resolvers<TContext>;
-  ArtistStatsPeriod?: ArtistStatsPeriodResolvers.Resolvers<TContext>;
-  ArtistStatsPeriodUser?: ArtistStatsPeriodUserResolvers.Resolvers<TContext>;
   Mutation?: MutationResolvers.Resolvers<TContext>;
 } & { [typeName: string]: never };
 

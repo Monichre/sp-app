@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import ReactMarkdown from 'react-markdown'
-import { BackLink } from '../../shared/BackLink';
+import { BackLink } from '../../../shared/BackLink';
 
 const LeftRow = styled.div`
   display: flex;

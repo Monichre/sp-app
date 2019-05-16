@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components'
-import { PlaytimeSummaryTopLifetimeArtists } from '../../../../../types';
+// import { PlaytimeSummaryTopLifetimeArtists } from '../../../../types';
 import { NavLink } from 'react-router-dom';
-import { SpotifyLogoLink } from '../../../../../shared/SpotifyLogoLink/SpotifyLogoLink';
-import { hrsAndMinsAndSecs } from '../../../../../lib/durationFormats';
+import { SpotifyLogoLink } from '../../../../shared/SpotifyLogoLink/SpotifyLogoLink';
+import { hrsAndMinsAndSecs } from '../../../../lib/durationFormats';
 
 const BlockTitle = styled.div`
   display: flex;
@@ -73,7 +73,7 @@ const ImageBlock = styled(NavBlock)<{src: string}>`
   }
 `
 
-export const TopArtistBlock: React.SFC<{className?: string, stat: PlaytimeSummaryTopLifetimeArtists}> =
+export const TopArtistBlock: React.SFC<{className?: string, stat: any}> =
   ({className, stat: { playDurationMs, artist: {id, name, images, external_urls: { spotify }}}}) => {
     const { hrs, mins } = hrsAndMinsAndSecs(playDurationMs)
     const imgUrl = images[0] && images[0].url

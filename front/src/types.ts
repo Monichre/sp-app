@@ -1,4 +1,4 @@
-// Generated in 2019-04-14T12:11:36-07:00
+// Generated in 2019-05-09T12:21:31-07:00
 // REGENERATE THIS BY STARTING THE LOCAL BACKEND
 // AND THEN RUNNING `front % yarn generate`
 
@@ -8,99 +8,30 @@ export type Maybe<T> = T | null;
 // Documents
 // ====================================================
 
-export type ArtistStatsVariables = {
+export type GetUserInfoVariables = {
   uid: string;
-  id: string;
 };
 
-export type ArtistStatsQuery = {
+export type GetUserInfoQuery = {
   __typename?: "Query";
 
-  artistStats: ArtistStatsArtistStats;
+  getUserInfo: GetUserInfoGetUserInfo;
 };
 
-export type ArtistStatsArtistStats = {
-  __typename?: "ArtistStatsResponse";
+export type GetUserInfoGetUserInfo = {
+  __typename?: "UserInfoResponse";
 
-  artist: ArtistStatsArtist;
+  uid: string;
 
-  past30d: ArtistStatsPast30d;
+  email: string;
 
-  past12w: ArtistStatsPast12w;
-};
+  displayName: Maybe<string>;
 
-export type ArtistStatsArtist = {
-  __typename?: "Artist";
+  lastUpdate: Maybe<string>;
 
-  id: string;
+  photoURL: Maybe<string>;
 
-  name: string;
-
-  images: ArtistStatsImages[];
-
-  external_urls: ArtistStatsExternalUrls;
-
-  genres: string[];
-};
-
-export type ArtistStatsImages = {
-  __typename?: "Image";
-
-  url: string;
-};
-
-export type ArtistStatsExternalUrls = {
-  __typename?: "SpotifyUrl";
-
-  spotify: string;
-};
-
-export type ArtistStatsPast30d = {
-  __typename?: "ArtistStatsPeriod";
-
-  global: ArtistStatsGlobal[];
-
-  personal: ArtistStatsPersonal[];
-};
-
-export type ArtistStatsGlobal = {
-  __typename?: "ArtistStatsPeriodUser";
-
-  period: string;
-
-  playDurationMs: number;
-};
-
-export type ArtistStatsPersonal = {
-  __typename?: "ArtistStatsPeriodUser";
-
-  period: string;
-
-  playDurationMs: number;
-};
-
-export type ArtistStatsPast12w = {
-  __typename?: "ArtistStatsPeriod";
-
-  global: ArtistStats_Global[];
-
-  personal: ArtistStats_Personal[];
-};
-
-export type ArtistStats_Global = {
-  __typename?: "ArtistStatsPeriodUser";
-
-  period: string;
-
-  playDurationMs: number;
-};
-
-export type ArtistStats_Personal = {
-  __typename?: "ArtistStatsPeriodUser";
-
-  period: string;
-
-  playDurationMs: number;
+  initialHarvestComplete: Maybe<boolean>;
 };
 
 export type RecentPlaysVariables = {
@@ -177,485 +108,903 @@ export type RecentPlays_Images = {
   url: string;
 };
 
-export type DashStatsVariables = {
+export type InsightsArtistStatsVariables = {
   uid: string;
+  artistId: string;
 };
 
-export type DashStatsQuery = {
+export type InsightsArtistStatsQuery = {
   __typename?: "Query";
 
-  dashStats: DashStatsDashStats;
+  insightsArtistStats: InsightsArtistStatsInsightsArtistStats;
 };
 
-export type DashStatsDashStats = {
-  __typename?: "DashStatsResponse";
+export type InsightsArtistStatsInsightsArtistStats = {
+  __typename?: "InsightsArtistStatsResponse";
 
-  topArtists: DashStatsTopArtists;
+  artist: InsightsArtistStatsArtist;
 
-  topGenres: DashStatsTopGenres;
+  today: InsightsArtistStatsToday;
+
+  thisWeek: InsightsArtistStatsThisWeek;
+
+  thisMonth: InsightsArtistStatsThisMonth;
+
+  lifetime: InsightsArtistStatsLifetime;
 };
 
-export type DashStatsTopArtists = {
-  __typename?: "UserArtistPlaytimes";
+export type InsightsArtistStatsArtist = ArtistFragmentFragment;
 
-  week: DashStatsWeek;
+export type InsightsArtistStatsToday = TimescopeStatsFragmentFragment;
 
-  month: DashStatsMonth;
+export type InsightsArtistStatsThisWeek = TimescopeStatsFragmentFragment;
 
-  life: DashStatsLife;
-};
+export type InsightsArtistStatsThisMonth = TimescopeStatsFragmentFragment;
 
-export type DashStatsWeek = {
-  __typename?: "PeriodGlobalUserArtistPlaytimes";
+export type InsightsArtistStatsLifetime = TimescopeStatsFragmentFragment;
 
-  global: DashStatsGlobal[];
-
-  user: DashStatsUser[];
-};
-
-export type DashStatsGlobal = {
-  __typename?: "ArtistPlaytime";
-
-  artist: DashStatsArtist;
-
-  playDurationMs: number;
-};
-
-export type DashStatsArtist = {
-  __typename?: "Artist";
-
-  id: string;
-
-  name: string;
-
-  images: DashStatsImages[];
-
-  external_urls: DashStatsExternalUrls;
-};
-
-export type DashStatsImages = {
-  __typename?: "Image";
-
-  url: string;
-};
-
-export type DashStatsExternalUrls = {
-  __typename?: "SpotifyUrl";
-
-  spotify: string;
-};
-
-export type DashStatsUser = {
-  __typename?: "ArtistPlaytime";
-
-  artist: DashStats_Artist;
-
-  playDurationMs: number;
-};
-
-export type DashStats_Artist = {
-  __typename?: "Artist";
-
-  id: string;
-
-  name: string;
-
-  images: DashStats_Images[];
-
-  external_urls: DashStats_ExternalUrls;
-};
-
-export type DashStats_Images = {
-  __typename?: "Image";
-
-  url: string;
-};
-
-export type DashStats_ExternalUrls = {
-  __typename?: "SpotifyUrl";
-
-  spotify: string;
-};
-
-export type DashStatsMonth = {
-  __typename?: "PeriodGlobalUserArtistPlaytimes";
-
-  global: DashStats_Global[];
-
-  user: DashStats_User[];
-};
-
-export type DashStats_Global = {
-  __typename?: "ArtistPlaytime";
-
-  artist: DashStats__Artist;
-
-  playDurationMs: number;
-};
-
-export type DashStats__Artist = {
-  __typename?: "Artist";
-
-  id: string;
-
-  name: string;
-
-  images: DashStats__Images[];
-
-  external_urls: DashStats__ExternalUrls;
-};
-
-export type DashStats__Images = {
-  __typename?: "Image";
-
-  url: string;
-};
-
-export type DashStats__ExternalUrls = {
-  __typename?: "SpotifyUrl";
-
-  spotify: string;
-};
-
-export type DashStats_User = {
-  __typename?: "ArtistPlaytime";
-
-  artist: DashStats___Artist;
-
-  playDurationMs: number;
-};
-
-export type DashStats___Artist = {
-  __typename?: "Artist";
-
-  id: string;
-
-  name: string;
-
-  images: DashStats___Images[];
-
-  external_urls: DashStats___ExternalUrls;
-};
-
-export type DashStats___Images = {
-  __typename?: "Image";
-
-  url: string;
-};
-
-export type DashStats___ExternalUrls = {
-  __typename?: "SpotifyUrl";
-
-  spotify: string;
-};
-
-export type DashStatsLife = {
-  __typename?: "PeriodGlobalUserArtistPlaytimes";
-
-  global: DashStats__Global[];
-
-  user: DashStats__User[];
-};
-
-export type DashStats__Global = {
-  __typename?: "ArtistPlaytime";
-
-  artist: DashStats____Artist;
-
-  playDurationMs: number;
-};
-
-export type DashStats____Artist = {
-  __typename?: "Artist";
-
-  id: string;
-
-  name: string;
-
-  images: DashStats____Images[];
-
-  external_urls: DashStats____ExternalUrls;
-};
-
-export type DashStats____Images = {
-  __typename?: "Image";
-
-  url: string;
-};
-
-export type DashStats____ExternalUrls = {
-  __typename?: "SpotifyUrl";
-
-  spotify: string;
-};
-
-export type DashStats__User = {
-  __typename?: "ArtistPlaytime";
-
-  artist: DashStats_____Artist;
-
-  playDurationMs: number;
-};
-
-export type DashStats_____Artist = {
-  __typename?: "Artist";
-
-  id: string;
-
-  name: string;
-
-  images: DashStats_____Images[];
-
-  external_urls: DashStats_____ExternalUrls;
-};
-
-export type DashStats_____Images = {
-  __typename?: "Image";
-
-  url: string;
-};
-
-export type DashStats_____ExternalUrls = {
-  __typename?: "SpotifyUrl";
-
-  spotify: string;
-};
-
-export type DashStatsTopGenres = {
-  __typename?: "UserGenrePlaytimes";
-
-  week: DashStats_Week;
-
-  month: DashStats_Month;
-
-  life: DashStats_Life;
-};
-
-export type DashStats_Week = {
-  __typename?: "UserGenrePeriodPlaytimes";
-
-  global: DashStats___Global[];
-
-  user: DashStats___User[];
-};
-
-export type DashStats___Global = {
-  __typename?: "GenrePlaytime";
-
-  name: string;
-
-  playDurationMs: number;
-};
-
-export type DashStats___User = {
-  __typename?: "GenrePlaytime";
-
-  name: string;
-
-  playDurationMs: number;
-};
-
-export type DashStats_Month = {
-  __typename?: "UserGenrePeriodPlaytimes";
-
-  global: DashStats____Global[];
-
-  user: DashStats____User[];
-};
-
-export type DashStats____Global = {
-  __typename?: "GenrePlaytime";
-
-  name: string;
-
-  playDurationMs: number;
-};
-
-export type DashStats____User = {
-  __typename?: "GenrePlaytime";
-
-  name: string;
-
-  playDurationMs: number;
-};
-
-export type DashStats_Life = {
-  __typename?: "UserGenrePeriodPlaytimes";
-
-  global: DashStats_____Global[];
-
-  user: DashStats_____User[];
-};
-
-export type DashStats_____Global = {
-  __typename?: "GenrePlaytime";
-
-  name: string;
-
-  playDurationMs: number;
-};
-
-export type DashStats_____User = {
-  __typename?: "GenrePlaytime";
-
-  name: string;
-
-  playDurationMs: number;
-};
-
-export type PlaytimeSummaryVariables = {
+export type InsightsDashVariables = {
   uid: string;
 };
 
-export type PlaytimeSummaryQuery = {
+export type InsightsDashQuery = {
   __typename?: "Query";
 
-  playtimeSummary: PlaytimeSummaryPlaytimeSummary;
+  insightsDash: InsightsDashInsightsDash;
 };
 
-export type PlaytimeSummaryPlaytimeSummary = {
-  __typename?: "PlaytimeSummaryResponse";
+export type InsightsDashInsightsDash = {
+  __typename?: "InsightsDashResponse";
 
-  topLifetimeArtists: PlaytimeSummaryTopLifetimeArtists[];
+  today: InsightsDashToday;
 
-  day: PlaytimeSummaryDay;
+  thisWeek: InsightsDashThisWeek;
 
-  week: PlaytimeSummaryWeek;
+  thisMonth: InsightsDashThisMonth;
 
-  month: PlaytimeSummaryMonth;
+  lifetime: InsightsDashLifetime;
 };
 
-export type PlaytimeSummaryTopLifetimeArtists = {
-  __typename?: "ArtistPlaytime";
+export type InsightsDashToday = TimescopeDashFragment;
 
-  artist: PlaytimeSummaryArtist;
+export type InsightsDashThisWeek = TimescopeDashFragment;
 
-  playDurationMs: number;
+export type InsightsDashThisMonth = TimescopeDashFragment;
+
+export type InsightsDashLifetime = TimescopeDashFragment;
+
+export type InsightsGenreStatsVariables = {
+  uid: string;
+  genre: string;
 };
 
-export type PlaytimeSummaryArtist = {
+export type InsightsGenreStatsQuery = {
+  __typename?: "Query";
+
+  insightsGenreStats: InsightsGenreStatsInsightsGenreStats;
+};
+
+export type InsightsGenreStatsInsightsGenreStats = {
+  __typename?: "InsightsGenreStatsResponse";
+
+  genre: string;
+
+  today: InsightsGenreStatsToday;
+
+  thisWeek: InsightsGenreStatsThisWeek;
+
+  thisMonth: InsightsGenreStatsThisMonth;
+
+  lifetime: InsightsGenreStatsLifetime;
+};
+
+export type InsightsGenreStatsToday = TimescopeGenreStatsFragmentFragment;
+
+export type InsightsGenreStatsThisWeek = TimescopeGenreStatsFragmentFragment;
+
+export type InsightsGenreStatsThisMonth = TimescopeGenreStatsFragmentFragment;
+
+export type InsightsGenreStatsLifetime = TimescopeGenreStatsFragmentFragment;
+
+export type InsightsStatsVariables = {
+  uid: string;
+};
+
+export type InsightsStatsQuery = {
+  __typename?: "Query";
+
+  insightsStats: InsightsStatsInsightsStats;
+};
+
+export type InsightsStatsInsightsStats = {
+  __typename?: "InsightsStatsResponse";
+
+  today: InsightsStatsToday;
+
+  thisWeek: InsightsStatsThisWeek;
+
+  thisMonth: InsightsStatsThisMonth;
+
+  lifetime: InsightsStatsLifetime;
+};
+
+export type InsightsStatsToday = {
+  __typename?: "TimescopeStats";
+
+  personal: InsightsStatsPersonal;
+
+  group: InsightsStatsGroup;
+};
+
+export type InsightsStatsPersonal = {
+  __typename?: "PerspectiveStats";
+
+  current: InsightsStatsCurrent;
+
+  delta: Maybe<InsightsStatsDelta>;
+};
+
+export type InsightsStatsCurrent = {
+  __typename?: "Duration";
+
+  hrs: number;
+
+  mins: Maybe<number>;
+};
+
+export type InsightsStatsDelta = {
+  __typename?: "Delta";
+
+  direction: Maybe<string>;
+
+  hrs: number;
+
+  mins: Maybe<number>;
+};
+
+export type InsightsStatsGroup = {
+  __typename?: "PerspectiveStats";
+
+  current: InsightsStats_Current;
+
+  delta: Maybe<InsightsStats_Delta>;
+};
+
+export type InsightsStats_Current = {
+  __typename?: "Duration";
+
+  hrs: number;
+
+  mins: Maybe<number>;
+};
+
+export type InsightsStats_Delta = {
+  __typename?: "Delta";
+
+  direction: Maybe<string>;
+
+  hrs: number;
+
+  mins: Maybe<number>;
+};
+
+export type InsightsStatsThisWeek = {
+  __typename?: "TimescopeStats";
+
+  personal: InsightsStats_Personal;
+
+  group: InsightsStats_Group;
+};
+
+export type InsightsStats_Personal = {
+  __typename?: "PerspectiveStats";
+
+  current: InsightsStats__Current;
+
+  delta: Maybe<InsightsStats__Delta>;
+};
+
+export type InsightsStats__Current = {
+  __typename?: "Duration";
+
+  hrs: number;
+
+  mins: Maybe<number>;
+};
+
+export type InsightsStats__Delta = {
+  __typename?: "Delta";
+
+  direction: Maybe<string>;
+
+  hrs: number;
+
+  mins: Maybe<number>;
+};
+
+export type InsightsStats_Group = {
+  __typename?: "PerspectiveStats";
+
+  current: InsightsStats___Current;
+
+  delta: Maybe<InsightsStats___Delta>;
+};
+
+export type InsightsStats___Current = {
+  __typename?: "Duration";
+
+  hrs: number;
+
+  mins: Maybe<number>;
+};
+
+export type InsightsStats___Delta = {
+  __typename?: "Delta";
+
+  direction: Maybe<string>;
+
+  hrs: number;
+
+  mins: Maybe<number>;
+};
+
+export type InsightsStatsThisMonth = {
+  __typename?: "TimescopeStats";
+
+  personal: InsightsStats__Personal;
+
+  group: InsightsStats__Group;
+};
+
+export type InsightsStats__Personal = {
+  __typename?: "PerspectiveStats";
+
+  current: InsightsStats____Current;
+
+  delta: Maybe<InsightsStats____Delta>;
+};
+
+export type InsightsStats____Current = {
+  __typename?: "Duration";
+
+  hrs: number;
+
+  mins: Maybe<number>;
+};
+
+export type InsightsStats____Delta = {
+  __typename?: "Delta";
+
+  direction: Maybe<string>;
+
+  hrs: number;
+
+  mins: Maybe<number>;
+};
+
+export type InsightsStats__Group = {
+  __typename?: "PerspectiveStats";
+
+  current: InsightsStats_____Current;
+
+  delta: Maybe<InsightsStats_____Delta>;
+};
+
+export type InsightsStats_____Current = {
+  __typename?: "Duration";
+
+  hrs: number;
+
+  mins: Maybe<number>;
+};
+
+export type InsightsStats_____Delta = {
+  __typename?: "Delta";
+
+  direction: Maybe<string>;
+
+  hrs: number;
+
+  mins: Maybe<number>;
+};
+
+export type InsightsStatsLifetime = {
+  __typename?: "TimescopeStats";
+
+  personal: InsightsStats___Personal;
+
+  group: InsightsStats___Group;
+};
+
+export type InsightsStats___Personal = {
+  __typename?: "PerspectiveStats";
+
+  current: InsightsStats______Current;
+
+  delta: Maybe<InsightsStats______Delta>;
+};
+
+export type InsightsStats______Current = {
+  __typename?: "Duration";
+
+  hrs: number;
+
+  mins: Maybe<number>;
+};
+
+export type InsightsStats______Delta = {
+  __typename?: "Delta";
+
+  direction: Maybe<string>;
+
+  hrs: number;
+
+  mins: Maybe<number>;
+};
+
+export type InsightsStats___Group = {
+  __typename?: "PerspectiveStats";
+
+  current: InsightsStats_______Current;
+
+  delta: Maybe<InsightsStats_______Delta>;
+};
+
+export type InsightsStats_______Current = {
+  __typename?: "Duration";
+
+  hrs: number;
+
+  mins: Maybe<number>;
+};
+
+export type InsightsStats_______Delta = {
+  __typename?: "Delta";
+
+  direction: Maybe<string>;
+
+  hrs: number;
+
+  mins: Maybe<number>;
+};
+
+export type InsightsArtistsVariables = {
+  uid: string;
+};
+
+export type InsightsArtistsQuery = {
+  __typename?: "Query";
+
+  insightsArtists: InsightsArtistsInsightsArtists;
+};
+
+export type InsightsArtistsInsightsArtists = {
+  __typename?: "InsightsArtistsResponse";
+
+  today: InsightsArtistsToday;
+
+  thisWeek: InsightsArtistsThisWeek;
+
+  thisMonth: InsightsArtistsThisMonth;
+
+  lifetime: InsightsArtistsLifetime;
+};
+
+export type InsightsArtistsToday = TimescopeTopArtistsFragmentFragment;
+
+export type InsightsArtistsThisWeek = TimescopeTopArtistsFragmentFragment;
+
+export type InsightsArtistsThisMonth = TimescopeTopArtistsFragmentFragment;
+
+export type InsightsArtistsLifetime = TimescopeTopArtistsFragmentFragment;
+
+export type InsightsGenresVariables = {
+  uid: string;
+};
+
+export type InsightsGenresQuery = {
+  __typename?: "Query";
+
+  insightsGenres: InsightsGenresInsightsGenres;
+};
+
+export type InsightsGenresInsightsGenres = {
+  __typename?: "InsightsGenresResponse";
+
+  today: InsightsGenresToday;
+
+  thisWeek: InsightsGenresThisWeek;
+
+  thisMonth: InsightsGenresThisMonth;
+
+  lifetime: InsightsGenresLifetime;
+};
+
+export type InsightsGenresToday = TimescopeTopGenresFragmentFragment;
+
+export type InsightsGenresThisWeek = TimescopeTopGenresFragmentFragment;
+
+export type InsightsGenresThisMonth = TimescopeTopGenresFragmentFragment;
+
+export type InsightsGenresLifetime = TimescopeTopGenresFragmentFragment;
+
+export type ArtistFragmentFragment = {
   __typename?: "Artist";
 
   id: string;
 
   name: string;
 
-  images: PlaytimeSummaryImages[];
+  images: ArtistFragmentImages[];
 
-  external_urls: PlaytimeSummaryExternalUrls;
+  external_urls: ArtistFragmentExternalUrls;
 };
 
-export type PlaytimeSummaryImages = {
+export type ArtistFragmentImages = {
   __typename?: "Image";
 
   url: string;
 };
 
-export type PlaytimeSummaryExternalUrls = {
+export type ArtistFragmentExternalUrls = {
   __typename?: "SpotifyUrl";
 
   spotify: string;
 };
 
-export type PlaytimeSummaryDay = {
-  __typename?: "PlaytimeSummaryPeriods";
+export type TimescopeStatsFragmentFragment = {
+  __typename?: "TimescopeStats";
 
-  current: number;
+  timeseries: TimescopeStatsFragmentTimeseries;
 
-  prev: number;
+  personal: TimescopeStatsFragmentPersonal;
+
+  group: TimescopeStatsFragmentGroup;
 };
 
-export type PlaytimeSummaryWeek = {
-  __typename?: "PlaytimeSummaryPeriods";
+export type TimescopeStatsFragmentTimeseries = {
+  __typename?: "Timeseries";
 
-  current: number;
+  label: string;
 
-  prev: number;
+  values: TimescopeStatsFragmentValues[];
 };
 
-export type PlaytimeSummaryMonth = {
-  __typename?: "PlaytimeSummaryPeriods";
+export type TimescopeStatsFragmentValues = {
+  __typename?: "TimeseriesValue";
 
-  current: number;
+  period: string;
 
-  prev: number;
+  personal: number;
+
+  group: number;
 };
 
-export type GetUserInfoVariables = {
-  uid: string;
+export type TimescopeStatsFragmentPersonal = PerspectiveStatsFragmentFragment;
+
+export type TimescopeStatsFragmentGroup = PerspectiveStatsFragmentFragment;
+
+export type PerspectiveStatsFragmentFragment = {
+  __typename?: "PerspectiveStats";
+
+  current: PerspectiveStatsFragmentCurrent;
+
+  delta: Maybe<PerspectiveStatsFragmentDelta>;
 };
 
-export type GetUserInfoQuery = {
-  __typename?: "Query";
+export type PerspectiveStatsFragmentCurrent = {
+  __typename?: "Duration";
 
-  getUserInfo: GetUserInfoGetUserInfo;
+  hrs: number;
+
+  mins: Maybe<number>;
 };
 
-export type GetUserInfoGetUserInfo = {
-  __typename?: "UserInfoResponse";
+export type PerspectiveStatsFragmentDelta = {
+  __typename?: "Delta";
 
-  uid: string;
+  direction: Maybe<string>;
 
-  email: string;
+  hrs: number;
 
-  displayName: Maybe<string>;
+  mins: Maybe<number>;
+};
 
-  lastUpdate: Maybe<string>;
+export type PerspectiveDashFragment = {
+  __typename?: "PerspectiveTops";
 
-  photoURL: Maybe<string>;
+  artists: PerspectiveDashArtists[];
 
-  initialHarvestComplete: Maybe<boolean>;
+  genres: PerspectiveDashGenres[];
+};
+
+export type PerspectiveDashArtists = {
+  __typename?: "TopArtistStat";
+
+  personal: number;
+
+  group: number;
+
+  artist: PerspectiveDashArtist;
+};
+
+export type PerspectiveDashArtist = {
+  __typename?: "Artist";
+
+  id: string;
+
+  name: string;
+
+  images: PerspectiveDashImages[];
+};
+
+export type PerspectiveDashImages = {
+  __typename?: "Image";
+
+  url: string;
+};
+
+export type PerspectiveDashGenres = {
+  __typename?: "TopGenreStat";
+
+  personal: number;
+
+  group: number;
+
+  genre: string;
+};
+
+export type TimescopeDashFragment = {
+  __typename?: "TimescopeTops";
+
+  timeSeries: TimescopeDashTimeSeries;
+
+  personal: TimescopeDashPersonal;
+
+  group: TimescopeDashGroup;
+};
+
+export type TimescopeDashTimeSeries = {
+  __typename?: "Timeseries";
+
+  label: string;
+
+  values: TimescopeDashValues[];
+};
+
+export type TimescopeDashValues = {
+  __typename?: "TimeseriesValue";
+
+  period: string;
+
+  personal: number;
+
+  group: number;
+};
+
+export type TimescopeDashPersonal = PerspectiveDashFragment;
+
+export type TimescopeDashGroup = PerspectiveDashFragment;
+
+export type TimescopeGenreStatsFragmentFragment = {
+  __typename?: "TimescopeStats";
+
+  timeseries: TimescopeGenreStatsFragmentTimeseries;
+
+  personal: TimescopeGenreStatsFragmentPersonal;
+
+  group: TimescopeGenreStatsFragmentGroup;
+};
+
+export type TimescopeGenreStatsFragmentTimeseries = {
+  __typename?: "Timeseries";
+
+  label: string;
+
+  values: TimescopeGenreStatsFragmentValues[];
+};
+
+export type TimescopeGenreStatsFragmentValues = {
+  __typename?: "TimeseriesValue";
+
+  period: string;
+
+  personal: number;
+
+  group: number;
+};
+
+export type TimescopeGenreStatsFragmentPersonal = PerspectiveGenreStatsFragmentFragment;
+
+export type TimescopeGenreStatsFragmentGroup = PerspectiveGenreStatsFragmentFragment;
+
+export type PerspectiveGenreStatsFragmentFragment = {
+  __typename?: "PerspectiveStats";
+
+  current: PerspectiveGenreStatsFragmentCurrent;
+
+  delta: Maybe<PerspectiveGenreStatsFragmentDelta>;
+};
+
+export type PerspectiveGenreStatsFragmentCurrent = {
+  __typename?: "Duration";
+
+  hrs: number;
+
+  mins: Maybe<number>;
+};
+
+export type PerspectiveGenreStatsFragmentDelta = {
+  __typename?: "Delta";
+
+  direction: Maybe<string>;
+
+  hrs: number;
+
+  mins: Maybe<number>;
+};
+
+export type TimescopeTopArtistsFragmentFragment = {
+  __typename?: "TimescopeTopArtists";
+
+  personal: TimescopeTopArtistsFragmentPersonal[];
+
+  group: TimescopeTopArtistsFragmentGroup[];
+};
+
+export type TimescopeTopArtistsFragmentPersonal = ArtistsFragmentFragment;
+
+export type TimescopeTopArtistsFragmentGroup = ArtistsFragmentFragment;
+
+export type ArtistsFragmentFragment = {
+  __typename?: "TopArtistStat";
+
+  personal: number;
+
+  group: number;
+
+  artist: ArtistsFragmentArtist;
+};
+
+export type ArtistsFragmentArtist = {
+  __typename?: "Artist";
+
+  id: string;
+
+  name: string;
+
+  images: ArtistsFragmentImages[];
+};
+
+export type ArtistsFragmentImages = {
+  __typename?: "Image";
+
+  url: string;
+};
+
+export type TimescopeTopGenresFragmentFragment = {
+  __typename?: "TimescopeTopGenres";
+
+  personal: TimescopeTopGenresFragmentPersonal[];
+
+  group: TimescopeTopGenresFragmentGroup[];
+};
+
+export type TimescopeTopGenresFragmentPersonal = GenresFragmentFragment;
+
+export type TimescopeTopGenresFragmentGroup = GenresFragmentFragment;
+
+export type GenresFragmentFragment = {
+  __typename?: "TopGenreStat";
+
+  personal: number;
+
+  group: number;
+
+  genre: string;
 };
 
 import gql from "graphql-tag";
 import * as ReactApolloHooks from "react-apollo-hooks";
 
 // ====================================================
-// Components
+// Fragments
 // ====================================================
 
-export const ArtistStatsDocument = gql`
-  query ArtistStats($uid: String!, $id: String!) {
-    artistStats(uid: $uid, id: $id) {
+export const ArtistFragmentFragmentDoc = gql`
+  fragment ArtistFragment on Artist {
+    id
+    name
+    images {
+      url
+    }
+    external_urls {
+      spotify
+    }
+  }
+`;
+
+export const PerspectiveStatsFragmentFragmentDoc = gql`
+  fragment PerspectiveStatsFragment on PerspectiveStats {
+    current {
+      hrs
+      mins
+    }
+    delta {
+      direction
+      hrs
+      mins
+    }
+  }
+`;
+
+export const TimescopeStatsFragmentFragmentDoc = gql`
+  fragment TimescopeStatsFragment on TimescopeStats {
+    timeseries {
+      label
+      values {
+        period
+        personal
+        group
+      }
+    }
+    personal {
+      ...PerspectiveStatsFragment
+    }
+    group {
+      ...PerspectiveStatsFragment
+    }
+  }
+
+  ${PerspectiveStatsFragmentFragmentDoc}
+`;
+
+export const PerspectiveDashFragmentDoc = gql`
+  fragment PerspectiveDash on PerspectiveTops {
+    artists {
+      personal
+      group
       artist {
         id
         name
         images {
           url
         }
-        external_urls {
-          spotify
-        }
-        genres
       }
-      past30d {
-        global {
-          period
-          playDurationMs
-        }
-        personal {
-          period
-          playDurationMs
-        }
+    }
+    genres {
+      personal
+      group
+      genre
+    }
+  }
+`;
+
+export const TimescopeDashFragmentDoc = gql`
+  fragment TimescopeDash on TimescopeTops {
+    timeSeries {
+      label
+      values {
+        period
+        personal
+        group
       }
-      past12w {
-        global {
-          period
-          playDurationMs
-        }
-        personal {
-          period
-          playDurationMs
-        }
+    }
+    personal {
+      ...PerspectiveDash
+    }
+    group {
+      ...PerspectiveDash
+    }
+  }
+
+  ${PerspectiveDashFragmentDoc}
+`;
+
+export const PerspectiveGenreStatsFragmentFragmentDoc = gql`
+  fragment PerspectiveGenreStatsFragment on PerspectiveStats {
+    current {
+      hrs
+      mins
+    }
+    delta {
+      direction
+      hrs
+      mins
+    }
+  }
+`;
+
+export const TimescopeGenreStatsFragmentFragmentDoc = gql`
+  fragment TimescopeGenreStatsFragment on TimescopeStats {
+    timeseries {
+      label
+      values {
+        period
+        personal
+        group
+      }
+    }
+    personal {
+      ...PerspectiveGenreStatsFragment
+    }
+    group {
+      ...PerspectiveGenreStatsFragment
+    }
+  }
+
+  ${PerspectiveGenreStatsFragmentFragmentDoc}
+`;
+
+export const ArtistsFragmentFragmentDoc = gql`
+  fragment ArtistsFragment on TopArtistStat {
+    personal
+    group
+    artist {
+      id
+      name
+      images {
+        url
       }
     }
   }
 `;
-export function useArtistStats(
-  baseOptions?: ReactApolloHooks.QueryHookOptions<ArtistStatsVariables>
+
+export const TimescopeTopArtistsFragmentFragmentDoc = gql`
+  fragment TimescopeTopArtistsFragment on TimescopeTopArtists {
+    personal {
+      ...ArtistsFragment
+    }
+    group {
+      ...ArtistsFragment
+    }
+  }
+
+  ${ArtistsFragmentFragmentDoc}
+`;
+
+export const GenresFragmentFragmentDoc = gql`
+  fragment GenresFragment on TopGenreStat {
+    personal
+    group
+    genre
+  }
+`;
+
+export const TimescopeTopGenresFragmentFragmentDoc = gql`
+  fragment TimescopeTopGenresFragment on TimescopeTopGenres {
+    personal {
+      ...GenresFragment
+    }
+    group {
+      ...GenresFragment
+    }
+  }
+
+  ${GenresFragmentFragmentDoc}
+`;
+
+// ====================================================
+// Components
+// ====================================================
+
+export const GetUserInfoDocument = gql`
+  query GetUserInfo($uid: String!) {
+    getUserInfo(uid: $uid) {
+      uid
+      email
+      displayName
+      lastUpdate
+      photoURL
+      initialHarvestComplete
+    }
+  }
+`;
+export function useGetUserInfo(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<GetUserInfoVariables>
 ) {
-  return ReactApolloHooks.useQuery<ArtistStatsQuery, ArtistStatsVariables>(
-    ArtistStatsDocument,
+  return ReactApolloHooks.useQuery<GetUserInfoQuery, GetUserInfoVariables>(
+    GetUserInfoDocument,
     baseOptions
   );
 }
@@ -696,194 +1045,258 @@ export function useRecentPlays(
     baseOptions
   );
 }
-export const DashStatsDocument = gql`
-  query DashStats($uid: String!) {
-    dashStats(uid: $uid) {
-      topArtists {
-        week {
-          global {
-            artist {
-              id
-              name
-              images {
-                url
-              }
-              external_urls {
-                spotify
-              }
-            }
-            playDurationMs
-          }
-          user {
-            artist {
-              id
-              name
-              images {
-                url
-              }
-              external_urls {
-                spotify
-              }
-            }
-            playDurationMs
-          }
-        }
-        month {
-          global {
-            artist {
-              id
-              name
-              images {
-                url
-              }
-              external_urls {
-                spotify
-              }
-            }
-            playDurationMs
-          }
-          user {
-            artist {
-              id
-              name
-              images {
-                url
-              }
-              external_urls {
-                spotify
-              }
-            }
-            playDurationMs
-          }
-        }
-        life {
-          global {
-            artist {
-              id
-              name
-              images {
-                url
-              }
-              external_urls {
-                spotify
-              }
-            }
-            playDurationMs
-          }
-          user {
-            artist {
-              id
-              name
-              images {
-                url
-              }
-              external_urls {
-                spotify
-              }
-            }
-            playDurationMs
-          }
-        }
+export const InsightsArtistStatsDocument = gql`
+  query InsightsArtistStats($uid: String!, $artistId: String!) {
+    insightsArtistStats(uid: $uid, gid: "global", artistId: $artistId) {
+      artist {
+        ...ArtistFragment
       }
-      topGenres {
-        week {
-          global {
-            name
-            playDurationMs
-          }
-          user {
-            name
-            playDurationMs
-          }
-        }
-        month {
-          global {
-            name
-            playDurationMs
-          }
-          user {
-            name
-            playDurationMs
-          }
-        }
-        life {
-          global {
-            name
-            playDurationMs
-          }
-          user {
-            name
-            playDurationMs
-          }
-        }
+      today {
+        ...TimescopeStatsFragment
+      }
+      thisWeek {
+        ...TimescopeStatsFragment
+      }
+      thisMonth {
+        ...TimescopeStatsFragment
+      }
+      lifetime {
+        ...TimescopeStatsFragment
       }
     }
   }
+
+  ${ArtistFragmentFragmentDoc}
+  ${TimescopeStatsFragmentFragmentDoc}
 `;
-export function useDashStats(
-  baseOptions?: ReactApolloHooks.QueryHookOptions<DashStatsVariables>
-) {
-  return ReactApolloHooks.useQuery<DashStatsQuery, DashStatsVariables>(
-    DashStatsDocument,
-    baseOptions
-  );
-}
-export const PlaytimeSummaryDocument = gql`
-  query PlaytimeSummary($uid: String!) {
-    playtimeSummary(uid: $uid) {
-      topLifetimeArtists {
-        artist {
-          id
-          name
-          images {
-            url
-          }
-          external_urls {
-            spotify
-          }
-        }
-        playDurationMs
-      }
-      day {
-        current
-        prev
-      }
-      week {
-        current
-        prev
-      }
-      month {
-        current
-        prev
-      }
-    }
-  }
-`;
-export function usePlaytimeSummary(
-  baseOptions?: ReactApolloHooks.QueryHookOptions<PlaytimeSummaryVariables>
+export function useInsightsArtistStats(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<InsightsArtistStatsVariables>
 ) {
   return ReactApolloHooks.useQuery<
-    PlaytimeSummaryQuery,
-    PlaytimeSummaryVariables
-  >(PlaytimeSummaryDocument, baseOptions);
+    InsightsArtistStatsQuery,
+    InsightsArtistStatsVariables
+  >(InsightsArtistStatsDocument, baseOptions);
 }
-export const GetUserInfoDocument = gql`
-  query GetUserInfo($uid: String!) {
-    getUserInfo(uid: $uid) {
-      uid
-      email
-      displayName
-      lastUpdate
-      photoURL
-      initialHarvestComplete
+export const InsightsDashDocument = gql`
+  query InsightsDash($uid: String!) {
+    insightsDash(uid: $uid, gid: "global") {
+      today {
+        ...TimescopeDash
+      }
+      thisWeek {
+        ...TimescopeDash
+      }
+      thisMonth {
+        ...TimescopeDash
+      }
+      lifetime {
+        ...TimescopeDash
+      }
+    }
+  }
+
+  ${TimescopeDashFragmentDoc}
+`;
+export function useInsightsDash(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<InsightsDashVariables>
+) {
+  return ReactApolloHooks.useQuery<InsightsDashQuery, InsightsDashVariables>(
+    InsightsDashDocument,
+    baseOptions
+  );
+}
+export const InsightsGenreStatsDocument = gql`
+  query InsightsGenreStats($uid: String!, $genre: String!) {
+    insightsGenreStats(uid: $uid, gid: "global", genre: $genre) {
+      genre
+      today {
+        ...TimescopeGenreStatsFragment
+      }
+      thisWeek {
+        ...TimescopeGenreStatsFragment
+      }
+      thisMonth {
+        ...TimescopeGenreStatsFragment
+      }
+      lifetime {
+        ...TimescopeGenreStatsFragment
+      }
+    }
+  }
+
+  ${TimescopeGenreStatsFragmentFragmentDoc}
+`;
+export function useInsightsGenreStats(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<InsightsGenreStatsVariables>
+) {
+  return ReactApolloHooks.useQuery<
+    InsightsGenreStatsQuery,
+    InsightsGenreStatsVariables
+  >(InsightsGenreStatsDocument, baseOptions);
+}
+export const InsightsStatsDocument = gql`
+  query InsightsStats($uid: String!) {
+    insightsStats(uid: $uid, gid: "global") {
+      today {
+        personal {
+          current {
+            hrs
+            mins
+          }
+          delta {
+            direction
+            hrs
+            mins
+          }
+        }
+        group {
+          current {
+            hrs
+            mins
+          }
+          delta {
+            direction
+            hrs
+            mins
+          }
+        }
+      }
+      thisWeek {
+        personal {
+          current {
+            hrs
+            mins
+          }
+          delta {
+            direction
+            hrs
+            mins
+          }
+        }
+        group {
+          current {
+            hrs
+            mins
+          }
+          delta {
+            direction
+            hrs
+            mins
+          }
+        }
+      }
+      thisMonth {
+        personal {
+          current {
+            hrs
+            mins
+          }
+          delta {
+            direction
+            hrs
+            mins
+          }
+        }
+        group {
+          current {
+            hrs
+            mins
+          }
+          delta {
+            direction
+            hrs
+            mins
+          }
+        }
+      }
+      lifetime {
+        personal {
+          current {
+            hrs
+            mins
+          }
+          delta {
+            direction
+            hrs
+            mins
+          }
+        }
+        group {
+          current {
+            hrs
+            mins
+          }
+          delta {
+            direction
+            hrs
+            mins
+          }
+        }
+      }
     }
   }
 `;
-export function useGetUserInfo(
-  baseOptions?: ReactApolloHooks.QueryHookOptions<GetUserInfoVariables>
+export function useInsightsStats(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<InsightsStatsVariables>
 ) {
-  return ReactApolloHooks.useQuery<GetUserInfoQuery, GetUserInfoVariables>(
-    GetUserInfoDocument,
+  return ReactApolloHooks.useQuery<InsightsStatsQuery, InsightsStatsVariables>(
+    InsightsStatsDocument,
     baseOptions
   );
+}
+export const InsightsArtistsDocument = gql`
+  query InsightsArtists($uid: String!) {
+    insightsArtists(uid: $uid, gid: "global") {
+      today {
+        ...TimescopeTopArtistsFragment
+      }
+      thisWeek {
+        ...TimescopeTopArtistsFragment
+      }
+      thisMonth {
+        ...TimescopeTopArtistsFragment
+      }
+      lifetime {
+        ...TimescopeTopArtistsFragment
+      }
+    }
+  }
+
+  ${TimescopeTopArtistsFragmentFragmentDoc}
+`;
+export function useInsightsArtists(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<InsightsArtistsVariables>
+) {
+  return ReactApolloHooks.useQuery<
+    InsightsArtistsQuery,
+    InsightsArtistsVariables
+  >(InsightsArtistsDocument, baseOptions);
+}
+export const InsightsGenresDocument = gql`
+  query InsightsGenres($uid: String!) {
+    insightsGenres(uid: $uid, gid: "global") {
+      today {
+        ...TimescopeTopGenresFragment
+      }
+      thisWeek {
+        ...TimescopeTopGenresFragment
+      }
+      thisMonth {
+        ...TimescopeTopGenresFragment
+      }
+      lifetime {
+        ...TimescopeTopGenresFragment
+      }
+    }
+  }
+
+  ${TimescopeTopGenresFragmentFragmentDoc}
+`;
+export function useInsightsGenres(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<InsightsGenresVariables>
+) {
+  return ReactApolloHooks.useQuery<
+    InsightsGenresQuery,
+    InsightsGenresVariables
+  >(InsightsGenresDocument, baseOptions);
 }

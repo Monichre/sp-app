@@ -1,5 +1,5 @@
 import React from 'react';
-import { ButtonSignout } from './Authed/AuthedAppBar';
+import { ButtonSignout } from '../../shared/ui';
 import styled from 'styled-components';
 import LogRocket from 'logrocket'
 
