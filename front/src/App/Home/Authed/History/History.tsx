@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRecentPlays } from '../../../../types';
 import styled from 'styled-components'
-import { HistoryCard } from './HistoryCard';
+import { Play } from './Play';
 import { Container } from '../../../../shared/ui';
 
 const Card = styled.div`
@@ -91,7 +91,7 @@ export const History: React.SFC<{uid: string}> = ({uid}) => {
     <HistoryGrid data-test="play-timeline">
       {recentPlays.map((play, key) => 
         <HistoryRow {...{key}}>
-          <HistoryCard {...{play}}/>
+          <Play {...{play}}/>
         </HistoryRow>
       )}
     </HistoryGrid>

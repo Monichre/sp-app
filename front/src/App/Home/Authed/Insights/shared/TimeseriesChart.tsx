@@ -5,18 +5,18 @@ import { BRAND_GLOBAL_COLOR, BRAND_PERSONAL_COLOR, notLargeQuery, largeQuery } f
 import styled from 'styled-components';
 import { BlockTitle, BlockTitleMore } from '../shared/BlockTitle';
 
-export const TimeseriesChart: React.SFC<{timeseries: TimescopeDashTimeSeries}> = ({timeseries}) =>
+export const TimeseriesChart: React.SFC<{timeSeries: TimescopeDashTimeSeries}> = ({timeSeries}) =>
 <div>
-<BlockTitle>{timeseries.label}</BlockTitle>
+<BlockTitle>{timeSeries.label}</BlockTitle>
 <ResponsiveContainer width='100%' height={240}>
-  <LineChart data={timeseries.values}>
+  <LineChart data={timeSeries.values}>
     {/* <CartesianGrid stroke='#999'/> */}
     <XAxis dataKey='period' stroke='#ccc' textAnchor='middle' tickMargin={12}>
     </XAxis>
-    <YAxis yAxisId='left' type='number' stroke={BRAND_PERSONAL_COLOR} interval={0} orientation='left'>
+    <YAxis yAxisId='left' type='number' stroke={BRAND_PERSONAL_COLOR} interval={0} orientation='left' tickFormatter={Math.floor} allowDecimals={false}>
       <Label position='left' angle={90} offset={-8}  y={-32} stroke={BRAND_PERSONAL_COLOR}>hours by you</Label>
     </YAxis>
-    <YAxis yAxisId='right' type='number' stroke={BRAND_GLOBAL_COLOR} interval={0} orientation='right'>
+    <YAxis yAxisId='right' type='number' stroke={BRAND_GLOBAL_COLOR} interval={0} orientation='right' tickFormatter={Math.floor} allowDecimals={false}>
       <Label position='right' angle={90} offset={-4} stroke={BRAND_GLOBAL_COLOR}>hours by soundpruf</Label>
     </YAxis>
     <Line dataKey='group' fill={BRAND_GLOBAL_COLOR} stroke={BRAND_GLOBAL_COLOR} yAxisId='right'/>

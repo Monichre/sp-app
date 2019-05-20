@@ -50,17 +50,18 @@ export const Authed: React.SFC<{user: {uid: string}}> = ({user: firebaseUser}) =
   const result = useGetUserInfo({ variables: { uid: firebaseUser.uid }, pollInterval: 4000, suspend: true})
   const user = result.data && result.data.getUserInfo
   if (!user) { return <ErrorFallback/> }
+  const { initialHarvestComplete, lastUpdate, uid } = user
   console.log('userInfo', user)
   // if (!user) { throw new Error('No user found!')} // error boundary not handling this properly???
 
-  if (!user.initialHarvestComplete) { return <OnboardingMessage/> }
+  // if (!user.initialHarvestComplete) { return <OnboardingMessage/> }
   return (
     <AuthedView>
-        <NavMenu/>
+        <NavMenu {...{initialHarvestComplete: initialHarvestComplete || false, lastUpdate: lastUpdate || ''}}/>
       <React.Suspense fallback={<Loading/>}>
         <Switch>
-          <Route path='/insights/:timeScope/:groupId/:perspective' render={(props) => <Insights {...props} uid={user.uid}/>}/>
-          <Route path='/history' render={(props) => <History {...props} uid={user.uid}/>}/>
+          <Route path='/insights/:timeScope/:groupId/:perspective' render={(props) => <Insights {...props} uid={uid}/>}/>
+          <Route path='/history' render={(props) => <History {...props} uid={uid}/>}/>
           <Route path='/profile' render={(props) => <Profile {...props}/>}/>
           <Redirect from='/' to='/insights/thisWeek/global/personal'/>
         </Switch>

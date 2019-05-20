@@ -1,8 +1,9 @@
 import React from 'react';
-import { TPathParams, insightLink } from './functions';
-import { Link } from 'react-router-dom';
+import { TPathParams, insightLink, navigateTo, genreLink } from './functions';
+import { Link, withRouter, RouteComponentProps } from 'react-router-dom';
+import { History } from 'history'
 import { PerspectiveDashGenres } from '../../../../../types';
-import { ResponsiveContainer, BarChart, XAxis, YAxis, Bar, CartesianGrid, Label, Text, LineChart, Line } from 'recharts';
+import { ResponsiveContainer, BarChart, XAxis, YAxis, Bar, CartesianGrid, Label, Text, LineChart, Line, Tooltip } from 'recharts';
 import { BRAND_GLOBAL_COLOR, BRAND_PERSONAL_COLOR, notLargeQuery } from '../../../../../shared/media';
 import { Comment } from './Comment';
 
@@ -22,34 +23,91 @@ const CustomTick: React.SFC<TickProps> = ({x, y, offset, genre, pathParams}) =>{
     </Link>
   )
 }
-const GenresChart: React.SFC<{pathParams: TPathParams, genres: PerspectiveDashGenres[], height?: any}> = ({pathParams, genres, children, height = 70}) =>
-<div>
-  {children}
+
+const navigateToGenre = (history: History, pathParams: TPathParams) => (obj: any) => {
+  if (!obj) { return }
+  const genre = obj['activePayload'][0]['payload']['genre']
+  console.log('genre', genre )
+  navigateTo(history, genreLink(pathParams, genre))
+}
+
+type BarXAxisProps = {
+  stroke: string
+  orientation: 'top' | 'bottom'
+  position: 'insideTopLeft' | 'insideBottomLeft'
+}
+const BarXAxis: React.SFC<BarXAxisProps> = ({stroke, orientation, position}) =>
+  <XAxis height={40} type='number' stroke={stroke} orientation={orientation} xAxisId={orientation} tickFormatter={Math.floor} allowDecimals={false}>
+    <Label position={position} offset={0} stroke={stroke}>hours by you</Label>
+  </XAxis>
+
+const BarXAxisPersonal: React.SFC = () =>
+  <BarXAxis {...{stroke: BRAND_PERSONAL_COLOR, orientation: 'top', position: 'insideTopLeft'}}/>
+
+  const BarXAxisGroup: React.SFC = () =>
+  <BarXAxis {...{stroke: BRAND_GLOBAL_COLOR, orientation: 'bottom', position: 'insideBottomLeft'}}/>
+
+// const BarComparisonChart: React.SFC<ChartProps<T>> = (arg: T, {pathParams, data, history, height = 70}) => {
+// return <BarChart layout='vertical' data={data} onClick={navigateToGenre(history, pathParams)}>
+// {/* <CartesianGrid stroke='#999'/> */}
+// {/* <BarXAxisPersonal/>
+// <BarXAxisGroup/> */}
+// <XAxis height={40} type='number' stroke={BRAND_PERSONAL_COLOR} orientation='top' xAxisId='top' tickFormatter={Math.floor} allowDecimals={false}>
+//   <Label position='insideTopLeft' offset={0} stroke={BRAND_PERSONAL_COLOR}>hours by you</Label>
+// </XAxis>
+// <XAxis height={40} type='number' stroke={BRAND_GLOBAL_COLOR} orientation='bottom' xAxisId='bottom' tickFormatter={Math.floor} allowDecimals={false}>
+//   <Label position='insideBottomLeft' offset={0} stroke={BRAND_GLOBAL_COLOR}>hours by soundpruf</Label>
+// </XAxis>
+// <YAxis width={136} type='category' stroke={BRAND_PERSONAL_COLOR} interval={0}
+//   tick={({payload, ...props}) => <CustomTick {...props} pathParams={pathParams} genre={genres[payload.value].genre}/>}
+//   />
+// <Tooltip cursor={{fill: '#666'}} content={() => <div/>}/>
+// {/* <Legend /> */}
+// <Bar dataKey='personal' fill={BRAND_PERSONAL_COLOR} xAxisId='top' cursor='pointer'/>
+// <Bar dataKey='group' fill={BRAND_GLOBAL_COLOR} xAxisId='bottom' cursor='pointer'/>
+// </BarChart>
+// }
+
+type ChartProps<T> = RouteComponentProps & {
+  pathParams: TPathParams,
+  data: T[],
+  height?: any
+}
+type GenreChartProps = RouteComponentProps & {
+  pathParams: TPathParams,
+  genres: PerspectiveDashGenres[]
+  height?: any
+}
+
+const GenresChart: React.SFC<GenreChartProps> = ({pathParams, genres, history, height = 70}) =>
   <ResponsiveContainer width='100%' height={(height * genres.length) + 90}>
-    <BarChart layout='vertical' data={genres}>
+    <BarChart layout='vertical' data={genres} onClick={navigateToGenre(history, pathParams)}>
       {/* <CartesianGrid stroke='#999'/> */}
-      <XAxis height={40} type='number' stroke={BRAND_PERSONAL_COLOR} orientation='top' xAxisId='top'>
+      {/* <BarXAxisPersonal/>
+      <BarXAxisGroup/> */}
+      <XAxis height={40} type='number' stroke={BRAND_PERSONAL_COLOR} orientation='top' xAxisId='top' tickFormatter={Math.floor} allowDecimals={false}>
         <Label position='insideTopLeft' offset={0} stroke={BRAND_PERSONAL_COLOR}>hours by you</Label>
       </XAxis>
-      <XAxis height={40} type='number' stroke={BRAND_GLOBAL_COLOR} orientation='bottom' xAxisId='bottom'>
+      <XAxis height={40} type='number' stroke={BRAND_GLOBAL_COLOR} orientation='bottom' xAxisId='bottom' tickFormatter={Math.floor} allowDecimals={false}>
         <Label position='insideBottomLeft' offset={0} stroke={BRAND_GLOBAL_COLOR}>hours by soundpruf</Label>
       </XAxis>
       <YAxis width={136} type='category' stroke={BRAND_PERSONAL_COLOR} interval={0}
         tick={({payload, ...props}) => <CustomTick {...props} pathParams={pathParams} genre={genres[payload.value].genre}/>}
         />
-      {/* <Tooltip /> */}
+      <Tooltip cursor={{fill: '#666'}} content={() => <div/>}/>
       {/* <Legend /> */}
-      <Bar dataKey='personal' fill={BRAND_PERSONAL_COLOR} xAxisId='top'/>
-      <Bar dataKey='group' fill={BRAND_GLOBAL_COLOR} xAxisId='bottom'/>
+      <Bar dataKey='personal' fill={BRAND_PERSONAL_COLOR} xAxisId='top' cursor='pointer'/>
+      <Bar dataKey='group' fill={BRAND_GLOBAL_COLOR} xAxisId='bottom' cursor='pointer'/>
     </BarChart>
   </ResponsiveContainer>
-</div>
+
+const GenresChartWithRouter = withRouter(GenresChart)
 
 export const GenresChartBlock: React.SFC<{pathParams: TPathParams, genres: PerspectiveDashGenres[], height?: any}> = ({children, ...params}) =>
   <div>
     {children}
     { params.genres.length > 0 ?
-      <GenresChart {...params}/> :
+      <GenresChartWithRouter {...params}/> :
       <Comment>I don't see any genres for you here.  Have you <a target='new' href='http://open.spotify.com'>listened to Spotify lately?</a></Comment>
     }
   </div>

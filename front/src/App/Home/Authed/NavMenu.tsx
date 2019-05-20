@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { LineChart, History, User } from 'grommet-icons'
 import { largeQuery, notLargeQuery, BRAND_COLOR, BRAND_PERSONAL_COLOR, Large } from '../../../shared/media';
 import { Logo, LogoHorizontal } from '../../../shared/Logo';
+import Moment from 'react-moment';
 
 export const NavMenuView = styled.div`
 background-color: #333;
@@ -80,7 +81,36 @@ const FillSpace = styled.div`
   align-items: center;
 `
 
-export const NavMenu: React.SFC = () =>
+const LastUpdateDiv = styled.div`
+  padding: 1rem;
+  color: #888;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  text-align: center;
+  font-size: 0.8rem;
+`
+const LastUpdate: React.SFC<{lastUpdate: string}> = ({lastUpdate}) =>
+  <LastUpdateDiv>
+    <div>last updated</div>
+    <div><Moment fromNow>{lastUpdate}</Moment></div>
+  </LastUpdateDiv>
+
+const HarvestingNoticeDiv = styled.div`
+margin: 2rem 0rem;
+padding: 1rem;
+background-color: #AAA;
+color: #333;
+`
+
+const HarvestingNotice: React.SFC = () =>
+  <HarvestingNoticeDiv>
+    Watch your stats grow as we complete your initial harvest.
+  </HarvestingNoticeDiv>
+
+export const NavMenu: React.SFC<{initialHarvestComplete: boolean, lastUpdate: string}> = ({initialHarvestComplete, lastUpdate}) =>
   <NavMenuView>
     <NavPrimaryLink to='/insights'>
       <LineChart color='white'/>
@@ -96,6 +126,7 @@ export const NavMenu: React.SFC = () =>
     </NavPrimaryLink>
     <Large>
       <FillSpace>
+      { !initialHarvestComplete ? <HarvestingNotice/> : <LastUpdate {...{lastUpdate}}/> }
         <LogoHorizontal size={8}/>
       </FillSpace>
     </Large>

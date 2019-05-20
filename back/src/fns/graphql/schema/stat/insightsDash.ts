@@ -154,9 +154,33 @@ type TTopKeys = {
   gid: string,
   now: moment.Moment
 }
+
+type PeriodKeys = {
+  timeseriesLabel: string
+  timeseriesPeriodType: PeriodType
+  unit: TMomentUnits
+  distance: number
+  periodType: PeriodType
+
+}
+type SpecificPeriodKeys = {
+  today: PeriodKeys
+}
+const PERIOD_KEYS: SpecificPeriodKeys = {
+  today: {
+    timeseriesLabel: 'past 7 days',
+    timeseriesPeriodType: 'day',
+    unit: 'days',
+    distance: 7,
+    periodType: 'day',
+  }
+}
 const topArtistsAndGenres = async (tableStat: TTableStat, {uid, gid, now}: TTopKeys) => {
+  const mainKeys = {uid, gid, endDate: now}
+  // const x= Object.assign({periodType: 'day'}, mainKeys, PERIOD_KEYS.today)
   return {
-    today: await timescopeTopArtistAndGenres(tableStat, {timeseriesLabel: 'past 7 days', timeseriesPeriodType: 'day', endDate: now, unit: 'days', distance: 7, uid, gid, periodType: 'day'}),
+    // today: await timescopeTopArtistAndGenres(tableStat, {timeseriesLabel: 'past 7 days', timeseriesPeriodType: 'day', endDate: now, unit: 'days', distance: 7, uid, gid, periodType: 'day'}),
+    today: await timescopeTopArtistAndGenres(tableStat, Object.assign({periodType: 'day'}, mainKeys, PERIOD_KEYS.today)),
     thisWeek: await timescopeTopArtistAndGenres(tableStat, {timeseriesLabel: 'past 6 weeks', timeseriesPeriodType: 'week', endDate: now, unit: 'weeks', distance: 6, uid, gid, periodType: 'week'}),
     thisMonth: await timescopeTopArtistAndGenres(tableStat, {timeseriesLabel: 'past 5 months', timeseriesPeriodType: 'month', endDate: now, unit: 'months', distance: 5, uid, gid, periodType: 'month'}),
     lifetime: await timescopeTopArtistAndGenres(tableStat, {timeseriesLabel: 'past 5 months', timeseriesPeriodType: 'month', endDate: now, unit: 'months', distance: 5, uid, gid, periodType: 'life'}),

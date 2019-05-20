@@ -129,6 +129,7 @@ export const StatPage: React.SFC<{stats: Stats, path: string, pathParams: TPathP
       </NotLarge>
       <Container>
         {children}
+        <VerticalSpacer height='110px'/>
       </Container>
     </>
   )

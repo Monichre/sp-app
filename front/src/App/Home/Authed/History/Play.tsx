@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom';
 
 const bgSize = 16
 
-const AlbumBackground = styled.div<{src: string}>`
+const AlbumBackgroundDiv = styled.div<{src: string}>`
   content: "";
   position: absolute;
   height: ${bgSize}rem;
@@ -19,7 +19,7 @@ const AlbumBackground = styled.div<{src: string}>`
   background-size: cover;
 `
 
-const ArtistAvatar = styled.div<{src: string}>`
+const ArtistAvatarDiv = styled.div<{src: string}>`
   height: ${bgSize/2}rem;
   width: ${bgSize/2}rem;
   border-radius: ${bgSize/2/2}rem;
@@ -27,54 +27,54 @@ const ArtistAvatar = styled.div<{src: string}>`
   background-size: cover;
   `
 
-const ArtistInfo = styled.div`
+const ArtistInfoDiv = styled.div`
 `
-const ArtistName = styled.div`
+const ArtistNameDiv = styled.div`
   font-size: ${bgSize/12}rem;
   font-weight: 500;
 `
 
-const Artist = styled(NavLink)`
+const ArtistNavLink = styled(NavLink)`
   display: flex;
   text-decoration: none;
-  ${ArtistInfo} {
+  ${ArtistInfoDiv} {
     margin-top: ${bgSize/16}rem;
     margin-left: -${bgSize/2/2}rem;
   }
 `
 
-const Play = styled.div`
+const PlayDiv = styled.div`
 height: ${bgSize * 1.25}rem;
 width: ${bgSize * 1.25}rem;
-${AlbumBackground} {
+${AlbumBackgroundDiv} {
   margin-top: ${bgSize/8}rem;
   margin-left: ${bgSize/2/2}rem;
 }
 `
 
-const Track = styled.div`
+const TrackDiv = styled.div`
   position: relative;
   top: 1rem;
 `
 
-const TrackName = styled.div`
+const TrackNameDiv = styled.div`
   font-size: ${bgSize/10}rem;
   font-weight; 500;
   max-width: ${bgSize}rem;
 `
 
-const TrackWhen = styled.div`
+const TrackWhenDiv = styled.div`
   font-weight: 300;
   color: #64d6ee;
 `
 
-const TrackAgo = styled.div`
+const TrackAgoMoment = styled(Moment)`
   font-weight: 300;
   font-size: 0.8rem;
   color: #aaa;
 `
 
-export const HistoryCard: React.SFC<{play: RecentPlaysPlays, className?: string}> = ({play: {playedAt, track}, className}) => {
+export const Play: React.SFC<{play: RecentPlaysPlays, className?: string}> = ({play: {playedAt, track}, className}) => {
   try {
     const artistImgUrl = track.artists[0] && track.artists[0].images[0] && track.artists[0].images[0].url || ''
     const artistSpotifyUrl = track.artists[0] && track.artists[0].external_urls.spotify
@@ -83,29 +83,25 @@ export const HistoryCard: React.SFC<{play: RecentPlaysPlays, className?: string}
     const albumImg = track.album.images[0] // this should be fixed in graphql return types
     const albumImgUrl = albumImg ? albumImg.url : ''
     return (
-      <Play {...{className}}>
-        <AlbumBackground {...{src: albumImgUrl}}/>
-        {artistId ? <Artist to={`/insights/lifetime/global/personal/artists/${artistId}`}>
-          <ArtistAvatar src={artistImgUrl}/>
-          <ArtistInfo>
-            <ArtistName>{artistName}</ArtistName>
+      <PlayDiv {...{className}}>
+        <AlbumBackgroundDiv {...{src: albumImgUrl}}/>
+        {artistId ? <ArtistNavLink to={`/insights/lifetime/global/personal/artists/${artistId}`}>
+          <ArtistAvatarDiv src={artistImgUrl}/>
+          <ArtistInfoDiv>
+            <ArtistNameDiv>{artistName}</ArtistNameDiv>
             { artistSpotifyUrl ? <SpotifyLogoLink href={artistSpotifyUrl}/> : ''}
-          </ArtistInfo>
-        </Artist> : ''}
-        <Track>
-          <TrackName>{track.name}</TrackName>
-          <TrackWhen>
+          </ArtistInfoDiv>
+        </ArtistNavLink> : ''}
+        <TrackDiv>
+          <TrackNameDiv>{track.name}</TrackNameDiv>
+          <TrackWhenDiv>
             <Moment format='hh:mma | ddd D MMM'>
               {playedAt}
             </Moment>
-          </TrackWhen>
-          <TrackAgo>
-            <Moment fromNow>
-              {playedAt}
-            </Moment>
-          </TrackAgo>
-        </Track>
-      </Play>
+          </TrackWhenDiv>
+          <TrackAgoMoment fromNow date={playedAt}/>
+        </TrackDiv>
+      </PlayDiv>
     )
   } catch (err) {
     throw new Error(`this is fu'd ${JSON.stringify(track, null, 2)}`)
