@@ -91,7 +91,7 @@ const GenresChart: React.SFC<GenreChartProps> = ({pathParams, genres, history, h
       {/* <BarXAxisPersonal/>
       <BarXAxisGroup/> */}
       <XAxis height={40} type='number' stroke={BRAND_PERSONAL_COLOR} orientation='top' xAxisId='top' tickFormatter={decimalToHrsMins} domain={[0, domainMaxBuilder(genres)]}>
-        <Label position='insideTopLeft' offset={0} stroke={BRAND_PERSONAL_COLOR}>hours by you</Label>
+        <Label position='insideTopLeft' offset={0} stroke={BRAND_PERSONAL_COLOR}>hours</Label>
       </XAxis>
       {/* <XAxis height={40} type='number' stroke={BRAND_GLOBAL_COLOR} orientation='bottom' xAxisId='bottom' tickFormatter={decimalToHrsMins} domain={[0, domainMaxBuilder(genres)]}>
         <Label position='insideBottomLeft' offset={0} stroke={BRAND_GLOBAL_COLOR}>hours by soundpruf</Label>
