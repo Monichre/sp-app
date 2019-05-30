@@ -3,9 +3,13 @@ import { TPathParams, insightLink, navigateTo, genreLink } from './functions';
 import { Link, withRouter, RouteComponentProps } from 'react-router-dom';
 import { History } from 'history'
 import { PerspectiveDashGenres } from '../../../../../types';
-import { ResponsiveContainer, BarChart, XAxis, YAxis, Bar, CartesianGrid, Label, Text, LineChart, Line, Tooltip } from 'recharts';
+import { ResponsiveContainer, BarChart, XAxis, YAxis, Bar, CartesianGrid, Label, Text, LineChart, Line, Tooltip, TooltipProps } from 'recharts';
 import { BRAND_GLOBAL_COLOR, BRAND_PERSONAL_COLOR, notLargeQuery } from '../../../../../shared/media';
 import { Comment } from './Comment';
+import max from 'ramda/es/max';
+import pluck from 'ramda/es/pluck';
+import reduce from 'ramda/es/reduce';
+import pipe from 'ramda/es/pipe';
 
 type TickProps = {
   x?: number
@@ -68,11 +72,12 @@ const BarXAxisPersonal: React.SFC = () =>
 // </BarChart>
 // }
 
-type ChartProps<T> = RouteComponentProps & {
-  pathParams: TPathParams,
-  data: T[],
-  height?: any
-}
+const domainMaxBuilder: (values: PerspectiveDashGenres[]) => (maxValue: number) => number =
+  // (values: TimescopeDashValues[]) => (maxValue: number) => pipe((vals: TimescopeDashValues[]) => vals.map(v => v.group), reduce(max, -Infinity))(values), 
+  (values: PerspectiveDashGenres[]) => (maxValue: number) => Math.ceil(pipe<PerspectiveDashGenres[], number[], number>(pluck('group'), reduce(max, -Infinity))(values))
+
+const decimalToHrsMins = (value: number) => `${Math.floor(value)}:${Math.floor((value % 1) * 60).toString().padStart(2, '0')}`
+
 type GenreChartProps = RouteComponentProps & {
   pathParams: TPathParams,
   genres: PerspectiveDashGenres[]
@@ -85,19 +90,19 @@ const GenresChart: React.SFC<GenreChartProps> = ({pathParams, genres, history, h
       {/* <CartesianGrid stroke='#999'/> */}
       {/* <BarXAxisPersonal/>
       <BarXAxisGroup/> */}
-      <XAxis height={40} type='number' stroke={BRAND_PERSONAL_COLOR} orientation='top' xAxisId='top' tickFormatter={Math.floor} allowDecimals={false}>
+      <XAxis height={40} type='number' stroke={BRAND_PERSONAL_COLOR} orientation='top' xAxisId='top' tickFormatter={decimalToHrsMins} domain={[0, domainMaxBuilder(genres)]}>
         <Label position='insideTopLeft' offset={0} stroke={BRAND_PERSONAL_COLOR}>hours by you</Label>
       </XAxis>
-      <XAxis height={40} type='number' stroke={BRAND_GLOBAL_COLOR} orientation='bottom' xAxisId='bottom' tickFormatter={Math.floor} allowDecimals={false}>
+      {/* <XAxis height={40} type='number' stroke={BRAND_GLOBAL_COLOR} orientation='bottom' xAxisId='bottom' tickFormatter={decimalToHrsMins} domain={[0, domainMaxBuilder(genres)]}>
         <Label position='insideBottomLeft' offset={0} stroke={BRAND_GLOBAL_COLOR}>hours by soundpruf</Label>
-      </XAxis>
+      </XAxis> */}
       <YAxis width={136} type='category' stroke={BRAND_PERSONAL_COLOR} interval={0}
         tick={({payload, ...props}) => <CustomTick {...props} pathParams={pathParams} genre={genres[payload.value].genre}/>}
         />
       <Tooltip cursor={{fill: '#666'}} content={() => <div/>}/>
       {/* <Legend /> */}
       <Bar dataKey='personal' fill={BRAND_PERSONAL_COLOR} xAxisId='top' cursor='pointer'/>
-      <Bar dataKey='group' fill={BRAND_GLOBAL_COLOR} xAxisId='bottom' cursor='pointer'/>
+      <Bar dataKey='group' fill={BRAND_GLOBAL_COLOR} xAxisId='top' cursor='pointer'/>
     </BarChart>
   </ResponsiveContainer>
 
