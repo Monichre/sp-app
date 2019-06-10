@@ -67,7 +67,7 @@ export const TimeseriesChart: React.SFC<{timeSeries: TimescopeDashTimeSeries}> =
     {/* <CartesianGrid stroke='#999'/> */}
     <XAxis dataKey='period' stroke='#ccc' textAnchor='middle' tickMargin={12}>
     </XAxis>
-    <Tooltip content={<CustomTooltip/>}/>
+    {/* <Tooltip content={<CustomTooltip/>}/> */}
     {/* <YAxis yAxisId='left' type='number' stroke={BRAND_PERSONAL_COLOR} interval={0} orientation='left' tickFormatter={Math.floor} allowDecimals={true} domain={[0, domainMaxBuilder(timeSeries.values)]}> */}
     <YAxis yAxisId='left' type='number' stroke={BRAND_PERSONAL_COLOR} interval={0} orientation='left' tickFormatter={decimalToHrsMins} allowDecimals={true} domain={[0, domainMaxBuilder(timeSeries.values)]}>
       <Label position='left' angle={90} offset={-8}  y={-32} stroke={BRAND_PERSONAL_COLOR}>hours</Label>

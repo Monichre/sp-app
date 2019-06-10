@@ -181,9 +181,9 @@ const topArtistsAndGenres = async (tableStat: TTableStat, {uid, gid, now}: TTopK
   return {
     // today: await timescopeTopArtistAndGenres(tableStat, {timeseriesLabel: 'past 7 days', timeseriesPeriodType: 'day', endDate: now, unit: 'days', distance: 7, uid, gid, periodType: 'day'}),
     today: await timescopeTopArtistAndGenres(tableStat, Object.assign({periodType: 'day'}, mainKeys, PERIOD_KEYS.today)),
-    thisWeek: await timescopeTopArtistAndGenres(tableStat, {timeseriesLabel: 'past 7 days', timeseriesPeriodType: 'day', endDate: now, unit: 'days', distance: 7, uid, gid, periodType: 'day'}),
-    thisMonth: await timescopeTopArtistAndGenres(tableStat, {timeseriesLabel: 'past 30 days', timeseriesPeriodType: 'day', endDate: now, unit: 'days', distance: 30, uid, gid, periodType: 'day'}),
-    lifetime: await timescopeTopArtistAndGenres(tableStat, {timeseriesLabel: 'past 12 weeks', timeseriesPeriodType: 'week', endDate: now, unit: 'weeks', distance: 12, uid, gid, periodType: 'week'}),
+    thisWeek: await timescopeTopArtistAndGenres(tableStat, {timeseriesLabel: 'past 7 days', timeseriesPeriodType: 'day', endDate: now, unit: 'days', distance: 7, uid, gid, periodType: 'week'}),
+    thisMonth: await timescopeTopArtistAndGenres(tableStat, {timeseriesLabel: 'past 30 days', timeseriesPeriodType: 'day', endDate: now, unit: 'days', distance: 30, uid, gid, periodType: 'month'}),
+    lifetime: await timescopeTopArtistAndGenres(tableStat, {timeseriesLabel: 'past 12 weeks', timeseriesPeriodType: 'week', endDate: now, unit: 'weeks', distance: 12, uid, gid, periodType: 'life'}),
   }
 }
 

@@ -10,7 +10,8 @@ import { BlockTitle, BlockTitleMore } from '../shared/BlockTitle';
 import { GenresChartBlock } from '../shared/GenresChart';
 import { TimeseriesChart } from '../shared/TimeseriesChart';
 import { suspensefulHook } from '../../../../../lib/suspensefulHook';
-
+import { FeaturedArtists } from './FeaturedArtists';
+import ReactTooltip from 'react-tooltip'
 
 
 const Row = styled.div`
@@ -51,6 +52,13 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
         <BlockTitle to={`${insightLink(pathParams)}/genres`}>Top Genres <BlockTitleMore>see all</BlockTitleMore></BlockTitle>
       </GenresChartBlock>
     </Row>
+    <Row>
+      <BlockTitle>Emerging Artists: Staff Picks</BlockTitle>
+    </Row>
+    <Row>
+      <FeaturedArtists/>
+    </Row>
     <VerticalSpacer height='100px'/>
+    <ReactTooltip place="top" type="dark" effect="float"/>
   </>
 }
