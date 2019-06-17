@@ -43,7 +43,7 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
   } = suspensefulHook(useInsightsDash({ variables: { uid }, suspend: true, pollInterval: 10000}))
   console.log('genres', genres)
   return <>
-    <TimeseriesChart {...{timeSeries}}/>
+    <TimeseriesChart {...{timeSeries, showOnly: pathParams.perspective}}/>
     <Row>
       <ArtistsChartBlock {...{artists, pathParams}}>
         <BlockTitle to={`${insightLink(pathParams)}/artists`}>Top Artists <BlockTitleMore>see all</BlockTitleMore></BlockTitle>

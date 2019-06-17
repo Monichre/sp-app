@@ -8,10 +8,11 @@ import max from 'ramda/es/max';
 import pluck from 'ramda/es/pluck';
 import reduce from 'ramda/es/reduce';
 import pipe from 'ramda/es/pipe';
+import { TPerspectiveOption } from './functions';
 
-const domainMaxBuilder: (values: TimescopeDashValues[]) => (maxValue: number) => number =
+const domainMaxBuilder: (values: TimescopeDashValues[], fromSeries?: TPerspectiveOption) => (maxValue: number) => number =
   // (values: TimescopeDashValues[]) => (maxValue: number) => pipe((vals: TimescopeDashValues[]) => vals.map(v => v.group), reduce(max, -Infinity))(values), 
-  (values: TimescopeDashValues[]) => (maxValue: number) => Math.ceil(pipe<TimescopeDashValues[], number[], number>(pluck('group'), reduce(max, -Infinity))(values))
+  (values, fromSeries = 'group') => (maxValue) => Math.ceil(pipe<TimescopeDashValues[], number[], number>(pluck(fromSeries), reduce(max, -Infinity))(values))
 
   const decimalToHrsMins = (value: number) => `${Math.floor(value)}:${Math.floor((value % 1) * 60).toString().padStart(2, '0')}`
 
@@ -59,7 +60,7 @@ const CustomTooltip: React.SFC<TooltipProps> = ({active, label, payload}) =>
     }
   </TooltipDiv> : <></>
 
-export const TimeseriesChart: React.SFC<{timeSeries: TimescopeDashTimeSeries}> = ({timeSeries}) =>
+export const TimeseriesChart: React.SFC<{timeSeries: TimescopeDashTimeSeries, showOnly?: TPerspectiveOption}> = ({timeSeries, showOnly}) =>
 <div>
 <BlockTitle>{timeSeries.label}</BlockTitle>
 <ResponsiveContainer width='100%' height={240}>
@@ -69,14 +70,19 @@ export const TimeseriesChart: React.SFC<{timeSeries: TimescopeDashTimeSeries}> =
     </XAxis>
     {/* <Tooltip content={<CustomTooltip/>}/> */}
     {/* <YAxis yAxisId='left' type='number' stroke={BRAND_PERSONAL_COLOR} interval={0} orientation='left' tickFormatter={Math.floor} allowDecimals={true} domain={[0, domainMaxBuilder(timeSeries.values)]}> */}
-    <YAxis yAxisId='left' type='number' stroke={BRAND_PERSONAL_COLOR} interval={0} orientation='left' tickFormatter={decimalToHrsMins} allowDecimals={true} domain={[0, domainMaxBuilder(timeSeries.values)]}>
+    <YAxis yAxisId='left' type='number' stroke={BRAND_PERSONAL_COLOR} interval={0} orientation='left'
+      tickFormatter={decimalToHrsMins} allowDecimals={true} domain={[0, domainMaxBuilder(timeSeries.values, showOnly)]}>
       <Label position='left' angle={90} offset={-8}  y={-32} stroke={BRAND_PERSONAL_COLOR}>hours</Label>
     </YAxis>
     {/* <YAxis yAxisId='right' type='number' stroke={BRAND_GLOBAL_COLOR} interval={0} orientation='right' tickFormatter={Math.floor} allowDecimals={false}>
       <Label position='right' angle={90} offset={-4} stroke={BRAND_GLOBAL_COLOR}>hours by soundpruf</Label>
     </YAxis> */}
-    <Area dataKey='group' stackId="1" fill={BRAND_GLOBAL_COLOR} stroke={BRAND_GLOBAL_COLOR} yAxisId='left'/>
-    <Area dataKey='personal' stackId="2" fill={BRAND_PERSONAL_COLOR} stroke={BRAND_PERSONAL_COLOR} yAxisId='left'/>
+    {
+      !showOnly || (showOnly === 'group') ? <Area dataKey='group' stackId="1" fill={BRAND_GLOBAL_COLOR} stroke={BRAND_GLOBAL_COLOR} yAxisId='left'/> : ''
+    }
+    {
+      !showOnly || (showOnly === 'personal') ? <Area dataKey='personal' stackId="2" fill={BRAND_PERSONAL_COLOR} stroke={BRAND_PERSONAL_COLOR} yAxisId='left'/> : ''
+    }
   </AreaChart>
 </ResponsiveContainer>
 </div>
