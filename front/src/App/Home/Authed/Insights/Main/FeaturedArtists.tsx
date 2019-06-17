@@ -68,30 +68,53 @@ type FeaturedArtist = {
   src: string
 }
 
+// const featuredArtists: FeaturedArtist[] = [
+//   {
+//     title: 'Ready',
+//     hover: 'Artists under 5,000 monthly streamers on Spotify',
+//     name: 'Dwynell Roland',
+//     href: 'https://open.spotify.com/artist/1Hk2SN1UWBeajoJBNMCial?si=rts66NevRwCNLWU3ZeR9Rw',
+//     src: 'https://kyigt1bcans3ofli94di0kch-wpengine.netdna-ssl.com/wp-content/blogs.dir/9/files/2017/04/test-1260x838.jpg',
+//   },
+//   {
+//     title: 'Set',
+//     hover: 'Artists under 200,000 monthly streamers on Spotify',
+//     name: 'Yam Haus',
+//     href: 'https://open.spotify.com/artist/0rSavBIQ6PthnW6brWugNL?si=K7brrhjuQIm4e-s3yHtp3Q',
+//     src: 'https://www.minnesotamonthly.com/wp-content/uploads/sites/85/2019/04/Yam-Haus-Downtown-LA_0760.jpg',
+//   },
+//   {
+//     title: 'Liftoff',
+//     hover: 'Artists under 2,500,000 monthly streamers on Spotify',
+//     name: 'Shallou',
+//     href: 'https://open.spotify.com/artist/7C3Cbtr2PkH2l4tOGhtCsk?si=m6kVD_TKRm2-kuGToaIX9g',
+//     src: 'https://www.lollapalooza.com/wp-www-lollapalooza-com/wp/wp-content/uploads/2019/03/shallou_85hxmnbnmwi7-bd936831.jpg',
+//   },
+// ]
+
 const featuredArtists: FeaturedArtist[] = [
   {
     title: 'Ready',
     hover: 'Artists under 5,000 monthly streamers on Spotify',
-    name: 'Dwynell Roland',
-    href: 'https://open.spotify.com/artist/1Hk2SN1UWBeajoJBNMCial?si=rts66NevRwCNLWU3ZeR9Rw',
-    src: 'https://kyigt1bcans3ofli94di0kch-wpengine.netdna-ssl.com/wp-content/blogs.dir/9/files/2017/04/test-1260x838.jpg',
+    name: 'I Self Devine',
+    href: 'https://open.spotify.com/artist/6sUO0fwzR9xGArdGmJry6G?si=5nMKKdONQtSY-1V8RBtvRA',
+    src: 'https://storage.googleapis.com/rhymesayers/images/_hero/iself.jpg',
   },
   {
     title: 'Set',
     hover: 'Artists under 200,000 monthly streamers on Spotify',
-    name: 'Yam Haus',
-    href: 'https://open.spotify.com/artist/0rSavBIQ6PthnW6brWugNL?si=K7brrhjuQIm4e-s3yHtp3Q',
-    src: 'https://www.minnesotamonthly.com/wp-content/uploads/sites/85/2019/04/Yam-Haus-Downtown-LA_0760.jpg',
+    name: 'Sniffle Party',
+    href: 'https://open.spotify.com/artist/5YJXDPud21d8RrmnHGWNx5?si=xag131JNSc6dNxhcbXVBeg',
+    src: 'https://www.convergeradio.org/wp-content/uploads/2016/10/0007143976_10-770x513.jpg',
   },
   {
     title: 'Liftoff',
     hover: 'Artists under 2,500,000 monthly streamers on Spotify',
-    name: 'Shallou',
-    href: 'https://open.spotify.com/artist/7C3Cbtr2PkH2l4tOGhtCsk?si=m6kVD_TKRm2-kuGToaIX9g',
-    src: 'https://www.lollapalooza.com/wp-www-lollapalooza-com/wp/wp-content/uploads/2019/03/shallou_85hxmnbnmwi7-bd936831.jpg',
+    name: 'River Whyless',
+    href: 'https://open.spotify.com/artist/5gcDZA9xXCOspWgQilUYIu?si=8MBZHfLERNOrL9c9DoRF3Q',
+    src: 'https://townsquare.media/site/443/files/2015/03/preatures.jpg?w=980&q=75',
   },
 ]
-
 export const FeaturedArtists: React.SFC = () => 
   <ThreeColumns>
     {featuredArtists.map((artist, key) => <ArtistPromoItem key={key} {...artist}/>)}
