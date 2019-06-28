@@ -92,29 +92,54 @@ type FeaturedArtist = {
 //   },
 // ]
 
+// const featuredArtists: FeaturedArtist[] = [
+//   {
+//     title: 'Ready',
+//     hover: 'Artists under 5,000 monthly streamers on Spotify',
+//     name: 'I Self Devine',
+//     href: 'https://open.spotify.com/artist/6sUO0fwzR9xGArdGmJry6G?si=5nMKKdONQtSY-1V8RBtvRA',
+//     src: 'https://storage.googleapis.com/rhymesayers/images/_hero/iself.jpg',
+//   },
+//   {
+//     title: 'Set',
+//     hover: 'Artists under 200,000 monthly streamers on Spotify',
+//     name: 'Sniffle Party',
+//     href: 'https://open.spotify.com/artist/5YJXDPud21d8RrmnHGWNx5?si=xag131JNSc6dNxhcbXVBeg',
+//     src: 'https://www.convergeradio.org/wp-content/uploads/2016/10/0007143976_10-770x513.jpg',
+//   },
+//   {
+//     title: 'Liftoff',
+//     hover: 'Artists under 2,500,000 monthly streamers on Spotify',
+//     name: 'The Preatures',
+//     href: 'https://open.spotify.com/artist/5gcDZA9xXCOspWgQilUYIu?si=8MBZHfLERNOrL9c9DoRF3Q',
+//     src: 'https://townsquare.media/site/443/files/2015/03/preatures.jpg?w=980&q=75',
+//   },
+// ]
+
 const featuredArtists: FeaturedArtist[] = [
   {
     title: 'Ready',
     hover: 'Artists under 5,000 monthly streamers on Spotify',
-    name: 'I Self Devine',
-    href: 'https://open.spotify.com/artist/6sUO0fwzR9xGArdGmJry6G?si=5nMKKdONQtSY-1V8RBtvRA',
-    src: 'https://storage.googleapis.com/rhymesayers/images/_hero/iself.jpg',
+    name: 'The Nunnery',
+    href: 'https://open.spotify.com/artist/4Y1mEUeicSLw6bWNjUdQCJ?si=u7iNk7abT0mfrYmkq-VwPg',
+    src: 'https://d2l6t8rnjafg4n.cloudfront.net/u/344585/072c04643c8e58526de5cb897f98785a75296131/1100w/photo-jun-12-12-01-15-pm.jpg',
   },
   {
     title: 'Set',
     hover: 'Artists under 200,000 monthly streamers on Spotify',
-    name: 'Sniffle Party',
-    href: 'https://open.spotify.com/artist/5YJXDPud21d8RrmnHGWNx5?si=xag131JNSc6dNxhcbXVBeg',
-    src: 'https://www.convergeradio.org/wp-content/uploads/2016/10/0007143976_10-770x513.jpg',
+    name: 'The Comet is Coming',
+    href: 'https://open.spotify.com/artist/0Z5FMozvx15nUSUA6a9kkU?si=-xKGF_yhTS2Fq3cwKL60jw',
+    src: 'https://f4.bcbits.com/img/0005898581_10.jpg',
   },
   {
     title: 'Liftoff',
     hover: 'Artists under 2,500,000 monthly streamers on Spotify',
-    name: 'River Whyless',
-    href: 'https://open.spotify.com/artist/5gcDZA9xXCOspWgQilUYIu?si=8MBZHfLERNOrL9c9DoRF3Q',
-    src: 'https://townsquare.media/site/443/files/2015/03/preatures.jpg?w=980&q=75',
+    name: 'Polo & Pan',
+    href: 'https://open.spotify.com/artist/45yEuthJ9yq1rNXAOpBnqM?si=ylx-bdc3TaG0bdM2ClSTyg',
+    src: 'http://fonotekaelektrika.com/wp-content/uploads/2018/11/ft.jpg',
   },
 ]
+
 export const FeaturedArtists: React.SFC = () => 
   <ThreeColumns>
     {featuredArtists.map((artist, key) => <ArtistPromoItem key={key} {...artist}/>)}
