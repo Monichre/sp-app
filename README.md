@@ -239,6 +239,3 @@ need to change config/elasticmq
 - [ ] that stupid create kinesis streams script, make it smarter
 
 ## front
-
-- [ ] devops: figger out better way to distinguish between 'offline' and 'cloud' modes independent of target
-
