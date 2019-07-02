@@ -52,10 +52,9 @@ export const Authed: React.SFC<{user: {uid: string}}> = ({user: firebaseUser}) =
   const user = result.data && result.data.getUserInfo
   if (!user) { return <ErrorFallback/> }
   const { initialHarvestComplete, lastUpdate, uid } = user
-  console.log('userInfo', user)
-
   //@ts-ignore
-  console.log(window.Intercom)
+  const intercomUser: any = JSON.parse(localStorage.getItem('intercomUser'))
+  console.log('userInfo', user)
 
 //@ts-ignore
   window.Intercom('boot', {
@@ -71,8 +70,11 @@ export const Authed: React.SFC<{user: {uid: string}}> = ({user: firebaseUser}) =
 
   })
 
-  //@ts-ignore
-  window.Intercom('trackEvent', 'user-login', {
+  if (intercomUser && intercomUser === user.displayName) {
+
+  } else {
+    //@ts-ignore
+    window.Intercom('trackEvent', 'user-login', {
       name: user.displayName || 'N/A', // Full name
       email: user.email || 'N/A', // Email address
       user_id: user.uid,
@@ -81,18 +83,21 @@ export const Authed: React.SFC<{user: {uid: string}}> = ({user: firebaseUser}) =
         "image_url": user.photoURL
       }, // current_user_id
       initialHarvestComplete,
-    lastUpdate
-  })
+      lastUpdate
+    })
+    localStorage.setItem('intercomUser', JSON.stringify(user.displayName))
+  }
   
+ 
   // if (!user.initialHarvestComplete) { return <OnboardingMessage/> }
   return (
     <AuthedView>
         <NavMenu {...{initialHarvestComplete: initialHarvestComplete || false, lastUpdate: lastUpdate || ''}}/>
       <React.Suspense fallback={<Loading/>}>
         <Switch>
-          <Route path='/insights/:timeScope/:groupId/:perspective' render={(props) => <Insights {...props} uid={uid}/>}/>
-          <Route path='/history' render={(props) => <History {...props} uid={uid}/>}/>
-          <Route path='/profile' render={(props) => <Profile {...props}/>}/>
+          <Route path='/insights/:timeScope/:groupId/:perspective' render={(props) => <Insights user={user} {...props} uid={uid}/>}/>
+          <Route path='/history' render={(props) => <History user={user} {...props} uid={uid}/>}/>
+          <Route path='/profile' render={(props) => <Profile user={user} {...props}/>}/>
           <Redirect from='/' to='/insights/thisWeek/global/personal'/>
         </Switch>
       </React.Suspense>
