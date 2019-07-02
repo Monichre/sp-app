@@ -46,14 +46,44 @@ const AuthedView = styled.div`
   }
 `
 
+//cc:signin#2;User is Authenticated
 export const Authed: React.SFC<{user: {uid: string}}> = ({user: firebaseUser}) => {
   const result = useGetUserInfo({ variables: { uid: firebaseUser.uid }, pollInterval: 4000, suspend: true})
   const user = result.data && result.data.getUserInfo
   if (!user) { return <ErrorFallback/> }
   const { initialHarvestComplete, lastUpdate, uid } = user
   console.log('userInfo', user)
-  // if (!user) { throw new Error('No user found!')} // error boundary not handling this properly???
 
+  //@ts-ignore
+  console.log(window.Intercom)
+
+//@ts-ignore
+  window.Intercom('boot', {
+    name: user.displayName || 'N/A', // Full name
+    email: user.email || 'N/A', // Email address
+    user_id: user.uid,
+    avatar: {
+      "type": "avatar",
+      "image_url": user.photoURL
+    }, // current_user_id
+    initialHarvestComplete,
+    lastUpdate
+
+  })
+
+  //@ts-ignore
+  window.Intercom('trackEvent', 'user-login', {
+      name: user.displayName || 'N/A', // Full name
+      email: user.email || 'N/A', // Email address
+      user_id: user.uid,
+      avatar: {
+        "type": "avatar",
+        "image_url": user.photoURL
+      }, // current_user_id
+      initialHarvestComplete,
+    lastUpdate
+  })
+  
   // if (!user.initialHarvestComplete) { return <OnboardingMessage/> }
   return (
     <AuthedView>
