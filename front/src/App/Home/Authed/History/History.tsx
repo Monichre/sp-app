@@ -69,7 +69,20 @@ const HistoryRow = styled.div`
   }
 `
 
-export const History: React.SFC<{uid: string}> = ({uid}) => {
+export const History: React.SFC<{ uid: string, user: any }> = ({ uid, user }) => {
+  if (user) {
+    //@ts-ignore
+    window.Intercom('trackEvent', 'page-navigation', {
+      name: user.displayName || 'N/A', // Full name
+      email: user.email || 'N/A', // Email address
+      user_id: user.uid,
+      avatar: {
+        "type": "avatar",
+        "image_url": user.photoURL
+      }, // current_user_id
+      page: 'history'
+    })
+  }
   const [pollInterval, setPollInterval] = useState(2000)
   const { data, error, errors } = useRecentPlays({ variables: { uid }, suspend: true, pollInterval})
   if (error) { throw new Error(JSON.stringify(error)) }

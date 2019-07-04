@@ -127,9 +127,9 @@ const playtimeStats = async (tableStat: TTableStat, uid: string, gid: string, ge
   return {
     genre,
     today: await playtimeTimescopeStats(tableStat, {uid, gid, genre, periodType: 'day', periodCurrent: today, endDate: now, periodPrev: yest, timeseriesLabel: 'past 7 days', timeseriesPeriodType: 'day', unit: 'days', distance: 7}),
-    thisWeek: await playtimeTimescopeStats(tableStat, {uid, gid, genre, periodType: 'week', periodCurrent: thisWeek, endDate: now, periodPrev: lastWeek, timeseriesLabel: 'past 6 weeks', timeseriesPeriodType: 'week', unit: 'weeks', distance: 6}),
-    thisMonth: await playtimeTimescopeStats(tableStat, {uid, gid, genre, periodType: 'month', periodCurrent: thisMonth, endDate: now, periodPrev: lastMonth, timeseriesLabel: 'past 5 months', timeseriesPeriodType: 'month', unit: 'months', distance: 5}),
-    lifetime: await playtimeTimescopeStats(tableStat, {uid, gid, genre, periodType: 'life', periodCurrent: life, endDate: now, timeseriesLabel: 'past 5 months', timeseriesPeriodType: 'month', unit: 'months', distance: 5}),
+    thisWeek: await playtimeTimescopeStats(tableStat, {uid, gid, genre, periodType: 'week', periodCurrent: thisWeek, endDate: now, periodPrev: lastWeek, timeseriesLabel: 'past 7 days', timeseriesPeriodType: 'day', unit: 'days', distance: 7}),
+    thisMonth: await playtimeTimescopeStats(tableStat, {uid, gid, genre, periodType: 'month', periodCurrent: thisMonth, endDate: now, periodPrev: lastMonth, timeseriesLabel: 'past 30 days', timeseriesPeriodType: 'day', unit: 'days', distance: 30}),
+    lifetime: await playtimeTimescopeStats(tableStat, {uid, gid, genre, periodType: 'life', periodCurrent: life, endDate: now, timeseriesLabel: 'past 12 weeks', timeseriesPeriodType: 'week', unit: 'weeks', distance: 12}),
     // thisWeek: await playtimeTimescopeStats(tableStat, uid, gid, artistId, 'week', thisWeek, lastWeek),
     // thisMonth: await playtimeTimescopeStats(tableStat, uid, gid, artistId, 'month', thisMonth, lastMonth),
     // lifetime: await playtimeTimescopeStats(tableStat, uid, gid, artistId, 'life', 'life'),

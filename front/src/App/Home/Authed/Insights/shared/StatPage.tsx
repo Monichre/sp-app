@@ -47,7 +47,7 @@ const NavOption: React.SFC<{pathParams: TPathParams, label: string}> = ({pathPar
     addParams: { timeScope: TTimeScopeOption }
   }
 const navOptions: TNavOption[]  = [
-  { label: 'Today', addParams: {timeScope: 'today'} },
+  // { label: 'Today', addParams: {timeScope: 'today'} },
   { label: 'This Week', addParams: {timeScope: 'thisWeek'} },
   { label: 'This Month', addParams: {timeScope: 'thisMonth'} },
   { label: 'Lifetime', addParams: {timeScope: 'lifetime'} },

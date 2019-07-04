@@ -13,10 +13,27 @@ export const CustomAuth: React.SFC<RouteComponentProps> = ({history, location}) 
         console.log('logged in with custom token', result)
         if (result.user) {
           //@ts-ignore
+          window.intercomSettings = {
+            app_id: process.env.REACT_APP_INTERCOM_APP_ID,
+            // name: user.displayName || 'N/A', // Full name
+            // email: user.email || 'N/A', // Email address
+            // user_id: user.uid,
+            // avatar: {
+            //   "type": "avatar",
+            //   "image_url": user.photoURL
+            // }, // current_user_id
+            // initialHarvestComplete,
+            // lastUpdate
+
+          }
+
+          
+          //@ts-ignore
           FS.identify(result.user.uid, {
             displayName: result.user.displayName || 'N/A',
             email: result.user.email || 'N/A',
           })
+         
           return LogRocket.identify(result.user.uid, {
             name: result.user.displayName || 'N/A',
             email: result.user.email || 'N/A',

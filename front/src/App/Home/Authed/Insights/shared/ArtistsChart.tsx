@@ -7,6 +7,10 @@ import { ResponsiveContainer, BarChart, XAxis, YAxis, Bar, CartesianGrid, Label,
 import { BRAND_GLOBAL_COLOR, BRAND_PERSONAL_COLOR, notLargeQuery } from '../../../../../shared/media';
 import styled from 'styled-components';
 import { Comment } from './Comment';
+import max from 'ramda/es/max';
+import pluck from 'ramda/es/pluck';
+import reduce from 'ramda/es/reduce';
+import pipe from 'ramda/es/pipe';
 
 type TickProps = {
   x?: number
@@ -42,25 +46,31 @@ const navigateToArtist = (history: History, pathParams: TPathParams) => (obj: an
   navigateTo(history, artistLink(pathParams, artistId))
 }
 
+const domainMaxBuilder: (values: PerspectiveDashArtists[]) => (maxValue: number) => number =
+  // (values: TimescopeDashValues[]) => (maxValue: number) => pipe((vals: TimescopeDashValues[]) => vals.map(v => v.group), reduce(max, -Infinity))(values), 
+  (values: PerspectiveDashArtists[]) => (maxValue: number) => Math.ceil(pipe<PerspectiveDashArtists[], number[], number>(pluck('group'), reduce(max, -Infinity))(values))
+
+  const decimalToHrsMins = (value: number) => `${Math.floor(value)}:${Math.floor((value % 1) * 60).toString().padStart(2, '0')}`
+
 type ChartProps = {pathParams: TPathParams, artists: PerspectiveDashArtists[], height?: any}
 
 const ArtistsChart: React.SFC<RouteComponentProps & ChartProps> = ({pathParams, artists, history, height = 70}) =>
   <ResponsiveContainer width='100%' height={(height * artists.length) + 90}>
     <BarChart layout='vertical' data={artists} onClick={navigateToArtist(history, pathParams)}>
       {/* <CartesianGrid stroke='#999'/> */}
-      <XAxis height={40} type='number' stroke={BRAND_PERSONAL_COLOR} orientation='top' xAxisId='top' tickFormatter={Math.floor} allowDecimals={false}>
-        <Label position='insideTopLeft' offset={0} stroke={BRAND_PERSONAL_COLOR}>hours by you</Label>
+      <XAxis height={40} type='number' stroke={BRAND_PERSONAL_COLOR} orientation='top' xAxisId='top' tickFormatter={decimalToHrsMins} domain={[0, domainMaxBuilder(artists)]}>
+        <Label position='insideTopLeft' offset={0} stroke={BRAND_PERSONAL_COLOR}>hours</Label>
       </XAxis>
-      <XAxis height={40} type='number' stroke={BRAND_GLOBAL_COLOR} orientation='bottom' xAxisId='bottom' tickFormatter={Math.floor} allowDecimals={false} >
+      {/* <XAxis height={40} type='number' stroke={BRAND_GLOBAL_COLOR} orientation='bottom' xAxisId='bottom' tickFormatter={decimalToHrsMins} domain={[0, domainMaxBuilder(artists)]}>
         <Label position='insideBottomLeft' offset={0} stroke={BRAND_GLOBAL_COLOR}>hours by soundpruf</Label>
-      </XAxis>
+      </XAxis> */}
       <YAxis width={200} type='category' stroke={BRAND_PERSONAL_COLOR} interval={0}
         tick={({payload, ...props}) => <CustomArtistTick {...props} pathParams={pathParams} artist={artists[payload.value].artist}/>}
         />
       <Tooltip cursor={{fill: '#666'}} content={() => <div/>}/>
       {/* <Legend /> */}
       <Bar dataKey='personal' fill={BRAND_PERSONAL_COLOR} xAxisId='top' cursor='pointer' />
-      <Bar dataKey='group' fill={BRAND_GLOBAL_COLOR} xAxisId='bottom' cursor='pointer'/>
+      <Bar dataKey='group' fill={BRAND_GLOBAL_COLOR} xAxisId='top' cursor='pointer'/>
     </BarChart>
   </ResponsiveContainer>
 

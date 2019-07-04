@@ -66,6 +66,7 @@ export const AppMetaTags = () => (
     {/* FONTS */}
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet"></link>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet"></link>
+    <link href="https://fonts.googleapis.com/css?family=Righteous&display=swap" rel="stylesheet"></link>
 
     <script>
       {`
