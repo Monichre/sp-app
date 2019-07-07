@@ -10,6 +10,7 @@ export DynamoEndpoint=http://localhost:8888
 export TableUser=sp-app-back-local-TableUser
 export TablePlay=sp-app-back-local-TablePlay
 export TableStat=sp-app-back-local-TableStat
+export TableAchievement=sp-app-back-local-TableAchievement
 
 # streams
 export StreamCreatePlayFromSpotify=sp-app-back-local-StreamCreatePlayFromSpotify
