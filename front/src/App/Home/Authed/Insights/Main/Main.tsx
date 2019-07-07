@@ -10,6 +10,8 @@ import { Genres } from './Genres';
 export const Main: React.SFC<RouteComponentProps & { uid: string, pathParams: TPathParams }> =
 ({uid, history, match: {path}, pathParams}) => {
   const { insightsStats: stats } = suspensefulHook(useInsightsStats({variables: { uid }, suspend: true, pollInterval: 10000}))
+  console.log('TCL: stats', stats)
+  
   return <StatPage {...{stats, history, path, pathParams}}>
     <Switch>
       <Route path={`${path}/artists`} render={props => <Artists {...{uid, pathParams, ...props}}/>}/>

@@ -1,6 +1,11 @@
 import React from 'react';
 import styled from 'styled-components'
 import { DashStatsGlobal } from '../../../../../types';
+import { DashStatsWeek, DashStatsMonth, DashStatsLife } from '../../../../../types';
+import { SpotifyLogoLink } from '../../../../../shared/SpotifyLogoLink/SpotifyLogoLink';
+import { NavLink } from 'react-router-dom';
+import { hrsAndMinsAndSecs } from '../../../../../lib/durationFormats';
+type DashStatsPeriod = DashStatsWeek | DashStatsMonth | DashStatsLife
 
 const TwoColumns = styled.div`
   display: grid;
@@ -120,11 +125,6 @@ const TopArtistsPeriod: React.SFC<{global: DashStatsGlobal[], user: DashStatsGlo
   </TwoColumns>
 )
 
-import { DashStatsWeek, DashStatsMonth, DashStatsLife } from '../../../../../types';
-import { SpotifyLogoLink } from '../../../../../shared/SpotifyLogoLink/SpotifyLogoLink';
-import { NavLink } from 'react-router-dom';
-import { hrsAndMinsAndSecs } from '../../../../../lib/durationFormats';
-type DashStatsPeriod = DashStatsWeek | DashStatsMonth | DashStatsLife
 
 export const TopArtists: React.SFC<{stats: DashStatsPeriod}> = ({stats}) => {
   return (

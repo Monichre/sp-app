@@ -10,7 +10,7 @@ const Card = styled.div`
 `
 
 const CardAlert = styled(Card)`
-  background-color: #666;
+  background-color: rgba(216, 216, 216, .05);
 `
 
 const Note = styled.div`

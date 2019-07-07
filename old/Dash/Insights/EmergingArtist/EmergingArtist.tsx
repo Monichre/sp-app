@@ -89,7 +89,7 @@ const HeroBlock = styled.div`
   padding-top: 2rem;
   font-weight: 500;
   font-size: 4rem;
-  color: #999;
+  color: #fff;
   line-height: 140%;
   @media (max-width: 600px) {
     font-size: 3rem;

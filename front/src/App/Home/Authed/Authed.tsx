@@ -11,15 +11,15 @@ import { DummyRouted } from '../../../shared/debug/DummyRouted';
 import { NavMenu, NavMenuView } from './NavMenu';
 import { Profile } from './Profile/Profile';
 import { History } from './History/History';
+import { IntercomHandler } from '../../../lib/intercom'
+import * as firebase from 'firebase';
 
 const SIDEBAR_WIDTH = 200
 
 const AuthedView = styled.div`
   height: 100%;
   width: 100%;
-  // display: flex;
-  // flex-direction: column;
-  // align-items: center;
+background-color: #030616;
   ${largeQuery`
     padding-left: ${SIDEBAR_WIDTH}px;
   `}
@@ -32,11 +32,13 @@ const AuthedView = styled.div`
       top: 0;
       height: 100%;
       width: ${SIDEBAR_WIDTH}px;
+      border-right: 1px solid rgba(255, 255, 255, .1);
     `}
     ${notLargeQuery`
       display: flex;
       flex-direction: row;
       justify-content: center;
+      background-color: #030616;
       position: fixed;
       left: 0;
       right: 0;
@@ -50,42 +52,36 @@ const AuthedView = styled.div`
 export const Authed: React.SFC<{user: {uid: string}}> = ({user: firebaseUser}) => {
   const result = useGetUserInfo({ variables: { uid: firebaseUser.uid }, pollInterval: 4000, suspend: true})
   const user = result.data && result.data.getUserInfo
-  if (!user) { return <ErrorFallback/> }
+  if (!user) { return <ErrorFallback /> }
+  
+  const activeUsersListRef = firebase.database().ref('USERS_ONLINE')
+  activeUsersListRef.once('value', function (snapshot) {
+    snapshot.forEach(function (childSnapshot) {
+    console.log('TCL: childSnapshot', childSnapshot)
+      var childKey = childSnapshot.key;
+      console.log('TCL: childKey', childKey)
+      var childData = childSnapshot.val();
+      console.log('TCL: childData', childData)
+      
+    });
+  });
+  // const connectedRef = firebase.database().ref('.info/connected')
+
   const { initialHarvestComplete, lastUpdate, uid } = user
   //@ts-ignore
   const intercomUser: any = JSON.parse(localStorage.getItem('intercomUser'))
   console.log('userInfo', user)
 
-//@ts-ignore
-  window.Intercom('boot', {
-    name: user.displayName || 'N/A', // Full name
-    email: user.email || 'N/A', // Email address
-    user_id: user.uid,
-    avatar: {
-      "type": "avatar",
-      "image_url": user.photoURL
-    }, // current_user_id
-    initialHarvestComplete,
-    lastUpdate
 
-  })
-
-  if (intercomUser && intercomUser === user.displayName) {
-
-  } else {
-    //@ts-ignore
-    window.Intercom('trackEvent', 'user-login', {
-      name: user.displayName || 'N/A', // Full name
-      email: user.email || 'N/A', // Email address
-      user_id: user.uid,
-      avatar: {
-        "type": "avatar",
-        "image_url": user.photoURL
-      }, // current_user_id
-      initialHarvestComplete,
-      lastUpdate
-    })
-    localStorage.setItem('intercomUser', JSON.stringify(user.displayName))
+  if (process.env.NODE_ENV === 'production') {
+    IntercomHandler.boot(user, 'boot')
+  }
+  
+  if (!intercomUser && intercomUser !== user.displayName) {
+    if (process.env.NODE_ENV === 'production') {
+      IntercomHandler.trackEvent(user, 'user-login')
+      localStorage.setItem('intercomUser', JSON.stringify(user.displayName))
+    }
   }
   
  

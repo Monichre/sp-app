@@ -2,59 +2,28 @@ import React, { useContext, useState, useEffect } from 'react';
 import * as firebase from 'firebase';
 import { Subject } from 'rxjs'
 import LogRocket from 'logrocket'
-
+import { useGetUserInfo } from '../types';
+// import { _getActiveUserRootRef, _getActiveUsersStateRef} from './ActiveUsers'
 // should be AuthContext and return uid or nothing
 
 export const FirebaseContext = React.createContext<firebase.app.App | null>(null)
 
 const useFirebase = () => {
   const firebase = useContext(FirebaseContext)
+  
   if (!firebase) { throw new Error('no firebase! provider value not set?')}
   return firebase
 }
 
 export const useFirebaseAuth = () => useFirebase().auth()
-
+export const useFirebaseAuthDatabase = () => firebase.database()
+// export const firebaseActiveUsers = useFirebaseAuthDatabase().ref("USERS_ONLINE")
 const impersonations = new Subject<useUserState>();
 
 export const impersonate = (uid: string) => {
   impersonations.next({isLoading: false, user: { uid, displayName: `Impersonated ${uid}`, photoURL: '', email: 'impersonated@none'}})
 }
 
-// const promiseUser = (auth: firebase.auth.Auth) =>
-//   new Promise<BasicUser | null>((resolve, reject) => {
-//     const unsub = auth.onAuthStateChanged(user => {
-//       console.log('promise resolving')
-//       unsub();
-//       resolve(user);
-//     }, reject)
-//   })
-
-// trying to make a hook that works with suspense
-// locking browser rn
-// export const useUser2 = () => {
-//   const auth = useFirebaseAuth()
-//   const [userState, setUser] = useState<BasicUser | null>(null)
-//   const [loadedState, setLoaded] = useState<boolean>(false)
-
-//   if (!loadedState) {
-//     throw promiseUser(auth).then(user => {setLoaded(true); setUser(user)})
-//   }
-//   useEffect(() => {
-    
-//     const unsub = auth.onAuthStateChanged(user => {
-//       console.log('new user:', user)
-//       return setUser(user)
-//     })
-//     const iUnsub = impersonations.subscribe(imp => {
-//       console.log('impersonating authState', imp)
-//       return setUser(imp.user)
-//     })
-//     return unsub
-//   }, [auth])
-
-//   return { user: userState, isLoading: false }
-// }
 
 export type BasicUser = Pick<firebase.User, 'uid' | 'email' | 'displayName' | 'photoURL'>
 
@@ -65,6 +34,30 @@ type useUserState = {
 
 export const useUser = () => {
   const auth = useFirebaseAuth()
+  const activeUsersListRef = firebase.database().ref('USERS_ONLINE')
+  const connectedRef = firebase.database().ref('.info/connected')
+
+  activeUsersListRef.on("child_added", (snap: any) => {
+  console.log('TCL: useUser -> snap, new user added', snap.val())
+    // const presence: PresenceIF = snap.val();
+    
+    // ctx.emit(GLOBAL_CONSTANTS.LE_PRESENCE_USER_ADDED, presence);
+  });
+
+  // update the UI to show that a user has left (gone offline)
+  activeUsersListRef.on("child_removed", (snap: any) => {
+    // const presence: PresenceIF = snap.val();
+    console.log('TCL: useUser -> snap', snap)
+    // ctx.emit(GLOBAL_CONSTANTS.LE_PRESENCE_USER_REMOVED, presence);
+  });
+
+  // update the UI to show that a user's status has changed
+  activeUsersListRef.on("child_changed", (snap: any) => {
+    // const presence: PresenceIF = snap.val();
+    console.log('TCL: useUser -> snap', snap)
+    // ctx.emit(GLOBAL_CONSTANTS.LE_PRESENCE_USER_CHANGED, presence);
+  });
+
   const [authState, setState] = useState<useUserState>({ isLoading: true, user: null })
 
   useEffect(() => {
@@ -76,6 +69,37 @@ export const useUser = () => {
           name: authState.displayName || 'N/A',
           email: authState.email || 'N/A',
         })
+
+        const currentUserRef = activeUsersListRef.push()
+        console.log('TCL: useUser -> currentUserRef', currentUserRef)
+
+        // Monitor connection state on browser tab
+        connectedRef.on('value', (snap: any) => {
+          if (snap.val()) {
+            console.log('TCL: initPresence -> snap.val()', snap.val())
+            currentUserRef.set({
+              user: {
+                name: authState.displayName || 'N/A',
+                email: authState.email || 'N/A'
+              }, status: 'online'
+            })
+            // const result = useGetUserInfo({ variables: { uid: authState.uid }, pollInterval: 4000, suspend: true })
+            // console.log('TCL: useUser -> result', result)
+            // const user = result.data && result.data.getUserInfo
+            // console.log('TCL: useUser -> user', user)
+            // If we lose our internet connection, we want ourselves removed from the list.
+            
+            // Set our initial online status.
+            // setUserStatus(PRESENCE_STATES.ONLINE, ctx)
+          } else {
+            // We need to catch anytime we are marked as offline and then set the correct
+            // status. We could be marked as offline 1) on page load or 2) when we lose our
+            // internet connection temporarily.
+            // setUserStatus(PRESENCE_STATES.OFFLINE, ctx)
+          }
+        })
+
+
       }
 
       return setState({ isLoading: false, user: authState })
@@ -103,6 +127,7 @@ export const useAuthHandlers = () => {
 
 export const useUserChange = (fn: (user: firebase.User | null) => any) => {
   const auth = useFirebaseAuth()
+  console.log('TCL: useUserChange -> auth', auth)
   useEffect(() => {
     return auth.onAuthStateChanged(fn)
   }, [auth])

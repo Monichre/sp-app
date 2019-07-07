@@ -22,18 +22,33 @@ display: flex;
 align-items: center;
 text-align: center;
 flex-direction: column;
-// padding-top: ${bgSize/2}rem;
-// padding-left: ${bgSize/12}rem;
 padding-bottom: ${bgSize/12}rem;
 margin-bottom: 1rem;
 text-decoration: none;
 height: ${bgSize}rem;
 width: 100%;
-// width: ${bgSize}rem;
 border-radius: 0.5rem;
-background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("${({src}) => src}");
-background-position: center center;
-background-size: cover;
+position: relative;
+/* background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("${({ src }) => src}"); */
+
+
+  &::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: '';
+    height: 100%;
+    width: 100%;
+    border-radius: 0.5rem;
+      background: linear-gradient(179deg, rgba(3,6,22,0.00) 0%, rgba(3,6,22,0.02) 43%, #030616 79%), url("${({ src }) => src}");
+  background-size: cover;
+  opacity: 0.5;
+  background-position: center center;
+  }
+/* background-image: radial-gradient(56% 148%, rgba(3,6,22,0.00) 54%, rgba(3,6,22,0.95) 100%);
+background-image: linear-gradient(179deg, rgba(3,6,22,0.00) 0%, rgba(3,6,22,0.02) 43%, #030616 79%); */
+/* background-image: linear-gradient(90deg, rgba(3,6,22,0.00) 2%, #030616 100%); */
+
 `
 
 const ArtistName = styled.div`

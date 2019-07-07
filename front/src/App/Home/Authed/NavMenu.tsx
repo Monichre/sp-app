@@ -7,7 +7,7 @@ import { Logo, LogoHorizontal } from '../../../shared/Logo';
 import Moment from 'react-moment';
 
 export const NavMenuView = styled.div`
-background-color: #333;
+background-color: #030616;
 z-index: 20;
 }
 `
@@ -21,7 +21,7 @@ text-decoration: none;
   background-color: #444;
 }
 &.active {
-  background-color: #666;
+  background-color: rgba(216, 216, 216, .05);
 
   color: ${BRAND_COLOR};
 
@@ -102,7 +102,7 @@ const HarvestingNoticeDiv = styled.div`
 margin: 2rem 0rem;
 padding: 1rem;
 background-color: #AAA;
-color: #333;
+color: #030616;
 `
 
 const HarvestingNotice: React.SFC = () =>

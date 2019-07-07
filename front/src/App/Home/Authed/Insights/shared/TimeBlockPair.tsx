@@ -93,16 +93,16 @@ const MinorValue = styled.div`
 const TimeBlockDeltaView = styled.div`
   text-align: center;
 `
-const TimeBlockDelta: React.SFC<{delta: InsightsStatsDelta}> = ({delta: { hrs, mins, direction }}) =>
+const TimeBlockDelta: React.SFC<{ delta: InsightsStatsDelta }> = ({ delta: { hrs, mins, direction } }) =>
   <TimeBlockDeltaView>
-    { direction == 'up' ? <Ascend color={direction == 'up' ? 'white' : 'black'}/> : <Descend color={direction == 'up' ? 'white' : 'black'}/> }
+    {direction == 'up' ? <Ascend color={direction == 'up' ? 'white' : 'black'} /> : <Descend color={direction == 'up' ? 'white' : 'black'} />}
     {/* {direction} */}
     {mins ? `${hrs}:${mins.toString().padStart(2, '0')}` : hrs}
   </TimeBlockDeltaView>
 
 
 
-const TimeBlockLink = styled(({colors, ...rest}) => <NavLink {...rest}/>)<{colors: TimeBlockColors}>`
+const TimeBlockLink = styled(({ colors, ...rest }) => <NavLink {...rest} />) <{ colors: TimeBlockColors }>`
   ${xLargeQuery`
   height: 6.5rem;
   `}
@@ -114,24 +114,24 @@ const TimeBlockLink = styled(({colors, ...rest}) => <NavLink {...rest}/>)<{color
   `}
   padding: 1rem 0.5rem;
   text-decoration: none;
-  background-color: ${({colors}) => colors.inactive.backgroundColor};
-  color: ${({colors}) => colors.inactive.color};
+  background-color: ${({ colors }) => colors.inactive.backgroundColor};
+  color: ${({ colors }) => colors.inactive.color};
   ${MajorValue} {
-    color: ${({colors}) => colors.inactive.value.color};
+    color: ${({ colors }) => colors.inactive.value.color};
     opacity: 0.3;
   }
   ${TimeBlockDeltaView} {
-    color: ${({colors}) => colors.inactive.value.color};
+    color: ${({ colors }) => colors.inactive.value.color};
     opacity: 0.3;
   }
   &.active {
-    background-color: ${({colors}) => colors.active.backgroundColor};
-    border-top: 0.5rem solid ${({colors}) => colors.active.color};
+    background-color: ${({ colors }) => colors.active.backgroundColor};
+    border-top: 0.5rem solid ${({ colors }) => colors.active.color};
     color: white;
     padding-top: 0;
     padding-top: 0.5rem;
     ${MajorValue} {
-      color: ${({colors}) => colors.active.value.color};
+      color: ${({ colors }) => colors.active.value.color};
       opacity: 1.0;
     }
     ${TimeBlockDeltaView} {
@@ -143,27 +143,56 @@ const TimeBlockLink = styled(({colors, ...rest}) => <NavLink {...rest}/>)<{color
     }
   }
 `
+const TimeBlockTitleRow = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-content: center;
+  align-items: center;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  position: absolute;
+
+  h4 {
+    position: relative;
+    width: 50%;
+    font-family: 'Source Sans Pro';
+    text-align: center;
+    opacity: .1;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: #fff;
+    font-weight: bolder;
+  }
+`
 
 
-const TimeBlock: React.SFC<{stats: InsightsStats, colors: TimeBlockColors, pathParams: TPathParams}> = ({stats: { current: { hrs, mins }, delta }, colors, pathParams}) =>
-    <TimeBlockLink {...{colors, to: insightLink(pathParams)}}>
-      <MajorValue>
-        {mins ? `${hrs}:${mins.toString().padStart(2, '0')}` : hrs}
-      </MajorValue>
-      { delta ? <TimeBlockDelta {...{delta}}/> : '' }
-    </TimeBlockLink>
+const TimeBlock: React.SFC<{ stats: InsightsStats, colors: TimeBlockColors, pathParams: TPathParams }> = ({ stats: { current: { hrs, mins }, delta }, colors, pathParams }) =>
+  <TimeBlockLink {...{ colors, to: insightLink(pathParams) }}>
+    <MajorValue>
+      {mins ? `${hrs}:${mins.toString().padStart(2, '0')}` : hrs}
+    </MajorValue>
+    {delta ? <TimeBlockDelta {...{ delta }} /> : ''}
+  </TimeBlockLink>
+
 
 const TimeBlockPairView = styled.div`
   display: flex;
   flex-direction: row;
+  position: relative;
   & > * {
     flex: 1;
   }
 `
 
-export const TimeBlockPair: React.SFC<{pathParams: TPathParams, stats: InsightsStatsTimescope}> = ({pathParams, stats: { personal, group }}) =>
+export const TimeBlockPair: React.SFC<{ pathParams: TPathParams, stats: InsightsStatsTimescope }> = ({ pathParams, stats: { personal, group } }) =>
   <TimeBlockPairView>
-    <TimeBlock stats={personal} colors={COLORS.personal} pathParams={Object.assign({}, pathParams, {perspective: 'personal'})}/>
-    <TimeBlock stats={group} colors={COLORS.group} pathParams={Object.assign({}, pathParams, {perspective: 'group'})}/>
+    <TimeBlockTitleRow>
+      <h4>You</h4>
+      <h4>Soundpruf</h4>
+    </TimeBlockTitleRow>
+    <TimeBlock stats={personal} colors={COLORS.personal} pathParams={Object.assign({}, pathParams, { perspective: 'personal' })} />
+    <TimeBlock stats={group} colors={COLORS.group} pathParams={Object.assign({}, pathParams, { perspective: 'group' })} />
   </TimeBlockPairView>
 

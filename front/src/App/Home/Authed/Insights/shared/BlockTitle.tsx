@@ -24,13 +24,13 @@ display: flex;
 flex-direction: row;
 align-items: flex-end;
 flex: 1;
-color: #999;
+color: #fff;
 text-transform: uppercase;
 font-weight: 500;
 font-size: 1.2rem;
 padding-bottom: 0.25rem;
 margin-bottom: 1rem;
-border-bottom: 1px solid #666;
+border-bottom: 1px solid rgba(255, 255, 255, .1);
 `
 
 const BlockTitleView = styled.div<{color?: string}>`
@@ -38,7 +38,7 @@ const BlockTitleView = styled.div<{color?: string}>`
 // padding-top: 2rem;
 // display: block;
 // flex: 1;
-// color: #999;
+// color: #fff;
 // text-transform: uppercase;
 // font-weight: 500;
 // font-size: 1.2rem;
@@ -46,7 +46,7 @@ const BlockTitleView = styled.div<{color?: string}>`
 // margin-bottom: 1rem;
 // // border-bottom: 1px solid ${({color}) => color || '#64d6ee'};
 // // border-top: 1px solid #AAA;
-// border-bottom: 1px solid #666;
+// border-bottom: 1px solid rgba(216, 216, 216, .05);
 `
 
 const BlockTitleLink = styled(Link)`

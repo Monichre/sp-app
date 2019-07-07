@@ -67,10 +67,10 @@ const ArtistsChart: React.SFC<RouteComponentProps & ChartProps> = ({pathParams, 
       <YAxis width={200} type='category' stroke={BRAND_PERSONAL_COLOR} interval={0}
         tick={({payload, ...props}) => <CustomArtistTick {...props} pathParams={pathParams} artist={artists[payload.value].artist}/>}
         />
-      <Tooltip cursor={{fill: '#666'}} content={() => <div/>}/>
+      <Tooltip cursor={{fill: 'rgba(216, 216, 216, .05)'}} content={() => <div/>}/>
       {/* <Legend /> */}
-      <Bar dataKey='personal' fill={BRAND_PERSONAL_COLOR} xAxisId='top' cursor='pointer' />
-      <Bar dataKey='group' fill={BRAND_GLOBAL_COLOR} xAxisId='top' cursor='pointer'/>
+      <Bar dataKey='personal' fill={BRAND_PERSONAL_COLOR} xAxisId='top' barSize={5} cursor='pointer' />
+      <Bar dataKey='group' fill={BRAND_GLOBAL_COLOR} xAxisId='top' barSize={5}  cursor='pointer'/>
     </BarChart>
   </ResponsiveContainer>
 

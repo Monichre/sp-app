@@ -51,26 +51,18 @@ const BarXAxisPersonal: React.SFC = () =>
   const BarXAxisGroup: React.SFC = () =>
   <BarXAxis {...{stroke: BRAND_GLOBAL_COLOR, orientation: 'bottom', position: 'insideBottomLeft'}}/>
 
-// const BarComparisonChart: React.SFC<ChartProps<T>> = (arg: T, {pathParams, data, history, height = 70}) => {
-// return <BarChart layout='vertical' data={data} onClick={navigateToGenre(history, pathParams)}>
-// {/* <CartesianGrid stroke='#999'/> */}
-// {/* <BarXAxisPersonal/>
-// <BarXAxisGroup/> */}
-// <XAxis height={40} type='number' stroke={BRAND_PERSONAL_COLOR} orientation='top' xAxisId='top' tickFormatter={Math.floor} allowDecimals={false}>
-//   <Label position='insideTopLeft' offset={0} stroke={BRAND_PERSONAL_COLOR}>hours by you</Label>
-// </XAxis>
-// <XAxis height={40} type='number' stroke={BRAND_GLOBAL_COLOR} orientation='bottom' xAxisId='bottom' tickFormatter={Math.floor} allowDecimals={false}>
-//   <Label position='insideBottomLeft' offset={0} stroke={BRAND_GLOBAL_COLOR}>hours by soundpruf</Label>
-// </XAxis>
-// <YAxis width={136} type='category' stroke={BRAND_PERSONAL_COLOR} interval={0}
-//   tick={({payload, ...props}) => <CustomTick {...props} pathParams={pathParams} genre={genres[payload.value].genre}/>}
-//   />
-// <Tooltip cursor={{fill: '#666'}} content={() => <div/>}/>
-// {/* <Legend /> */}
-// <Bar dataKey='personal' fill={BRAND_PERSONAL_COLOR} xAxisId='top' cursor='pointer'/>
-// <Bar dataKey='group' fill={BRAND_GLOBAL_COLOR} xAxisId='bottom' cursor='pointer'/>
-// </BarChart>
-// }
+const getPath = (x: any, y: any, width: any, height: any) => {
+  return `M${x},${y + height}
+          C${x + width / 3},${y + height} ${x + width / 2},${y + height / 3} ${x + width / 2}, ${y}
+          C${x + width / 2},${y + height / 3} ${x + 2 * width / 3},${y + height} ${x + width}, ${y + height}
+          Z`;
+};
+
+const TriangleBar = (props: any) => {
+  const { fill, x, y, width, height } = props;
+
+  return <path d={getPath(x, y, width, height)} stroke="none" fill={fill} />;
+};
 
 const domainMaxBuilder: (values: PerspectiveDashGenres[]) => (maxValue: number) => number =
   // (values: TimescopeDashValues[]) => (maxValue: number) => pipe((vals: TimescopeDashValues[]) => vals.map(v => v.group), reduce(max, -Infinity))(values), 
@@ -99,10 +91,10 @@ const GenresChart: React.SFC<GenreChartProps> = ({pathParams, genres, history, h
       <YAxis width={136} type='category' stroke={BRAND_PERSONAL_COLOR} interval={0}
         tick={({payload, ...props}) => <CustomTick {...props} pathParams={pathParams} genre={genres[payload.value].genre}/>}
         />
-      <Tooltip cursor={{fill: '#666'}} content={() => <div/>}/>
+      <Tooltip cursor={{fill: 'rgba(216, 216, 216, .05)'}} content={() => <div/>}/>
       {/* <Legend /> */}
-      <Bar dataKey='personal' fill={BRAND_PERSONAL_COLOR} xAxisId='top' cursor='pointer'/>
-      <Bar dataKey='group' fill={BRAND_GLOBAL_COLOR} xAxisId='top' cursor='pointer'/>
+      <Bar dataKey='personal' fill={BRAND_PERSONAL_COLOR} xAxisId='top' barSize={5}  cursor='pointer'/>
+      <Bar dataKey='group' fill={BRAND_GLOBAL_COLOR} xAxisId='top' barSize={5}  cursor='pointer'/>
     </BarChart>
   </ResponsiveContainer>
 

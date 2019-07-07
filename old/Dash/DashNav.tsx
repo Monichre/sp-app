@@ -15,13 +15,13 @@ const NavTab = styled(NavLink)`
   flex-direction: row;
   align-items: center;
   font-size: 1.25rem;
-  background-color: #121519;
-  color: #999;
+  background-color: #030616;
+  color: #fff;
   text-decoration: none;
   padding: 1rem;
   transition: all 0.25s linear;
   &.active {
-    background-color: #555;
+    /* background-color: #555; */
     color: #FFF;
   }
   // padding-top: 1rem;

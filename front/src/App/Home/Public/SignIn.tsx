@@ -51,7 +51,7 @@ const Hero = styled.div`
 `
 
 const Button = styled.button`
-  background-color: #333;
+  background-color: #030616;
   border: 1px solid #64d6ee;
   border-radius: 0.5rem;
   color: #64d6ee;

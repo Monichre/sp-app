@@ -17,7 +17,7 @@ const domainMaxBuilder: (values: TimescopeDashValues[], fromSeries?: TPerspectiv
   const decimalToHrsMins = (value: number) => `${Math.floor(value)}:${Math.floor((value % 1) * 60).toString().padStart(2, '0')}`
 
 const TooltipDiv = styled.div`
-background-color: #666;
+background-color: rgba(216, 216, 216, .05);
 min-width: 15rem;
 padding: 0.5rem;
 `

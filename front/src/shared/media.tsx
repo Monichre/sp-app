@@ -36,13 +36,19 @@ export const NotLarge: React.SFC = props => <Responsive {...props} maxWidth={BP_
 export const BRAND_COLOR = '#64d6ee'
 // #64d6ee
 export const BRAND_PERSONAL_COLOR = 'rgba(100, 214, 238, 1)'
-export const BRAND_PERSONAL_COLOR_BACKGROUND = 'rgba(100, 214, 238, 0.5)'
-export const BRAND_PERSONAL_COLOR_BACKGROUND_INACTIVE = 'rgba(146, 183, 191, 0.5)'
+export const BRAND_PERSONAL_COLOR_BACKGROUND = '#50E3C2'
+export const BRAND_PERSONAL_COLOR_BACKGROUND_INACTIVE = 'rgb(122, 172, 183)'
 
 // #67BF72
-export const BRAND_GLOBAL_COLOR = 'rgba(103, 191, 114, 1)'
-export const BRAND_GLOBAL_COLOR_BACKGROUND = 'rgba(103, 191, 114, 0.5)'
-export const BRAND_GLOBAL_COLOR_BACKGROUND_INACTIVE = 'rgba(126, 169, 132, 0.5)'
+export const BRAND_GLOBAL_COLOR = '#C036D0'
+export const BRAND_GLOBAL_COLOR_BACKGROUND = 'rgba(192, 54, 208, 1)'
+export const BRAND_GLOBAL_COLOR_BACKGROUND_INACTIVE = 'rgba(192, 54, 208, .5)'
+// export const BRAND_GLOBAL_COLOR_BACKGROUND = 'linear-gradient(134deg, #C036D0 0 %, #E33C7A 52 %, #FFBF99 100 %)'
+// export const BRAND_GLOBAL_COLOR_BACKGROUND_INACTIVE = 'rgba(0, 0, 0, .05)'
+
 
 export const BODY_FONT = 'Source Sans Pro'
 export const TITLE_FONT = 'Open Sans Condensed'
+
+// background - image: linear-gradient(134deg, #C036D0 0 %, #E33C7A 52 %, #FFBF99 100 %);
+
