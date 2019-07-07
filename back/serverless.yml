@@ -296,6 +296,7 @@ functions:
       TABLE_PLAY: ${self:custom.ref.TablePlay}
       TABLE_USER: ${self:custom.ref.TableUser}
       TABLE_STAT: ${self:custom.ref.TableStat}
+      TABLE_ACHIEVEMENT: ${self:custom.ref.TableAchievement}
       QUEUE_START_HARVEST_USER: ${self:custom.ref.QueueStartHarvestUser}
       QUEUE_VALIDATION_ERRORS: ${self:custom.ref.QueueValidationErrors}
 
@@ -399,6 +400,7 @@ functions:
       - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
       TABLE_STAT: ${self:custom.ref.TableStat}
+      TABLE_ACHIEVEMENT: ${self:custom.ref.TableAchievement}
       QUEUE_VALIDATION_ERRORS: ${self:custom.ref.QueueValidationErrors}
 
   onPlayUpdateArtistStats:
@@ -412,6 +414,7 @@ functions:
       - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
       TABLE_STAT: ${self:custom.ref.TableStat}
+      TABLE_ACHIEVEMENT: ${self:custom.ref.TableAchievement}
       QUEUE_VALIDATION_ERRORS: ${self:custom.ref.QueueValidationErrors}
 
   onPlayUpdateGenreStats:
@@ -425,6 +428,7 @@ functions:
       - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
       TABLE_STAT: ${self:custom.ref.TableStat}
+      TABLE_ACHIEVEMENT: ${self:custom.ref.TableAchievement}
       QUEUE_VALIDATION_ERRORS: ${self:custom.ref.QueueValidationErrors}
 
 ################################################################################

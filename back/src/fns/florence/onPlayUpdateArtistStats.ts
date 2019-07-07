@@ -4,6 +4,7 @@ import { verifyEnv } from "../../shared/env";
 import { makeLogger, TLogger } from "../logger";
 import { TableStat } from "../../shared/tables/TableStat";
 import { TablePlay } from '../../shared/tables/TablePlay';
+import { TableAchievement } from '../../shared/tables/TableAchievement'
 import { handleInvalid } from '../../shared/validation';
 import winston = require("winston");
 
@@ -24,16 +25,29 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 type Env = {
   DYNAMO_ENDPOINT: string,
   TABLE_STAT: string,
+  TABLE_ACHIEVEMENT: string,
   QUEUE_VALIDATION_ERRORS: string,
 }
 
 const handleRecord = (env: Env, log: TLogger) => async (record: DynamoDBRecord) => {
+  
+  /**
+   *
+   * I want to see the User info here to post that shit as a key entry in the respective Artist's AchievementType key * ['Top', 'First']
+   *
+   */
+  
+  
+  console.log('TCL: handleRecord -> record: Id love some user info here: ', record)
   const { eventName, dynamodb: { Keys } } = record
   log.info(eventName, Keys)
   if (eventName === 'INSERT') {
 
-    const tablePlay = TablePlay(env.DYNAMO_ENDPOINT, "") // not actually writing anything, this is hacky af
+    const tableStat = TableStat(env.DYNAMO_ENDPOINT, env.TABLE_STAT)
+    const tableAchievement = TableStat(env.DYNAMO_ENDPOINT, env.TABLE_ACHIEVEMENT)
+    const tablePlay = TablePlay(env.DYNAMO_ENDPOINT, "") // not actually writing anything, this is hacky af [Why??]
     const { valid, invalid } = tablePlay.decode(record.dynamodb.NewImage)
+
     if (invalid) {
       handleInvalid(log, env.QUEUE_VALIDATION_ERRORS, invalid.errors, {handler: 'onPlayUpdateArtistStats', input: invalid.item })
       return
@@ -43,22 +57,19 @@ const handleRecord = (env: Env, log: TLogger) => async (record: DynamoDBRecord) 
     log.info(`Updating Artist Stats ${track.name}`)
 
     const artists = track.artists
-    // log.info('artists for this track:', {artists: artists.map(({name, genres, images})=>({name, genres, images}))})
-    
-    const table = TableStat(env.DYNAMO_ENDPOINT, env.TABLE_STAT)
-    const { day, week, month } = table.periodsFor(playedAt)
+    const { day, week, month } = tableStat.periodsFor(playedAt)
 
     for (const artist of artists) {
       // log.info('updating user and global stats for', {artist: artist.name})
-      await table.writeArtistStat({uid, relationType: 'artist', relationKey: artist.id, periodType: 'day', periodValue: day, playDurationMs, artist})
-      await table.writeArtistStat({uid, relationType: 'artist', relationKey: artist.id, periodType: 'week', periodValue: week, playDurationMs, artist})
-      await table.writeArtistStat({uid, relationType: 'artist', relationKey: artist.id, periodType: 'month', periodValue: month, playDurationMs, artist})
-      await table.writeArtistStat({uid, relationType: 'artist', relationKey: artist.id, periodType: 'life', periodValue: 'life', playDurationMs, artist})
+      await tableStat.writeArtistStat({uid, relationType: 'artist', relationKey: artist.id, periodType: 'day', periodValue: day, playDurationMs, artist})
+      await tableStat.writeArtistStat({uid, relationType: 'artist', relationKey: artist.id, periodType: 'week', periodValue: week, playDurationMs, artist})
+      await tableStat.writeArtistStat({uid, relationType: 'artist', relationKey: artist.id, periodType: 'month', periodValue: month, playDurationMs, artist})
+      await tableStat.writeArtistStat({uid, relationType: 'artist', relationKey: artist.id, periodType: 'life', periodValue: 'life', playDurationMs, artist})
 
-      await table.writeArtistStat({uid: 'global', relationType: 'artist', relationKey: artist.id, periodType: 'day', periodValue: day, playDurationMs, artist})
-      await table.writeArtistStat({uid: 'global', relationType: 'artist', relationKey: artist.id, periodType: 'week', periodValue: week, playDurationMs, artist})
-      await table.writeArtistStat({uid: 'global', relationType: 'artist', relationKey: artist.id, periodType: 'month', periodValue: month, playDurationMs, artist})
-      await table.writeArtistStat({uid: 'global', relationType: 'artist', relationKey: artist.id, periodType: 'life', periodValue: 'life', playDurationMs, artist})
+      await tableStat.writeArtistStat({uid: 'global', relationType: 'artist', relationKey: artist.id, periodType: 'day', periodValue: day, playDurationMs, artist})
+      await tableStat.writeArtistStat({uid: 'global', relationType: 'artist', relationKey: artist.id, periodType: 'week', periodValue: week, playDurationMs, artist})
+      await tableStat.writeArtistStat({uid: 'global', relationType: 'artist', relationKey: artist.id, periodType: 'month', periodValue: month, playDurationMs, artist})
+      await tableStat.writeArtistStat({uid: 'global', relationType: 'artist', relationKey: artist.id, periodType: 'life', periodValue: 'life', playDurationMs, artist})
     }
 
     return

@@ -5,7 +5,7 @@ import { UpdateItemOutput } from 'aws-sdk/clients/dynamodb';
 import { PromiseResult } from 'aws-sdk/lib/request';
 import { AWSError } from 'aws-sdk';
 
-export type RelationType = 'total' | 'artist'| 'genre'
+export type RelationType = 'total' | 'artist' | 'genre' | 'user'
 export type PeriodType = 'day' | 'dow' | 'week' | 'month' | 'moy' | 'year' | 'life'
 
 export type Stat = {
@@ -20,6 +20,9 @@ export type Stat = {
 export type StatTotal = Stat
 export type StatArtist = Stat & {
   artist: { name: string, genres: string[] }
+}
+export type StatArtistAndUser = Stat & StatArtist & {
+	user: { id: string; img: string }
 }
 export type StatGenre = Stat & {
   genre: string
