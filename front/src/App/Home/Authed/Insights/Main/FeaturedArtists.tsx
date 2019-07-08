@@ -88,23 +88,23 @@ const featuredArtists: FeaturedArtist[] = [
   {
     title: 'Ready',
     hover: 'Artists under 5,000 monthly streamers on Spotify',
-    name: 'Panther Ray',
-    href: 'https://open.spotify.com/artist/7ug6ifTZ4titqyrx3uagxD?si=KxPWNARWTBymwb3sy7Q3ug',
-    src: 'https://f4.bcbits.com/img/0013035999_10.jpg',
+    name: 'Night Glitter',
+    href: 'https://open.spotify.com/artist/2ujENWdLHYFbb32PWCRDip?si=w1n0LWZmT36hhz4OzWlwmg',
+    src: 'https://www.austinchronicle.com/binary/8fd7/music_play-1.jpg',
   },
   {
     title: 'Set',
     hover: 'Artists under 200,000 monthly streamers on Spotify',
-    name: 'Ibibio Sound Machine',
-    href: 'https://open.spotify.com/artist/4J6CnIqPEtWYn3la2YYj2c?si=TUpmCIq9SeOUy4r-18DQ4g',
-    src: 'https://ichef.bbci.co.uk/images/ic/960x540/p01w8c8s.jpg',
+    name: 'Charly Bliss',
+    href: 'https://open.spotify.com/artist/7axA2bNeZsae6t2mgxoSFh?si=VEwTjMN_TkC9Ej-_q6M3pQ',
+    src: 'https://www.rollingstone.com/wp-content/uploads/2019/02/Shervin-Lainez.jpg',
   },
   {
     title: 'Liftoff',
     hover: 'Artists under 2,500,000 monthly streamers on Spotify',
-    name: 'Dorothy',
-    href: 'https://open.spotify.com/artist/6IOvhXyk5edbA2DVaeP9Up?si=ziul84YCQEmjYK2sm37bBA',
-    src: 'http://stereochampions.com/wp-content/uploads/2016/06/dorothy.jpg',
+    name: 'Kevin Abstract',
+    href: 'https://open.spotify.com/artist/07EcmJpfAday8xGkslfanE?si=-oMeDoF4Q0i3l8bLBOgLrQ',
+    src: 'https://consequenceofsound.net/wp-content/uploads/2019/04/kevin-abstract-arizona-baby-album-release-stream.png?w=807',
   },
 ]
 
