@@ -5,12 +5,13 @@ import * as winston from 'winston'
 import { makeLogger, TLogger } from '../logger';
 
 export type Context = {
-  DYNAMO_ENDPOINT: string
-  TABLE_PLAY: string
-  TABLE_USER: string
-  TABLE_STAT: string
-  QUEUE_START_HARVEST_USER: string
-  log: TLogger
+	DYNAMO_ENDPOINT: string
+	TABLE_PLAY: string
+	TABLE_USER: string
+	TABLE_STAT: string
+	TABLE_ACHIEVEMENT: string
+	QUEUE_START_HARVEST_USER: string
+	log: TLogger
 }
 
 // const log = slog.child({handler: 'graphql', awsEvent: 'http'})
@@ -30,6 +31,7 @@ const server = new ApolloServer({
         TABLE_PLAY: process.env.TABLE_PLAY,
         TABLE_USER: process.env.TABLE_USER,
         TABLE_STAT: process.env.TABLE_STAT,
+        TABLE_ACHIEVEMENT: process.env.TABLE_ACHIEVEMENT,
         QUEUE_START_HARVEST_USER: process.env.QUEUE_START_HARVEST_USER,
       })
     }

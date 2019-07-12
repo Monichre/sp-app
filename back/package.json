@@ -80,5 +80,7 @@
     "webpack-node-externals": "^1.7.2",
     "winston": "^3.2.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "csv-generate": "^3.2.3"
+  }
 }

@@ -224,6 +224,10 @@ custom:
           - onPlayUpdateArtistStats
           - onPlayUpdateGenreStats
 
+      - table: ${self:custom.ref.TableStat}
+        functions:
+          - onPlayUpdateAchievementStats
+
   webpack:
     packager: 'yarn'
 
@@ -400,7 +404,6 @@ functions:
       - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
       TABLE_STAT: ${self:custom.ref.TableStat}
-      TABLE_ACHIEVEMENT: ${self:custom.ref.TableAchievement}
       QUEUE_VALIDATION_ERRORS: ${self:custom.ref.QueueValidationErrors}
 
   onPlayUpdateArtistStats:
@@ -414,8 +417,22 @@ functions:
       - ${self:custom.LAYER_REF.${self:custom.config}}
     environment:
       TABLE_STAT: ${self:custom.ref.TableStat}
+      QUEUE_VALIDATION_ERRORS: ${self:custom.ref.QueueValidationErrors}
+
+  onPlayUpdateAchievementStats:
+    events:
+      - stream:
+          type: dynamodb
+          arn:
+            Fn::GetAtt: [ TableStat, StreamArn ]
+    handler: src/fns/florence/onPlayUpdateAchievements.handler
+    layers:
+      - ${self:custom.LAYER_REF.${self:custom.config}}
+    environment:
+      TABLE_STAT: ${self:custom.ref.TableStat}
       TABLE_ACHIEVEMENT: ${self:custom.ref.TableAchievement}
       QUEUE_VALIDATION_ERRORS: ${self:custom.ref.QueueValidationErrors}
+
 
   onPlayUpdateGenreStats:
     events:
