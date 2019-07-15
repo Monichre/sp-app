@@ -4,9 +4,50 @@ import * as R from 'ramda'
 import { UpdateItemOutput } from 'aws-sdk/clients/dynamodb'
 import { PromiseResult } from 'aws-sdk/lib/request'
 import { AWSError } from 'aws-sdk'
-import { RelationType, PeriodType, StatArtistAndUser } from './TableStat'
 
-export type AchievementType = 'top' | 'first' |  'second' | 'third'
+export type PeriodType =
+	| 'day'
+	| 'dow'
+	| 'week'
+	| 'month'
+	| 'moy'
+	| 'year'
+	| 'life'
+
+export type RelationType = 'total' | 'artist' | 'genre' | 'user'
+
+export type TopKeys = {
+	uid: string
+	periodType: PeriodType
+	periodValue: string
+	Limit: number
+}
+
+export type StatKeys = {
+	uid: string
+	periodType: PeriodType
+	periodValue: string
+}
+
+export type ArtistStatKeys = {
+	uid: string
+	artistId: string
+	periodType: PeriodType
+	periodValue: string
+}
+
+export type GenreStatKeys = {
+	uid: string
+	genre: string
+	periodType: PeriodType
+	periodValue: string
+}
+
+export type AchievementType =
+	| 'topListener'
+	| 'firstToStream'
+	| 'secondPlaceListener'
+	| 'thirdPlaceListener'
 
 export type Achievement = {
 	artistId: string
@@ -17,7 +58,7 @@ export type Achievement = {
 	total: number
 }
 
-type AchievementMetric = {
+export type AchievementMetric = {
 	uid: string
 	achievementType: AchievementType
 	artistId: string
@@ -72,7 +113,7 @@ export type TTableAchievement = {
 		periodValue: string
 	) => string
 	makeSk: (
-		achievementType: AchievementType,
+		artistId: string,
 		periodType: PeriodType,
 		periodValue: string,
 		uid: string
@@ -109,11 +150,11 @@ export const TableAchievement = (
 	) => [artistId, achievementType, periodType, periodValue].join('#')
 
 	const makeSk = (
-		achievementType: AchievementType,
+		artistId: string,
 		periodType: PeriodType,
 		periodValue: string,
 		uid: string
-	) => [achievementType, periodType, periodValue, uid].join('#')
+	) => [artistId, periodType, periodValue, uid].join('#')
 
 	const getAchievementStatTopListener = async ({
 		artistId,
@@ -236,7 +277,6 @@ export const TableAchievement = (
 	return {
 		makePk,
 		makeSk,
-		// getAchievementStat,
 		periodsFor,
 		getTimeseries,
 		writeAchievement

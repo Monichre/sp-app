@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 import { makeExecutableSchema } from "graphql-tools";
 import { TableStat, TTableStat, PeriodType } from "../../../../shared/tables/TableStat";
-import moment = require("moment");
+import * as moment from "moment"
 import { TableUser } from "../../../../shared/tables/TableUser";
 import { verifyEnv } from "../../../../shared/env";
 import { InsightsDashResponseResolvers, InsightsDashResponse, TimescopeTops, PerspectiveTops, InsightsArtistsResponse, TimescopeTopArtists, TopArtistStat } from "../../types";

@@ -431,6 +431,7 @@ functions:
     environment:
       TABLE_STAT: ${self:custom.ref.TableStat}
       TABLE_ACHIEVEMENT: ${self:custom.ref.TableAchievement}
+      TABLE_USER: ${self:custom.ref.TableUser}
       QUEUE_VALIDATION_ERRORS: ${self:custom.ref.QueueValidationErrors}
 
 
@@ -677,8 +678,7 @@ resources:
                 AttributeType: S
               - AttributeName: sk # This will be an achievement type parameter
                 AttributeType: S
-              - AttributeName: achievement
-                AttributeType: S
+   
             KeySchema:
               - AttributeName: pk
                 KeyType: HASH
@@ -696,12 +696,4 @@ resources:
                   KeyType: RANGE
               Projection:
                 ProjectionType: ALL
-            LocalSecondaryIndexes:
-            - IndexName: AchievementType
-              KeySchema:
-                - AttributeName: pk
-                  KeyType: HASH
-                - AttributeName: achievement
-                  KeyType: RANGE
-              Projection:
-                ProjectionType: ALL
+      
