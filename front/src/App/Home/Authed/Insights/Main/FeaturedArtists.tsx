@@ -73,23 +73,23 @@ const featuredArtists: FeaturedArtist[] = [
   {
     title: 'Ready',
     hover: 'Artists under 5,000 monthly streamers on Spotify',
-    name: 'Night Glitter',
-    href: 'https://open.spotify.com/artist/2ujENWdLHYFbb32PWCRDip?si=w1n0LWZmT36hhz4OzWlwmg',
-    src: 'https://www.austinchronicle.com/binary/8fd7/music_play-1.jpg',
+    name: 'Hama',
+    href: 'https://open.spotify.com/artist/5tTnPc0PnhooCRXW0RJPFN?si=KEEd7BYISpuknGoVSeiUFQ',
+    src: 'https://www.newframe.com/wp-content/uploads/2019/04/image-24-24.jpg'
   },
   {
     title: 'Set',
     hover: 'Artists under 200,000 monthly streamers on Spotify',
-    name: 'Charly Bliss',
-    href: 'https://open.spotify.com/artist/7axA2bNeZsae6t2mgxoSFh?si=VEwTjMN_TkC9Ej-_q6M3pQ',
-    src: 'https://www.rollingstone.com/wp-content/uploads/2019/02/Shervin-Lainez.jpg',
+    name: 'Sam Gellaitry',
+    href: 'https://open.spotify.com/artist/07UJz804RJxqNvxFXC3h9H?si=PH_Ch66NTfeVq2CgDuK0Yw',
+    src: 'https://ichef.bbci.co.uk/images/ic/960x540/p02wj4tg.jpg'
   },
   {
     title: 'Liftoff',
     hover: 'Artists under 2,500,000 monthly streamers on Spotify',
-    name: 'Kevin Abstract',
-    href: 'https://open.spotify.com/artist/07EcmJpfAday8xGkslfanE?si=-oMeDoF4Q0i3l8bLBOgLrQ',
-    src: 'https://consequenceofsound.net/wp-content/uploads/2019/04/kevin-abstract-arizona-baby-album-release-stream.png?w=807',
+    name: 'Tierra Whack',
+    href: 'https://open.spotify.com/artist/4lPl9gqgox3JDiaJ1yklKh?si=g_zk0IdGQDCJcX7nyWSmuA',
+    src: 'https://www.billboard.com/files/media/tierra-whack-2019-cr-Maria-Jose-Govea-billboard-1548.jpg'
   },
 ]
 
