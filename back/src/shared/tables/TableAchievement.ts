@@ -46,15 +46,17 @@ export type GenreStatKeys = {
 export type AchievementType =
 	| 'topListener'
 	| 'firstToStream'
-	| 'secondPlaceListener'
-	| 'thirdPlaceListener'
+	
+export type AchievementValue = 'first' | 'second' | 'third'
+	
 
 export type Achievement = {
 	artistId: string
-	uid: string
 	achievementType: AchievementType
+	achievementValue: AchievementValue
 	periodType: PeriodType
 	periodValue: string
+	uid: string
 	total: number
 }
 
@@ -109,27 +111,30 @@ export type TTableAchievement = {
 	makePk: (
 		artistId: string,
 		achievementType: AchievementType,
+		achievementValue: AchievementValue,
 		periodType: PeriodType,
 		periodValue: string
 	) => string
 	makeSk: (
 		artistId: string,
+		achievementType: AchievementType,
+		achievementValue: AchievementValue,
 		periodType: PeriodType,
 		periodValue: string,
 		uid: string
 	) => string
-	periodsFor: (
-		isoDateString: string
-	) => {
-		day: string
-		dow: string
-		week: string
-		month: string
-		moy: string
-		year: string
-		life: string
-	}
-	getTimeseries: (timeseriesKeys: TimeseriesKeys) => Promise<Timeseries[]>
+	// periodsFor: (
+	// 	isoDateString: string
+	// ) => {
+	// 	day: string
+	// 	dow: string
+	// 	week: string
+	// 	month: string
+	// 	moy: string
+	// 	year: string
+	// 	life: string
+	// }
+	// getTimeseries: (timeseriesKeys: TimeseriesKeys) => Promise<Timeseries[]>
 	// updateAchievementStats: (stat: StatArtistAndUser) => any
 	writeAchievement: (
 		achievement: Achievement
@@ -145,92 +150,103 @@ export const TableAchievement = (
 	const makePk = (
 		artistId: string,
 		achievementType: AchievementType,
+		achievementValue: AchievementValue,
 		periodType: PeriodType,
 		periodValue: string
-	) => [artistId, achievementType, periodType, periodValue].join('#')
+	) => [artistId, achievementType, achievementValue, periodType, periodValue].join('#')
 
 	const makeSk = (
 		artistId: string,
+		achievementType: AchievementType,
+		achievementValue: AchievementValue,
 		periodType: PeriodType,
 		periodValue: string,
 		uid: string
-	) => [artistId, periodType, periodValue, uid].join('#')
+	) =>
+		[
+			artistId,
+			achievementType,
+			achievementValue,
+			periodType,
+			periodValue,
+			uid
+		].join('#')
 
-	const getAchievementStatTopListener = async ({
-		artistId,
-		achievementType,
-		periodType,
-		periodValue,
-		uid
-	}: AchievementStatKeys) => {
-		return await doc
-			.get({
-				TableName,
-				Key: {
-					pk: makePk(artistId, achievementType, periodType, periodValue),
-					sk: makeSk(achievementType, periodType, periodType, uid)
-				}
-			})
-			.promise()
-			.then(res => {
-				console.log('TCL Get AchievementStatTopListener: res', res)
-				// (r.Item && (r.Item.playDurationMs as number)) || 0
+	// const getAchievementStatTopListener = async ({
+	// 	artistId,
+	// 	achievementType,
+	// 	periodType,
+	// 	periodValue,
+	// 	uid
+	// }: AchievementStatKeys) => {
+	// 	return await doc
+	// 		.get({
+	// 			TableName,
+	// 			Key: {
+	// 				pk: makePk(artistId, achievementType, periodType, periodValue),
+	// 				sk: makeSk(achievementType, periodType, periodType, uid)
+	// 			}
+	// 		})
+	// 		.promise()
+	// 		.then(res => {
+	// 			console.log('TCL Get AchievementStatTopListener: res', res)
+	// 			// (r.Item && (r.Item.playDurationMs as number)) || 0
 
-			})
-	}
+	// 		})
+	// }
 
-	const periodsFor = (isoDateString: string) => {
-		const m = moment.parseZone(isoDateString)
-		return {
-			day: m.format('YYYY-MM-DD'),
-			dow: m.format('d'),
-			week: m.format('YYYY-WW'),
-			month: m.format('YYYY-MM'),
-			moy: m.format('MM'),
-			year: m.format('YYYY'),
-			life: 'life'
-		}
-	}
+	// const periodsFor = (isoDateString: string) => {
+	// 	const m = moment.parseZone(isoDateString)
+	// 	return {
+	// 		day: m.format('YYYY-MM-DD'),
+	// 		dow: m.format('d'),
+	// 		week: m.format('YYYY-WW'),
+	// 		month: m.format('YYYY-MM'),
+	// 		moy: m.format('MM'),
+	// 		year: m.format('YYYY'),
+	// 		life: 'life'
+	// 	}
+	// }
 
-	const getTimeseries = async ({
-		uid,
-		relationId,
-		relationType,
-		periodType,
-		startPeriod,
-		endPeriod
-	}: TimeseriesKeys): Promise<Timeseries[]> => {
-		const sk = [uid, periodType, relationId].join('#')
-		const startPk = [uid, relationType, periodType, startPeriod].join('#')
-		const endPk = [uid, relationType, periodType, endPeriod].join('#')
-		// console.log('getting stats for', { sk, startPk, endPk })
+	// const getTimeseries = async ({
+	// 	uid,
+	// 	relationId,
+	// 	relationType,
+	// 	periodType,
+	// 	startPeriod,
+	// 	endPeriod
+	// }: TimeseriesKeys): Promise<Timeseries[]> => {
+	// 	const sk = [uid, periodType, relationId].join('#')
+	// 	const startPk = [uid, relationType, periodType, startPeriod].join('#')
+	// 	const endPk = [uid, relationType, periodType, endPeriod].join('#')
+	// 	// console.log('getting stats for', { sk, startPk, endPk })
 
-		const params = {
-			TableName,
-			// Limit,
-			KeyConditionExpression: `sk = :sk and pk BETWEEN :s and :e`,
-			IndexName: 'GSIReverse',
-			// ScanIndexForward: false,
-			ExpressionAttributeValues: {
-				':sk': sk,
-				':s': startPk,
-				':e': endPk
-			}
-		}
-		const result = await doc
-			.query(params)
-			.promise()
-			.then(d =>
-				d.Items.map(i => ({
-					// artist: i.artist,
-					period: i.pk.split('#')[3],
-					playDurationMs: i.playDurationMs
-				}))
-			)
-			.then(byPeriod)
-		// console.log('artistStatsFor', uid, id, result)
-		return result
-	}
+	// 	const params = {
+	// 		TableName,
+	// 		// Limit,
+	// 		KeyConditionExpression: `sk = :sk and pk BETWEEN :s and :e`,
+	// 		IndexName: 'GSIReverse',
+	// 		// ScanIndexForward: false,
+	// 		ExpressionAttributeValues: {
+	// 			':sk': sk,
+	// 			':s': startPk,
+	// 			':e': endPk
+	// 		}
+	// 	}
+	// 	const result = await doc
+	// 		.query(params)
+	// 		.promise()
+	// 		.then(d =>
+	// 			d.Items.map(i => ({
+	// 				// artist: i.artist,
+	// 				period: i.pk.split('#')[3],
+	// 				playDurationMs: i.playDurationMs
+	// 			}))
+	// 		)
+	// 		.then(byPeriod)
+	// 	// console.log('artistStatsFor', uid, id, result)
+	// 	return result
+	// }
 
 	// const updateAchievementStats = async ({
 	// 	uid,
@@ -256,6 +272,7 @@ export const TableAchievement = (
 	const writeAchievement = async ({
 		artistId,
 		achievementType,
+		achievementValue,
 		periodType,
 		periodValue,
 		uid,
@@ -265,10 +282,10 @@ export const TableAchievement = (
 			.update({
 				TableName,
 				Key: {
-					pk: makePk(artistId, achievementType, periodType, periodValue),
-					sk: makeSk(achievementType, periodType, periodType, uid)
+					pk: makePk(artistId, achievementType,achievementValue, periodType, periodValue),
+					sk: makeSk(artistId, achievementType,achievementValue, periodType, periodType, uid)
 				},
-				UpdateExpression: 'ADD total :v SET artistId = :a',
+				UpdateExpression: 'SET total :v SET artistId = :a',
 				ExpressionAttributeValues: { ':v': total, ':a': artistId }
 			})
 			.promise()
@@ -277,8 +294,6 @@ export const TableAchievement = (
 	return {
 		makePk,
 		makeSk,
-		periodsFor,
-		getTimeseries,
 		writeAchievement
 	}
 }
