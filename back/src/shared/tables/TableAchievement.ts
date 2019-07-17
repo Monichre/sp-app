@@ -58,6 +58,8 @@ export type Achievement = {
 	periodValue: string
 	uid: string
 	total: number
+	date: string
+	user?: any
 }
 
 export type AchievementMetric = {
@@ -107,35 +109,25 @@ type Timeseries = {
 const byPeriod = R.sortWith<Timeseries>([R.ascend(R.path(['period']))])
 
 export type TTableAchievement = {
-	// getAchievementStat: (artistStatKeys: AchievementStatKeys) => Promise<number>
 	makePk: (
 		artistId: string,
 		achievementType: AchievementType,
 		achievementValue: AchievementValue,
 		periodType: PeriodType,
-		periodValue: string
+		periodValue: string,
+		date: string
 	) => string
+
 	makeSk: (
 		artistId: string,
 		achievementType: AchievementType,
 		achievementValue: AchievementValue,
 		periodType: PeriodType,
 		periodValue: string,
+		date: string,
 		uid: string
 	) => string
-	// periodsFor: (
-	// 	isoDateString: string
-	// ) => {
-	// 	day: string
-	// 	dow: string
-	// 	week: string
-	// 	month: string
-	// 	moy: string
-	// 	year: string
-	// 	life: string
-	// }
-	// getTimeseries: (timeseriesKeys: TimeseriesKeys) => Promise<Timeseries[]>
-	// updateAchievementStats: (stat: StatArtistAndUser) => any
+
 	writeAchievement: (
 		achievement: Achievement
 	) => Promise<PromiseResult<UpdateItemOutput, AWSError>>
@@ -152,8 +144,17 @@ export const TableAchievement = (
 		achievementType: AchievementType,
 		achievementValue: AchievementValue,
 		periodType: PeriodType,
-		periodValue: string
-	) => [artistId, achievementType, achievementValue, periodType, periodValue].join('#')
+		periodValue: string,
+		date: string
+	) =>
+		[
+			artistId,
+			achievementType,
+			achievementValue,
+			periodType,
+			periodValue,
+			date
+		].join('#')
 
 	const makeSk = (
 		artistId: string,
@@ -161,6 +162,7 @@ export const TableAchievement = (
 		achievementValue: AchievementValue,
 		periodType: PeriodType,
 		periodValue: string,
+		date: string,
 		uid: string
 	) =>
 		[
@@ -169,8 +171,41 @@ export const TableAchievement = (
 			achievementValue,
 			periodType,
 			periodValue,
+			date,
 			uid
 		].join('#')
+	
+	  const encode = ({
+			artistId,
+			achievementType,
+			achievementValue,
+			periodType,
+			periodValue,
+			date,
+			uid,
+			...rest
+		}: Achievement) => ({
+			pk: makePk(
+				artistId,
+				achievementType,
+				achievementValue,
+				periodType,
+				periodValue,
+				date
+			),
+			sk: makeSk(
+				artistId,
+				achievementType,
+				achievementValue,
+				periodType,
+				periodValue,
+				date,
+				uid
+			),
+
+			...rest
+		})
+
 
 	// const getAchievementStatTopListener = async ({
 	// 	artistId,
@@ -275,18 +310,27 @@ export const TableAchievement = (
 		achievementValue,
 		periodType,
 		periodValue,
+		date,
 		uid,
-		total
+		total,
+		user
 	}: Achievement) => {
 		return await doc
-			.update({
+			.put({
 				TableName,
-				Key: {
-					pk: makePk(artistId, achievementType,achievementValue, periodType, periodValue),
-					sk: makeSk(artistId, achievementType,achievementValue, periodType, periodType, uid)
-				},
-				UpdateExpression: 'SET total :v SET artistId = :a',
-				ExpressionAttributeValues: { ':v': total, ':a': artistId }
+				Item: {
+					...encode({
+						artistId,
+						achievementType,
+						achievementValue,
+						periodType,
+						periodValue,
+						date,
+						uid,
+						total,
+						user
+					})
+				}
 			})
 			.promise()
 	}
