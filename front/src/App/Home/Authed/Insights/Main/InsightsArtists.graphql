@@ -1,23 +1,7 @@
 
 query InsightsArtists($uid: String!) {
 	insightsArtists(uid: $uid, gid: "global") {
-		artist {
-			topListeners {
-				total
-				user {
-					photoURL
-					uid
-					utcOffset
-					displayName
-					lastUpdate
-					sk
-					totalUpdates
-					pk
-					accessToken
-					refreshToken
-				}
-			}
-		}
+		
 		today {
 			...TimescopeTopArtistsFragment
 		}

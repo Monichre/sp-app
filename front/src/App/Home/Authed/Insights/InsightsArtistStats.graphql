@@ -54,23 +54,7 @@ fragment PerspectiveStatsFragment on PerspectiveStats {
 }
 
 query InsightsArtistStats($uid: String!, $artistId: String!) {
-	artist {
-		topListeners {
-			total
-			user {
-				photoURL
-				uid
-				utcOffset
-				displayName
-				lastUpdate
-				sk
-				totalUpdates
-				pk
-				accessToken
-				refreshToken
-			}
-		}
-	}
+	
 	insightsArtistStats(uid: $uid, gid: "global", artistId: $artistId) {
 		artist {
 			...ArtistFragment

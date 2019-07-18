@@ -1,4 +1,4 @@
-// Generated in 2019-05-09T12:21:31-07:00
+// Generated in 2019-07-18T10:27:50-04:00
 // REGENERATE THIS BY STARTING THE LOCAL BACKEND
 // AND THEN RUNNING `front % yarn generate`
 
@@ -538,6 +538,8 @@ export type ArtistFragmentFragment = {
   images: ArtistFragmentImages[];
 
   external_urls: ArtistFragmentExternalUrls;
+
+  topListeners: Maybe<(Maybe<ArtistFragmentTopListeners>)[]>;
 };
 
 export type ArtistFragmentImages = {
@@ -550,6 +552,38 @@ export type ArtistFragmentExternalUrls = {
   __typename?: "SpotifyUrl";
 
   spotify: string;
+};
+
+export type ArtistFragmentTopListeners = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  user: Maybe<ArtistFragmentUser>;
+};
+
+export type ArtistFragmentUser = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  utcOffset: Maybe<number>;
+
+  displayName: Maybe<string>;
+
+  lastUpdate: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  totalUpdates: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  accessToken: Maybe<string>;
+
+  refreshToken: Maybe<string>;
 };
 
 export type TimescopeStatsFragmentFragment = {
@@ -636,12 +670,46 @@ export type PerspectiveDashArtist = {
   name: string;
 
   images: PerspectiveDashImages[];
+
+  topListeners: Maybe<(Maybe<PerspectiveDashTopListeners>)[]>;
 };
 
 export type PerspectiveDashImages = {
   __typename?: "Image";
 
   url: string;
+};
+
+export type PerspectiveDashTopListeners = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  user: Maybe<PerspectiveDashUser>;
+};
+
+export type PerspectiveDashUser = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  utcOffset: Maybe<number>;
+
+  displayName: Maybe<string>;
+
+  lastUpdate: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  totalUpdates: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  accessToken: Maybe<string>;
+
+  refreshToken: Maybe<string>;
 };
 
 export type PerspectiveDashGenres = {
@@ -774,12 +842,46 @@ export type ArtistsFragmentArtist = {
   name: string;
 
   images: ArtistsFragmentImages[];
+
+  topListeners: Maybe<(Maybe<ArtistsFragmentTopListeners>)[]>;
 };
 
 export type ArtistsFragmentImages = {
   __typename?: "Image";
 
   url: string;
+};
+
+export type ArtistsFragmentTopListeners = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  user: Maybe<ArtistsFragmentUser>;
+};
+
+export type ArtistsFragmentUser = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  utcOffset: Maybe<number>;
+
+  displayName: Maybe<string>;
+
+  lastUpdate: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  totalUpdates: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  accessToken: Maybe<string>;
+
+  refreshToken: Maybe<string>;
 };
 
 export type TimescopeTopGenresFragmentFragment = {
@@ -820,6 +922,21 @@ export const ArtistFragmentFragmentDoc = gql`
     }
     external_urls {
       spotify
+    }
+    topListeners {
+      total
+      user {
+        photoURL
+        uid
+        utcOffset
+        displayName
+        lastUpdate
+        sk
+        totalUpdates
+        pk
+        accessToken
+        refreshToken
+      }
     }
   }
 `;
@@ -869,6 +986,21 @@ export const PerspectiveDashFragmentDoc = gql`
         name
         images {
           url
+        }
+        topListeners {
+          total
+          user {
+            photoURL
+            uid
+            utcOffset
+            displayName
+            lastUpdate
+            sk
+            totalUpdates
+            pk
+            accessToken
+            refreshToken
+          }
         }
       }
     }
@@ -945,6 +1077,21 @@ export const ArtistsFragmentFragmentDoc = gql`
       name
       images {
         url
+      }
+      topListeners {
+        total
+        user {
+          photoURL
+          uid
+          utcOffset
+          displayName
+          lastUpdate
+          sk
+          totalUpdates
+          pk
+          accessToken
+          refreshToken
+        }
       }
     }
   }

@@ -12,32 +12,7 @@ query InsightsDash($uid: String!) {
 		}
 		lifetime {
 			...TimescopeDash
-			artists {
-				personal
-				group
-				artist {
-					id
-					name
-					images {
-						url
-					}
-					topListeners {
-						total
-						user {
-							photoURL
-							uid
-							utcOffset
-							displayName
-							lastUpdate
-							sk
-							totalUpdates
-							pk
-							accessToken
-							refreshToken
-						}
-					}
-				}
-			}
+		
 		}
 	}
 }
