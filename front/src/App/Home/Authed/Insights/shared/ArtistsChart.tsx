@@ -43,6 +43,7 @@ const CustomArtistTick: React.SFC<TickProps & any> = React.memo(({ x, y, offset,
   const { topListeners } = artist
   const [first]: any = topListeners
   const isTopListener: any = first.user.uid === userId
+  const userHandle = first.user.displayName ? first.user.displayName : first.user.email
 
 
   // topListeners.find((listener: any) => listener.user.uid === userId)
@@ -53,18 +54,18 @@ const CustomArtistTick: React.SFC<TickProps & any> = React.memo(({ x, y, offset,
     <Link to={artistLink(pathParams, artist.id)} className={className} style={{ position: 'relative'
     }}>
       {
-        isTopListener ? <image color='' href='/icons/first-award.png' y="75" x="0"
+        isTopListener ? <image  href='/icons/first-award.png' transform={`translate(${(x || 0) - 200},${(y || 0) - 10})`}
         /> : null
       }
       <clipPath id='clipCircle'>
         <circle r='32px' cx='32px' cy='32px' />
       </clipPath>
-      <Text stroke='white' width={100} textAnchor='end' dx={-78} dy={4} {...{ x, y }}>
+      <Text stroke='white' width={100} font-size="14" textAnchor='end' dx={-78} dy={4} {...{ x, y }}>
         {artist.name} 
       </Text>
       {
-        isTopListener ? <Text stroke='white' width={100} textAnchor='end' dx={-88} dy={20} {...{ x, y }}>
-          1st Place
+        isTopListener ? <Text stroke='#64d6ee' width={100} font-size="10" height={20} textAnchor='end' dx={-78} dy={24} {...{ x, y }}>
+          {userHandle}
         </Text> : null
       }
       <image href={artist.images[0] && artist.images[0].url} width='64px' height='64px' clipPath='url(#clipCircle)' transform={`translate(${(x || 0) - 70},${(y || 0) - 32})`}
