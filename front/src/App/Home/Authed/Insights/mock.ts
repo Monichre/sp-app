@@ -1,12 +1,57 @@
-import { InsightsDashInsightsDash } from "../../../../types";
+
+import { InsightsDashInsightsDash, PerspectiveDashArtist, ArtistsFragmentUser } from "../../../../types";
 
 
-const AR1 = { id: '1', name: 'A Long Ass Artist Name', images: [ { url: 'https://i.scdn.co/image/5e05e74fb744d3c80005fd68a49f74ef6e4fa3cb' }]}
-const AR2 = { id: '2', name: 'A2', images: [ { url: 'https://i.scdn.co/image/5e05e74fb744d3c80005fd68a49f74ef6e4fa3cb' }]}
-const AR3 = { id: '3', name: 'A3', images: [ { url: 'https://i.scdn.co/image/5e05e74fb744d3c80005fd68a49f74ef6e4fa3cb' }]}
-const AR4 = { id: '4', name: 'A4', images: [ { url: 'https://i.scdn.co/image/5e05e74fb744d3c80005fd68a49f74ef6e4fa3cb' }]}
-const AR5 = { id: '5', name: 'A5', images: [ { url: 'https://i.scdn.co/image/5e05e74fb744d3c80005fd68a49f74ef6e4fa3cb' }]}
-const AR6 = { id: '6', name: 'A6', images: [ { url: 'https://i.scdn.co/image/5e05e74fb744d3c80005fd68a49f74ef6e4fa3cb' }]}
+const dirksPhoto = 'http://arnoldzwicky.s3.amazonaws.com/WahlbergDiggler.jpg'
+const user: ArtistsFragmentUser = {
+	displayName: 'Dirk Diggler',
+	email: 'dirk@diggler.com',
+	photoURL: dirksPhoto,
+	uid: 'spotify:1121486086'
+}
+
+const AR1: PerspectiveDashArtist = { id: '1', name: 'A Long Ass Artist Name', images: [ { url: 'https://i.scdn.co/image/5e05e74fb744d3c80005fd68a49f74ef6e4fa3cb' }], topListeners: [
+{  
+  
+  user: user,
+  total: 1002000
+}
+]}
+const AR2: PerspectiveDashArtist = { id: '2', name: 'A2', images: [ { url: 'https://i.scdn.co/image/5e05e74fb744d3c80005fd68a49f74ef6e4fa3cb' }], topListeners: [
+{  
+  
+  user: user,
+  total: 1002000
+}
+]}
+const AR3: PerspectiveDashArtist = { id: '3', name: 'A3', images: [ { url: 'https://i.scdn.co/image/5e05e74fb744d3c80005fd68a49f74ef6e4fa3cb' }], topListeners: [
+{  
+  
+  user: user,
+  total: 1002000
+}
+]}
+const AR4: PerspectiveDashArtist = { id: '4', name: 'A4', images: [ { url: 'https://i.scdn.co/image/5e05e74fb744d3c80005fd68a49f74ef6e4fa3cb' }], topListeners: [
+{  
+  
+  user: user,
+  total: 1002000
+}
+]}
+const AR5: PerspectiveDashArtist = { id: '5', name: 'A5', images: [ { url: 'https://i.scdn.co/image/5e05e74fb744d3c80005fd68a49f74ef6e4fa3cb' }], topListeners: [
+{  
+  
+  user: user,
+  total: 1002000
+}
+]}
+const AR6: PerspectiveDashArtist = { id: '6', name: 'A6', images: [ { url: 'https://i.scdn.co/image/5e05e74fb744d3c80005fd68a49f74ef6e4fa3cb' }], topListeners: [
+{  
+  
+  user: user,
+  total: 1002000
+}
+]}
 
 export const useInsightsData = (): InsightsDashInsightsDash => {
 
@@ -165,3 +210,25 @@ export const useInsightsData = (): InsightsDashInsightsDash => {
     },
   }
 }
+
+
+// const third = { sk: '3nnQpaTvKb5jCQabZefACI#first#life#life#2019-07-18',
+//   total: 2312317,
+//   pk: '3nnQpaTvKb5jCQabZefACI#topListener#life#life',
+//   user:
+//    { photoURL:
+//       'https://scontent.xx.fbcdn.net/v/t1.0-1/p200x200/27073066_10102681350144831_3294770492597424902_n.jpg?_nc_cat=104&_nc_oc=AQk3_SfJitwb6umCXG2Bt-DGJXmotHjxQ5ITSz4d6wTs_RtvcjoYxigI_Dz8P2MjOFI&_nc_ht=scontent.xx&oh=1c8acd250f3c8d0cfdc424646fe4bc63&oe=5DB89AEC',
+//      uid: 'spotify:124053034',
+//      utcOffset: -240,
+//      displayName: 'Liam Ellis',
+//      lastUpdate: '2019-07-18T15:08:49.553Z',
+//      sk: 'spotify',
+//      spotifyId: '124053034',
+//      totalUpdates: 1,
+//      pk: 'spotify:124053034',
+//      accessToken:
+//       'BQBH4lOU2LdYr5BqCujjgb9avUEmlODoQBaVmN3rErgPBp3a5X5Z1sDAVozRBb_RoLtGff00RQ1px-Mu5RRaoim635P5qhNo2bakjwJHFPjRUsBjgbdxYgvEobMHHfkfNVoGtt0dedO8nSX-utU9Qf549AFNeHFrq-1U_4agaPJOyAtWIl7kwZBTfTo3xsczFxie3qWC36r1K0BkuKRfoYhcx1vAbeR24GyGxsBDSNJMpvvjhuyDhCIGSA',
+//      email: 'ellis245@umn.edu',
+//      refreshToken:
+//       'AQAl5TlRgC87Bou9sIwATrVoNBuLbpz3oDs5WsdfWdDbK3H8QskwmT8ZDSFlctu9DurSToYQPKaGE5VjyTKohsXp7Uzy-Sii1tA2Fl134rHDWzitxdkqa8DZC9J8qyhQsKvuog' } }
+// }

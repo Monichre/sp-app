@@ -19,6 +19,10 @@ const Row = styled.div`
   flex-direction: row;
   width: 100%;
   margin: 30px 0; 
+
+  .isTopListener {
+    border: 1px solid #64d6ee;
+  }
   ${notLargeQuery`
     flex-direction: column;
   `}
@@ -42,11 +46,12 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
       }
     }
   } = suspensefulHook(useInsightsDash({ variables: { uid }, suspend: true, pollInterval: 10000}))
-  console.log('genres', genres)
+  console.log('TCL: uid', uid)
+  
   return <>
     <TimeseriesChart {...{timeSeries, showOnly: pathParams.perspective}}/>
     <Row>
-      <ArtistsChartBlock {...{artists, pathParams}}>
+      <ArtistsChartBlock {...{ artists, pathParams }} userId={uid}>
         <BlockTitle to={`${insightLink(pathParams)}/artists`}>Top Artists <BlockTitleMore>see all</BlockTitleMore></BlockTitle>
       </ArtistsChartBlock>
       <GenresChartBlock {...{genres, pathParams}}>

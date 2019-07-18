@@ -39,15 +39,9 @@ fragment ArtistsFragment on TopArtistStat {
 			total
 			user {
 				photoURL
+				email
 				uid
-				utcOffset
 				displayName
-				lastUpdate
-				sk
-				totalUpdates
-				pk
-				accessToken
-				refreshToken
 			}
 		}
 	}

@@ -18,6 +18,8 @@ export const Music = () => (
   </svg>
 )
 
+export const FirstTopListenerAward = () => (<img src='/icons/first.svg' />)
+
 // not animating now -- is this animating in the other branch?
 const MenuIconStyles = styled.div`
 

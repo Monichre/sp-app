@@ -10,7 +10,7 @@ export const Artists: React.SFC<RouteComponentProps & { uid: string, pathParams:
   console.log('TCL: artists', artists)
 
   return (
-    <ArtistsChartBlock {...{artists, pathParams}}>
+    <ArtistsChartBlock {...{ artists, pathParams }} userId={uid}>
       <h1><InsightsBackLink/> Top Artists</h1>
     </ArtistsChartBlock>
   )

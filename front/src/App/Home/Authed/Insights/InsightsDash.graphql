@@ -31,15 +31,9 @@ fragment PerspectiveDash on PerspectiveTops {
 				total
 				user {
 					photoURL
+					email
 					uid
-					utcOffset
 					displayName
-					lastUpdate
-					sk
-					totalUpdates
-					pk
-					accessToken
-					refreshToken
 				}
 			}
 		}

@@ -11,15 +11,9 @@ fragment ArtistFragment on Artist {
 		total
 		user {
 			photoURL
+			email
 			uid
-			utcOffset
 			displayName
-			lastUpdate
-			sk
-			totalUpdates
-			pk
-			accessToken
-			refreshToken
 		}
 	}
 }

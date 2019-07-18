@@ -35,6 +35,7 @@ type TopListener {
 type User {
   photoURL: String
   uid: String
+  email: String
   utcOffset: Int
   displayName: String
   lastUpdate: String

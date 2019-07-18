@@ -1,4 +1,4 @@
-// Generated in 2019-07-18T10:27:50-04:00
+// Generated in 2019-07-18T11:02:27-04:00
 // REGENERATE THIS BY STARTING THE LOCAL BACKEND
 // AND THEN RUNNING `front % yarn generate`
 
@@ -567,23 +567,11 @@ export type ArtistFragmentUser = {
 
   photoURL: Maybe<string>;
 
+  email: Maybe<string>;
+
   uid: Maybe<string>;
 
-  utcOffset: Maybe<number>;
-
   displayName: Maybe<string>;
-
-  lastUpdate: Maybe<string>;
-
-  sk: Maybe<string>;
-
-  totalUpdates: Maybe<number>;
-
-  pk: Maybe<string>;
-
-  accessToken: Maybe<string>;
-
-  refreshToken: Maybe<string>;
 };
 
 export type TimescopeStatsFragmentFragment = {
@@ -693,23 +681,11 @@ export type PerspectiveDashUser = {
 
   photoURL: Maybe<string>;
 
+  email: Maybe<string>;
+
   uid: Maybe<string>;
 
-  utcOffset: Maybe<number>;
-
   displayName: Maybe<string>;
-
-  lastUpdate: Maybe<string>;
-
-  sk: Maybe<string>;
-
-  totalUpdates: Maybe<number>;
-
-  pk: Maybe<string>;
-
-  accessToken: Maybe<string>;
-
-  refreshToken: Maybe<string>;
 };
 
 export type PerspectiveDashGenres = {
@@ -865,23 +841,11 @@ export type ArtistsFragmentUser = {
 
   photoURL: Maybe<string>;
 
+  email: Maybe<string>;
+
   uid: Maybe<string>;
 
-  utcOffset: Maybe<number>;
-
   displayName: Maybe<string>;
-
-  lastUpdate: Maybe<string>;
-
-  sk: Maybe<string>;
-
-  totalUpdates: Maybe<number>;
-
-  pk: Maybe<string>;
-
-  accessToken: Maybe<string>;
-
-  refreshToken: Maybe<string>;
 };
 
 export type TimescopeTopGenresFragmentFragment = {
@@ -927,15 +891,9 @@ export const ArtistFragmentFragmentDoc = gql`
       total
       user {
         photoURL
+        email
         uid
-        utcOffset
         displayName
-        lastUpdate
-        sk
-        totalUpdates
-        pk
-        accessToken
-        refreshToken
       }
     }
   }
@@ -991,15 +949,9 @@ export const PerspectiveDashFragmentDoc = gql`
           total
           user {
             photoURL
+            email
             uid
-            utcOffset
             displayName
-            lastUpdate
-            sk
-            totalUpdates
-            pk
-            accessToken
-            refreshToken
           }
         }
       }
@@ -1082,15 +1034,9 @@ export const ArtistsFragmentFragmentDoc = gql`
         total
         user {
           photoURL
+          email
           uid
-          utcOffset
           displayName
-          lastUpdate
-          sk
-          totalUpdates
-          pk
-          accessToken
-          refreshToken
         }
       }
     }

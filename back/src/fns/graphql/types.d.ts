@@ -1,4 +1,4 @@
-// Generated in 2019-07-18T00:39:51-04:00
+// Generated in 2019-07-18T10:55:23-04:00
 // REGENERATE THIS BY STARTING THE LOCAL SERVER
 // AND THEN RUNNING `back % yarn generate`
 
@@ -104,6 +104,8 @@ export interface User {
   photoURL?: Maybe<string>;
 
   uid?: Maybe<string>;
+
+  email?: Maybe<string>;
 
   utcOffset?: Maybe<number>;
 
@@ -775,6 +777,8 @@ export namespace UserResolvers {
 
     uid?: UidResolver<Maybe<string>, TypeParent, TContext>;
 
+    email?: EmailResolver<Maybe<string>, TypeParent, TContext>;
+
     utcOffset?: UtcOffsetResolver<Maybe<number>, TypeParent, TContext>;
 
     displayName?: DisplayNameResolver<Maybe<string>, TypeParent, TContext>;
@@ -798,6 +802,11 @@ export namespace UserResolvers {
     TContext = Context
   > = Resolver<R, Parent, TContext>;
   export type UidResolver<
+    R = Maybe<string>,
+    Parent = User,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type EmailResolver<
     R = Maybe<string>,
     Parent = User,
     TContext = Context
