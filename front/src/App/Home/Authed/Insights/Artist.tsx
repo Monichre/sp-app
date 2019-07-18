@@ -36,6 +36,7 @@ const ArtistTitle = styled.div`
 `
 
 const ArtistBanner: React.SFC<{artist: ArtistFragmentFragment}> = ({artist}) => {
+console.log('TCL: artist', artist)
   const { name, images, external_urls: { spotify } } = artist
   const backgroundUrl = images[0] && images[0].url
   return <ArtistBannerDiv {...{backgroundUrl}}>
@@ -48,7 +49,10 @@ const ArtistBanner: React.SFC<{artist: ArtistFragmentFragment}> = ({artist}) => 
 export const Artist: React.SFC<RouteComponentProps<{artistId: string}> & { uid: string, pathParams: TPathParams }> =
 ({uid, history, match: {path, params: { artistId }}, pathParams}) => {
   const { insightsArtistStats: stats} = suspensefulHook(useInsightsArtistStats({variables: { uid, artistId }, suspend: true}))
+  console.log('TCL: stats', stats)
+  
   const { artist, [pathParams.timeScope]: { timeseries: timeSeries }} = stats
+  console.log('TCL: artist', artist)
   return <StatPage {...{stats, history, path, pathParams}}>
     <ArtistBanner {...{artist}}/>
     <TimeseriesChart {...{timeSeries}}/>

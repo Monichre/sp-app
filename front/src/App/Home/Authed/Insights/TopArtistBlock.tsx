@@ -74,7 +74,10 @@ const ImageBlock = styled(NavBlock)<{src: string}>`
 `
 
 export const TopArtistBlock: React.SFC<{className?: string, stat: any}> =
-  ({className, stat: { playDurationMs, artist: {id, name, images, external_urls: { spotify }}}}) => {
+  ({ className, stat: { playDurationMs, artist: { id, name, images, external_urls: { spotify }, ...rest } } }) => {
+    
+    console.log(rest)
+
     const { hrs, mins } = hrsAndMinsAndSecs(playDurationMs)
     const imgUrl = images[0] && images[0].url
     return (

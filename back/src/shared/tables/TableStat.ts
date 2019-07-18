@@ -5,6 +5,11 @@ import { UpdateItemOutput } from 'aws-sdk/clients/dynamodb';
 import { PromiseResult } from 'aws-sdk/lib/request';
 import { AWSError } from 'aws-sdk';
 
+// import {
+// 	TableAchievement,
+// 	TTableAchievement
+// } from './TableAchievement'
+
 export type PeriodType =
 	| 'day'
 	| 'dow'
@@ -43,32 +48,6 @@ export type GenreStatKeys = {
 	periodValue: string
 }
 
-export type AchievementType =
-	| 'topListener'
-	| 'firstToStream'
-	| 'secondPlaceListener'
-	| 'thirdPlaceListener'
-
-export type Achievement = {
-	artistId: string
-	uid: string
-	achievementType: AchievementType
-	periodType: PeriodType
-	periodValue: string
-	total: number
-}
-
-export type AchievementMetric = {
-	uid: string
-	achievementType: AchievementType
-	artistId: string
-	periodType: PeriodType
-	periodValue: string
-	playDurationMs: number
-	artist: { name: string; id: string }
-	user: { name: string; id: string }
-}
-
 export type Stat = {
   uid: string,
   relationType: RelationType,
@@ -82,9 +61,7 @@ export type StatTotal = Stat
 export type StatArtist = Stat & {
   artist: { name: string, genres: string[] }
 }
-export type StatArtistAndUser = Stat & StatArtist & {
-	user: { id: string; img: string }
-}
+
 export type StatGenre = Stat & {
   genre: string
 }
@@ -94,6 +71,7 @@ type Artist = {
   images: Image[],
   external_urls: SpotifyUrl
   genres: string[]
+  topListeners?: Object []
 }
 type SpotifyUrl = {
   spotify: string
@@ -116,19 +94,42 @@ type Timeseries = {
 }
 
 export type TTableStat = {
-  makePk: (uid: string, relationType: RelationType, periodType: PeriodType, periodValue: string) => string
-  makeSk: (uid: string, periodType: PeriodType, relationKey: string) => string
-  periodsFor: (isoDateString: string) => { day: string, dow: string, week: string, month: string, moy: string, year: string, life: string}
-  getTimeseries: (timeseriesKeys: TimeseriesKeys) => Promise<Timeseries[]>
-  getStat: (statKeys: StatKeys) => Promise<number>
-  getTopGenres: (topKeys: TopKeys) => Promise<TopGenreRow[]>
-  getGenreStat: (genreStatKeys: GenreStatKeys) => Promise<number>
-  getArtistInfo: (artistId: string) => Promise<Artist>
-  getTopArtists: (topKeys: TopKeys) => Promise<TopArtistsRow[]>
-  getArtistStat: (artistStatKeys: ArtistStatKeys) => Promise<number>
-  writeTotalStat: (stat: StatTotal) => Promise<PromiseResult<UpdateItemOutput, AWSError>>
-  writeArtistStat: (stat: StatArtist) => Promise<PromiseResult<UpdateItemOutput, AWSError>>
-  writeGenreStat: (stat: StatGenre) => Promise<PromiseResult<UpdateItemOutput, AWSError>>
+	makePk: (
+		uid: string,
+		relationType: RelationType,
+		periodType: PeriodType,
+		periodValue: string
+	) => string
+	makeSk: (uid: string, periodType: PeriodType, relationKey: string) => string
+	periodsFor: (
+		isoDateString: string
+	) => {
+		day: string
+		dow: string
+		week: string
+		month: string
+		moy: string
+		year: string
+		life: string
+	}
+	getTimeseries: (timeseriesKeys: TimeseriesKeys) => Promise<Timeseries[]>
+	getStat: (statKeys: StatKeys) => Promise<number>
+	getTopGenres: (topKeys: TopKeys) => Promise<TopGenreRow[]>
+	getGenreStat: (genreStatKeys: GenreStatKeys) => Promise<number>
+	getArtistInfo: (
+		artistId: string
+	) => Promise<Artist>
+	getTopArtists: (topKeys: TopKeys) => Promise<TopArtistsRow[]>
+	getArtistStat: (artistStatKeys: ArtistStatKeys) => Promise<number>
+	writeTotalStat: (
+		stat: StatTotal
+	) => Promise<PromiseResult<UpdateItemOutput, AWSError>>
+	writeArtistStat: (
+		stat: StatArtist
+	) => Promise<PromiseResult<UpdateItemOutput, AWSError>>
+	writeGenreStat: (
+		stat: StatGenre
+	) => Promise<PromiseResult<UpdateItemOutput, AWSError>>
 }
 
 type TopArtistsRow = {
@@ -240,15 +241,20 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
     }).promise().then(r => r.Item && r.Item.playDurationMs as number || 0)
   }
 
-  const getArtistInfo = async (artistId: string): Promise<Artist> => {
-    return await doc.get({
-      TableName,
-      Key: {
-        pk: makePk('global', 'artist', 'life', 'life'),
-        sk: makeSk('global', 'life', artistId)
-      }
-    }).promise().then(r => r.Item && r.Item.artist as Artist)
-  }
+  const getArtistInfo = async (
+		artistId: string
+	): Promise<Artist> => {
+		return await doc
+			.get({
+				TableName,
+				Key: {
+					pk: makePk('global', 'artist', 'life', 'life'),
+					sk: makeSk('global', 'life', artistId)
+				}
+			})
+			.promise()
+			.then(r => r.Item && (r.Item.artist as Artist))
+	}
 
 
   const getTopArtists = async ({uid, periodType, periodValue, Limit = 5}: TopKeys) => {

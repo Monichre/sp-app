@@ -55,6 +55,7 @@ type Artist = {
   images: Image[],
   external_urls: SpotifyUrl
   genres: string[]
+  topListeners?: Object[]
 }
 
 type TopArtistsRow = {

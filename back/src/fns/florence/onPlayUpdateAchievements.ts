@@ -7,13 +7,11 @@ import { TableAchievement } from '../../shared/tables/TableAchievement'
 import * as _ from 'lodash'
 import * as moment from 'moment'
 
-type Artist = {
-	id?: string
-	name?: string
-}
-
 const localizedMoment = (utcOffset: number, m: moment.Moment) =>
-	moment.utc(m).utcOffset(utcOffset, false).format('YYYY-MM-DD')
+	moment
+		.utc(m)
+		.utcOffset(utcOffset, false)
+		.format('YYYY-MM-DD')
 
 const localizedISOString = (m: moment.Moment) => m.toISOString(true)
 
@@ -78,7 +76,7 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 				const artist = artistKeys.find(artist => artist.id.S === artistId)
 				const topListeners = await Promise.all(
 					valids.map(async (user: any) => {
-						const { valid, utcOffset } = user
+						const { utcOffset } = user
 
 						const now = localizedMoment(utcOffset, moment())
 

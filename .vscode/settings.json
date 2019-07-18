@@ -77,10 +77,10 @@
 	"[yaml]": {
 		"editor.defaultFormatter": "redhat.vscode-yaml"
 	},
-	// "[javascriptreact]": {
-	// 	"editor.defaultFormatter": "esbenp.prettier-vscode",
-	// 	"editor.formatOnSave": true
-	// },
+	"[javascriptreact]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true
+	},
 	
 	"codestream.email": "liam@plusminussays.com",
 	"[javascript]": {
@@ -101,7 +101,7 @@
 	"typescript.preferences.quoteStyle": "single",
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"editor.formatOnPaste": true,
-	// "editor.formatOnSaveTimeout": 0,
+	"editor.formatOnSaveTimeout": 0,
 	"javascript.format.insertSpaceBeforeFunctionParenthesis": false,
 	"typescript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": false,
 	"typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": false,

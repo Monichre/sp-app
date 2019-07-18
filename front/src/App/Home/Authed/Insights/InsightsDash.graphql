@@ -1,38 +1,79 @@
 
 query InsightsDash($uid: String!) {
-  insightsDash(uid: $uid, gid: "global") {
-    today {
-      ...TimescopeDash
-    }
-    thisWeek {
-      ...TimescopeDash
-    }
-    thisMonth {
-      ...TimescopeDash
-    }
-    lifetime {
-      ...TimescopeDash
-    }
-  }
+	insightsDash(uid: $uid, gid: "global") {
+		today {
+			...TimescopeDash
+		}
+		thisWeek {
+			...TimescopeDash
+		}
+		thisMonth {
+			...TimescopeDash
+		}
+		lifetime {
+			...TimescopeDash
+			artists {
+				personal
+				group
+				artist {
+					id
+					name
+					images {
+						url
+					}
+					topListeners {
+						total
+						user {
+							photoURL
+							uid
+							utcOffset
+							displayName
+							lastUpdate
+							sk
+							totalUpdates
+							pk
+							accessToken
+							refreshToken
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 fragment PerspectiveDash on PerspectiveTops {
-  artists {
-    personal
-    group
-    artist {
-      id
-      name
-      images {
-        url
-      }
-    }
-  }
-  genres {
-    personal
-    group
-    genre
-  }
+	artists {
+		personal
+		group
+		artist {
+			id
+			name
+			images {
+				url
+			}
+			topListeners {
+				total
+				user {
+					photoURL
+					uid
+					utcOffset
+					displayName
+					lastUpdate
+					sk
+					totalUpdates
+					pk
+					accessToken
+					refreshToken
+				}
+			}
+		}
+	}
+	genres {
+		personal
+		group
+		genre
+	}
 }
 fragment TimescopeDash on TimescopeTops {
   timeSeries {

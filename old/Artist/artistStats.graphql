@@ -1,35 +1,50 @@
 query ArtistStats($uid: String!, $id: String!) {
-  artistStats(uid: $uid, id: $id) {
-    artist {
-      id
-      name
-      images {
-        url
-      }
-      external_urls {
-        spotify
-      }
-      genres
-    }
-    past30d {
-      global {
-        period
-        playDurationMs
-      }
-      personal {
-        period
-        playDurationMs
-      }
-    }
-    past12w {
-      global {
-        period
-        playDurationMs
-      }
-      personal {
-        period
-        playDurationMs
-      }
-    }
-  }
+	artistStats(uid: $uid, id: $id) {
+		artist {
+			id
+			name
+			images {
+				url
+			}
+			external_urls {
+				spotify
+			}
+			genres
+			topListeners {
+				total
+				user {
+					photoURL
+					uid
+					utcOffset
+					displayName
+					lastUpdate
+					sk
+					totalUpdates
+					pk
+					accessToken
+					refreshToken
+				}
+			}
+		}
+		past30d {
+			global {
+				period
+				playDurationMs
+			}
+			personal {
+				period
+				playDurationMs
+			}
+		}
+		past12w {
+			global {
+				period
+				playDurationMs
+			}
+			personal {
+				period
+				playDurationMs
+			}
+		}
+	}
 }

@@ -1,9 +1,9 @@
-import * as AWS from 'aws-sdk';
-import { makeExecutableSchema } from "graphql-tools";
-import { QueryResolvers, Image } from "../types";
-import { TableUser } from '../../../shared/tables/TableUser';
-import { QueueStartHarvestUser } from '../../../shared/queues';
-import { TablePlay } from '../../../shared/tables/TablePlay';
+import * as AWS from 'aws-sdk'
+import { makeExecutableSchema } from 'graphql-tools'
+import { QueryResolvers, Image } from '../types'
+import { TableUser } from '../../../shared/tables/TableUser'
+import { QueueStartHarvestUser } from '../../../shared/queues'
+import { TablePlay } from '../../../shared/tables/TablePlay'
 
 const typeDefs = `
 type Query {
@@ -12,22 +12,39 @@ type Query {
 type Mutation {
   _: String
 }
-
 type RecentPlaysResponse {
   lastUpdate: String
   plays: [Play!]!
 }
-
 type Play {
   track: Track!
   playedAt: String!
 }
-
 type Track {
   name: String!
   artists: [Artist!]!
   album: Album!
 }
+type TopListener {
+  sk: String
+  pk: String
+  total: Float
+  user: User
+}
+
+type User {
+  photoURL: String
+  uid: String
+  utcOffset: Int
+  displayName: String
+  lastUpdate: String
+  sk: String
+  totalUpdates: Int
+  pk: String
+  accessToken: String
+  refreshToken: String
+}
+
 
 type Artist {
   id: String!
@@ -35,53 +52,68 @@ type Artist {
   images: [Image!]!
   external_urls: SpotifyUrl!
   genres: [String!]!
+  topListeners: [TopListener]
 }
-
 type Album {
   name: String!
   images: [Image]!
 }
-
 type Image {
   url: String!
 }
-
 type SpotifyUrl {
   spotify: String!
 }
 `
-
-const recentPlays: QueryResolvers.RecentPlaysResolver = async (_, {uid}, context) => {
-  const log = context.log
-  log.info(uid)
-
-  const tablePlay = TablePlay(context.DYNAMO_ENDPOINT, context.TABLE_PLAY)
-  const { docs, errors } = await tablePlay.getRecentPlays(uid, 100)
+type SpotifyUrl = {
+  spotify: string
+}
 
 
-  if (errors.length > 0) {
-    log.error('errors in plays fetched from TablePlay', { errors })
-  }
-  log.info('from TablePlay', { count: docs.length })
+type Artist = {
+  id: string,
+  name: string,
+  images: Image[],
+  external_urls: SpotifyUrl
+  genres: string[]
+  topListeners?: Object []
+}
 
-  try {
-    const plays = docs
-    const table = TableUser(context.DYNAMO_ENDPOINT, context.TABLE_USER)
-    const lastUpdate = await table.getSpotifyLastUpdate(uid)
-    log.info('returning', { lastUpdate, count: plays.length })
-    return {
-      plays,
-      lastUpdate,
+const recentPlays: QueryResolvers.RecentPlaysResolver = async (
+	_,
+	{ uid },
+	context
+) => {
+	const log = context.log
+	log.info(uid)
+
+	const tablePlay = TablePlay(context.DYNAMO_ENDPOINT, context.TABLE_PLAY)
+	const { docs, errors } = await tablePlay.getRecentPlays(uid, 100)
+
+	if (errors.length > 0) {
+		log.error('errors in plays fetched from TablePlay', { errors })
+	}
+	log.info('from TablePlay', { count: docs.length })
+
+	try {
+		const plays = docs
+		const table = TableUser(context.DYNAMO_ENDPOINT, context.TABLE_USER)
+		const lastUpdate = await table.getSpotifyLastUpdate(uid)
+		log.info('returning', { lastUpdate, count: plays.length })
+		const data: any =  {
+			plays,
+			lastUpdate
     }
-  } catch (error) {
-    log.error('unable to format response', {error, docs})
-  }
+    return data
+	} catch (error) {
+		log.error('unable to format response', { error, docs })
+	}
 }
 
 const resolvers = {
-  Query: {
-    recentPlays,
-  }
+	Query: {
+		recentPlays
+	}
 }
 
-export const schema = makeExecutableSchema({typeDefs, resolvers})
+export const schema = makeExecutableSchema({ typeDefs, resolvers })

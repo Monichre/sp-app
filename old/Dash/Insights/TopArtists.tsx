@@ -25,6 +25,7 @@ const Block = styled.div`
 type Artist = {
   name: string
   playDurationMs: number
+  topListeners: [string]
 }
 
 const bgSize = 16;

@@ -1,4 +1,4 @@
-// Generated in 2019-05-09T12:15:52-07:00
+// Generated in 2019-07-18T00:39:51-04:00
 // REGENERATE THIS BY STARTING THE LOCAL SERVER
 // AND THEN RUNNING `back % yarn generate`
 
@@ -78,6 +78,8 @@ export interface Artist {
   external_urls: SpotifyUrl;
 
   genres: string[];
+
+  topListeners?: Maybe<(Maybe<TopListener>)[]>;
 }
 
 export interface Image {
@@ -86,6 +88,38 @@ export interface Image {
 
 export interface SpotifyUrl {
   spotify: string;
+}
+
+export interface TopListener {
+  sk?: Maybe<string>;
+
+  pk?: Maybe<string>;
+
+  total?: Maybe<number>;
+
+  user?: Maybe<User>;
+}
+
+export interface User {
+  photoURL?: Maybe<string>;
+
+  uid?: Maybe<string>;
+
+  utcOffset?: Maybe<number>;
+
+  displayName?: Maybe<string>;
+
+  lastUpdate?: Maybe<string>;
+
+  sk?: Maybe<string>;
+
+  totalUpdates?: Maybe<number>;
+
+  pk?: Maybe<string>;
+
+  accessToken?: Maybe<string>;
+
+  refreshToken?: Maybe<string>;
 }
 
 export interface Album {
@@ -638,6 +672,12 @@ export namespace ArtistResolvers {
     external_urls?: ExternalUrlsResolver<SpotifyUrl, TypeParent, TContext>;
 
     genres?: GenresResolver<string[], TypeParent, TContext>;
+
+    topListeners?: TopListenersResolver<
+      Maybe<(Maybe<TopListener>)[]>,
+      TypeParent,
+      TContext
+    >;
   }
 
   export type IdResolver<
@@ -665,6 +705,11 @@ export namespace ArtistResolvers {
     Parent = Artist,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
+  export type TopListenersResolver<
+    R = Maybe<(Maybe<TopListener>)[]>,
+    Parent = Artist,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
 }
 
 export namespace ImageResolvers {
@@ -687,6 +732,114 @@ export namespace SpotifyUrlResolvers {
   export type SpotifyResolver<
     R = string,
     Parent = SpotifyUrl,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace TopListenerResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = TopListener> {
+    sk?: SkResolver<Maybe<string>, TypeParent, TContext>;
+
+    pk?: PkResolver<Maybe<string>, TypeParent, TContext>;
+
+    total?: TotalResolver<Maybe<number>, TypeParent, TContext>;
+
+    user?: UserResolver<Maybe<User>, TypeParent, TContext>;
+  }
+
+  export type SkResolver<
+    R = Maybe<string>,
+    Parent = TopListener,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type PkResolver<
+    R = Maybe<string>,
+    Parent = TopListener,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type TotalResolver<
+    R = Maybe<number>,
+    Parent = TopListener,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type UserResolver<
+    R = Maybe<User>,
+    Parent = TopListener,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace UserResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = User> {
+    photoURL?: PhotoUrlResolver<Maybe<string>, TypeParent, TContext>;
+
+    uid?: UidResolver<Maybe<string>, TypeParent, TContext>;
+
+    utcOffset?: UtcOffsetResolver<Maybe<number>, TypeParent, TContext>;
+
+    displayName?: DisplayNameResolver<Maybe<string>, TypeParent, TContext>;
+
+    lastUpdate?: LastUpdateResolver<Maybe<string>, TypeParent, TContext>;
+
+    sk?: SkResolver<Maybe<string>, TypeParent, TContext>;
+
+    totalUpdates?: TotalUpdatesResolver<Maybe<number>, TypeParent, TContext>;
+
+    pk?: PkResolver<Maybe<string>, TypeParent, TContext>;
+
+    accessToken?: AccessTokenResolver<Maybe<string>, TypeParent, TContext>;
+
+    refreshToken?: RefreshTokenResolver<Maybe<string>, TypeParent, TContext>;
+  }
+
+  export type PhotoUrlResolver<
+    R = Maybe<string>,
+    Parent = User,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type UidResolver<
+    R = Maybe<string>,
+    Parent = User,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type UtcOffsetResolver<
+    R = Maybe<number>,
+    Parent = User,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type DisplayNameResolver<
+    R = Maybe<string>,
+    Parent = User,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type LastUpdateResolver<
+    R = Maybe<string>,
+    Parent = User,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type SkResolver<
+    R = Maybe<string>,
+    Parent = User,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type TotalUpdatesResolver<
+    R = Maybe<number>,
+    Parent = User,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type PkResolver<
+    R = Maybe<string>,
+    Parent = User,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type AccessTokenResolver<
+    R = Maybe<string>,
+    Parent = User,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type RefreshTokenResolver<
+    R = Maybe<string>,
+    Parent = User,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
 }
@@ -1274,6 +1427,8 @@ export type IResolvers<TContext = Context> = {
   Artist?: ArtistResolvers.Resolvers<TContext>;
   Image?: ImageResolvers.Resolvers<TContext>;
   SpotifyUrl?: SpotifyUrlResolvers.Resolvers<TContext>;
+  TopListener?: TopListenerResolvers.Resolvers<TContext>;
+  User?: UserResolvers.Resolvers<TContext>;
   Album?: AlbumResolvers.Resolvers<TContext>;
   InsightsStatsResponse?: InsightsStatsResponseResolvers.Resolvers<TContext>;
   TimescopeStats?: TimescopeStatsResolvers.Resolvers<TContext>;
