@@ -181,6 +181,8 @@ const perspectiveTopArtists = async (
 		Limit: 3
 	})
 
+	console.log('TCL: endDate', endDate)
+
 	return await Promise.all(
 		artistsPrimary.map(async ({ artist, playDurationMs }) => {
 			let enrichedArtist = Object.assign({}, artist)
@@ -194,39 +196,46 @@ const perspectiveTopArtists = async (
 				periodValue: 'life',
 				currentTime: endDate
 			})
-			console.log('TCL: perspectiveTopArtists -> first', first)
+			console.log('Insights Dash first', first)
 			if (first) {
 				enrichedArtist.topListeners.push(first)
-			}
-			const second = await tableAchievement.getArtistTopListeners({
-				artistId: artist.id,
-				achievementType: 'topListener',
-				achievementValue: 'second',
-				periodType: 'life',
-				periodValue: 'life',
-				currentTime: endDate
-			})
 
-			console.log('TCL: perspectiveTopArtists -> second', second)
-			if (second && first.user.pk !== second.user.pk) {
-				enrichedArtist.topListeners.push(second)
-			}
+				const second = await tableAchievement.getArtistTopListeners({
+					artistId: artist.id,
+					achievementType: 'topListener',
+					achievementValue: 'second',
+					periodType: 'life',
+					periodValue: 'life',
+					currentTime: endDate
+				})
 
-			const third = await tableAchievement.getArtistTopListeners({
-				artistId: artist.id,
-				achievementType: 'topListener',
-				achievementValue: 'third',
-				periodType: 'life',
-				periodValue: 'life',
-				currentTime: endDate
-			})
+				console.log('Insights Dash second', second)
+				if (second && first.user.pk !== second.user.pk) {
+					enrichedArtist.topListeners.push(second)
 
-			console.log('TCL: perspectiveTopArtists -> third', third)
-			if (
-				third &&
-				(second.user.pk !== third.user.pk && third.user.pk !== first.user.pk)
-			) {
-				enrichedArtist.topListeners.push(third)
+					const third = await tableAchievement.getArtistTopListeners({
+						artistId: artist.id,
+						achievementType: 'topListener',
+						achievementValue: 'third',
+						periodType: 'life',
+						periodValue: 'life',
+						currentTime: endDate
+					})
+
+					console.log('Insights Dash third', third)
+					if (
+						third &&
+						(second.user.pk !== third.user.pk &&
+							third.user.pk !== first.user.pk)
+					) {
+						enrichedArtist.topListeners.push(third)
+					}
+
+					console.log(
+						'TCL: perspectiveTopArtists -> enrichedArtist.topListeners',
+						enrichedArtist.topListeners
+					)
+				}
 			}
 
 			console.log(

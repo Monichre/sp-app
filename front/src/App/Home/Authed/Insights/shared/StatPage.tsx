@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
 import { NotLarge, Large, BRAND_COLOR, BRAND_GLOBAL_COLOR_BACKGROUND, BRAND_PERSONAL_COLOR_BACKGROUND, BRAND_PERSONAL_COLOR, BRAND_GLOBAL_COLOR, BRAND_GLOBAL_COLOR_BACKGROUND_INACTIVE, BRAND_PERSONAL_COLOR_BACKGROUND_INACTIVE, TITLE_FONT } from '../../../../../shared/media';
-import { NavLink } from 'react-router-dom';
+
 import { History } from 'history';
 import { insightLink, TPathParams } from './functions';
 import { InsightsStatsInsightsStats, InsightsStatsToday, InsightsStatsThisWeek, InsightsStatsThisMonth, InsightsStatsLifetime, InsightsStatsPersonal, InsightsStatsGroup, InsightsArtistStatsInsightsArtistStats, InsightsGenreStatsInsightsGenreStats } from '../../../../../types';
@@ -53,16 +53,6 @@ const navOptions: TNavOption[]  = [
   { label: 'Lifetime', addParams: {timeScope: 'lifetime'} },
 ]
 
-const NavTabLink = styled(NavLink)`
-  display: block;
-  text-decoration: none;
-  flex: 1;
-  padding: 1rem 2rem;
-  &.active {
-    color: ${BRAND_COLOR}
-  }
-`
-
 
 
 const NavTabView = styled.div`
@@ -73,8 +63,7 @@ margin-right: 0.75rem;
 
 const NavTab: React.SFC<{label: string, pathParams: TPathParams, stats: InsightsStatsTimescope}> = ({label, pathParams, stats}) =>
   <NavTabView>
-    <NavTabLink to={insightLink(pathParams)}>{label}</NavTabLink>
-    <TimeBlockPair {...{pathParams, stats}}/>
+    <TimeBlockPair {...{label, pathParams, stats}}/>
   </NavTabView>
 
 const NavTabsView = styled.div`

@@ -676,9 +676,10 @@ resources:
             AttributeDefinitions:
               - AttributeName: pk # Will be Artist's pk/spotify uid
                 AttributeType: S
-              - AttributeName: sk # This will be an achievement type parameter
+              - AttributeName: sk 
                 AttributeType: S
-   
+              - AttributeName: fk 
+                AttributeType: S
             KeySchema:
               - AttributeName: pk
                 KeyType: HASH
@@ -688,11 +689,11 @@ resources:
             StreamSpecification:
               StreamViewType: NEW_AND_OLD_IMAGES
             GlobalSecondaryIndexes:
-            - IndexName: GSIReverse
+            - IndexName: UserAchievementIndex
               KeySchema:
                 - AttributeName: sk
                   KeyType: HASH
-                - AttributeName: pk
+                - AttributeName: fk
                   KeyType: RANGE
               Projection:
                 ProjectionType: ALL

@@ -36,38 +36,46 @@ type UserIdProp = {
 
 
 
-const CustomArtistTick: React.SFC<TickProps & any> = React.memo(({ x, y, offset, artist, pathParams, userId }) => {
+const CustomArtistTick: React.SFC<TickProps> = React.memo(({ x, y, offset, artist, pathParams }) => {
+
+  // const { topListeners } = artist
+  // const [first, second=false, third=false]: any = topListeners
+  // console.log('TCL: third', third)
+  // console.log('TCL: second', second)
+  // console.log('TCL: first', first)
+  // const isTopListener: any = first ? first.user.uid === userId : false
+  // const isSecond: any = second ? second.user.uid === userId : false
+  // console.log('TCL: isSecond', isSecond)
+  // const isThird: any = third ? third.user.uid === userId : false
+  // console.log('TCL: isThird', isThird)
+
+  // const userHandle: any = first ? (first.user.displayName || first.user.email) : second ? (second.user.displayName || second.user.email) : third ? (third.user.displayName || third.user.email) : null
+
+  // const firstPlaceBadge: any = '/icons/first-currentUser.png'
+  // const secondPlaceBadge = '/icons/second-currentUser.png'
+
   
-  // let artistLinkRef = useRef();
-   
-  const { topListeners } = artist
-  const [first]: any = topListeners
-  const isTopListener: any = first.user.uid === userId
-  const userHandle = first.user.displayName ? first.user.displayName : first.user.email
+  
+  // console.log('TCL: isTopListener', isTopListener)
 
-
-  // topListeners.find((listener: any) => listener.user.uid === userId)
-  console.log('TCL: isTopListener', isTopListener)
-
-  const ArtistLink: any = ({ className, isTopListener }: any) => (
+  const ArtistLink: any = ({ className }: any) => (
     
     <Link to={artistLink(pathParams, artist.id)} className={className} style={{ position: 'relative'
     }}>
-      {
-        isTopListener ? <image  href='/icons/first-award.png' transform={`translate(${(x || 0) - 200},${(y || 0) - 10})`}
-        /> : null
-      }
+      {/* {
+        isTopListener ? <image href={firstPlaceBadge} transform={`translate(${(x || 0) + 150},${(y || 0) - 5})`} width='30px' height='30px' 
+        /> : first.user.photoURL ? <image href={first.user.photoURL} dx={-78} width='30px' height='30px' clipPath='url(#clipCircle)'
+          /> : <Text stroke='#64d6ee' width={100} font-size="10" height={20} textAnchor='end' dx={-78} dy={24} {...{ x, y }}>
+              {userHandle}
+            </Text>
+      } */}
       <clipPath id='clipCircle'>
         <circle r='32px' cx='32px' cy='32px' />
       </clipPath>
       <Text stroke='white' width={100} font-size="14" textAnchor='end' dx={-78} dy={4} {...{ x, y }}>
         {artist.name} 
       </Text>
-      {
-        isTopListener ? <Text stroke='#64d6ee' width={100} font-size="10" height={20} textAnchor='end' dx={-78} dy={24} {...{ x, y }}>
-          {userHandle}
-        </Text> : null
-      }
+     
       <image href={artist.images[0] && artist.images[0].url} width='64px' height='64px' clipPath='url(#clipCircle)' transform={`translate(${(x || 0) - 70},${(y || 0) - 32})`}
   />
       </Link>
@@ -75,8 +83,79 @@ const CustomArtistTick: React.SFC<TickProps & any> = React.memo(({ x, y, offset,
   )
 
 
-  return <ArtistLink isTopListener={isTopListener} className={`${artist.name.length > 1 ?artist.name.split(' ').join('-').toLowerCase() : artist.name.toLowerCase()} ${isTopListener ? 'isTopListener' : ''}`}/>
+  return <ArtistLink className={`${artist.name.length > 1 ?artist.name.split(' ').join('-').toLowerCase() : artist.name.toLowerCase()}`}/>
 })
+
+const TopListenerYaxis: React.SFC<TickProps & any> = React.memo(({ x, y, offset, artist, pathParams, userId }) => {
+
+  const { topListeners } = artist
+  const [first, second = false, third = false]: any = topListeners
+  console.log('TCL: third', third)
+  console.log('TCL: second', second)
+  console.log('TCL: first', first)
+  const isTopListener: any = first ? first.user.uid === userId : false
+  const isSecond: any = second ? second.user.uid === userId : false
+  console.log('TCL: isSecond', isSecond)
+  const isThird: any = third ? third.user.uid === userId : false
+  console.log('TCL: isThird', isThird)
+
+  const topListenerHandle: any = first && first.user.displayName ? first.user.displayName : first && first.user.email ? first.user.email : null
+  const secondListenerHandle: any = second && second.user.displayName ? second.user.displayName : second && second.user.email ? second.user.email : null
+  const firstPlaceBadge: any = '/icons/first-currentUser.png'
+  const secondPlaceBadge = '/icons/second-currentUser.png'
+
+
+
+  console.log('TCL: isTopListener', isTopListener)
+
+  const TopListenerLink: any = ({ className, isTopListener }: any) => (
+
+    <Link to={artistLink(pathParams, artist.id)} className={className} style={{
+      position: 'relative'
+    }}>
+      {
+        isTopListener ? <image href={firstPlaceBadge} transform={`translate(${(x || 0) + 15}, ${(y || 0) - 20})`} width='30px' height='30px' 
+        /> : first && first.user.photoURL ? <image href={first.user.photoURL} width='32px' height='32px' clipPath='url(#clipCircle2)' transform={`translate(${(x || 0) + 15}, ${(y || 0) - 20})`} /> : first ? <Text stroke='#64d6ee' width={100} font-size="10" height={20} textAnchor='end' dx={-78} dy={24} {...{ x, y }}>
+            {topListenerHandle}
+          </Text> : null
+      }
+      
+      {
+        isSecond ? <image href={secondPlaceBadge} transform={`translate(${(x || 0) + 45}, ${(y || 0) - 20})`} width='30px' height='30px'
+        /> : second && second.user.photoURL ? <image href={second.user.photoURL} width='32px' height='32px' clipPath='url(#clipCircle2)' transform={`translate(${(x || 0) + 45}, ${(y || 0) - 20})`} /> : second && second.user ? <Text stroke='#64d6ee' width={100} font-size="10" height={20} textAnchor='end' dx={-78} dy={24} {...{ x, y }}>
+          {secondListenerHandle}
+        </Text> : null
+      }
+
+      
+      <clipPath id='clipCircle2'>
+        <circle r='16px' cx='16px' cy='16px' />
+      </clipPath>
+ 
+    </Link>
+
+  )
+
+
+  return <TopListenerLink isTopListener={isTopListener} className={`${artist.name.length > 1 ? artist.name.split(' ').join('-').toLowerCase() : artist.name.toLowerCase()} ${isTopListener ? 'isTopListener' : ''}`} />
+})
+
+
+const CustomTip: any = ({ active, payload, label }: any) => {
+  if (active) {
+    return (
+      <div className="custom-tooltip">
+        <p className="label">{`${label} : ${payload[0].value}`}</p>
+        
+        <p className="desc">Anything you want can be displayed here.</p>
+      </div>
+    );
+  }
+
+  return null;
+};
+
+
 
 const navigateToArtist = (history: History, pathParams: TPathParams) => (obj: any) => {
   if (!obj) { return }
@@ -97,19 +176,26 @@ const ArtistsChart: React.SFC<RouteComponentProps & ChartProps & UserIdProp> = (
     <ResponsiveContainer width='100%' height={(height * artists.length) + 90}>
      
       <BarChart layout='vertical' data={artists} onClick={navigateToArtist(history, pathParams)}>
-        {/* <CartesianGrid stroke='#999'/> */}
-        <XAxis height={40} type='number' stroke={BRAND_PERSONAL_COLOR} orientation='top' xAxisId='top' tickFormatter={decimalToHrsMins} domain={[0, domainMaxBuilder(artists)]}>
+        
+        <XAxis height={30} type='number' stroke={BRAND_PERSONAL_COLOR} orientation='top' xAxisId='top' tickFormatter={decimalToHrsMins} domain={[0, domainMaxBuilder(artists)]}>
           <Label position='insideTopLeft' offset={0} stroke={BRAND_PERSONAL_COLOR}>hours</Label>
         </XAxis>
 
-        <YAxis width={200} type='category' stroke={BRAND_PERSONAL_COLOR} interval={0}
-          tick={({ payload, ...props }) =>
-            <CustomArtistTick {...props} pathParams={pathParams} artist={artists[payload.value].artist} userId={userId} /> }
-        />
-        <Tooltip cursor={{ fill: 'rgba(216, 216, 216, .05)' }} content={() => <div />} />
-        {/* <Legend /> */}
-        <Bar dataKey='personal' fill={BRAND_PERSONAL_COLOR} xAxisId='top' barSize={5} cursor='pointer' />
-        <Bar dataKey='group' fill={BRAND_GLOBAL_COLOR} xAxisId='top' barSize={5} cursor='pointer' />
+      <YAxis width={200} yAxisId="left" orientation="left" type='category' stroke={BRAND_PERSONAL_COLOR} interval={0} tick={({ payload, ...props }) =>
+            <CustomArtistTick {...props} pathParams={pathParams} artist={artists[payload.value].artist} /> }
+      />
+
+      <YAxis width={50} yAxisId="right" orientation="right" type='category' stroke={BRAND_PERSONAL_COLOR} interval={0} tick={({ payload, ...props }) =>
+        <TopListenerYaxis {...props}   pathParams={pathParams} artist={artists[payload.value].artist} userId={userId} />}
+      />
+      
+      
+      {/* <Tooltip cursor={{ fill: 'rgba(216, 216, 216, .05)' }} content={<CustomTip />} /> */}
+        
+        <Bar dataKey='personal' fill={BRAND_PERSONAL_COLOR} xAxisId='top' yAxisId="left" barSize={5} cursor='pointer' />
+      <Bar dataKey='group' fill={BRAND_GLOBAL_COLOR} xAxisId='top' yAxisId="left" barSize={5} cursor='pointer' />
+      
+    
       </BarChart>
     </ResponsiveContainer>
 
@@ -117,11 +203,11 @@ const ArtistsChart: React.SFC<RouteComponentProps & ChartProps & UserIdProp> = (
  
 const ArtistsChartWithRouter = withRouter(ArtistsChart)
 
-export const ArtistsChartBlock: React.SFC<{ pathParams: TPathParams, artists: PerspectiveDashArtists[], height?: any } & UserIdProp> = ({ children, userId, ...params }) =>
+export const ArtistsChartBlock: React.SFC<{ pathParams: TPathParams, artists: PerspectiveDashArtists[], height?: any } & UserIdProp> = ({ children, ...params }) =>
   <div>
     {children}
     {params.artists.length > 0 ?
-      <ArtistsChartWithRouter {...params} userId={userId} /> :
+      <ArtistsChartWithRouter {...params} /> :
       <Comment>I don't see any artists for you here.  Have you <a target='new' href='http://open.spotify.com'>listened to Spotify lately?</a></Comment>
     }
   </div>

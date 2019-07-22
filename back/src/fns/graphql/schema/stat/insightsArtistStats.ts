@@ -262,36 +262,42 @@ const playtimeStats = async (
 	console.log('TCL: perspectiveTopArtists -> first', first)
 	if (first) {
 		enrichedArtist.topListeners.push(first)
-	}
-	const second = await tableAchievement.getArtistTopListeners({
-		artistId: artist.id,
-		achievementType: 'topListener',
-		achievementValue: 'second',
-		periodType: 'life',
-		periodValue: 'life',
-		currentTime: now
-	})
 
-	console.log('TCL: perspectiveTopArtists -> second', second)
-	if (second && first.user.pk !== second.user.pk) {
-		enrichedArtist.topListeners.push(second)
-	}
+		const second = await tableAchievement.getArtistTopListeners({
+			artistId: artist.id,
+			achievementType: 'topListener',
+			achievementValue: 'second',
+			periodType: 'life',
+			periodValue: 'life',
+			currentTime: now
+		})
 
-	const third = await tableAchievement.getArtistTopListeners({
-		artistId: artist.id,
-		achievementType: 'topListener',
-		achievementValue: 'third',
-		periodType: 'life',
-		periodValue: 'life',
-		currentTime: now
-	})
+		console.log('TCL: perspectiveTopArtists -> second', second)
+		if (second && first.user.pk !== second.user.pk) {
+			enrichedArtist.topListeners.push(second)
 
-	console.log('TCL: perspectiveTopArtists -> third', third)
-	if (
-		third &&
-		(second.user.pk !== third.user.pk && third.user.pk !== first.user.pk)
-	) {
-		enrichedArtist.topListeners.push(third)
+			const third = await tableAchievement.getArtistTopListeners({
+				artistId: artist.id,
+				achievementType: 'topListener',
+				achievementValue: 'third',
+				periodType: 'life',
+				periodValue: 'life',
+				currentTime: now
+			})
+
+			console.log('TCL: perspectiveTopArtists -> third', third)
+			if (
+				third &&
+				(second.user.pk !== third.user.pk && third.user.pk !== first.user.pk)
+			) {
+				enrichedArtist.topListeners.push(third)
+			}
+
+			console.log(
+				'TCL: perspectiveTopArtists -> enrichedArtist.topListeners',
+				enrichedArtist.topListeners
+			)
+		}
 	}
 
 	console.log(

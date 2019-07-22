@@ -18,6 +18,7 @@ const script = async () => {
 
   for (const item of items) {
     const { track, ...Item } = item
+    console.log('TCL: script -> JSON.parse(track),', JSON.parse(track))
     await doc.put({
       TableName: env.TABLE_PLAY,
       Item: {

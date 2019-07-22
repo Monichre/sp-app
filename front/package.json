@@ -82,16 +82,23 @@
     "@types/request-promise": "^4.1.42",
     "@types/styled-components": "^4.1.12",
     "@types/victory": "^31.0.14",
+    "@typescript-eslint/eslint-plugin": "^1.12.0",
+    "@typescript-eslint/parser": "^1.12.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.14.2",
     "graphql-code-generator": "^0.18.0",
     "graphql-codegen-add": "^0.18.0",
     "graphql-codegen-time": "^0.18.0",
     "graphql-codegen-typescript-client": "^0.18.0",
     "graphql-codegen-typescript-common": "^0.18.0",
     "graphql-codegen-typescript-react-apollo": "^0.18.0",
+    "prettier": "^1.18.2",
     "puppeteer": "^1.13.0",
     "request-promise": "^4.2.4",
     "serverless-s3-sync": "^1.7.3",
     "serverless-stack-output": "^0.2.3",
-    "ts-jest": "^24.0.0"
+    "ts-jest": "^24.0.0",
+    "tslint-config-prettier": "^1.18.0"
   }
 }

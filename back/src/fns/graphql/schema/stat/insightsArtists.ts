@@ -115,37 +115,12 @@ type TopArtistsRow = {
 	playDurationMs: number
 }
 
-// type ArtistPeriodsRow = {
-//   period: string,
-//   playDurationMs: number,
-// }
-
-// const byTimeThenArtistName = R.sortWith<TopArtistsRow>([
-//   R.descend(R.prop('playDurationMs')),
-//   R.ascend(R.path(['artist', 'name']))
-// ])
-
-// const topArtistsFor = async (doc: AWS.DynamoDB.DocumentClient, TableName, uid: string, periodName, periodValue, Limit = 5) => {
-//   const params = {
-//     TableName,
-//     Limit,
-//     KeyConditionExpression: `pk = :pk`,
-//     IndexName: 'LSIPlayDuration',
-//     ScanIndexForward: false,
-//     ExpressionAttributeValues: {
-//       ':pk': [uid, 'artist', periodName, periodValue].join('#')
-//     }
-//   }
-//   return await doc.query(params).promise()
-//     .then(d => d.Items.map(i => ({artist: i.artist, playDurationMs: i.playDurationMs})))
-//     .then(byTimeThenArtistName)
-// }
 
 type PerspectiveTypes = 'personal' | 'group'
 
+
 const perspectiveTopArtists = async (
 	tableStat: TTableStat,
-	tableAchievement: TTableAchievement,
 	primaryUid: string,
 	primaryType: PerspectiveTypes,
 	secondaryUid: string,
@@ -153,7 +128,6 @@ const perspectiveTopArtists = async (
 	periodType: PeriodType,
 	periodCurrent: string,
 	periodPrev?: string,
-	now?: moment.Moment
 ): Promise<TopArtistStat[]> => {
 	const artistsPrimary = await tableStat.getTopArtists({
 		uid: primaryUid,
@@ -161,65 +135,8 @@ const perspectiveTopArtists = async (
 		periodValue: periodCurrent,
 		Limit: 20
 	})
-	// artists
-	const artists: any = await Promise.all(
+	return await Promise.all(
 		artistsPrimary.map(async ({ artist, playDurationMs }) => {
-			let enrichedArtist = Object.assign({}, artist)
-
-			enrichedArtist.topListeners = []
-
-			const first = await tableAchievement.getArtistTopListeners({
-				artistId: artist.id,
-				achievementType: 'topListener',
-				achievementValue: 'first',
-				periodType: 'life',
-				periodValue: 'life',
-				currentTime: now
-			})
-
-			console.log('TCL: perspectiveTopArtists -> first', first)
-			if (first) {
-				enrichedArtist.topListeners.push(first)
-			}
-
-			const second = await tableAchievement.getArtistTopListeners({
-				artistId: artist.id,
-				achievementType: 'topListener',
-				achievementValue: 'second',
-				periodType: 'life',
-				periodValue: 'life',
-				currentTime: now
-			})
-
-			console.log('TCL: perspectiveTopArtists -> second', second)
-			if (second && first.user.pk !== second.user.pk) {
-				enrichedArtist.topListeners.push(second)
-			}
-
-			const third = await tableAchievement.getArtistTopListeners({
-				artistId: artist.id,
-				achievementType: 'topListener',
-				achievementValue: 'third',
-				periodType: 'life',
-				periodValue: 'life',
-				currentTime: now
-			})
-
-			console.log('TCL: perspectiveTopArtists -> third', third)
-			if (
-				third &&
-				(second.user.pk !== third.user.pk && third.user.pk !== first.user.pk)
-			) {
-				enrichedArtist.topListeners.push(third)
-			}
-
-			console.log(
-				'TCL: perspectiveTopArtists -> enrichedArtist.topListeners',
-				enrichedArtist.topListeners
-			)
-
-			console.log(enrichedArtist)
-
 			const secondary = await tableStat.getArtistStat({
 				uid: secondaryUid,
 				artistId: artist.id,
@@ -234,13 +151,13 @@ const perspectiveTopArtists = async (
 				primaryType === 'group' ? playDurationMs / 3600000 : secondary / 3600000
 
 			return {
-				artist: enrichedArtist,
+				artist,
 				personal,
 				group
 			}
 		})
 	)
-	return artists
+	
 }
 
 const timescopeTopArtists = async (
@@ -250,32 +167,27 @@ const timescopeTopArtists = async (
 	gid: string,
 	periodType: PeriodType,
 	periodCurrent: string,
-	periodPrev?: string,
-	now?: moment.Moment
+	periodPrev?: string
 ): Promise<TimescopeTopArtists> => ({
 	personal: await perspectiveTopArtists(
 		tableStat,
-		tableAchievement,
 		uid,
 		'personal',
 		'global',
 		'group',
 		periodType,
 		periodCurrent,
-		periodPrev,
-		now
+		periodPrev
 	),
 	group: await perspectiveTopArtists(
 		tableStat,
-		tableAchievement,
 		'global',
 		'group',
 		uid,
 		'personal',
 		periodType,
 		periodCurrent,
-		periodPrev,
-		now
+		periodPrev
 	)
 })
 
@@ -299,47 +211,176 @@ const topArtists = async (
 		localizedISOString(now.subtract(1, 'days'))
 	)
 
+	const getTopListenersForArtist: any = async (func, args) => {
+		const { personal, group } = await func
+		const personalClone = [...personal]
+		const groupClone = [...group]
+
+		personalClone.map(async (item) => {
+			const clone = Object.assign({}, item)
+			const { artist } = clone
+
+			artist.topListeners = []
+			
+			const first = await tableAchievement.getArtistTopListeners({
+				artistId: artist.id,
+				achievementType: 'topListener',
+				achievementValue: 'first',
+				periodType: 'life',
+				periodValue: 'life',
+				currentTime: now
+			})
+
+			console.log('TCL: perspectiveTopArtists -> first', first)
+			if (first) {
+				artist.topListeners.push(first)
+
+				const second = await tableAchievement.getArtistTopListeners({
+					artistId: artist.id,
+					achievementType: 'topListener',
+					achievementValue: 'second',
+					periodType: 'life',
+					periodValue: 'life',
+					currentTime: now
+				})
+
+				console.log('TCL: perspectiveTopArtists -> second', second)
+				if (second && first.user.pk !== second.user.pk) {
+					artist.topListeners.push(second)
+
+					const third = await tableAchievement.getArtistTopListeners({
+						artistId: artist.id,
+						achievementType: 'topListener',
+						achievementValue: 'third',
+						periodType: 'life',
+						periodValue: 'life',
+						currentTime: now
+					})
+
+					console.log('TCL: perspectiveTopArtists -> third', third)
+					if (
+						third &&
+						(second.user.pk !== third.user.pk &&
+							third.user.pk !== first.user.pk)
+					) {
+						artist.topListeners.push(third)
+					}
+
+					console.log(
+						'TCL: perspectiveTopArtists -> artist.topListeners',
+						artist.topListeners
+					)
+				}
+			}
+
+		})
+
+		groupClone.map(async item => {
+			const clone = Object.assign({}, item)
+			const { artist } = clone
+
+			artist.topListeners = []
+
+			const first = await tableAchievement.getArtistTopListeners({
+				artistId: artist.id,
+				achievementType: 'topListener',
+				achievementValue: 'first',
+				periodType: 'life',
+				periodValue: 'life',
+				currentTime: now
+			})
+
+			console.log('TCL: perspectiveTopArtists -> first', first)
+			if (first) {
+				artist.topListeners.push(first)
+
+				const second = await tableAchievement.getArtistTopListeners({
+					artistId: artist.id,
+					achievementType: 'topListener',
+					achievementValue: 'second',
+					periodType: 'life',
+					periodValue: 'life',
+					currentTime: now
+				})
+
+				console.log('TCL: perspectiveTopArtists -> second', second)
+				if (second && first.user.pk !== second.user.pk) {
+					artist.topListeners.push(second)
+
+					const third = await tableAchievement.getArtistTopListeners({
+						artistId: artist.id,
+						achievementType: 'topListener',
+						achievementValue: 'third',
+						periodType: 'life',
+						periodValue: 'life',
+						currentTime: now
+					})
+
+					console.log('TCL: perspectiveTopArtists -> third', third)
+					if (
+						third &&
+						(second.user.pk !== third.user.pk &&
+							third.user.pk !== first.user.pk)
+					) {
+						artist.topListeners.push(third)
+					}
+
+					console.log(
+						'TCL: perspectiveTopArtists -> artist.topListeners',
+						artist.topListeners
+					)
+				}
+			}
+		})
+
+		return {
+			personal: personalClone,
+			group: groupClone
+		}
+	
+	}
+
+
 	return {
-		today: await timescopeTopArtists(
+		today: await getTopListenersForArtist(timescopeTopArtists(
 			tableStat,
 			tableAchievement,
 			uid,
 			gid,
 			'day',
 			today,
-			yest,
-			now
-		),
-		thisWeek: await timescopeTopArtists(
+			yest
+		)),
+		thisWeek: await getTopListenersForArtist(timescopeTopArtists(
 			tableStat,
 			tableAchievement,
 			uid,
 			gid,
 			'week',
 			thisWeek,
-			lastWeek,
-			now
-		),
-		thisMonth: await timescopeTopArtists(
+			lastWeek
+		)),
+		thisMonth: await getTopListenersForArtist(timescopeTopArtists(
 			tableStat,
 			tableAchievement,
 			uid,
 			gid,
 			'month',
 			thisMonth,
-			lastMonth,
-			now
-		),
-		lifetime: await timescopeTopArtists(
+			lastMonth
+		)),
+		lifetime: await getTopListenersForArtist(timescopeTopArtists(
 			tableStat,
 			tableAchievement,
 			uid,
 			gid,
 			'life',
 			'life'
-		)
+		))
 	}
 }
+
+
 const insightsArtists = async (
 	_,
 	{ uid, gid },

@@ -11,6 +11,8 @@ export const Main: React.SFC<RouteComponentProps & { uid: string, pathParams: TP
 ({uid, history, match: {path}, pathParams}) => {
   const { insightsStats: stats } = suspensefulHook(useInsightsStats({variables: { uid }, suspend: true, pollInterval: 10000}))
   console.log('TCL: stats', stats)
+
+  console.log('TCL: pathParams', pathParams)
   
   return <StatPage {...{stats, history, path, pathParams}}>
     <Switch>
