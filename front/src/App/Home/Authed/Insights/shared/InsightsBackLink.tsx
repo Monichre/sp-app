@@ -4,7 +4,7 @@ import { Previous } from 'grommet-icons';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { History } from 'history';
 
-const Back = styled(Previous)`
+const Back: any = styled(Previous)`
   cursor: pointer;
 `
 
@@ -40,7 +40,7 @@ const backUntilNewFocus = (history: History) => {
   // }
 }
 
-export const BackLinkWithoutRouter: React.SFC<RouteComponentProps> = ({history}) =>
+export const BackLinkWithoutRouter: React.SFC<RouteComponentProps & any> = ({history}) =>
   <Back onClick={() => backUntilNewFocus(history)} color='white' size='3rem'/>
 
-export const InsightsBackLink = withRouter(BackLinkWithoutRouter)
+export const InsightsBackLink: any = withRouter(BackLinkWithoutRouter)

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components'
 import { Previous } from 'grommet-icons';
 
-const Back = styled(Previous)`
+const Back: any = styled(Previous)`
   cursor: pointer;
 `
 export const BackLink: React.SFC = () =>
