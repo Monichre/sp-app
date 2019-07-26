@@ -73,23 +73,23 @@ const featuredArtists: FeaturedArtist[] = [
   {
     title: 'Ready',
     hover: 'Artists under 5,000 monthly streamers on Spotify',
-    name: 'Hama',
-    href: 'https://open.spotify.com/artist/5tTnPc0PnhooCRXW0RJPFN?si=KEEd7BYISpuknGoVSeiUFQ',
-    src: 'https://www.newframe.com/wp-content/uploads/2019/04/image-24-24.jpg'
+    name: 'The Muckers',
+    href: 'https://open.spotify.com/artist/19yF7aXJdu5R9rwOAxgQZA?si=HNBB1DqgRoCJSAe5RfcvvQ',
+    src: 'https://f4.bcbits.com/img/0014497429_10.jpg'
   },
   {
     title: 'Set',
     hover: 'Artists under 200,000 monthly streamers on Spotify',
-    name: 'Sam Gellaitry',
-    href: 'https://open.spotify.com/artist/07UJz804RJxqNvxFXC3h9H?si=PH_Ch66NTfeVq2CgDuK0Yw',
-    src: 'https://ichef.bbci.co.uk/images/ic/960x540/p02wj4tg.jpg'
+    name: 'John Chuck and The Class',
+    href: 'https://open.spotify.com/artist/0vL5IeQO8wvyDAq7zu6N96?si=mI3LSnWOQJ6mc0ugrs2bqA',
+    src: 'https://static1.squarespace.com/static/55e9a72fe4b014a326acda21/t/5bd739ad7817f7eb119847c9/1540831855498/jctc_019.jpg'
   },
   {
     title: 'Liftoff',
     hover: 'Artists under 2,500,000 monthly streamers on Spotify',
-    name: 'Tierra Whack',
-    href: 'https://open.spotify.com/artist/4lPl9gqgox3JDiaJ1yklKh?si=g_zk0IdGQDCJcX7nyWSmuA',
-    src: 'https://www.billboard.com/files/media/tierra-whack-2019-cr-Maria-Jose-Govea-billboard-1548.jpg'
+    name: 'Snail Mail',
+    href: 'https://open.spotify.com/artist/4QkSD9TRUnMtI8Fq1jXJJe?si=i3fp_YfbQMabvN_X62hCvw',
+    src: 'https://media.npr.org/assets/img/2018/03/12/snail-mail---main---credit-to-michael-lavine-f5257760c1a135425cb8dd54b8933b571d02bcbe-s800-c85.jpg'
   },
 ]
 
