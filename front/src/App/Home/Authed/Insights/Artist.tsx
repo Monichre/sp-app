@@ -7,6 +7,7 @@ import { InsightsBackLink } from './shared/InsightsBackLink';
 import { useInsightsArtistStats, ArtistFragmentFragment } from '../../../../types';
 import { SpotifyLogoLink } from '../../../../shared/SpotifyLogoLink/SpotifyLogoLink';
 import { TimeseriesChart } from './shared/TimeseriesChart';
+import { ArtistTopListeners } from './ArtistTopListeners'
 import { suspensefulHook } from '../../../../lib/suspensefulHook';
 
 const ArtistBannerDiv = styled.div<{backgroundUrl: string}>`
@@ -36,13 +37,14 @@ const ArtistTitle = styled.div`
 `
 
 const ArtistBanner: React.SFC<{artist: ArtistFragmentFragment}> = ({artist}) => {
-console.log('TCL: artist', artist)
-  const { name, images, external_urls: { spotify } } = artist
+  const { name, images, external_urls: { spotify }, topListeners } = artist
   const backgroundUrl = images[0] && images[0].url
   return <ArtistBannerDiv {...{backgroundUrl}}>
     <InsightsBackLink/>
     <ArtistTitle>{name}</ArtistTitle>
-    <SpotifyLogoLink href={spotify} size='48px'/>
+    <SpotifyLogoLink href={spotify} size='48px' />    
+    {topListeners && topListeners.length ? <ArtistTopListeners topListeners={topListeners} /> : null}
+
   </ArtistBannerDiv>
 }
 
