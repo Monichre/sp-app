@@ -1,7 +1,7 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { TPathParams, insightLink } from '../shared/functions';
-import { useInsightsDash } from '../../../../../types';
+import { useInsightsDash, ArtistFragmentTopListeners } from '../../../../../types';
 import { notLargeQuery, largeQuery } from '../../../../../shared/media';
 import styled from 'styled-components';
 import { VerticalSpacer } from '../../../../../shared/VerticalSpacer';
@@ -37,7 +37,69 @@ const Row = styled.div`
   `}
 `
 
-export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams: TPathParams }> = ({uid, pathParams}) => {
+
+// type AchievementsObject = {
+//   1: {
+
+//   },
+//   2: {
+
+//   },
+//   3: {
+
+//   }
+// }
+
+// type AchievementObject = {
+//   achievementTitle: string,
+//   artists: 
+// }
+
+
+const FirstPlaceBadge: React.SFC = () => <img src='/icons/first-currentUser.png' />
+const SecondPlaceBadge: React.SFC = () => <img src='/icons/second-currentUser.png' />
+const ThirdPlaceBadge: React.SFC = () => <img src='/icons/third.svg' />
+
+const determineAchievements = (artists: any[], userId: string) => {
+ 
+  const isUser = (userId: string, achievementHolder: any) => achievementHolder && achievementHolder.user.uid === userId
+
+ const achievements: any = {
+    1: {
+      achievement: 'Top Listener',
+      artists: [],
+      Badge: <FirstPlaceBadge />
+    },
+    2: {
+      achievement: 'Second Top Listener',
+      artists: [],
+      Badge: <SecondPlaceBadge />
+    },
+    3: {
+      achievement: 'Third Top Listener',
+      artists: [],
+      Badge: <ThirdPlaceBadge />
+    }
+ }
+  
+  artists.forEach(artist => {
+    const { topListeners  } = artist
+
+    topListeners.forEach((listener: any, i: number) => {
+      let itIs: boolean = isUser(userId, listener)
+
+      if (itIs) { achievements[i + 1].artists.push(artist) }
+
+    })
+  })
+
+  return {
+    achievements
+  }
+
+}
+
+export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams: TPathParams, setUserAchievements: Function }> = ({ uid, pathParams, setUserAchievements }) => {
   const {
     insightsDash: {
       [pathParams.timeScope]: {
@@ -45,16 +107,23 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
         [pathParams.perspective]: { artists, genres }
       }
     }
-  } = suspensefulHook(useInsightsDash({ variables: { uid }, suspend: true, pollInterval: 10000}))
-  console.log('TCL: uid', uid)
-  
+  } = suspensefulHook(useInsightsDash({ variables: { uid }, suspend: true, pollInterval: 10000 }))
+
+    
+  const theArtists = artists.map(({artist}) =>  artist)
+  const { achievements } = determineAchievements(theArtists, uid)
+  console.log('TCL: achievements', achievements)
+
+  // setUserAchievements(achievements)
+
+
   return <>
-    <TimeseriesChart {...{timeSeries, showOnly: pathParams.perspective}}/>
+    <TimeseriesChart {...{ timeSeries, showOnly: pathParams.perspective }} />
     <Row>
       <ArtistsChartBlock {...{ artists, pathParams }} userId={uid}>
         <BlockTitle to={`${insightLink(pathParams)}/artists`}>Top Artists <BlockTitleMore>see all</BlockTitleMore></BlockTitle>
       </ArtistsChartBlock>
-      <GenresChartBlock {...{genres, pathParams}}>
+      <GenresChartBlock {...{ genres, pathParams }}>
         <BlockTitle to={`${insightLink(pathParams)}/genres`}>Top Genres <BlockTitleMore>see all</BlockTitleMore></BlockTitle>
       </GenresChartBlock>
     </Row>
@@ -62,9 +131,9 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
       <BlockTitle>Emerging Artists: Staff Picks</BlockTitle>
     </Row>
     <Row>
-      <FeaturedArtists/>
+      <FeaturedArtists />
     </Row>
-    <VerticalSpacer height='100px'/>
-    <ReactTooltip place="top" type="dark" effect="float"/>
+    <VerticalSpacer height='100px' />
+    <ReactTooltip place="top" type="dark" effect="float" />
   </>
 }

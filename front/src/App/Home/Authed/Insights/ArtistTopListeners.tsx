@@ -11,9 +11,9 @@ const TopListenerRow: any = styled.ul`
 
 const TopListenerCard: any = styled.li`
     
-	width: 195px;
-    height: 225px;
-	padding: 80px 20px 40px;
+	width: 145px;
+    height: 175px;
+	padding: 60px 20px 40px;
 	position: relative;
 	vertical-align: top;
 	margin: 10px;
@@ -35,27 +35,33 @@ const TopListenerCard: any = styled.li`
 }
  h3 {
 	font-size: 20px;
-	color: #b7b7b7;
+	color: #fff;
 	margin-bottom: 5px;
 }
  p {
 	font-size: 16px;
 	line-height: 18px;
-	color: #b7b7b7;
+	color: #fff;
 	margin-top: 5px;
 }
  button {
 	background: transparent;
-	/* border: 1px solid #b7b7b7!important; */
-	padding: 10px 20px;
-	color: #b7b7b7;
-	border-radius: 3px;
+	/* border: 1px solid #fff!important; */
+	padding: 2px;
+	color: #fff;
+	border-radius: 50%;
 	position: relative;
 	transition: all 0.3s ease-in-out;
-	transform: translateY(-40px);
+	transform: translate(-50px, -40px);
 	opacity: 0;
 	cursor: pointer;
 	overflow: hidden;
+
+	img {
+		height: 60px;
+		width: 60px;
+		border-radius: 50%;
+	}
 }
  button:before {
 	content: '';
@@ -66,7 +72,7 @@ const TopListenerCard: any = styled.li`
 	top: 0;
 	opacity: 0;
 	left: -140px;
-	border-radius: 0 20px 20px 0;
+	border-radius: 50%;
 	z-index: 0;
 	transition: all 0.3s ease-in-out;
 	
@@ -75,16 +81,17 @@ const TopListenerCard: any = styled.li`
 
 
 &:hover button {
-	transform: translateY(5px);
+	/* transform: translateY(5px); */
+	transform: translate(100px, -40px);
 	opacity: 1;
 }
  button:hover {
 	color: #262a2b;
 }
- button:hover:before {
+ /* button:hover:before {
 	left: 0;
 	opacity: 1;
-}
+} */
 
 &:hover h2 {
 	top: -120px;
@@ -96,8 +103,10 @@ const TopListenerCard: any = styled.li`
 &:before {
 	content: '';
 	position: absolute;
-    width: 200px;
-    height: 230px;
+    width: 150px;
+	height: 180px;
+	/* width: 145px; */
+    /* height: 175px; */
 	top: -2px;
 	left: -2px;
 	right: -2px;
@@ -109,11 +118,11 @@ const TopListenerCard: any = styled.li`
 &:after {
 	content: '';
 	position: absolute;
-	width: 100%;
-	height: 100%;
+	width: 97%;
+    height: 98%;
     z-index: 0;
-    left: 0;
-    top: 0;
+    left: 4px;
+    top: 3px;
     background: #000;
 }
 
@@ -142,25 +151,44 @@ background: linear-gradient(to right, #0ABFBC, #FC354C);
 `
 
 
+const BadgeWrap = styled.div`
+height: 60px;
+width: 60px;
+
+img {
+	object-fit: contain;
+	object-position: center;
+	height: 100%;
+	width: 100%;
+}
+`
+
 
 
 interface ArtistTopListenersProps {
     topListeners: ArtistFragmentTopListeners[] | any
 }
 
-
 export const ArtistTopListeners: React.SFC<ArtistTopListenersProps> = ({ topListeners }) => {
     return (
         <TopListenerRow>
             {topListeners.length ? topListeners.map((topListener: TopListener, index: number) => {
-                const { total, user }: any = topListener
+				const { total, user }: any = topListener
+				const achievementIconMap: any = {
+					1: (): any => <img src='/icons/first-currentUser.png' />,
+					2: (): any => <img src='/icons/second-currentUser.png' />,
+					3: (): any => <img src='/icons/third.svg' />,
+				}
+				const BadgeImg: React.SFC = achievementIconMap[index + 1]
+				const Badge: React.SFC = () => <BadgeWrap><BadgeImg /></BadgeWrap>
+
                 return (
                     <TopListenerCard>
                         <div className='inner'>
-                        <h2>{index + 1}</h2>
+                        <h2><Badge /></h2>
                         <h3>{user.displayName ? user.displayName : user.email}</h3>
                         <p>
-                                Total Time Listened: {Math.round((total / 3600000) * 100)} mins
+                                Total: {Math.round((total / 3600000) * 100)} mins
                         </p>
                             {user.photoURL ? <button><img src={user.photoURL} /></button> : null}
                         </div>

@@ -7,18 +7,17 @@ import { Overview } from './Overview';
 import { Artists } from './Artists';
 import { Genres } from './Genres';
 
-export const Main: React.SFC<RouteComponentProps & { uid: string, pathParams: TPathParams }> =
-({uid, history, match: {path}, pathParams}) => {
+export const Main: React.SFC<RouteComponentProps & { uid: string, pathParams: TPathParams, setUserAchievements: Function }> =
+  ({ uid, history, match: { path }, pathParams, setUserAchievements}) => {
   const { insightsStats: stats } = suspensefulHook(useInsightsStats({variables: { uid }, suspend: true, pollInterval: 10000}))
   console.log('TCL: stats', stats)
-
-  console.log('TCL: pathParams', pathParams)
   
+  /* //cc: userAchievementsFrontEnd#3; Passing down the state setting function to Overview */ 
   return <StatPage {...{stats, history, path, pathParams}}>
     <Switch>
       <Route path={`${path}/artists`} render={props => <Artists {...{uid, pathParams, ...props}}/>}/>
       <Route path={`${path}/genres`} render={props => <Genres {...{uid, pathParams, ...props}}/>}/>
-      <Route path={path} render={props => <Overview {...{uid, pathParams, ...props}}/>}/>
+      <Route path={path} render={props => <Overview {...{ uid, pathParams, ...props, setUserAchievements}}/>}/>
     </Switch>
   </StatPage>
 }

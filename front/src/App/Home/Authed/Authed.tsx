@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState} from 'react';
 import styled from 'styled-components'
 import { Route, Switch, Redirect } from 'react-router';
 import { Loading } from '../../../shared/Loading';
@@ -7,7 +7,6 @@ import { ErrorFallback } from '../ErrorBoundary';
 import { OnboardingMessage } from './AuthedOnboardingMessage'
 import { Insights } from './Insights/Insights';
 import { largeQuery, notLargeQuery } from '../../../shared/media';
-import { DummyRouted } from '../../../shared/debug/DummyRouted';
 import { NavMenu, NavMenuView } from './NavMenu';
 import { Profile } from './Profile/Profile';
 import { History } from './History/History';
@@ -48,8 +47,30 @@ background-color: #030616;
   }
 `
 
+const achievements: any = {
+  1: {
+    achievement: 'Top Listener',
+    artists: []
+  },
+  2: {
+    achievement: 'Second Top Listener',
+    artists: []
+  },
+  3: {
+    achievement: 'Third Top Listener',
+    artists: []
+  }
+}
+
+const UserAchievementsContext: any = React.createContext(achievements)
+
 //cc:signin#2;User is Authenticated
-export const Authed: React.SFC<{user: {uid: string}}> = ({user: firebaseUser}) => {
+export const Authed: React.SFC<{ user: { uid: string } }> = ({ user: firebaseUser }) => {
+  
+  // let userAchievementArtists = useContext(UserAchievementsTopArtists)
+  const [userAchievements, setUserAchievements]: any = useState(achievements)
+
+
   const result = useGetUserInfo({ variables: { uid: firebaseUser.uid }, pollInterval: 4000, suspend: true})
   const user = result.data && result.data.getUserInfo
   if (!user) { return <ErrorFallback /> }
@@ -84,19 +105,21 @@ export const Authed: React.SFC<{user: {uid: string}}> = ({user: firebaseUser}) =
     }
   }
   
- 
-  // if (!user.initialHarvestComplete) { return <OnboardingMessage/> }
+
   return (
     <AuthedView>
-        <NavMenu {...{initialHarvestComplete: initialHarvestComplete || false, lastUpdate: lastUpdate || ''}}/>
+      {/* //cc: userAchievementsFrontEnd#2;Passing down the state setting function */}
+      <UserAchievementsContext.Provider value={[userAchievements, setUserAchievements]}>
+        <NavMenu {...{ initialHarvestComplete: initialHarvestComplete || false, lastUpdate: lastUpdate || '' }}/>
       <React.Suspense fallback={<Loading/>}>
         <Switch>
-          <Route path='/insights/:timeScope/:groupId/:perspective' render={(props) => <Insights user={user} {...props} uid={uid}/>}/>
+            <Route path='/insights/:timeScope/:groupId/:perspective' render={(props) => <Insights user={user} {...props} uid={uid}{ ...{userAchievements, setUserAchievements}}  />}/>
           <Route path='/history' render={(props) => <History user={user} {...props} uid={uid}/>}/>
           <Route path='/profile' render={(props) => <Profile user={user} {...props}/>}/>
           <Redirect from='/' to='/insights/thisWeek/global/personal'/>
         </Switch>
       </React.Suspense>
+      </UserAchievementsContext.Provider>
     </AuthedView>
   )
 }

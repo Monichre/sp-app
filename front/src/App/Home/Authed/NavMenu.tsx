@@ -5,6 +5,7 @@ import { LineChart, History, User } from 'grommet-icons'
 import { largeQuery, notLargeQuery, BRAND_COLOR, BRAND_PERSONAL_COLOR, Large } from '../../../shared/media';
 import { Logo, LogoHorizontal } from '../../../shared/Logo';
 import Moment from 'react-moment';
+import { ArtistFragmentFragment} from '../../../types'
 
 export const NavMenuView = styled.div`
 background-color: #030616;
@@ -110,24 +111,28 @@ const HarvestingNotice: React.SFC = () =>
     Watch your stats grow as we complete your initial harvest.
   </HarvestingNoticeDiv>
 
-export const NavMenu: React.SFC<{initialHarvestComplete: boolean, lastUpdate: string}> = ({initialHarvestComplete, lastUpdate}) =>
-  <NavMenuView>
-    <NavPrimaryLink to='/insights'>
-      <LineChart color='white'/>
-      <NavLabel>Insights</NavLabel>
-    </NavPrimaryLink>
-    <NavPrimaryLink to='/history'>
-      <History color='white'/>
-      <NavLabel>History</NavLabel>
-    </NavPrimaryLink>
-    <NavPrimaryLink to='/profile'>
-      <User color='white'/>
-      <NavLabel>Profile</NavLabel>
-    </NavPrimaryLink>
-    <Large>
-      <FillSpace>
-      { !initialHarvestComplete ? <HarvestingNotice/> : <LastUpdate {...{lastUpdate}}/> }
-        <LogoHorizontal size={8}/>
-      </FillSpace>
-    </Large>
-  </NavMenuView>
+export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: string}> = ({ initialHarvestComplete, lastUpdate }) => {
+  
+  return (
+    <NavMenuView>
+      <NavPrimaryLink to='/insights'>
+        <LineChart color='white' />
+        <NavLabel>Insights</NavLabel>
+      </NavPrimaryLink>
+      <NavPrimaryLink to='/history'>
+        <History color='white' />
+        <NavLabel>History</NavLabel>
+      </NavPrimaryLink>
+      <NavPrimaryLink to='/profile'>
+        <User color='white' />
+        <NavLabel>Profile</NavLabel>
+      </NavPrimaryLink>
+      <Large>
+        <FillSpace>
+          {!initialHarvestComplete ? <HarvestingNotice /> : <LastUpdate {...{ lastUpdate }} />}
+          <LogoHorizontal size={8} />
+        </FillSpace>
+      </Large>
+    </NavMenuView>
+  )
+}

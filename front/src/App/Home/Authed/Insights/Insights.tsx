@@ -5,8 +5,11 @@ import { Artist } from './Artist';
 import { TPathParams } from './shared';
 import { Genre } from './Genre';
 
-export const Insights: React.SFC<RouteComponentProps<TPathParams> & {uid: string, user:any}> =
-({uid, user, history: { location: { pathname }}, match: { path, params }}) => {
+//cc: Insights Component; Uses routing to configure which insights are queried...
+export const Insights: React.SFC<RouteComponentProps<TPathParams> & { uid: string, user: any, userAchievements: any[], setUserAchievements: Function}> =
+  ({ uid, user, history: { location: { pathname } }, match: { path, params }, ...rest }) => {
+  // cc: ..rest is passing the additional props of userAchievement Artists and setUserAchievementArtists
+console.log('TCL: rest', rest)
   const focus = pathname.split('/').slice(5,99).join('/')
   const pathParams = { focus, ...params }
 
@@ -26,7 +29,7 @@ export const Insights: React.SFC<RouteComponentProps<TPathParams> & {uid: string
     <Switch>
       <Route path={`${path}/artists/:artistId`} render={props => <Artist {...{uid, pathParams, ...props}}/>}/>
       <Route path={`${path}/genres/:genre`} render={props => <Genre {...{uid, pathParams, ...props}}/>}/>
-      <Route path={path} render={props => <Main {...{uid, pathParams, ...props}}/>}/>
+      <Route path={path} render={props => <Main {...{uid, pathParams, ...props, ...rest}}/>}/>
     </Switch>
   )
 }

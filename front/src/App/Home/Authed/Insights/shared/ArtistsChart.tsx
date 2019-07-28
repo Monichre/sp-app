@@ -38,37 +38,12 @@ type UserIdProp = {
 
 const CustomArtistTick: React.SFC<TickProps> = React.memo(({ x, y, offset, artist, pathParams }) => {
 
-  // const { topListeners } = artist
-  // const [first, second=false, third=false]: any = topListeners
-  // console.log('TCL: third', third)
-  // console.log('TCL: second', second)
-  // console.log('TCL: first', first)
-  // const isTopListener: any = first ? first.user.uid === userId : false
-  // const isSecond: any = second ? second.user.uid === userId : false
-  // console.log('TCL: isSecond', isSecond)
-  // const isThird: any = third ? third.user.uid === userId : false
-  // console.log('TCL: isThird', isThird)
-
-  // const userHandle: any = first ? (first.user.displayName || first.user.email) : second ? (second.user.displayName || second.user.email) : third ? (third.user.displayName || third.user.email) : null
-
-  // const firstPlaceBadge: any = '/icons/first-currentUser.png'
-  // const secondPlaceBadge = '/icons/second-currentUser.png'
-
-  
-  
-  // console.log('TCL: isTopListener', isTopListener)
 
   const ArtistLink: any = ({ className }: any) => (
     
     <Link to={artistLink(pathParams, artist.id)} className={className} style={{ position: 'relative'
     }}>
-      {/* {
-        isTopListener ? <image href={firstPlaceBadge} transform={`translate(${(x || 0) + 150},${(y || 0) - 5})`} width='30px' height='30px' 
-        /> : first.user.photoURL ? <image href={first.user.photoURL} dx={-78} width='30px' height='30px' clipPath='url(#clipCircle)'
-          /> : <Text stroke='#64d6ee' width={100} font-size="10" height={20} textAnchor='end' dx={-78} dy={24} {...{ x, y }}>
-              {userHandle}
-            </Text>
-      } */}
+    
       <clipPath id='clipCircle'>
         <circle r='32px' cx='32px' cy='32px' />
       </clipPath>
