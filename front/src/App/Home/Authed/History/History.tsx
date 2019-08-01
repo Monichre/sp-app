@@ -30,7 +30,7 @@ const HistoryGrid = styled.div`
   grid-template-columns: 1fr;
 
   @media (min-width: 760px) {
-    background-image: linear-gradient(to right, rgba(0,0,0,0) 49.5%, rgba(100,214,238,1) 50%, rgba(0,0,0,0) 50.5%);
+    background-image: linear-gradient(to right, rgba(0,0,0,0) 49.99%, rgba(100,214,238,1) 50%, rgba(0,0,0,0) 50.2%);
     background-position: 0 8rem;
 
     & > *:nth-child(odd) > * {
@@ -64,7 +64,7 @@ const HistoryRow = styled.div`
   @media (min-width: 760px) {
     display: grid;
     grid-template-columns: 1fr;
-      background-image: radial-gradient(circle, rgb(100,214,238,1) 1%, rgb(0,0,0,0) 2%);
+      background-image: radial-gradient(circle, rgb(100,214,238,1) 1%, rgb(0,0,0,0) 1%);
     background-position: 0 0rem;
   }
 `

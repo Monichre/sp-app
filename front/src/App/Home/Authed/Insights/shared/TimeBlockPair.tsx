@@ -34,40 +34,6 @@ const NavTabLink = styled(NavLink)`
 `
 
 
-
-const TimeBlockTitleRow = styled.div`
-  display: flex;
-  width: 100%;
-  height: 100%;
-  align-content: center;
-  align-items: center;
-  z-index: 0;
-  top: 0;
-  left: 0;
-  position: absolute;
-
-  h4 {
-    position: relative;
-    width: 50%;
-    font-family: 'Source Sans Pro';
-    text-align: center;
-    opacity: .5;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-    color: #fff;
-    font-weight: bolder;
-  }
-`
-
-
-
-// const MinorValue = styled.div`
-// font-size: 30px;
-// font-weight: 500;
-// color: #64d6ee;
-// `
-
-
 type InsightsStats = InsightsStatsPersonal | InsightsStatsGroup
 type InsightsStatsTimescope = InsightsStatsToday | InsightsStatsThisWeek | InsightsStatsThisMonth | InsightsStatsLifetime
 
@@ -206,6 +172,61 @@ const TimeBlockPairView = styled.div`
   }
 `
 
+const TimeBlockHeaderWrap = styled.div`
+  width: 50%;
+
+  height: max-content;
+
+  h4 {
+
+    margin: 0;
+    width: max-content;
+    background: #030616;
+    font-family: 'Source Sans Pro';
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: #fff;
+    font-weight: bolder;
+    padding: 0 10px 10px;
+  }
+
+`
+
+const TimeBlockTitleRow = styled.div`
+  display: flex;
+  width: 100%;
+  height: max-content;
+  margin: 0;
+  align-content: center;
+  align-items: center;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  position: absolute;
+
+  ${TimeBlockHeaderWrap} {
+
+  }
+`
+
+
+
+
+/*
+    h4 {
+    position: relative;
+    width: 50%;
+    font-family: 'Source Sans Pro';
+    text-align: center;
+    opacity: .5;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: #fff;
+    font-weight: bolder;
+  }
+
+*/
+
 export const TimeBlockPair: React.SFC<{ label?: string, pathParams: TPathParams, stats: InsightsStatsTimescope }> = ({ label, pathParams, stats }) => {
   const { personal, group } = stats
   const { delta } = personal
@@ -216,14 +237,16 @@ export const TimeBlockPair: React.SFC<{ label?: string, pathParams: TPathParams,
       {label ? <NavTabLink to={insightLink(pathParams)}>{label}: {delta ? <TimeBlockDelta {...{ delta }} /> : ''}</NavTabLink> :  delta? <TimeBlockDelta {...{ delta } } /> : ''}
     
       <TimeBlockPairView>
-        
-      
-      <TimeBlockTitleRow>
-        <h4>You</h4>
-        <h4>Everyone</h4>
+        <TimeBlockTitleRow>
+          <TimeBlockHeaderWrap><h4>You</h4></TimeBlockHeaderWrap>
+          <TimeBlockHeaderWrap>
+            <h4>Everyone</h4>
+          </TimeBlockHeaderWrap>
       </TimeBlockTitleRow>
-      <TimeBlock stats={personal} colors={COLORS.personal} pathParams={Object.assign({}, pathParams, { perspective: 'personal' })} />
-      <TimeBlock stats={group} colors={COLORS.group} pathParams={Object.assign({}, pathParams, { perspective: 'group' })} />
+        <TimeBlock stats={personal} colors={COLORS.personal} pathParams={Object.assign({}, pathParams, { perspective: 'personal' })} />
+        
+        <TimeBlock stats={group} colors={COLORS.group} pathParams={Object.assign({}, pathParams, { perspective: 'group' })} />
+        
       </TimeBlockPairView>
       </Fragment>
   )

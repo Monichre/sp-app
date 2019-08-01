@@ -19,7 +19,10 @@ const NavLabel = styled.div`
 const NavPrimaryLink = styled(NavLink)`
 text-decoration: none;
 &:hover {
-  background-color: #444;
+  color: ${BRAND_COLOR};
+  svg {
+    stroke: ${BRAND_COLOR};
+  }
 }
 &.active {
   background-color: rgba(216, 216, 216, .05);
