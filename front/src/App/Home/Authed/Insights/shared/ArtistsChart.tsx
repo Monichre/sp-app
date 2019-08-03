@@ -65,15 +65,9 @@ const TopListenerYaxis: React.SFC<TickProps & any> = React.memo(({ x, y, offset,
 
   const { topListeners } = artist
   const [first, second = false, third = false]: any = topListeners
-  console.log('TCL: third', third)
-  console.log('TCL: second', second)
-  console.log('TCL: first', first)
   const isTopListener: any = first ? first.user.uid === userId : false
   const isSecond: any = second ? second.user.uid === userId : false
-  console.log('TCL: isSecond', isSecond)
   const isThird: any = third ? third.user.uid === userId : false
-  console.log('TCL: isThird', isThird)
-
   const topListenerHandle: any = first && first.user.displayName ? first.user.displayName : first && first.user.email ? first.user.email : null
   const secondListenerHandle: any = second && second.user.displayName ? second.user.displayName : second && second.user.email ? second.user.email : null
   const firstPlaceBadge: any = '/icons/first-currentUser.png'
@@ -152,8 +146,8 @@ const ArtistsChart: React.SFC<RouteComponentProps & ChartProps & UserIdProp> = (
      
       <BarChart layout='vertical' data={artists} onClick={navigateToArtist(history, pathParams)}>
         
-        <XAxis height={30} type='number' stroke={BRAND_PERSONAL_COLOR} orientation='top' xAxisId='top' tickFormatter={decimalToHrsMins} domain={[0, domainMaxBuilder(artists)]}>
-          <Label position='insideTopLeft' offset={0} stroke={BRAND_PERSONAL_COLOR}>hours</Label>
+        <XAxis height={30} type='number' stroke='#fff' orientation='top' xAxisId='top' tickFormatter={decimalToHrsMins} domain={[0, domainMaxBuilder(artists)]}>
+          <Label position='insideTopLeft' offset={0} stroke='#fff'>hours</Label>
         </XAxis>
 
       <YAxis width={200} yAxisId="left" orientation="left" type='category' stroke={BRAND_PERSONAL_COLOR} interval={0} tick={({ payload, ...props }) =>

@@ -194,7 +194,7 @@ const perspectiveTopArtists = async (
 				achievementValue: 'first',
 				periodType: 'life',
 				periodValue: 'life',
-				currentTime: endDate
+				date: endDate
 			})
 			console.log('Insights Dash first', first)
 			if (first) {
@@ -206,7 +206,7 @@ const perspectiveTopArtists = async (
 					achievementValue: 'second',
 					periodType: 'life',
 					periodValue: 'life',
-					currentTime: endDate
+					date: endDate
 				})
 
 				console.log('Insights Dash second', second)
@@ -219,7 +219,7 @@ const perspectiveTopArtists = async (
 						achievementValue: 'third',
 						periodType: 'life',
 						periodValue: 'life',
-						currentTime: endDate
+						date: endDate
 					})
 
 					console.log('Insights Dash third', third)

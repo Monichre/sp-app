@@ -23,15 +23,11 @@ export type ArtistStatKeys = {
 	periodValue: string
 }
 
+export type AchievementType = 'topListener' | 'firstToStream'
 
-
-export type AchievementType =
-	| 'topListener'
-	| 'firstToStream'
-	
 export type AchievementValue = 'first' | 'second' | 'third'
-	
-// type DateParam = {
+
+// type AchievementDateParam = {
 // 	date: moment.Moment
 // }
 
@@ -43,8 +39,8 @@ export type Achievement = {
 	periodValue: string
 	uid: string
 	total: number
-	// currentTime: moment.Moment
-	currentTime: string
+	date: string
+	lastUpdated?: moment.Moment
 	user?: any
 }
 
@@ -59,19 +55,18 @@ type UserAchievementByArtistParams = {
 	achievementType: AchievementType
 	achievementValue: AchievementValue
 	periodType: PeriodType
-	periodValue: string,
-	currentTime: moment.Moment,
+	periodValue: string
+	date: moment.Moment
 	uid: string
 }
 
-
 type TopListenerParameterType = {
-		artistId: string,
-		achievementType: AchievementType,
-		achievementValue: AchievementValue,
-		periodType: PeriodType,
-		periodValue: string,
-		currentTime:  moment.Moment, // Will become a string
+	artistId: string
+	achievementType: AchievementType
+	achievementValue: AchievementValue
+	periodType: PeriodType
+	periodValue: string
+	date: moment.Moment // Will become a string
 }
 
 type Timeseries = {
@@ -79,7 +74,11 @@ type Timeseries = {
 	period: string
 }
 
-
+/**
+ *
+ * cc: Type Declaration of TableAchievement class
+ *
+ */
 
 export type TTableAchievement = {
 	makePk: (
@@ -94,7 +93,7 @@ export type TTableAchievement = {
 		achievementValue: AchievementValue,
 		periodType: PeriodType,
 		periodValue: string,
-		currentTime:string
+		date: string
 	) => string
 
 	makeFk: (
@@ -103,11 +102,12 @@ export type TTableAchievement = {
 		achievementValue: AchievementValue,
 		periodType: PeriodType,
 		periodValue: string,
-		currentTime:string,
+		date: string,
+		// Might need to add the lastUpdated field to this filter key?
 		uid: string
 	) => string
 
-	writeAchievement: (
+	createOrModifyAchievement: (
 		achievement: Achievement
 	) => Promise<PromiseResult<UpdateItemOutput, AWSError>>
 
@@ -117,7 +117,7 @@ export type TTableAchievement = {
 		achievementValue,
 		periodType,
 		periodValue,
-		currentTime
+		date
 	}: TopListenerParameterType) => Promise<PromiseResult<any, AWSError>>
 
 	getUserAchievementsByArtist: ({
@@ -141,32 +141,23 @@ export const TableAchievement = (
 		achievementType: AchievementType,
 		periodType: PeriodType,
 		periodValue: string
-	) =>
-		[
-			artistId,
-			achievementType,
-			periodType,
-			periodValue
-		].join('#')
+	) => [artistId, achievementType, periodType, periodValue].join('#')
 
 	const makeSk = (
 		artistId: string,
 		achievementValue: AchievementValue,
 		periodType: PeriodType,
 		periodValue: string,
-		currentTime: string
-	) =>
-		[artistId, achievementValue, periodType, periodValue, currentTime].join(
-			'#'
-		)
-	
+		date: string
+	) => [artistId, achievementValue, periodType, periodValue, date].join('#')
+
 	const makeFk = (
 		artistId: string,
 		achievementType: AchievementType,
 		achievementValue: AchievementValue,
 		periodType: PeriodType,
 		periodValue: string,
-		currentTime: string,
+		date: string,
 		uid: string
 	) =>
 		[
@@ -175,33 +166,36 @@ export const TableAchievement = (
 			achievementValue,
 			periodType,
 			periodValue,
-			currentTime,
+			date,
 			uid
 		].join('#')
-	
-	  const encode = ({
-			artistId,
-			achievementType,
-			achievementValue,
-			periodType,
-			periodValue,
-			currentTime, // Current time here is coming in a string
-			uid,
-			...rest
-	  }: Achievement) => {
-		  console.log(
-				'TCL: currentTime inside encode, should be a string',
-				currentTime
-			)
+
+	const encode = ({
+		artistId,
+		achievementType,
+		achievementValue,
+		periodType,
+		periodValue,
+		date, // Current time here is coming in a string
+		uid,
+		...rest
+	}: Achievement) => {
+
+		const lastUpdated = moment(date).format()
+		const calendarDay = moment(date).format('MMMM-Do-YYYY')
+
+		console.log('TCL: date inside encode, should be a string', date)
+        console.log('TCL: lastUpdated', lastUpdated)
+		
+
 		return {
-			
 			pk: makePk(artistId, achievementType, periodType, periodValue),
 			sk: makeSk(
 				artistId,
 				achievementValue,
 				periodType,
 				periodValue,
-				currentTime // Current time here is coming in a string
+				calendarDay // Current time here is coming in a string
 			),
 			fk: makeFk(
 				artistId,
@@ -209,33 +203,30 @@ export const TableAchievement = (
 				achievementValue,
 				periodType,
 				periodValue,
-				currentTime, // Current time here is coming in a string
+				calendarDay, // Current time here is coming in a string
 				uid
 			),
+			lastUpdated,
 			...rest
-		
 		}
-	  }
+	}
 
-
-	// cc:Achievements Lambda#5; Function writeAchievement;
+	// cc:Achievements Lambda#5; Function createOrModifyAchievement;
 	const getArtistTopListeners = async ({
 		artistId,
 		achievementType,
 		achievementValue,
 		periodType,
 		periodValue,
-		currentTime // is a moment object
+		date // is a moment object
 	}: TopListenerParameterType) => {
-		console.log('Im inside the function: getArtistTopListeners')
-		console.log('TCL: currentTime', currentTime)
-		const isMoment = moment.isMoment(currentTime)
-		console.log(
-			'TCL: moment.isMoment(currentTime)',
-			moment.isMoment(currentTime)
-		)
-		const isValid = currentTime.isValid()
-		console.log('TCL: currentTime.isValid()', currentTime.isValid())
+		
+		const isMoment = moment.isMoment(date)
+		const isValid = date.isValid()
+
+		console.log('TCL: isMoment', isMoment)
+		console.log('TCL: date', date)
+		console.log('TCL: date.isValid()', isValid)
 
 		const refTime = moment()
 			.startOf('day')
@@ -246,7 +237,7 @@ export const TableAchievement = (
 			achievementValue,
 			periodType,
 			periodValue,
-			currentTime.format() // Current time here is coming in as a moment object parameter and needs to be made into a string
+			date.format('MMMM-Do-YYYY') // Current time here is coming in as a moment object parameter and needs to be made into a string
 		)
 		const _rk = makeSk(
 			artistId,
@@ -255,14 +246,20 @@ export const TableAchievement = (
 			periodValue,
 			refTime
 		)
+		
 		console.log('TCL: achievementValue', achievementValue)
 		console.log('TCL: periodType', periodType)
 		console.log('TCL: periodValue', periodValue)
 		console.log('TCL: refTime', refTime)
 		console.log('TCL: _sk', _sk)
 		console.log('TCL: _rk', _rk)
-        
 
+		/*=============================================
+		
+		// cc: Since we're querying for records between a set of time stamps we may receive several records. The records are ordered from oldest to newest. Here we take the newest record.
+
+		=============================================*/
+		
 		return await doc
 			.query({
 				TableName,
@@ -276,7 +273,6 @@ export const TableAchievement = (
 			.promise()
 			.then(res => {
 				console.log(`Im the reponse for ${achievementValue} top listener`, res)
-				// cc: Since we're querying for records between a set of time stamps we may receive several records. The records are ordered from oldest to newest. Here we take the newest record.
 				if (res && res.Items && res.Items.length) {
 					let user = res.Items.pop()
 					console.log('TCL: user', user)
@@ -284,7 +280,6 @@ export const TableAchievement = (
 				} else {
 					return null
 				}
-					
 			})
 	}
 
@@ -294,26 +289,33 @@ export const TableAchievement = (
 		achievementValue,
 		periodType,
 		periodValue,
-		currentTime,
+		date,
 		uid
 	}: UserAchievementByArtistParams) => {
-
-	
 		const _pk = makePk(artistId, achievementType, periodType, periodValue)
 		const _sk = makeSk(
 			artistId,
 			achievementValue,
 			periodType,
 			periodValue,
-			currentTime.format() // Current time here is coming in as a moment object parameter and needs to be made into a string
+			date.format('MMMM-Do-YYYY') // cc: Current time here is coming in as a moment object parameter and needs to be made into a string
 		)
+
+		
+		/**
+		 *
+		 * cc: Do we need the current time?
+		 *
+		 */
+		
+		
 		const _fk = makeFk(
 			artistId,
 			achievementType,
 			achievementValue,
 			periodType,
 			periodValue,
-			currentTime.format(), // 1. do we need the current time?? 2. Current time here is coming in as a moment object parameter and needs to be made into a string
+			date.format('MMMM-Do-YYYY'), // cc: Current time here is coming in as a moment object parameter and needs to be made into a string
 			uid
 		)
 
@@ -329,28 +331,49 @@ export const TableAchievement = (
 				Limit: 3
 			})
 			.promise()
-			.then(res =>
-			{
+			.then(res => {
 				console.log('TCL: res', res)
-				return res && res.Items && res.Items.length
-					? res.Items[0]
-					: null
-			}
-			)
+				return res && res.Items && res.Items.length ? res.Items[0] : null
+			})
 	}
 
-	// cc:Achievements Lambda#4; writeAchievement function definition;
-	const writeAchievement = async ({
+	
+	/**
+	 *
+	 * cc:Achievements Lambda#4; createOrModifyAchievement function definition;
+	 *
+	 */
+	
+	
+	const createOrModifyAchievement = async ({
 		artistId,
 		achievementType,
 		achievementValue,
 		periodType,
 		periodValue,
-		currentTime, // Current time here is coming in a string
+		date, // Current time here is coming in a string
 		uid,
 		total,
 		user
 	}: Achievement) => {
+
+		let item = {Item: {
+					...encode({
+						artistId,
+						achievementType,
+						achievementValue,
+						periodType,
+						periodValue,
+						date, // Therefore this is a string
+						uid,
+						total,
+						user
+					})
+		}
+		}
+		
+        console.log('Use this item object to write tests', item)
+		
 		return await doc
 			.put({
 				TableName,
@@ -361,7 +384,7 @@ export const TableAchievement = (
 						achievementValue,
 						periodType,
 						periodValue,
-						currentTime, // Therefore this is a string
+						date, // Therefore this is a string
 						uid,
 						total,
 						user
@@ -377,12 +400,9 @@ export const TableAchievement = (
 		makeFk,
 		getArtistTopListeners,
 		getUserAchievementsByArtist,
-		writeAchievement
+		createOrModifyAchievement
 	}
 }
-
-
-
 
 // // user IDs
 // :"spotify:yw19fznedr2b4dxo55cmjz11h"

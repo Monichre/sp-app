@@ -82,7 +82,7 @@
 		"editor.formatOnSave": true
 	},
 	
-	"codestream.email": "liam@plusminussays.com",
+	"codestream.email": "liam@soundpruf.com",
 	"[javascript]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode",
 		"editor.formatOnSave": true
@@ -171,5 +171,6 @@
 		"editor.defaultFormatter": "esbenp.prettier-vscode",
 		"editor.formatOnSave": true
 	},
-	"editor.formatOnSave": true
+	"editor.formatOnSave": true,
+	"workbench.colorCustomizations": {}
 }

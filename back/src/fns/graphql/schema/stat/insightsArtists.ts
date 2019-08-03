@@ -228,7 +228,7 @@ const topArtists = async (
 				achievementValue: 'first',
 				periodType: 'life',
 				periodValue: 'life',
-				currentTime: now
+				date: now
 			})
 
 			console.log('TCL: perspectiveTopArtists -> first', first)
@@ -241,7 +241,7 @@ const topArtists = async (
 					achievementValue: 'second',
 					periodType: 'life',
 					periodValue: 'life',
-					currentTime: now
+					date: now
 				})
 
 				console.log('TCL: perspectiveTopArtists -> second', second)
@@ -254,7 +254,7 @@ const topArtists = async (
 						achievementValue: 'third',
 						periodType: 'life',
 						periodValue: 'life',
-						currentTime: now
+						date: now
 					})
 
 					console.log('TCL: perspectiveTopArtists -> third', third)
@@ -287,7 +287,7 @@ const topArtists = async (
 				achievementValue: 'first',
 				periodType: 'life',
 				periodValue: 'life',
-				currentTime: now
+				date: now
 			})
 
 			console.log('TCL: perspectiveTopArtists -> first', first)
@@ -300,7 +300,7 @@ const topArtists = async (
 					achievementValue: 'second',
 					periodType: 'life',
 					periodValue: 'life',
-					currentTime: now
+					date: now
 				})
 
 				console.log('TCL: perspectiveTopArtists -> second', second)
@@ -313,7 +313,7 @@ const topArtists = async (
 						achievementValue: 'third',
 						periodType: 'life',
 						periodValue: 'life',
-						currentTime: now
+						date: now
 					})
 
 					console.log('TCL: perspectiveTopArtists -> third', third)

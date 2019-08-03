@@ -7,14 +7,22 @@ import { TableAchievement } from '../../shared/tables/TableAchievement'
 import * as _ from 'lodash'
 import * as moment from 'moment'
 
-// cc:Achievement Current Time Key/Attribute#1;Moment Object v String;+5;This will be used as the metric to sort/filter achievements (sk and fk keys on the Achievements Table). This is localized
+/*=============================================
+
+cc:Achievement Current Time Key/Attribute#1;Moment Object v String;+5;This will be used as the metric to sort/filter achievements (sk and fk keys on the Achievements Table). This is localized
+
+cc: We want this data in two formats one to store as the day of the achievement record to which we will continue to make updates and the other as a isostring (? - I think) in the very least as timestamp in the following format: 'MMMM Do YYYY, h:mm:ss a'. This we will use as the value for the last updated field on the Achievement object
+
+=============================================*/
+
 const localizedMoment = (utcOffset: number, m: moment.Moment) =>
 	moment
 		.utc(m)
 		.utcOffset(utcOffset, false)
 		.format()
-// cc:This isn't being used but probably should be
+		
 const localizedISOString = (m: moment.Moment) => m.toISOString(true)
+console.log('TCL: localizedISOString', localizedISOString)
 
 type Env = {
 	DYNAMO_ENDPOINT: string
@@ -41,7 +49,13 @@ const retrieveArtistAndUserKeys = records => {
 	}
 }
 
-// cc: This function gets the user's total time listened value by artist id; Extract this out
+
+/**
+ *
+ * cc: This function gets the user's total time listened value by artist id; Extract this out
+ *
+ */
+
 const getUserStat = async (user, artistId, tableStat) =>
 	await tableStat.getArtistStat({
 		uid: user.uid,
@@ -53,7 +67,6 @@ const getUserStat = async (user, artistId, tableStat) =>
 	// cc: Extract this out
 const getStatsForUsers = async (artist, artistId, users, tableStat) =>  await Promise.all(
 		users.map(async (user: any) => {
-        console.log('TCL: user', user)
 			const { utcOffset } = user
 			const now = localizedMoment(utcOffset, moment())
 			const userStat = await getUserStat(user, artistId, tableStat)
@@ -69,12 +82,19 @@ const getStatsForUsers = async (artist, artistId, users, tableStat) =>  await Pr
 			return {
 				user,
 				ttl: userStat,
-				currentTime: now
+				date: now
 			}
 		})
 	)
 
-	// cc:Achievements Lambda#1; The beginning of the create/update Achievements Lambda logic; This receives an event parameters with an array of Records on it
+	
+	/**
+	 *
+	 * cc: Achievements Lambda#1; Beginning of the create/update Achievements Lambda; Receives an event parameters as array of Records
+	 *
+	 */
+	
+	
 export const handler: DynamoDBStreamHandler = async (event, context) => {
 	const log = makeLogger({
 		handler: 'onPlayUpdateAchievements',
@@ -92,7 +112,13 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 		log
 	)
 
-	// cc:Achievements Lambda#2; Achievement Table Module; This is where we keep all of our logic regarding creating, updating and comparing achievements.
+	
+	/**
+	 *
+	 * cc:Achievements Lambda#2; Achievement Table Module; This is where we keep all of our logic regarding creating, updating and comparing achievements.
+	 *
+	 */
+	
 	const tableAchievement = TableAchievement(
 		env.DYNAMO_ENDPOINT,
 		env.TABLE_ACHIEVEMENT
@@ -138,14 +164,19 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 						console.log('Three Top Listeners')
 						
 						if (first) {
-							// cc:Achievements Lambda#3; Function writeAchievement; This is responsible for creating achievement records in sync with the user's streaming behavior - as this function (and file at large) only fires when the Stats Table has been updated
-							await tableAchievement.writeAchievement({
+							
+							/*=============================================
+
+							cc:Achievements Lambda#3; Function createOrModifyAchievement; This is responsible for creating achievement records in sync with the user's streaming behavior - as this function (and file at large)only fires when the Stats Table has been updated
+
+							=============================================*/
+							await tableAchievement.createOrModifyAchievement({
 								artistId,
 								achievementType: 'topListener',
 								achievementValue: 'first',
 								periodType: 'life',
 								periodValue: 'life',
-								currentTime: first.currentTime,
+								date: first.currentTime,
 								uid: first.user.uid,
 								total: first.ttl,
 								user: first.user
@@ -153,26 +184,26 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 						}
 						if (second) {
 							console.log('second place user returned from get user Stats: ', second)
-							await tableAchievement.writeAchievement({
+							await tableAchievement.createOrModifyAchievement({
 								artistId,
 								achievementType: 'topListener',
 								achievementValue: 'second',
 								periodType: 'life',
 								periodValue: 'life',
-								currentTime: second.currentTime,
+								date: second.currentTime,
 								uid: second.user.uid,
 								total: second.ttl,
 								user: second.user
 							})
 						}
 						if (third) {
-							await tableAchievement.writeAchievement({
+							await tableAchievement.createOrModifyAchievement({
 								artistId,
 								achievementType: 'topListener',
 								achievementValue: 'third',
 								periodType: 'life',
 								periodValue: 'life',
-								currentTime: third.currentTime,
+								date: third.currentTime,
 								uid: third.user.uid,
 								total: third.ttl,
 								user: third.user
@@ -190,13 +221,13 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 						console.log('TCL: Two Top Listeners')
 						
 						if (first) {
-							await tableAchievement.writeAchievement({
+							await tableAchievement.createOrModifyAchievement({
 								artistId,
 								achievementType: 'topListener',
 								achievementValue: 'first',
 								periodType: 'life',
 								periodValue: 'life',
-								currentTime: first.currentTime,
+								date: first.currentTime,
 								uid: first.user.uid,
 								total: first.ttl,
 								user: first.user
@@ -204,13 +235,13 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 						}
 						if (second) {
 							console.log('second place user returned from get user Stats: ', second)
-							await tableAchievement.writeAchievement({
+							await tableAchievement.createOrModifyAchievement({
 								artistId,
 								achievementType: 'topListener',
 								achievementValue: 'second',
 								periodType: 'life',
 								periodValue: 'life',
-								currentTime: second.currentTime,
+								date: second.currentTime,
 								uid: second.user.uid,
 								total: second.ttl
 							})
@@ -222,13 +253,13 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 						let [first] = filtered
 						console.log('Only One Top Listener')
 						if (first) {
-							await tableAchievement.writeAchievement({
+							await tableAchievement.createOrModifyAchievement({
 								artistId,
 								achievementType: 'topListener',
 								achievementValue: 'first',
 								periodType: 'life',
 								periodValue: 'life',
-								currentTime: first.currentTime,
+								date: first.currentTime,
 								uid: first.user.uid,
 								total: first.ttl,
 								user: first.user

@@ -4,7 +4,6 @@ import { Route, Switch, Redirect } from 'react-router';
 import { Loading } from '../../../shared/Loading';
 import { useGetUserInfo } from '../../../types';
 import { ErrorFallback } from '../ErrorBoundary';
-import { OnboardingMessage } from './AuthedOnboardingMessage'
 import { Insights } from './Insights/Insights';
 import { largeQuery, notLargeQuery } from '../../../shared/media';
 import { NavMenu, NavMenuView } from './NavMenu';
@@ -12,6 +11,8 @@ import { Profile } from './Profile/Profile';
 import { History } from './History/History';
 import { IntercomHandler } from '../../../lib/intercom'
 import * as firebase from 'firebase';
+import { Comment } from './Insights/shared/Comment';
+import { BreadCrumbs } from '../../Components/BreadCrumbs';
 
 const SIDEBAR_WIDTH = 200
 
@@ -62,37 +63,28 @@ const achievements: any = {
   }
 }
 
-const UserAchievementsContext: any = React.createContext(achievements)
+/**
+ *
+ * cc:signin#2;User is Authenticated
+ *
+ */
 
-//cc:signin#2;User is Authenticated
+
+const UserAchievementsContext: any = React.createContext(achievements)
 export const Authed: React.SFC<{ user: { uid: string } }> = ({ user: firebaseUser }) => {
   
-  // let userAchievementArtists = useContext(UserAchievementsTopArtists)
   const [userAchievements, setUserAchievements]: any = useState(achievements)
-
-
   const result = useGetUserInfo({ variables: { uid: firebaseUser.uid }, pollInterval: 4000, suspend: true})
   const user = result.data && result.data.getUserInfo
+
   if (!user) { return <ErrorFallback /> }
   
-  const activeUsersListRef = firebase.database().ref('USERS_ONLINE')
-  activeUsersListRef.once('value', function (snapshot) {
-    snapshot.forEach(function (childSnapshot) {
-    console.log('TCL: childSnapshot', childSnapshot)
-      var childKey = childSnapshot.key;
-      console.log('TCL: childKey', childKey)
-      var childData = childSnapshot.val();
-      console.log('TCL: childData', childData)
-      
-    });
-  });
-  // const connectedRef = firebase.database().ref('.info/connected')
+  
 
   const { initialHarvestComplete, lastUpdate, uid } = user
   //@ts-ignore
   const intercomUser: any = JSON.parse(localStorage.getItem('intercomUser'))
-  console.log('userInfo', user)
-
+  
 
   if (process.env.NODE_ENV === 'production') {
     IntercomHandler.boot(user, 'boot')
@@ -106,9 +98,13 @@ export const Authed: React.SFC<{ user: { uid: string } }> = ({ user: firebaseUse
   }
   
 
+/**
+*
+* cc: userAchievementsFrontEnd#2;Passing down the state setting function
+*
+*/
   return (
     <AuthedView>
-      {/* //cc: userAchievementsFrontEnd#2;Passing down the state setting function */}
       <UserAchievementsContext.Provider value={[userAchievements, setUserAchievements]}>
         <NavMenu {...{ initialHarvestComplete: initialHarvestComplete || false, lastUpdate: lastUpdate || '' }}/>
       <React.Suspense fallback={<Loading/>}>

@@ -6,6 +6,8 @@ import { largeQuery, notLargeQuery, BRAND_COLOR, BRAND_PERSONAL_COLOR, Large } f
 import { Logo, LogoHorizontal } from '../../../shared/Logo';
 import Moment from 'react-moment';
 import { ArtistFragmentFragment} from '../../../types'
+import { UserAchievementsList } from '../../Components/UserAchievementsList'
+
 
 export const NavMenuView = styled.div`
 background-color: #030616;
@@ -131,6 +133,7 @@ export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: s
         <NavLabel>Profile</NavLabel>
       </NavPrimaryLink>
       <Large>
+        <UserAchievementsList />
         <FillSpace>
           {!initialHarvestComplete ? <HarvestingNotice /> : <LastUpdate {...{ lastUpdate }} />}
           <LogoHorizontal size={8} />

@@ -257,7 +257,7 @@ const playtimeStats = async (
 		achievementValue: 'first',
 		periodType: 'life',
 		periodValue: 'life',
-		currentTime: now
+		date: now
 	})
 	console.log('TCL: perspectiveTopArtists -> first', first)
 	if (first) {
@@ -269,7 +269,7 @@ const playtimeStats = async (
 			achievementValue: 'second',
 			periodType: 'life',
 			periodValue: 'life',
-			currentTime: now
+			date: now
 		})
 
 		console.log('TCL: perspectiveTopArtists -> second', second)
@@ -282,7 +282,7 @@ const playtimeStats = async (
 				achievementValue: 'third',
 				periodType: 'life',
 				periodValue: 'life',
-				currentTime: now
+				date: now
 			})
 
 			console.log('TCL: perspectiveTopArtists -> third', third)
