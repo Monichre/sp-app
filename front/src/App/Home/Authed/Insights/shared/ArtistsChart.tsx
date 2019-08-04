@@ -5,15 +5,12 @@ import { History } from 'history'
 import { PerspectiveDashArtists } from '../../../../../types';
 import { ResponsiveContainer, BarChart, XAxis, YAxis, Bar, CartesianGrid, Label, Text, LineChart, Line, Tooltip } from 'recharts';
 import { BRAND_GLOBAL_COLOR, BRAND_PERSONAL_COLOR, notLargeQuery } from '../../../../../shared/media';
-import styled, { css } from 'styled-components';
 import { Comment } from './Comment';
 import max from 'ramda/es/max';
 import pluck from 'ramda/es/pluck';
 import reduce from 'ramda/es/reduce';
-import { FirstTopListenerAward } from '../../../../../shared/icons'
-// front / src / shared / icons.tsx
 import pipe from 'ramda/es/pipe';
-import { TopListener } from '../../../../../../../back/src/fns/graphql/types';
+
 
 type TickProps = {
   x?: number
@@ -134,7 +131,6 @@ const navigateToArtist = (history: History, pathParams: TPathParams) => (obj: an
 }
 
 const domainMaxBuilder: (values: PerspectiveDashArtists[]) => (maxValue: number) => number =
-  // (values: TimescopeDashValues[]) => (maxValue: number) => pipe((vals: TimescopeDashValues[]) => vals.map(v => v.group), reduce(max, -Infinity))(values), 
   (values: PerspectiveDashArtists[]) => (maxValue: number) => Math.ceil(pipe<PerspectiveDashArtists[], number[], number>(pluck('group'), reduce(max, -Infinity))(values))
 
 const decimalToHrsMins = (value: number) => `${Math.floor(value)}:${Math.floor((value % 1) * 60).toString().padStart(2, '0')}`

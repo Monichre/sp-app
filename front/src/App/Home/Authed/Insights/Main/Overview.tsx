@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { TPathParams, insightLink } from '../shared/functions';
 import { useInsightsDash, ArtistFragmentTopListeners } from '../../../../../types';
@@ -12,7 +12,8 @@ import { TimeseriesChart } from '../shared/TimeseriesChart';
 import { suspensefulHook } from '../../../../../lib/suspensefulHook';
 import { FeaturedArtists } from './FeaturedArtists';
 import ReactTooltip from 'react-tooltip'
-
+import { AchievementsState } from '../../Authed';
+import { FirstPlaceBadge, SecondPlaceBadge, ThirdPlaceBadge } from '../../../../Components/Badge'
 
 const Row = styled.div`
   display: flex;
@@ -38,33 +39,14 @@ const Row = styled.div`
 `
 
 
-// type AchievementsObject = {
-//   1: {
 
-//   },
-//   2: {
-
-//   },
-//   3: {
-
-//   }
-// }
-
-// type AchievementObject = {
-//   achievementTitle: string,
-//   artists: 
-// }
-
-
-const FirstPlaceBadge: React.SFC = () => <img src='/icons/first-currentUser.png' />
-const SecondPlaceBadge: React.SFC = () => <img src='/icons/second-currentUser.png' />
-const ThirdPlaceBadge: React.SFC = () => <img src='/icons/third.svg' />
 
 const determineAchievements = (artists: any[], userId: string) => {
  
   const isUser = (userId: string, achievementHolder: any) => achievementHolder && achievementHolder.user.uid === userId
 
- const achievements: any = {
+  // AchievementData
+  const achievements: AchievementsState = {
     1: {
       achievement: 'Top Listener',
       artists: [],
@@ -85,9 +67,10 @@ const determineAchievements = (artists: any[], userId: string) => {
   artists.forEach(artist => {
     const { topListeners  } = artist
 
-    topListeners.forEach((listener: any, i: number) => {
+    topListeners.forEach((listener: any, i: any) => {
       let itIs: boolean = isUser(userId, listener)
 
+      // @ts-ignore
       if (itIs) { achievements[i + 1].artists.push(artist) }
 
     })
@@ -99,7 +82,7 @@ const determineAchievements = (artists: any[], userId: string) => {
 
 }
 
-export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams: TPathParams, setUserAchievements: Function }> = ({ uid, pathParams, setUserAchievements }) => {
+export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams: TPathParams, setUserAchievements: Function }> = ({ uid, pathParams, setUserAchievements, ...rest }) => {
   const {
     insightsDash: {
       [pathParams.timeScope]: {
@@ -108,14 +91,21 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
       }
     }
   } = suspensefulHook(useInsightsDash({ variables: { uid }, suspend: true, pollInterval: 10000 }))
+  
+  const theArtists = artists.map(({ artist }) => artist)
+  const { achievements } = determineAchievements(theArtists, uid)
+
+  useEffect(() => {
+    console.log('TCL: achievements', achievements)
+
+    setUserAchievements({
+      data: achievements, action: 'updateAchievments'
+    })
+
+    // @ts-ignore
+  }, achievements)
 
     
-  const theArtists = artists.map(({artist}) =>  artist)
-  const { achievements } = determineAchievements(theArtists, uid)
-  console.log('TCL: achievements', achievements)
-
-  // setUserAchievements(achievements)
-
 
   return <>
     <TimeseriesChart {...{ timeSeries, showOnly: pathParams.perspective }} />

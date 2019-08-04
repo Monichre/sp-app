@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Component } from 'react';
 import styled from 'styled-components';
 import { Achievement } from '../../../../back/src/shared/tables/TableAchievement';
+import { AchievementsState } from '../Home/Authed/Authed';
 
 const ListItem = styled.li`
 
@@ -76,10 +77,10 @@ const AchievementItem: React.SFC<AchievementItemProps> = ({ achievement }) => {
 export default AchievementItem;
 
 export interface UserAchievementsListProps {
-
+    userAchievements: AchievementsState
 }
 
-export const UserAchievementsList: React.SFC<UserAchievementsListProps> = () => {
+export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({userAchievements}) => {
     return (
         <ListWrap>
             <h4> <img src='/icons/award.svg' /> Achievements</h4>

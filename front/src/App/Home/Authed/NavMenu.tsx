@@ -1,4 +1,5 @@
 import React from 'react';
+import { useContext } from 'react';
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom';
 import { LineChart, History, User } from 'grommet-icons'
@@ -7,7 +8,7 @@ import { Logo, LogoHorizontal } from '../../../shared/Logo';
 import Moment from 'react-moment';
 import { ArtistFragmentFragment} from '../../../types'
 import { UserAchievementsList } from '../../Components/UserAchievementsList'
-
+import { UserAchievementsContext, AchievementsState } from './Authed'
 
 export const NavMenuView = styled.div`
 background-color: #030616;
@@ -116,7 +117,10 @@ const HarvestingNotice: React.SFC = () =>
     Watch your stats grow as we complete your initial harvest.
   </HarvestingNoticeDiv>
 
-export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: string}> = ({ initialHarvestComplete, lastUpdate }) => {
+export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: string }> = ({ initialHarvestComplete, lastUpdate }) => {
+  
+  const userAchievements: AchievementsState = useContext(UserAchievementsContext)
+  console.log('TCL: userAchievements in NavMenu: ', userAchievements)
   
   return (
     <NavMenuView>
@@ -133,7 +137,7 @@ export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: s
         <NavLabel>Profile</NavLabel>
       </NavPrimaryLink>
       <Large>
-        <UserAchievementsList />
+        <UserAchievementsList userAchievements={userAchievements} />
         <FillSpace>
           {!initialHarvestComplete ? <HarvestingNotice /> : <LastUpdate {...{ lastUpdate }} />}
           <LogoHorizontal size={8} />
