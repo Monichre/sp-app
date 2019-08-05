@@ -104,8 +104,6 @@ const reducer: Reducer<any, Action> = (state: AchievementsState, payload: any) =
 }
 
 
-export const UserAchievementsContext: any = React.createContext(initialAchievements)
-
 export const Authed: React.SFC<{ user: { uid: string } }> = ({ user: firebaseUser }) => {
 
   const result = useGetUserInfo({ variables: { uid: firebaseUser.uid }, pollInterval: 4000, suspend: true})
@@ -139,17 +137,17 @@ export const Authed: React.SFC<{ user: { uid: string } }> = ({ user: firebaseUse
 */
   return (
     <AuthedView>
-      <UserAchievementsContext.Provider value={userAchievements}>
-        <NavMenu {...{ initialHarvestComplete: initialHarvestComplete || false, lastUpdate: lastUpdate || '' }}/>
+
+        <NavMenu {...{ initialHarvestComplete: initialHarvestComplete || false, lastUpdate: lastUpdate || '', userAchievements }} />
+      
       <React.Suspense fallback={<Loading/>}>
         <Switch>
-            <Route path='/insights/:timeScope/:groupId/:perspective' render={(props) => <Insights user={user} {...props} uid={uid}{ ...{userAchievements, setUserAchievements}}  />}/>
+            <Route path='/insights/:timeScope/:groupId/:perspective' render={(props) => <Insights user={user} {...props} uid={uid}{ ...{setUserAchievements}}  />}/>
           <Route path='/history' render={(props) => <History user={user} {...props} uid={uid}/>}/>
           <Route path='/profile' render={(props) => <Profile user={user} {...props}/>}/>
           <Redirect from='/' to='/insights/thisWeek/global/personal'/>
         </Switch>
       </React.Suspense>
-      </UserAchievementsContext.Provider>
     </AuthedView>
   )
 }

@@ -12,7 +12,12 @@ export const Main: React.SFC<RouteComponentProps & { uid: string, pathParams: TP
   const { insightsStats: stats } = suspensefulHook(useInsightsStats({variables: { uid }, suspend: true, pollInterval: 10000}))
   console.log('TCL: stats', stats)
   
-  /* //cc: userAchievementsFrontEnd#3; Passing down the state setting function to Overview */ 
+/**
+*
+* cc: userAchievementsFrontEnd#3; Passing down the state setting function to Overview
+*
+*/
+
   return <StatPage {...{stats, history, path, pathParams}}>
     <Switch>
       <Route path={`${path}/artists`} render={props => <Artists {...{uid, pathParams, ...props}}/>}/>

@@ -183,7 +183,7 @@ export const ArtistTopListeners: React.SFC<ArtistTopListenersProps> = ({ topList
 				const Badge: React.SFC = () => <BadgeWrap><BadgeImg /></BadgeWrap>
 
                 return (
-                    <TopListenerCard>
+					<TopListenerCard key={index}>
                         <div className='inner'>
                         <h2><Badge /></h2>
                         <h3>{user.displayName ? user.displayName : user.email}</h3>

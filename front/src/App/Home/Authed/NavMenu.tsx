@@ -1,14 +1,12 @@
 import React from 'react';
-import { useContext } from 'react';
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom';
 import { LineChart, History, User } from 'grommet-icons'
 import { largeQuery, notLargeQuery, BRAND_COLOR, BRAND_PERSONAL_COLOR, Large } from '../../../shared/media';
-import { Logo, LogoHorizontal } from '../../../shared/Logo';
+import { LogoHorizontal } from '../../../shared/Logo';
 import Moment from 'react-moment';
-import { ArtistFragmentFragment} from '../../../types'
 import { UserAchievementsList } from '../../Components/UserAchievementsList'
-import { UserAchievementsContext, AchievementsState } from './Authed'
+
 
 export const NavMenuView = styled.div`
 background-color: #030616;
@@ -117,10 +115,9 @@ const HarvestingNotice: React.SFC = () =>
     Watch your stats grow as we complete your initial harvest.
   </HarvestingNoticeDiv>
 
-export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: string }> = ({ initialHarvestComplete, lastUpdate }) => {
+export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: string, userAchievements: any }> = ({ initialHarvestComplete, lastUpdate, userAchievements}) => {
   
-  const userAchievements: AchievementsState = useContext(UserAchievementsContext)
-  console.log('TCL: userAchievements in NavMenu: ', userAchievements)
+  console.count('NavMenu Render: ')
   
   return (
     <NavMenuView>

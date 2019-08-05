@@ -239,3 +239,12 @@ need to change config/elasticmq
 - [ ] that stupid create kinesis streams script, make it smarter
 
 ## front
+
+
+## Graphql Types
+
+Any modifications to the backend GraphQL resolvers or types must be recompiled on both the front end and backend. 
+
+**This can be accomplished on the backend** by executing `yarn generate`
+
+**On the frontend** this can be accomplished by running `yarn gql-gen`

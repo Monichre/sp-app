@@ -120,6 +120,15 @@ export type TTableAchievement = {
 		date
 	}: TopListenerParameterType) => Promise<PromiseResult<any, AWSError>>
 
+	getUserAchievements: (
+		uid: string,
+		achievementType: AchievementType,
+		achievementValue: AchievementValue,
+		periodType: PeriodType,
+		periodValue: string,
+		date: string
+	) => Promise<PromiseResult<any, AWSError>>
+
 	getUserAchievementsByArtist: ({
 		artistId,
 		achievementType,
@@ -136,6 +145,8 @@ export const TableAchievement = (
 ): TTableAchievement => {
 	const doc = new AWS.DynamoDB.DocumentClient({ endpoint })
 
+	const makeKey = (args: any[]) => [...args].join('#')
+
 	const makePk = (
 		artistId: string,
 		achievementType: AchievementType,
@@ -151,6 +162,12 @@ export const TableAchievement = (
 		date: string
 	) => [artistId, achievementValue, periodType, periodValue, date].join('#')
 
+	/**
+	 *
+	 * cc: FilterKey GSI; Switched up the order of the artistId and uid so they are inverse of the makePk
+	 *
+	 */
+
 	const makeFk = (
 		artistId: string,
 		achievementType: AchievementType,
@@ -161,13 +178,13 @@ export const TableAchievement = (
 		uid: string
 	) =>
 		[
-			artistId,
+			uid,
 			achievementType,
 			achievementValue,
 			periodType,
 			periodValue,
 			date,
-			uid
+			artistId
 		].join('#')
 
 	const encode = ({
@@ -180,13 +197,13 @@ export const TableAchievement = (
 		uid,
 		...rest
 	}: Achievement) => {
-
+		// @ts-ignore
 		const lastUpdated = moment(date).format()
+		// @ts-ignore
 		const calendarDay = moment(date).format('MMMM-Do-YYYY')
 
 		console.log('TCL: date inside encode, should be a string', date)
-        console.log('TCL: lastUpdated', lastUpdated)
-		
+		console.log('TCL: lastUpdated', lastUpdated)
 
 		return {
 			pk: makePk(artistId, achievementType, periodType, periodValue),
@@ -220,46 +237,27 @@ export const TableAchievement = (
 		periodValue,
 		date // is a moment object
 	}: TopListenerParameterType) => {
-		
 		const isMoment = moment.isMoment(date)
 		const isValid = date.isValid()
 
 		console.log('TCL: isMoment', isMoment)
 		console.log('TCL: date', date)
 		console.log('TCL: date.isValid()', isValid)
-
-		const refTime = moment()
-			.startOf('day')
-			.format()
 		const _pk = makePk(artistId, achievementType, periodType, periodValue)
 		const _sk = makeSk(
 			artistId,
 			achievementValue,
 			periodType,
 			periodValue,
-			date.format('MMMM-Do-YYYY') // Current time here is coming in as a moment object parameter and needs to be made into a string
+			date.format('MMMM-Do-YYYY') // cc: Current time here is coming in as a moment object parameter and needs to be made into a string
 		)
-		const _rk = makeSk(
-			artistId,
-			achievementValue,
-			periodType,
-			periodValue,
-			refTime
-		)
-		
-		console.log('TCL: achievementValue', achievementValue)
-		console.log('TCL: periodType', periodType)
-		console.log('TCL: periodValue', periodValue)
-		console.log('TCL: refTime', refTime)
-		console.log('TCL: _sk', _sk)
-		console.log('TCL: _rk', _rk)
 
 		/*=============================================
 		
-		// cc: Since we're querying for records between a set of time stamps we may receive several records. The records are ordered from oldest to newest. Here we take the newest record.
+		cc: Since we're querying for records between a set of time stamps we may receive several records. The records are ordered from oldest to newest. Here we take the newest record.
 
 		=============================================*/
-		
+
 		return await doc
 			.query({
 				TableName,
@@ -301,14 +299,12 @@ export const TableAchievement = (
 			date.format('MMMM-Do-YYYY') // cc: Current time here is coming in as a moment object parameter and needs to be made into a string
 		)
 
-		
 		/**
 		 *
 		 * cc: Do we need the current time?
 		 *
 		 */
-		
-		
+
 		const _fk = makeFk(
 			artistId,
 			achievementType,
@@ -337,14 +333,41 @@ export const TableAchievement = (
 			})
 	}
 
-	
+	const getUserAchievements = async ({
+		uid,
+		achievementType,
+		achievementValue,
+		periodType,
+		periodValue,
+		date
+	}: any) => {
+		const _pk = makeKey([achievementType, periodType, periodValue])
+		const _sk = makeKey([achievementValue, periodType, periodValue, date])
+
+		return await doc
+			.query({
+				TableName,
+				KeyConditionExpression: 'pk contains :p AND sk contains :s AND fk BEGINS WITH :f',
+				ExpressionAttributeValues: {
+					':p': _pk,
+					':s': _sk,
+					':f': uid
+				},
+				Limit: 3
+			})
+			.promise()
+			.then(res => {
+				console.log('TCL: res', res)
+				return res && res.Items && res.Items.length ? res.Items : null
+			})
+	}
+
 	/**
 	 *
 	 * cc:Achievements Lambda#4; createOrModifyAchievement function definition;
 	 *
 	 */
-	
-	
+
 	const createOrModifyAchievement = async ({
 		artistId,
 		achievementType,
@@ -356,24 +379,24 @@ export const TableAchievement = (
 		total,
 		user
 	}: Achievement) => {
+		let item = {
+			Item: {
+				...encode({
+					artistId,
+					achievementType,
+					achievementValue,
+					periodType,
+					periodValue,
+					date, // Therefore this is a string
+					uid,
+					total,
+					user
+				})
+			}
+		}
 
-		let item = {Item: {
-					...encode({
-						artistId,
-						achievementType,
-						achievementValue,
-						periodType,
-						periodValue,
-						date, // Therefore this is a string
-						uid,
-						total,
-						user
-					})
-		}
-		}
-		
-        console.log('Use this item object to write tests', item)
-		
+		console.log('Use this item object to write tests', item)
+
 		return await doc
 			.put({
 				TableName,
@@ -400,13 +423,7 @@ export const TableAchievement = (
 		makeFk,
 		getArtistTopListeners,
 		getUserAchievementsByArtist,
+		getUserAchievements,
 		createOrModifyAchievement
 	}
 }
-
-// // user IDs
-// :"spotify:yw19fznedr2b4dxo55cmjz11h"
-
-// : "spotify:xnx2fj5o8x2fgl1hdr10jjars"
-
-// :"spotify:a0rcusksyscdoa1f7ylnot6c8"

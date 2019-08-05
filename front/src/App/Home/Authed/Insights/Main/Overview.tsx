@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { TPathParams, insightLink } from '../shared/functions';
-import { useInsightsDash, ArtistFragmentTopListeners } from '../../../../../types';
+import { useInsightsDash } from '../../../../../types';
 import { notLargeQuery, largeQuery } from '../../../../../shared/media';
 import styled from 'styled-components';
 import { VerticalSpacer } from '../../../../../shared/VerticalSpacer';
@@ -14,6 +14,7 @@ import { FeaturedArtists } from './FeaturedArtists';
 import ReactTooltip from 'react-tooltip'
 import { AchievementsState } from '../../Authed';
 import { FirstPlaceBadge, SecondPlaceBadge, ThirdPlaceBadge } from '../../../../Components/Badge'
+
 
 const Row = styled.div`
   display: flex;
@@ -46,7 +47,7 @@ const determineAchievements = (artists: any[], userId: string) => {
   const isUser = (userId: string, achievementHolder: any) => achievementHolder && achievementHolder.user.uid === userId
 
   // AchievementData
-  const achievements: AchievementsState = {
+  const updatedAchievements: AchievementsState = {
     1: {
       achievement: 'Top Listener',
       artists: [],
@@ -71,18 +72,18 @@ const determineAchievements = (artists: any[], userId: string) => {
       let itIs: boolean = isUser(userId, listener)
 
       // @ts-ignore
-      if (itIs) { achievements[i + 1].artists.push(artist) }
+      if (itIs) { updatedAchievements[i + 1].artists.push(artist) }
 
     })
   })
 
   return {
-    achievements
+    updatedAchievements
   }
 
 }
 
-export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams: TPathParams, setUserAchievements: Function }> = ({ uid, pathParams, setUserAchievements, ...rest }) => {
+export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams: TPathParams, setUserAchievements: Function }> = ({ uid, pathParams, setUserAchievements }) => {
   const {
     insightsDash: {
       [pathParams.timeScope]: {
@@ -93,17 +94,20 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
   } = suspensefulHook(useInsightsDash({ variables: { uid }, suspend: true, pollInterval: 10000 }))
   
   const theArtists = artists.map(({ artist }) => artist)
-  const { achievements } = determineAchievements(theArtists, uid)
+  const { updatedAchievements } = determineAchievements(theArtists, uid)
+
+  console.count('Overview Render: ')
+  // console.log('previousAchievements: ', previousAchievements)
+  // console.log('TCL: updatedAchievements', updatedAchievements)
 
   useEffect(() => {
-    console.log('TCL: achievements', achievements)
 
     setUserAchievements({
-      data: achievements, action: 'updateAchievments'
+      data: updatedAchievements, action: 'updateAchievments'
     })
 
     // @ts-ignore
-  }, achievements)
+  }, [])
 
     
 

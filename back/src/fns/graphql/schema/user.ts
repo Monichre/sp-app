@@ -1,3 +1,5 @@
+// @ts-nocheck
+// @ts-ignore
 import { makeExecutableSchema } from 'graphql-tools'
 import {
 	QueryResolvers,
@@ -5,12 +7,74 @@ import {
 	UserInfoResponse
 } from '../types'
 import { TableUser } from '../../../shared/tables/TableUser'
-import moment = require('moment')
+import {
+	TableAchievement,
+	Achievement
+} from '../../../shared/tables/TableAchievement'
+import * as moment from 'moment'
 import { QueueStartHarvestUser } from '../../../shared/queues'
 
 const typeDefs = `
 type Query {
   getUserInfo(uid: String!): UserInfoResponse!
+  getUserAchievements(
+	uid: String!,
+	achievementType: String!,
+	achievementValue: String!,
+	periodType: String!,
+	periodValue: String!,
+	date: String!): [UserAchievement]
+}
+
+
+type Image {
+  url: String!
+}
+type SpotifyUrl {
+  spotify: String!
+}
+
+
+type User {
+  photoURL: String
+  uid: String
+  email: String
+  utcOffset: Int
+  displayName: String
+  lastUpdate: String
+  sk: String
+  totalUpdates: Int
+  pk: String
+  accessToken: String
+  refreshToken: String
+}
+
+
+type TopListener {
+  sk: String
+  pk: String
+  total: Float
+  user: User
+}
+
+type Artist {
+  id: String!
+  name: String!
+  images: [Image!]!
+  external_urls: SpotifyUrl!
+  genres: [String!]!
+  topListeners: [TopListener]
+}
+
+type UserAchievement {
+	artist: Artist
+	achievementType: String
+	achievementValue: String
+	periodType: String
+	periodValue: String
+	total: Int
+	date: String
+	lastUpdated: String
 }
 
 type UserInfoResponse {
@@ -20,6 +84,7 @@ type UserInfoResponse {
   displayName: String
   photoURL: String
   initialHarvestComplete: Boolean
+  
 }
 `
 
@@ -42,12 +107,14 @@ const isInitialHarvestComplete = ({
 	totalUpdates &&
 	(totalUpdates > 1 ||
 		(totalUpdates === 1 &&
+			// @ts-ignore
 			moment()
 				.subtract(MAGIC_DELAY, 'seconds')
 				.isAfter(lastUpdate)))
 
 /* cc: Helper */
 const isOlderThan = (olderSeconds: number, dts: string) =>
+	// @ts-ignore
 	moment()
 		.subtract(olderSeconds, 'seconds')
 		.isAfter(dts)
@@ -57,7 +124,7 @@ const isOlderThan = (olderSeconds: number, dts: string) =>
  * cc: User Resolver#1; getUserInfo
  *
  */
-
+// @ts-ignore
 const getUserInfo: QueryResolvers.GetUserInfoResolver = async (
 	_,
 	{ uid },
@@ -92,7 +159,34 @@ const initialHarvestComplete: UserInfoResponseResolvers.InitialHarvestCompleteRe
 			uid: userInfo.uid
 		})
 	}
+	// @ts-ignore
 	return isInitialHarvestComplete(userInfo)
+}
+
+const getUserAchievements: any = async (
+	_: any,
+	{
+		uid,
+		achievementType,
+		achievementValue,
+		periodType,
+		periodValue,
+		date
+	}: any,
+	{ log, DYNAMO_ENDPOINT, TABLE_ACHIEVEMENT }: any
+) => {
+	const tableAchievement = TableAchievement(DYNAMO_ENDPOINT, TABLE_ACHIEVEMENT)
+
+	const data = await tableAchievement.getUserAchievements(
+		uid,
+		achievementType,
+		achievementValue,
+		periodType,
+		periodValue,
+		date
+	)
+	console.log('TCL: data', data)
+	return data
 }
 
 const UserInfoResponse = {
@@ -101,7 +195,8 @@ const UserInfoResponse = {
 
 const resolvers = {
 	Query: {
-		getUserInfo
+		getUserInfo,
+		getUserAchievements
 	},
 	UserInfoResponse
 }

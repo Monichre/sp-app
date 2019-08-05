@@ -1,4 +1,4 @@
-// Generated in 2019-07-18T10:55:23-04:00
+// Generated in 2019-08-04T21:32:51-07:00
 // REGENERATE THIS BY STARTING THE LOCAL SERVER
 // AND THEN RUNNING `back % yarn generate`
 
@@ -10,6 +10,8 @@ export type Maybe<T> = T | null;
 
 export interface Query {
   getUserInfo: UserInfoResponse;
+
+  getUserAchievements?: Maybe<(Maybe<UserAchievement>)[]>;
 
   _?: Maybe<string>;
 
@@ -44,28 +46,22 @@ export interface UserInfoResponse {
   initialHarvestComplete?: Maybe<boolean>;
 }
 
-export interface BasicResponse {
-  ok?: Maybe<boolean>;
-}
+export interface UserAchievement {
+  artist?: Maybe<Artist>;
 
-export interface RecentPlaysResponse {
-  lastUpdate?: Maybe<string>;
+  achievementType?: Maybe<string>;
 
-  plays: Play[];
-}
+  achievementValue?: Maybe<string>;
 
-export interface Play {
-  track: Track;
+  periodType?: Maybe<string>;
 
-  playedAt: string;
-}
+  periodValue?: Maybe<string>;
 
-export interface Track {
-  name: string;
+  total?: Maybe<number>;
 
-  artists: Artist[];
+  date?: Maybe<string>;
 
-  album: Album;
+  lastUpdated?: Maybe<string>;
 }
 
 export interface Artist {
@@ -122,6 +118,30 @@ export interface User {
   accessToken?: Maybe<string>;
 
   refreshToken?: Maybe<string>;
+}
+
+export interface BasicResponse {
+  ok?: Maybe<boolean>;
+}
+
+export interface RecentPlaysResponse {
+  lastUpdate?: Maybe<string>;
+
+  plays: Play[];
+}
+
+export interface Play {
+  track: Track;
+
+  playedAt: string;
+}
+
+export interface Track {
+  name: string;
+
+  artists: Artist[];
+
+  album: Album;
 }
 
 export interface Album {
@@ -289,6 +309,19 @@ export interface Mutation {
 export interface GetUserInfoQueryArgs {
   uid: string;
 }
+export interface GetUserAchievementsQueryArgs {
+  uid: string;
+
+  achievementType: string;
+
+  achievementValue: string;
+
+  periodType: string;
+
+  periodValue: string;
+
+  date: string;
+}
 export interface RecentPlaysQueryArgs {
   uid: string;
 }
@@ -384,6 +417,12 @@ export namespace QueryResolvers {
   export interface Resolvers<TContext = Context, TypeParent = {}> {
     getUserInfo?: GetUserInfoResolver<UserInfoResponse, TypeParent, TContext>;
 
+    getUserAchievements?: GetUserAchievementsResolver<
+      Maybe<(Maybe<UserAchievement>)[]>,
+      TypeParent,
+      TContext
+    >;
+
     _?: _Resolver<Maybe<string>, TypeParent, TContext>;
 
     ping?: PingResolver<Maybe<BasicResponse>, TypeParent, TContext>;
@@ -438,6 +477,25 @@ export namespace QueryResolvers {
   > = Resolver<R, Parent, TContext, GetUserInfoArgs>;
   export interface GetUserInfoArgs {
     uid: string;
+  }
+
+  export type GetUserAchievementsResolver<
+    R = Maybe<(Maybe<UserAchievement>)[]>,
+    Parent = {},
+    TContext = Context
+  > = Resolver<R, Parent, TContext, GetUserAchievementsArgs>;
+  export interface GetUserAchievementsArgs {
+    uid: string;
+
+    achievementType: string;
+
+    achievementValue: string;
+
+    periodType: string;
+
+    periodValue: string;
+
+    date: string;
   }
 
   export type _Resolver<
@@ -584,81 +642,71 @@ export namespace UserInfoResponseResolvers {
   > = Resolver<R, Parent, TContext>;
 }
 
-export namespace BasicResponseResolvers {
-  export interface Resolvers<TContext = Context, TypeParent = BasicResponse> {
-    ok?: OkResolver<Maybe<boolean>, TypeParent, TContext>;
+export namespace UserAchievementResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = UserAchievement> {
+    artist?: ArtistResolver<Maybe<Artist>, TypeParent, TContext>;
+
+    achievementType?: AchievementTypeResolver<
+      Maybe<string>,
+      TypeParent,
+      TContext
+    >;
+
+    achievementValue?: AchievementValueResolver<
+      Maybe<string>,
+      TypeParent,
+      TContext
+    >;
+
+    periodType?: PeriodTypeResolver<Maybe<string>, TypeParent, TContext>;
+
+    periodValue?: PeriodValueResolver<Maybe<string>, TypeParent, TContext>;
+
+    total?: TotalResolver<Maybe<number>, TypeParent, TContext>;
+
+    date?: DateResolver<Maybe<string>, TypeParent, TContext>;
+
+    lastUpdated?: LastUpdatedResolver<Maybe<string>, TypeParent, TContext>;
   }
 
-  export type OkResolver<
-    R = Maybe<boolean>,
-    Parent = BasicResponse,
+  export type ArtistResolver<
+    R = Maybe<Artist>,
+    Parent = UserAchievement,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
-}
-
-export namespace RecentPlaysResponseResolvers {
-  export interface Resolvers<
-    TContext = Context,
-    TypeParent = RecentPlaysResponse
-  > {
-    lastUpdate?: LastUpdateResolver<Maybe<string>, TypeParent, TContext>;
-
-    plays?: PlaysResolver<Play[], TypeParent, TContext>;
-  }
-
-  export type LastUpdateResolver<
+  export type AchievementTypeResolver<
     R = Maybe<string>,
-    Parent = RecentPlaysResponse,
+    Parent = UserAchievement,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
-  export type PlaysResolver<
-    R = Play[],
-    Parent = RecentPlaysResponse,
+  export type AchievementValueResolver<
+    R = Maybe<string>,
+    Parent = UserAchievement,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
-}
-
-export namespace PlayResolvers {
-  export interface Resolvers<TContext = Context, TypeParent = Play> {
-    track?: TrackResolver<Track, TypeParent, TContext>;
-
-    playedAt?: PlayedAtResolver<string, TypeParent, TContext>;
-  }
-
-  export type TrackResolver<
-    R = Track,
-    Parent = Play,
+  export type PeriodTypeResolver<
+    R = Maybe<string>,
+    Parent = UserAchievement,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
-  export type PlayedAtResolver<
-    R = string,
-    Parent = Play,
+  export type PeriodValueResolver<
+    R = Maybe<string>,
+    Parent = UserAchievement,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
-}
-
-export namespace TrackResolvers {
-  export interface Resolvers<TContext = Context, TypeParent = Track> {
-    name?: NameResolver<string, TypeParent, TContext>;
-
-    artists?: ArtistsResolver<Artist[], TypeParent, TContext>;
-
-    album?: AlbumResolver<Album, TypeParent, TContext>;
-  }
-
-  export type NameResolver<
-    R = string,
-    Parent = Track,
+  export type TotalResolver<
+    R = Maybe<number>,
+    Parent = UserAchievement,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
-  export type ArtistsResolver<
-    R = Artist[],
-    Parent = Track,
+  export type DateResolver<
+    R = Maybe<string>,
+    Parent = UserAchievement,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
-  export type AlbumResolver<
-    R = Album,
-    Parent = Track,
+  export type LastUpdatedResolver<
+    R = Maybe<string>,
+    Parent = UserAchievement,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
 }
@@ -849,6 +897,85 @@ export namespace UserResolvers {
   export type RefreshTokenResolver<
     R = Maybe<string>,
     Parent = User,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace BasicResponseResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = BasicResponse> {
+    ok?: OkResolver<Maybe<boolean>, TypeParent, TContext>;
+  }
+
+  export type OkResolver<
+    R = Maybe<boolean>,
+    Parent = BasicResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace RecentPlaysResponseResolvers {
+  export interface Resolvers<
+    TContext = Context,
+    TypeParent = RecentPlaysResponse
+  > {
+    lastUpdate?: LastUpdateResolver<Maybe<string>, TypeParent, TContext>;
+
+    plays?: PlaysResolver<Play[], TypeParent, TContext>;
+  }
+
+  export type LastUpdateResolver<
+    R = Maybe<string>,
+    Parent = RecentPlaysResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type PlaysResolver<
+    R = Play[],
+    Parent = RecentPlaysResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace PlayResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = Play> {
+    track?: TrackResolver<Track, TypeParent, TContext>;
+
+    playedAt?: PlayedAtResolver<string, TypeParent, TContext>;
+  }
+
+  export type TrackResolver<
+    R = Track,
+    Parent = Play,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type PlayedAtResolver<
+    R = string,
+    Parent = Play,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace TrackResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = Track> {
+    name?: NameResolver<string, TypeParent, TContext>;
+
+    artists?: ArtistsResolver<Artist[], TypeParent, TContext>;
+
+    album?: AlbumResolver<Album, TypeParent, TContext>;
+  }
+
+  export type NameResolver<
+    R = string,
+    Parent = Track,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type ArtistsResolver<
+    R = Artist[],
+    Parent = Track,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type AlbumResolver<
+    R = Album,
+    Parent = Track,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
 }
@@ -1429,15 +1556,16 @@ export interface DeprecatedDirectiveArgs {
 export type IResolvers<TContext = Context> = {
   Query?: QueryResolvers.Resolvers<TContext>;
   UserInfoResponse?: UserInfoResponseResolvers.Resolvers<TContext>;
-  BasicResponse?: BasicResponseResolvers.Resolvers<TContext>;
-  RecentPlaysResponse?: RecentPlaysResponseResolvers.Resolvers<TContext>;
-  Play?: PlayResolvers.Resolvers<TContext>;
-  Track?: TrackResolvers.Resolvers<TContext>;
+  UserAchievement?: UserAchievementResolvers.Resolvers<TContext>;
   Artist?: ArtistResolvers.Resolvers<TContext>;
   Image?: ImageResolvers.Resolvers<TContext>;
   SpotifyUrl?: SpotifyUrlResolvers.Resolvers<TContext>;
   TopListener?: TopListenerResolvers.Resolvers<TContext>;
   User?: UserResolvers.Resolvers<TContext>;
+  BasicResponse?: BasicResponseResolvers.Resolvers<TContext>;
+  RecentPlaysResponse?: RecentPlaysResponseResolvers.Resolvers<TContext>;
+  Play?: PlayResolvers.Resolvers<TContext>;
+  Track?: TrackResolvers.Resolvers<TContext>;
   Album?: AlbumResolvers.Resolvers<TContext>;
   InsightsStatsResponse?: InsightsStatsResponseResolvers.Resolvers<TContext>;
   TimescopeStats?: TimescopeStatsResolvers.Resolvers<TContext>;
