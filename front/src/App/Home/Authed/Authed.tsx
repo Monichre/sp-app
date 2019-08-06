@@ -10,7 +10,6 @@ import { NavMenu, NavMenuView } from './NavMenu';
 import { Profile } from './Profile/Profile';
 import { History } from './History/History';
 import { IntercomHandler } from '../../../lib/intercom'
-import * as firebase from 'firebase';
 import { Comment } from './Insights/shared/Comment';
 import { BreadCrumbs } from '../../Components/BreadCrumbs';
 import { FirstPlaceBadge, SecondPlaceBadge, ThirdPlaceBadge } from '../../Components/Badge'
