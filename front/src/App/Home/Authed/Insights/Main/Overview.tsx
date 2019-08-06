@@ -14,7 +14,7 @@ import { FeaturedArtists } from './FeaturedArtists';
 import ReactTooltip from 'react-tooltip'
 import { AchievementsState } from '../../Authed';
 import { FirstPlaceBadge, SecondPlaceBadge, ThirdPlaceBadge } from '../../../../Components/Badge'
-
+import { UserAchievementsList } from '../../../../Components/UserAchievementsList'
 
 const Row = styled.div`
   display: flex;
@@ -83,7 +83,7 @@ const determineAchievements = (artists: any[], userId: string) => {
 
 }
 
-export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams: TPathParams, setUserAchievements: Function }> = ({ uid, pathParams, setUserAchievements }) => {
+export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams: TPathParams }> = ({ uid, pathParams }) => {
   const {
     insightsDash: {
       [pathParams.timeScope]: {
@@ -96,24 +96,13 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
   const theArtists = artists.map(({ artist }) => artist)
   const { updatedAchievements } = determineAchievements(theArtists, uid)
 
+  console.log('TCL: updatedAchievements', updatedAchievements)
   console.count('Overview Render: ')
-  // console.log('previousAchievements: ', previousAchievements)
-  // console.log('TCL: updatedAchievements', updatedAchievements)
-
-  useEffect(() => {
-
-    setUserAchievements({
-      data: updatedAchievements, action: 'updateAchievments'
-    })
-
-    // @ts-ignore
-  }, [])
-
-    
-
+  
   return <>
     <TimeseriesChart {...{ timeSeries, showOnly: pathParams.perspective }} />
     <Row>
+      <UserAchievementsList userAchievements={updatedAchievements} />
       <ArtistsChartBlock {...{ artists, pathParams }} userId={uid}>
         <BlockTitle to={`${insightLink(pathParams)}/artists`}>Top Artists <BlockTitleMore>see all</BlockTitleMore></BlockTitle>
       </ArtistsChartBlock>

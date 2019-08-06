@@ -5,9 +5,9 @@ import Moment from 'react-moment'
 import { SpotifyLogoLink } from '../../../../shared/SpotifyLogoLink/SpotifyLogoLink';
 import { NavLink } from 'react-router-dom';
 
-const bgSize = 16
+export const bgSize = 16
 
-const AlbumBackgroundDiv = styled.div<{src: string}>`
+export const AlbumBackgroundDiv = styled.div<{src: string}>`
   content: "";
   position: absolute;
   height: ${bgSize}rem;
@@ -19,7 +19,7 @@ const AlbumBackgroundDiv = styled.div<{src: string}>`
   background-size: cover;
 `
 
-const ArtistAvatarDiv = styled.div<{src: string}>`
+export const ArtistAvatarDiv = styled.div<{src: string}>`
   height: ${bgSize/2}rem;
   width: ${bgSize/2}rem;
   border-radius: ${bgSize/2/2}rem;
@@ -27,14 +27,14 @@ const ArtistAvatarDiv = styled.div<{src: string}>`
   background-size: cover;
   `
 
-const ArtistInfoDiv = styled.div`
+export const ArtistInfoDiv = styled.div`
 `
-const ArtistNameDiv = styled.div`
+export const ArtistNameDiv = styled.div`
   font-size: ${bgSize/12}rem;
   font-weight: 500;
 `
 
-const ArtistNavLink = styled(NavLink)`
+export const ArtistNavLink = styled(NavLink)`
   display: flex;
   text-decoration: none;
   ${ArtistInfoDiv} {
@@ -43,7 +43,7 @@ const ArtistNavLink = styled(NavLink)`
   }
 `
 
-const PlayDiv = styled.div`
+export const PlayDiv = styled.div`
 height: ${bgSize * 1.25}rem;
 width: ${bgSize * 1.25}rem;
 ${AlbumBackgroundDiv} {
@@ -52,18 +52,18 @@ ${AlbumBackgroundDiv} {
 }
 `
 
-const TrackDiv = styled.div`
+export const TrackDiv = styled.div`
   position: relative;
   top: 1rem;
 `
 
-const TrackNameDiv = styled.div`
+export const TrackNameDiv = styled.div`
   font-size: ${bgSize/10}rem;
   font-weight; 500;
   max-width: ${bgSize}rem;
 `
 
-const TrackWhenDiv = styled.div`
+export const TrackWhenDiv = styled.div`
   font-weight: 300;
   color: #64d6ee;
 `

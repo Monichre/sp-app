@@ -17,6 +17,32 @@ import { Action } from 'history';
 
 const SIDEBAR_WIDTH = 200
 
+const GridContainer = styled.div`
+  display: grid;
+  grid-template-columns: ;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas: "Top" "Bottom";
+`
+
+const Top = styled.div`
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: "SideBarTop .";
+  grid-area: Top;
+  `
+const Bottom = styled.div`
+display: grid;
+  grid-template-columns: 200px 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: "SideBarBottom .";
+  grid-area: Bottom;
+  `
+
+const SideBarTop = styled.div`grid-area: SideBarTop;`
+
+const SideBarBottom = styled.div`grid-area: SideBarBottom;`
+
 const AuthedView = styled.div`
   height: 100%;
   width: 100%;
@@ -26,6 +52,7 @@ background-color: #030616;
   `}
   ${NavMenuView} {
     position: fixed;
+    height: 100vh;
     display: flex;
     ${largeQuery`
       flex-direction: column;
@@ -68,39 +95,39 @@ export type AchievementsState = {
  */
 
 
-const initialAchievements: AchievementsState = {
-  1: {
-    achievement: 'Top Listener',
-    artists: [],
-    Badge: <FirstPlaceBadge />
-  },
-  2: {
-    achievement: 'Second Top Listener',
-    artists: [],
-    Badge: <SecondPlaceBadge />
-  },
-  3: {
-    achievement: 'Third Top Listener',
-    artists: [],
-    Badge: <ThirdPlaceBadge />
-  }
-}
+// const initialAchievements: AchievementsState = {
+//   1: {
+//     achievement: 'Top Listener',
+//     artists: [],
+//     Badge: <FirstPlaceBadge />
+//   },
+//   2: {
+//     achievement: 'Second Top Listener',
+//     artists: [],
+//     Badge: <SecondPlaceBadge />
+//   },
+//   3: {
+//     achievement: 'Third Top Listener',
+//     artists: [],
+//     Badge: <ThirdPlaceBadge />
+//   }
+// }
 
 
-const reducer: Reducer<any, Action> = (state: AchievementsState, payload: any) => {
-  const { action, data } = payload
-  console.log('TCL: data', data)
-  console.log('TCL: action', action)
+// const reducer: Reducer<any, Action> = (state: AchievementsState, payload: any) => {
+//   const { action, data } = payload
+//   console.log('TCL: data', data)
+//   console.log('TCL: action', action)
   
-  switch (action) {
+//   switch (action) {
     
-    case 'updateAchievments':
-      return { ...data }
+//     case 'updateAchievments':
+//       return { ...data }
 
-    default:
-      throw new Error("what's going on?")
-  }
-}
+//     default:
+//       throw new Error("what's going on?")
+//   }
+// }
 
 
 export const Authed: React.SFC<{ user: { uid: string } }> = ({ user: firebaseUser }) => {
@@ -114,8 +141,8 @@ export const Authed: React.SFC<{ user: { uid: string } }> = ({ user: firebaseUse
   //@ts-ignore
   const intercomUser: any = JSON.parse(localStorage.getItem('intercomUser'))
 
-  const [userAchievements, setUserAchievements]: any = useReducer(reducer, initialAchievements)  
-  console.log('TCL: userAchievements', userAchievements)
+  // const [userAchievements, setUserAchievements]: any = useReducer(reducer, initialAchievements)  
+  // console.log('TCL: userAchievements', userAchievements)
  
   if (process.env.NODE_ENV === 'production') {
     IntercomHandler.boot(user, 'boot')
@@ -136,18 +163,17 @@ export const Authed: React.SFC<{ user: { uid: string } }> = ({ user: firebaseUse
 */
   return (
     <AuthedView>
-
-        <NavMenu {...{ initialHarvestComplete: initialHarvestComplete || false, lastUpdate: lastUpdate || '', userAchievements }} />
-      
+      <NavMenu {...{ initialHarvestComplete: initialHarvestComplete || false, lastUpdate: lastUpdate || '' }} />
       <React.Suspense fallback={<Loading/>}>
         <Switch>
-            <Route path='/insights/:timeScope/:groupId/:perspective' render={(props) => <Insights user={user} {...props} uid={uid}{ ...{setUserAchievements}}  />}/>
+          <Route path='/insights/:timeScope/:groupId/:perspective' render={(props) => <Insights user={user} {...props} uid={uid} />} />
           <Route path='/history' render={(props) => <History user={user} {...props} uid={uid}/>}/>
           <Route path='/profile' render={(props) => <Profile user={user} {...props}/>}/>
           <Redirect from='/' to='/insights/thisWeek/global/personal'/>
         </Switch>
       </React.Suspense>
     </AuthedView>
+    
   )
 }
 

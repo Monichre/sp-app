@@ -13,7 +13,7 @@ import { Genre } from './Genre';
  */
 
 
-export const Insights: React.SFC<RouteComponentProps<TPathParams> & { uid: string, user: any, setUserAchievements: Function}> =
+export const Insights: React.SFC<RouteComponentProps<TPathParams> & { uid: string, user: any}> =
   ({ uid, user, history: { location: { pathname } }, match: { path, params }, ...rest }) => {
   const focus = pathname.split('/').slice(5,99).join('/')
   const pathParams = { focus, ...params }

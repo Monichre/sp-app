@@ -5,7 +5,7 @@ import { LineChart, History, User } from 'grommet-icons'
 import { largeQuery, notLargeQuery, BRAND_COLOR, BRAND_PERSONAL_COLOR, Large } from '../../../shared/media';
 import { LogoHorizontal } from '../../../shared/Logo';
 import Moment from 'react-moment';
-import { UserAchievementsList } from '../../Components/UserAchievementsList'
+
 
 
 export const NavMenuView = styled.div`
@@ -115,7 +115,7 @@ const HarvestingNotice: React.SFC = () =>
     Watch your stats grow as we complete your initial harvest.
   </HarvestingNoticeDiv>
 
-export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: string, userAchievements: any }> = ({ initialHarvestComplete, lastUpdate, userAchievements}) => {
+export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: string}> = ({ initialHarvestComplete, lastUpdate}) => {
   
   console.count('NavMenu Render: ')
   
@@ -134,7 +134,6 @@ export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: s
         <NavLabel>Profile</NavLabel>
       </NavPrimaryLink>
       <Large>
-        <UserAchievementsList userAchievements={userAchievements} />
         <FillSpace>
           {!initialHarvestComplete ? <HarvestingNotice /> : <LastUpdate {...{ lastUpdate }} />}
           <LogoHorizontal size={8} />
