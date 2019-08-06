@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components'
-import { BlockTitle } from '../shared/BlockTitle';
 import { SpotifyLogoLink } from '../../../../../shared/SpotifyLogoLink/SpotifyLogoLink';
 
 const bgSize = 24;
@@ -72,24 +71,24 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: 'Ready',
-    hover: 'Artists under 5,000 monthly streamers on Spotify',
-    name: 'The Muckers',
-    href: 'https://open.spotify.com/artist/19yF7aXJdu5R9rwOAxgQZA?si=HNBB1DqgRoCJSAe5RfcvvQ',
-    src: 'https://f4.bcbits.com/img/0014497429_10.jpg'
+    hover: '18,480 monthly streamers on Spotify',
+    name: 'Douchka',
+    href: 'https://open.spotify.com/artist/79QKsfh6iw68qfdIijntNh',
+    src: 'https://scontent-lax3-1.xx.fbcdn.net/v/t31.0-8/17191851_10155212060869276_3642745785806716490_o.jpg?_nc_cat=101&_nc_oc=AQm7obRvNtQHPFAn24Pxw9dc-i-kpf49WP1x9RcgQoDY7sOsbtfsyIbzlA_SjZWySac&_nc_ht=scontent-lax3-1.xx&oh=a27d38c02061a4265b6811613fc6dc04&oe=5DD87795'
   },
   {
     title: 'Set',
-    hover: 'Artists under 200,000 monthly streamers on Spotify',
-    name: 'John Chuck and The Class',
-    href: 'https://open.spotify.com/artist/0vL5IeQO8wvyDAq7zu6N96?si=mI3LSnWOQJ6mc0ugrs2bqA',
-    src: 'https://static1.squarespace.com/static/55e9a72fe4b014a326acda21/t/5bd739ad7817f7eb119847c9/1540831855498/jctc_019.jpg'
+    hover: '59,239 monthly streamers on Spotify',
+    name: 'Blac Rabbit',
+    href: 'https://open.spotify.com/artist/0UvgR4VckgdEkBhTOjxwCc?si=3vY8K0gOSgCtGtW1cZOKtA',
+    src: 'https://f4.bcbits.com/img/0016322553_10.jpg'
   },
   {
     title: 'Liftoff',
-    hover: 'Artists under 2,500,000 monthly streamers on Spotify',
-    name: 'Snail Mail',
-    href: 'https://open.spotify.com/artist/4QkSD9TRUnMtI8Fq1jXJJe?si=i3fp_YfbQMabvN_X62hCvw',
-    src: 'https://media.npr.org/assets/img/2018/03/12/snail-mail---main---credit-to-michael-lavine-f5257760c1a135425cb8dd54b8933b571d02bcbe-s800-c85.jpg'
+    hover: '598, 212 monthly streamers on Spotify',
+    name: 'Suga.wa',
+    href: 'https://open.spotify.com/artist/0XUBVuE1odesNug0oKt9Me',
+    src: 'https://f4.bcbits.com/img/a1557745303_16.jpg'
   },
 ]
 
