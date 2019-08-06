@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components'
-import { BlockTitle } from '../shared/BlockTitle';
 import { SpotifyLogoLink } from '../../../../../shared/SpotifyLogoLink/SpotifyLogoLink';
 
 const bgSize = 24;
@@ -17,42 +16,27 @@ const ThreeColumns = styled.div`
   align-items: center;
 `
 
-const ArtistLinkBlock = styled.a<{src: string}>`
+const ArtistLinkBlock = styled.a<{ src: string }>`
 display: flex;
 align-items: center;
 text-align: center;
 flex-direction: column;
-padding-bottom: ${bgSize/12}rem;
+// padding-top: ${bgSize / 2}rem;
+// padding-left: ${bgSize / 12}rem;
+padding-bottom: ${bgSize / 12}rem;
 margin-bottom: 1rem;
 text-decoration: none;
 height: ${bgSize}rem;
 width: 100%;
+// width: ${bgSize}rem;
 border-radius: 0.5rem;
-position: relative;
-/* background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("${({ src }) => src}"); */
-
-
-  &::after {
-    position: absolute;
-    top: 0;
-    left: 0;
-    content: '';
-    height: 100%;
-    width: 100%;
-    border-radius: 0.5rem;
-      background: linear-gradient(179deg, rgba(3,6,22,0.00) 0%, rgba(3,6,22,0.02) 43%, #030616 79%), url("${({ src }) => src}");
-  background-size: cover;
-  opacity: 0.5;
-  background-position: center center;
-  }
-/* background-image: radial-gradient(56% 148%, rgba(3,6,22,0.00) 54%, rgba(3,6,22,0.95) 100%);
-background-image: linear-gradient(179deg, rgba(3,6,22,0.00) 0%, rgba(3,6,22,0.02) 43%, #030616 79%); */
-/* background-image: linear-gradient(90deg, rgba(3,6,22,0.00) 2%, #030616 100%); */
-
+background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("${({ src }) => src}");
+background-position: center center;
+background-size: cover;
 `
 
 const ArtistName = styled.div`
-  font-size: ${bgSize/6}rem;
+  font-size: ${bgSize / 6}rem;
   // font-weight: 500;
   font-weight: bold;
   font-family: Righteous;
@@ -66,14 +50,14 @@ width: 100%;
   justify-content: flex-end;
 `
 
-const ArtistPromoItem: React.SFC<FeaturedArtist> =  ({title, hover, src, href, name}) =>
-<div data-tip={hover}>
-{/* <BlockTitle>{title}</BlockTitle> */}
-<ArtistLinkBlock data-test='artist-row' target='new' {...{href, src}}>
-  <PaddedRight><SpotifyLogoLink href={href} size='3rem'/></PaddedRight>
-  <ArtistName data-test='artist-row-name'>{name}</ArtistName>
-</ArtistLinkBlock>
-</div>
+const ArtistPromoItem: React.SFC<FeaturedArtist> = ({ title, hover, src, href, name }) =>
+  <div data-tip={hover}>
+    {/* <BlockTitle>{title}</BlockTitle> */}
+    <ArtistLinkBlock data-test='artist-row' target='new' {...{ href, src }}>
+      <PaddedRight><SpotifyLogoLink href={href} size='3rem' /></PaddedRight>
+      <ArtistName data-test='artist-row-name'>{name}</ArtistName>
+    </ArtistLinkBlock>
+  </div>
 
 type FeaturedArtist = {
   title: string
@@ -87,28 +71,28 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: 'Ready',
-    hover: 'Artists under 5,000 monthly streamers on Spotify',
-    name: 'Night Glitter',
-    href: 'https://open.spotify.com/artist/2ujENWdLHYFbb32PWCRDip?si=w1n0LWZmT36hhz4OzWlwmg',
-    src: 'https://www.austinchronicle.com/binary/8fd7/music_play-1.jpg',
+    hover: '18,480 monthly streamers on Spotify',
+    name: 'Douchka',
+    href: 'https://open.spotify.com/artist/79QKsfh6iw68qfdIijntNh',
+    src: 'https://scontent-lax3-1.xx.fbcdn.net/v/t31.0-8/17191851_10155212060869276_3642745785806716490_o.jpg?_nc_cat=101&_nc_oc=AQm7obRvNtQHPFAn24Pxw9dc-i-kpf49WP1x9RcgQoDY7sOsbtfsyIbzlA_SjZWySac&_nc_ht=scontent-lax3-1.xx&oh=a27d38c02061a4265b6811613fc6dc04&oe=5DD87795'
   },
   {
     title: 'Set',
-    hover: 'Artists under 200,000 monthly streamers on Spotify',
-    name: 'Charly Bliss',
-    href: 'https://open.spotify.com/artist/7axA2bNeZsae6t2mgxoSFh?si=VEwTjMN_TkC9Ej-_q6M3pQ',
-    src: 'https://www.rollingstone.com/wp-content/uploads/2019/02/Shervin-Lainez.jpg',
+    hover: '59,239 monthly streamers on Spotify',
+    name: 'Blac Rabbit',
+    href: 'https://open.spotify.com/artist/0UvgR4VckgdEkBhTOjxwCc?si=3vY8K0gOSgCtGtW1cZOKtA',
+    src: 'https://f4.bcbits.com/img/0016322553_10.jpg'
   },
   {
     title: 'Liftoff',
-    hover: 'Artists under 2,500,000 monthly streamers on Spotify',
-    name: 'Kevin Abstract',
-    href: 'https://open.spotify.com/artist/07EcmJpfAday8xGkslfanE?si=-oMeDoF4Q0i3l8bLBOgLrQ',
-    src: 'https://consequenceofsound.net/wp-content/uploads/2019/04/kevin-abstract-arizona-baby-album-release-stream.png?w=807',
+    hover: '598, 212 monthly streamers on Spotify',
+    name: 'Suga.wa',
+    href: 'https://open.spotify.com/artist/0XUBVuE1odesNug0oKt9Me',
+    src: 'https://f4.bcbits.com/img/a1557745303_16.jpg'
   },
 ]
 
-export const FeaturedArtists: React.SFC = () => 
+export const FeaturedArtists: React.SFC = () =>
   <ThreeColumns>
-    {featuredArtists.map((artist, key) => <ArtistPromoItem key={key} {...artist}/>)}
+    {featuredArtists.map((artist, key) => <ArtistPromoItem key={key} {...artist} />)}
   </ThreeColumns>
