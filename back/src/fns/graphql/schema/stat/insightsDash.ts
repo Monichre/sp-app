@@ -188,60 +188,60 @@ const perspectiveTopArtists = async (
 			let enrichedArtist = Object.assign({}, artist)
 			enrichedArtist.topListeners = []
 
-			const first = await tableAchievement.getArtistTopListeners({
-				artistId: artist.id,
-				achievementType: 'topListener',
-				achievementValue: 'first',
-				periodType: 'life',
-				periodValue: 'life',
-				date: endDate
-			})
-			console.log('Insights Dash first', first)
-			if (first) {
-				enrichedArtist.topListeners.push(first)
+			// const first = await tableAchievement.getArtistTopListeners({
+			// 	artistId: artist.id,
+			// 	achievementType: 'topListener',
+			// 	achievementValue: 'first',
+			// 	periodType: 'life',
+			// 	periodValue: 'life',
+			// 	date: endDate
+			// })
+			// console.log('Insights Dash first', first)
+			// if (first) {
+			// 	enrichedArtist.topListeners.push(first)
 
-				const second = await tableAchievement.getArtistTopListeners({
-					artistId: artist.id,
-					achievementType: 'topListener',
-					achievementValue: 'second',
-					periodType: 'life',
-					periodValue: 'life',
-					date: endDate
-				})
+			// 	const second = await tableAchievement.getArtistTopListeners({
+			// 		artistId: artist.id,
+			// 		achievementType: 'topListener',
+			// 		achievementValue: 'second',
+			// 		periodType: 'life',
+			// 		periodValue: 'life',
+			// 		date: endDate
+			// 	})
 
-				console.log('Insights Dash second', second)
-				if (second && first.user.pk !== second.user.pk) {
-					enrichedArtist.topListeners.push(second)
+			// 	console.log('Insights Dash second', second)
+			// 	if (second && first.user.pk !== second.user.pk) {
+			// 		enrichedArtist.topListeners.push(second)
 
-					const third = await tableAchievement.getArtistTopListeners({
-						artistId: artist.id,
-						achievementType: 'topListener',
-						achievementValue: 'third',
-						periodType: 'life',
-						periodValue: 'life',
-						date: endDate
-					})
+			// 		const third = await tableAchievement.getArtistTopListeners({
+			// 			artistId: artist.id,
+			// 			achievementType: 'topListener',
+			// 			achievementValue: 'third',
+			// 			periodType: 'life',
+			// 			periodValue: 'life',
+			// 			date: endDate
+			// 		})
 
-					console.log('Insights Dash third', third)
-					if (
-						third &&
-						(second.user.pk !== third.user.pk &&
-							third.user.pk !== first.user.pk)
-					) {
-						enrichedArtist.topListeners.push(third)
-					}
+			// 		console.log('Insights Dash third', third)
+			// 		if (
+			// 			third &&
+			// 			(second.user.pk !== third.user.pk &&
+			// 				third.user.pk !== first.user.pk)
+			// 		) {
+			// 			enrichedArtist.topListeners.push(third)
+			// 		}
 
-					console.log(
-						'TCL: perspectiveTopArtists -> enrichedArtist.topListeners',
-						enrichedArtist.topListeners
-					)
-				}
-			}
+			// 		console.log(
+			// 			'TCL: perspectiveTopArtists -> enrichedArtist.topListeners',
+			// 			enrichedArtist.topListeners
+			// 		)
+			// 	}
+			// }
 
-			console.log(
-				'TCL: perspectiveTopArtists -> enrichedArtist.topListeners',
-				enrichedArtist.topListeners
-			)
+			// console.log(
+			// 	'TCL: perspectiveTopArtists -> enrichedArtist.topListeners',
+			// 	enrichedArtist.topListeners
+			// )
 
 			console.log(enrichedArtist)
 			const secondary = await tableStat.getArtistStat({

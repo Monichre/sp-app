@@ -8,6 +8,7 @@ import {
 import * as moment from 'moment'
 import { TableUser } from '../../../../shared/tables/TableUser'
 import { verifyEnv } from '../../../../shared/env'
+import { KeyData } from '../../../../shared/tables/TableAchievement'
 import {
 	InsightsDashResponseResolvers,
 	InsightsDashResponse,
@@ -115,9 +116,46 @@ type TopArtistsRow = {
 	playDurationMs: number
 }
 
-
 type PerspectiveTypes = 'personal' | 'group'
-
+type EnrichedKeyMakerParams = {
+	perspective: string
+	relationType: 'artist'
+	periodType: PeriodType
+	periodValue: string
+	artistId: string
+	achievementType: 'topListener'
+	achievementValue: 'first' | 'second' | 'third'
+}
+const keyMaker = args => [...args].join('#')
+const keyMakerPlaceAndDay = ({
+	perspective,
+	relationType,
+	periodType,
+	periodValue,
+	artistId,
+	achievementType,
+	achievementValue
+}: EnrichedKeyMakerParams) => {
+	const pk = keyMaker([
+		perspective,
+		relationType,
+		periodType,
+		periodValue,
+		achievementType,
+		achievementValue
+	])
+	const sk = keyMaker([
+		perspective,
+		periodType,
+		artistId,
+		achievementType,
+		achievementValue
+	])
+	return {
+		sk,
+		pk
+	}
+}
 
 const perspectiveTopArtists = async (
 	tableStat: TTableStat,
@@ -127,7 +165,7 @@ const perspectiveTopArtists = async (
 	secondaryType: PerspectiveTypes,
 	periodType: PeriodType,
 	periodCurrent: string,
-	periodPrev?: string,
+	periodPrev?: string
 ): Promise<TopArtistStat[]> => {
 	const artistsPrimary = await tableStat.getTopArtists({
 		uid: primaryUid,
@@ -157,12 +195,10 @@ const perspectiveTopArtists = async (
 			}
 		})
 	)
-	
 }
 
 const timescopeTopArtists = async (
 	tableStat: TTableStat,
-	tableAchievement: TTableAchievement,
 	uid: string,
 	gid: string,
 	periodType: PeriodType,
@@ -211,175 +247,289 @@ const topArtists = async (
 		localizedISOString(now.subtract(1, 'days'))
 	)
 
-	const getTopListenersForArtist: any = async (func, args) => {
-		const { personal, group } = await func
-		const personalClone = [...personal]
-		const groupClone = [...group]
-
-		personalClone.map(async (item) => {
-			const clone = Object.assign({}, item)
-			const { artist } = clone
-
-			artist.topListeners = []
-			
-			const first = await tableAchievement.getArtistTopListeners({
-				artistId: artist.id,
-				achievementType: 'topListener',
-				achievementValue: 'first',
-				periodType: 'life',
-				periodValue: 'life',
-				date: now
-			})
-
-			console.log('TCL: perspectiveTopArtists -> first', first)
-			if (first) {
-				artist.topListeners.push(first)
-
-				const second = await tableAchievement.getArtistTopListeners({
+	const dailyArtists: any = await timescopeTopArtists(
+		tableStat,
+		uid,
+		gid,
+		'day',
+		today,
+		yest
+	).then(async res => {
+		const { personal, group } = res
+		console.log('TCL: personal', personal)
+		await Promise.all(
+			personal.map(async pArtistData => {
+				const { artist } = pArtistData
+				const firstKeys = keyMakerPlaceAndDay({
+					perspective: gid,
+					relationType: 'artist',
+					periodType: 'day',
+					periodValue: today,
 					artistId: artist.id,
 					achievementType: 'topListener',
-					achievementValue: 'second',
-					periodType: 'life',
-					periodValue: 'life',
-					date: now
+					achievementValue: 'first'
 				})
-
-				console.log('TCL: perspectiveTopArtists -> second', second)
-				if (second && first.user.pk !== second.user.pk) {
-					artist.topListeners.push(second)
-
-					const third = await tableAchievement.getArtistTopListeners({
-						artistId: artist.id,
-						achievementType: 'topListener',
-						achievementValue: 'third',
-						periodType: 'life',
-						periodValue: 'life',
-						date: now
-					})
-
-					console.log('TCL: perspectiveTopArtists -> third', third)
-					if (
-						third &&
-						(second.user.pk !== third.user.pk &&
-							third.user.pk !== first.user.pk)
-					) {
-						artist.topListeners.push(third)
-					}
-
-					console.log(
-						'TCL: perspectiveTopArtists -> artist.topListeners',
-						artist.topListeners
-					)
-				}
-			}
-
-		})
-
-		groupClone.map(async item => {
-			const clone = Object.assign({}, item)
-			const { artist } = clone
-
-			artist.topListeners = []
-
-			const first = await tableAchievement.getArtistTopListeners({
-				artistId: artist.id,
-				achievementType: 'topListener',
-				achievementValue: 'first',
-				periodType: 'life',
-				periodValue: 'life',
-				date: now
-			})
-
-			console.log('TCL: perspectiveTopArtists -> first', first)
-			if (first) {
-				artist.topListeners.push(first)
-
-				const second = await tableAchievement.getArtistTopListeners({
+				const secondKeys = keyMakerPlaceAndDay({
+					perspective: gid,
+					relationType: 'artist',
+					periodType: 'day',
+					periodValue: today,
 					artistId: artist.id,
 					achievementType: 'topListener',
-					achievementValue: 'second',
-					periodType: 'life',
-					periodValue: 'life',
-					date: now
+					achievementValue: 'second'
+				})
+				const thirdKeys = keyMakerPlaceAndDay({
+					perspective: gid,
+					relationType: 'artist',
+					periodType: 'day',
+					periodValue: today,
+					artistId: artist.id,
+					achievementType: 'topListener',
+					achievementValue: 'third'
 				})
 
-				console.log('TCL: perspectiveTopArtists -> second', second)
-				if (second && first.user.pk !== second.user.pk) {
-					artist.topListeners.push(second)
-
-					const third = await tableAchievement.getArtistTopListeners({
-						artistId: artist.id,
-						achievementType: 'topListener',
-						achievementValue: 'third',
-						periodType: 'life',
-						periodValue: 'life',
-						date: now
+				const keys = [firstKeys, secondKeys, thirdKeys]
+				const topListeners = await Promise.all(
+					keys.map(async (keyData: KeyData) => {
+						const data = await tableAchievement.getArtistTopListeners(keyData)
+						console.log('TCL: data', data)
+						return data
 					})
+				)
 
-					console.log('TCL: perspectiveTopArtists -> third', third)
-					if (
-						third &&
-						(second.user.pk !== third.user.pk &&
-							third.user.pk !== first.user.pk)
-					) {
-						artist.topListeners.push(third)
-					}
+				artist.topListeners = topListeners
 
-					console.log(
-						'TCL: perspectiveTopArtists -> artist.topListeners',
-						artist.topListeners
-					)
-				}
-			}
-		})
+				return pArtistData
+			})
+		)
 
 		return {
-			personal: personalClone,
-			group: groupClone
+			personal,
+			group
 		}
+	})
+
+
+
 	
-	}
+	/**
+	 *
+	 * Weekly Enriched Top Artists w/Top Listeners
+	 *
+	 */
+	
+	
+	const weeklyArtists = await timescopeTopArtists(
+		tableStat,
+		uid,
+		gid,
+		'week',
+		thisWeek,
+		lastWeek
+	).then(async res => {
+		const { personal, group } = res
+		console.log('TCL: personal', personal)
+		await Promise.all(
+			personal.map(async pArtistData => {
+				const { artist } = pArtistData
+				const firstKeys = keyMakerPlaceAndDay({
+					perspective: gid,
+					relationType: 'artist',
+					periodType: 'week',
+					periodValue: thisWeek,
+					artistId: artist.id,
+					achievementType: 'topListener',
+					achievementValue: 'first'
+				})
+				const secondKeys = keyMakerPlaceAndDay({
+					perspective: gid,
+					relationType: 'artist',
+					periodType: 'week',
+					periodValue: thisWeek,
+					artistId: artist.id,
+					achievementType: 'topListener',
+					achievementValue: 'second'
+				})
+				const thirdKeys = keyMakerPlaceAndDay({
+					perspective: gid,
+					relationType: 'artist',
+					periodType: 'week',
+					periodValue: thisWeek,
+					artistId: artist.id,
+					achievementType: 'topListener',
+					achievementValue: 'third'
+				})
+
+				const keys = [firstKeys, secondKeys, thirdKeys]
+				const topListeners = await Promise.all(
+					keys.map(async (keyData: KeyData) => {
+						const data = await tableAchievement.getArtistTopListeners(keyData)
+						console.log('TCL: data', data)
+						return data
+					})
+				)
+
+				artist.topListeners = topListeners
+
+				return pArtistData
+			})
+		)
+
+		return {
+			personal,
+			group
+		}
+	})
+
+	
+	/**
+	 *
+	 * Monthly Top Artists Enriched w/TopListeners
+	 *
+	 */
+	
+	
+
+	const monthlyArtists = await timescopeTopArtists(
+		tableStat,
+		uid,
+		gid,
+		'month',
+		thisMonth,
+		lastMonth
+	).then(async res => {
+		const { personal, group } = res
+		console.log('TCL: personal', personal)
+		await Promise.all(
+			personal.map(async pArtistData => {
+				const { artist } = pArtistData
+				const firstKeys = keyMakerPlaceAndDay({
+					perspective: gid,
+					relationType: 'artist',
+					periodType: 'month',
+					periodValue: thisMonth,
+					artistId: artist.id,
+					achievementType: 'topListener',
+					achievementValue: 'first'
+				})
+				const secondKeys = keyMakerPlaceAndDay({
+					perspective: gid,
+					relationType: 'artist',
+					periodType: 'month',
+					periodValue: thisMonth,
+					artistId: artist.id,
+					achievementType: 'topListener',
+					achievementValue: 'second'
+				})
+				const thirdKeys = keyMakerPlaceAndDay({
+					perspective: gid,
+					relationType: 'artist',
+					periodType: 'month',
+					periodValue: thisMonth,
+					artistId: artist.id,
+					achievementType: 'topListener',
+					achievementValue: 'third'
+				})
+
+				const keys = [firstKeys, secondKeys, thirdKeys]
+				const topListeners = await Promise.all(
+					keys.map(async (keyData: KeyData) => {
+						const data = await tableAchievement.getArtistTopListeners(keyData)
+						console.log('TCL: data', data)
+						return data
+					})
+				)
+
+				artist.topListeners = topListeners
+
+				return pArtistData
+			})
+		)
+
+		return {
+			personal,
+			group
+		}
+	})
+
+	
+	/**
+	 *
+	 * LifeTime Top Artists w/Listeners
+	 *
+	 */
+	
+	
+
+	const lifetimeArtists = await timescopeTopArtists(
+		tableStat,
+		uid,
+		gid,
+		'life',
+		'life'
+	).then(async res => {
+		const { personal, group } = res
+		console.log('TCL: personal', personal)
+		await Promise.all(
+			personal.map(async pArtistData => {
+				const { artist } = pArtistData
+				const firstKeys = keyMakerPlaceAndDay({
+					perspective: gid,
+					relationType: 'artist',
+					periodType: 'life',
+					periodValue: 'life',
+					artistId: artist.id,
+					achievementType: 'topListener',
+					achievementValue: 'first'
+				})
+				const secondKeys = keyMakerPlaceAndDay({
+					perspective: gid,
+					relationType: 'artist',
+					periodType: 'life',
+					periodValue: 'life',
+					artistId: artist.id,
+					achievementType: 'topListener',
+					achievementValue: 'second'
+				})
+				const thirdKeys = keyMakerPlaceAndDay({
+					perspective: gid,
+					relationType: 'artist',
+					periodType: 'life',
+					periodValue: 'life',
+					artistId: artist.id,
+					achievementType: 'topListener',
+					achievementValue: 'third'
+				})
+
+				const keys = [firstKeys, secondKeys, thirdKeys]
+				const topListeners = await Promise.all(
+					keys.map(async (keyData: KeyData) => {
+						const data = await tableAchievement.getArtistTopListeners(keyData)
+						console.log('TCL: data', data)
+						return data
+					})
+				)
+
+				artist.topListeners = topListeners
+
+				return pArtistData
+			})
+		)
+
+		return {
+			personal,
+			group
+		}
+	})
 
 
 	return {
-		today: await getTopListenersForArtist(timescopeTopArtists(
-			tableStat,
-			tableAchievement,
-			uid,
-			gid,
-			'day',
-			today,
-			yest
-		)),
-		thisWeek: await getTopListenersForArtist(timescopeTopArtists(
-			tableStat,
-			tableAchievement,
-			uid,
-			gid,
-			'week',
-			thisWeek,
-			lastWeek
-		)),
-		thisMonth: await getTopListenersForArtist(timescopeTopArtists(
-			tableStat,
-			tableAchievement,
-			uid,
-			gid,
-			'month',
-			thisMonth,
-			lastMonth
-		)),
-		lifetime: await getTopListenersForArtist(timescopeTopArtists(
-			tableStat,
-			tableAchievement,
-			uid,
-			gid,
-			'life',
-			'life'
-		))
+		today: dailyArtists,
+		thisWeek: weeklyArtists,
+		thisMonth: monthlyArtists,
+		lifetime: lifetimeArtists
 	}
 }
-
 
 const insightsArtists = async (
 	_,
@@ -427,3 +577,140 @@ export const insightsArtistsSchema = makeExecutableSchema({
 	typeDefs,
 	resolvers
 })
+
+
+
+/*
+
+	const calcAglForTSA: any = async (
+		tableStat: TTableStat,
+		uid: string,
+		gid: string,
+		periodType: PeriodType,
+		periodCurrent: string,
+		periodPrev?: string
+	) => {
+		// const { personal, group } = await func
+		// const personalClone = [...personal]
+		// const groupClone = [...group]
+		// personalClone.map(async (item) => {
+		// 	const clone = Object.assign({}, item)
+		// 	const { artist } = clone
+		// const pk = keyMaker([
+		// 	secondaryUid,
+		// 	'artist',
+		// 	periodType,
+		// 	periodCurrent,
+		// 	'topListener',
+		// 	'first'
+		// ])
+		// const sk = keyMaker([
+		// 	secondaryUid,
+		// 	periodType,
+		// 	artist.id,
+		// 	'topListener',
+		// 	'first'
+		// ])
+		// 	artist.topListeners = []
+		// 	const first = await tableAchievement.getArtistTopListeners({
+		// 		artistId: artist.id,
+		// 		achievementType: 'topListener',
+		// 		achievementValue: 'first',
+		// 		periodType: 'life',
+		// 		periodValue: 'life',
+		// 		date: now
+		// 	})
+		// 	console.log('TCL: perspectiveTopArtists -> first', first)
+		// 	if (first) {
+		// 		artist.topListeners.push(first)
+		// 		const second = await tableAchievement.getArtistTopListeners({
+		// 			artistId: artist.id,
+		// 			achievementType: 'topListener',
+		// 			achievementValue: 'second',
+		// 			periodType: 'life',
+		// 			periodValue: 'life',
+		// 			date: now
+		// 		})
+		// 		console.log('TCL: perspectiveTopArtists -> second', second)
+		// 		if (second && first.user.pk !== second.user.pk) {
+		// 			artist.topListeners.push(second)
+		// 			const third = await tableAchievement.getArtistTopListeners({
+		// 				artistId: artist.id,
+		// 				achievementType: 'topListener',
+		// 				achievementValue: 'third',
+		// 				periodType: 'life',
+		// 				periodValue: 'life',
+		// 				date: now
+		// 			})
+		// 			console.log('TCL: perspectiveTopArtists -> third', third)
+		// 			if (
+		// 				third &&
+		// 				(second.user.pk !== third.user.pk &&
+		// 					third.user.pk !== first.user.pk)
+		// 			) {
+		// 				artist.topListeners.push(third)
+		// 			}
+		// 			console.log(
+		// 				'TCL: perspectiveTopArtists -> artist.topListeners',
+		// 				artist.topListeners
+		// 			)
+		// 		}
+		// 	}
+		// })
+		// groupClone.map(async item => {
+		// 	const clone = Object.assign({}, item)
+		// 	const { artist } = clone
+		// 	artist.topListeners = []
+		// 	const first = await tableAchievement.getArtistTopListeners({
+		// 		artistId: artist.id,
+		// 		achievementType: 'topListener',
+		// 		achievementValue: 'first',
+		// 		periodType: 'life',
+		// 		periodValue: 'life',
+		// 		date: now
+		// 	})
+		// 	console.log('TCL: perspectiveTopArtists -> first', first)
+		// 	if (first) {
+		// 		artist.topListeners.push(first)
+		// 		const second = await tableAchievement.getArtistTopListeners({
+		// 			artistId: artist.id,
+		// 			achievementType: 'topListener',
+		// 			achievementValue: 'second',
+		// 			periodType: 'life',
+		// 			periodValue: 'life',
+		// 			date: now
+		// 		})
+		// 		console.log('TCL: perspectiveTopArtists -> second', second)
+		// 		if (second && first.user.pk !== second.user.pk) {
+		// 			artist.topListeners.push(second)
+		// 			const third = await tableAchievement.getArtistTopListeners({
+		// 				artistId: artist.id,
+		// 				achievementType: 'topListener',
+		// 				achievementValue: 'third',
+		// 				periodType: 'life',
+		// 				periodValue: 'life',
+		// 				date: now
+		// 			})
+		// 			console.log('TCL: perspectiveTopArtists -> third', third)
+		// 			if (
+		// 				third &&
+		// 				(second.user.pk !== third.user.pk &&
+		// 					third.user.pk !== first.user.pk)
+		// 			) {
+		// 				artist.topListeners.push(third)
+		// 			}
+		// 			console.log(
+		// 				'TCL: perspectiveTopArtists -> artist.topListeners',
+		// 				artist.topListeners
+		// 			)
+		// 		}
+		// 	}
+		// })
+		// return {
+		// 	personal: personalClone,
+		// 	group: groupClone
+		// }
+	}
+
+
+*/

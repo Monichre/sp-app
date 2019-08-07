@@ -1,6 +1,7 @@
 import * as AWS from 'aws-sdk'
 import * as moment from 'moment'
 import * as R from 'ramda'
+import { renameKeysWith } from 'ramda-adjunct'
 import { UpdateItemOutput } from 'aws-sdk/clients/dynamodb'
 import { PromiseResult } from 'aws-sdk/lib/request'
 import { AWSError } from 'aws-sdk'
@@ -34,6 +35,7 @@ export type AchievementValue = 'first' | 'second' | 'third'
 export type Achievement = {
 	keyData: any
 	total: number
+	lastUpdated: string
 	user?: any
 }
 
@@ -53,13 +55,14 @@ type UserAchievementByArtistParams = {
 	uid: string
 }
 
-type TopListenerParameterType = {
-	artistId: string
-	achievementType: AchievementType
-	achievementValue: AchievementValue
-	periodType: PeriodType
-	periodValue: string
-	date: moment.Moment // Will become a string
+export type KeyData = {
+		sk: string
+		pk: string
+		fk?: string
+	}
+
+type TopListenerParameterType  = KeyData & {
+	
 }
 
 type TimeseriesKeys = {
@@ -132,13 +135,8 @@ export type TTableAchievement = {
 	) => Promise<PromiseResult<UpdateItemOutput, AWSError>>
 
 	getArtistTopListeners: ({
-		artistId,
-		achievementType,
-		achievementValue,
-		periodType,
-		periodValue,
-		date
-	}: TopListenerParameterType) => Promise<PromiseResult<any, AWSError>>
+		sk, pk
+	}: KeyData) => Promise<PromiseResult<any, AWSError>>
 
 	getUserAchievements: (
 		uid: string,
@@ -353,48 +351,25 @@ export const TableAchievement = (
 
 	// cc:Achievements Lambda#5; Function createOrModifyAchievement;
 	const getArtistTopListeners = async ({
-		artistId,
-		achievementType,
-		achievementValue,
-		periodType,
-		periodValue,
-		date // is a moment object
-	}: TopListenerParameterType) => {
-		const isMoment = moment.isMoment(date)
-		const isValid = date.isValid()
-
-		console.log('TCL: isMoment', isMoment)
-		console.log('TCL: date', date)
-		console.log('TCL: date.isValid()', isValid)
-		const _pk = makePk(artistId, achievementType, periodType, periodValue)
-		const _sk = makeSk(
-			artistId,
-			achievementValue,
-			periodType,
-			periodValue,
-			date.format('MMMM-Do-YYYY') // cc: Current time here is coming in as a moment object parameter and needs to be made into a string
-		)
-
-		/*=============================================
+		sk, pk
+	}: KeyData) => {
 		
-		cc: Since we're querying for records between a set of time stamps we may receive several records. The records are ordered from oldest to newest. Here we take the newest record.
-
-		=============================================*/
-
+	
 		return await doc
 			.query({
 				TableName,
 				KeyConditionExpression: 'pk = :p and sk <= :s',
 				ExpressionAttributeValues: {
-					':p': _pk,
-					':s': _sk
+					':p': pk,
+					':s': sk
 				},
 				Limit: 3
 			})
 			.promise()
 			.then(res => {
-				console.log(`Im the reponse for ${achievementValue} top listener`, res)
+				console.log(`Im the reponse for top listeners`, res)
 				if (res && res.Items && res.Items.length) {
+                    console.log('TCL: res.Items', res.Items)
 					let user = res.Items.pop()
 					console.log('TCL: user', user)
 					return user
@@ -491,11 +466,35 @@ export const TableAchievement = (
 	 *
 	 */
 
+
 	const createOrModifyAchievement = async ({
 		keyData,
 		total,
+		lastUpdated,
 		user
 	}: Achievement) => {
+
+		const allData = {
+			keyData,
+			total,
+			lastUpdated,
+			user
+		}
+		console.log('TCL: allData', allData)
+		console.log('TCL: keyData', keyData)
+
+		// const UpdateExpression = 'ADD totalUpdates :v SET lastUpdate = :lastUpdate SET ' + Object.keys(allData).map(k => `${allData[k]} = :${k}`).join(', ')
+		// const ExpressionAttributeValues = renameKeysWith(k => `:${k}`, allData)
+		
+		
+		// return await doc
+		// 	.update({
+		// 		TableName,
+		// 		Key: keyData,
+		// 		UpdateExpression,
+		// 		ExpressionAttributeValues
+		// 	})
+		// 	.promise()
 	
 		return await doc
 			.put({
@@ -503,6 +502,7 @@ export const TableAchievement = (
 				Item: {
 					...keyData,
 					total,
+					lastUpdated,
 					user
 				}
 			})

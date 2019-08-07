@@ -273,6 +273,12 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
       .then(byTimeThenArtistName)
   }
 
+  /**
+   *
+   * cc: tableStat #1; Function getArtistStat
+   *
+   */
+
   const getArtistStat = async ({uid, artistId, periodType, periodValue}: ArtistStatKeys) => {
     return await doc.get({
       TableName,
