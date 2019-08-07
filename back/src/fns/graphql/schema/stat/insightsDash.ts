@@ -9,12 +9,11 @@ import moment = require('moment')
 import { TableUser } from '../../../../shared/tables/TableUser'
 import {
 	TableAchievement,
-	TTableAchievement
+	TTableAchievement,
+	KeyData
 } from '../../../../shared/tables/TableAchievement'
 import { verifyEnv } from '../../../../shared/env'
 import {
-	InsightsDashResponseResolvers,
-	InsightsDashResponse,
 	TimescopeTops,
 	PerspectiveTops,
 	QueryResolvers
@@ -106,6 +105,48 @@ type TopGenreStat {
 
 `
 
+type EnrichedKeyMakerParams = {
+	perspective: string
+	relationType: 'artist'
+	periodType: PeriodType
+	periodValue: string
+	artistId: string
+	achievementType: 'topListener'
+	achievementValue: 'first' | 'second' | 'third'
+}
+
+const keyMaker = args => [...args].join('#')
+const keyMakerPlaceAndDay = ({
+	perspective,
+	relationType,
+	periodType,
+	periodValue,
+	artistId,
+	achievementType,
+	achievementValue
+}: EnrichedKeyMakerParams) => {
+	const pk = keyMaker([
+		perspective,
+		relationType,
+		periodType,
+		periodValue,
+		achievementType,
+		achievementValue
+	])
+	const sk = keyMaker([
+		perspective,
+		periodType,
+		artistId,
+		achievementType,
+		achievementValue
+	])
+	return {
+		sk,
+		pk
+	}
+}
+
+
 const localizedMoment = (utcOffset: number, m: moment.Moment) =>
 	moment.utc(m).utcOffset(utcOffset, false)
 
@@ -185,65 +226,46 @@ const perspectiveTopArtists = async (
 
 	return await Promise.all(
 		artistsPrimary.map(async ({ artist, playDurationMs }) => {
-			let enrichedArtist = Object.assign({}, artist)
-			enrichedArtist.topListeners = []
+			
+			const firstKeys: any = keyMakerPlaceAndDay({
+				perspective: primaryId,
+				relationType: 'artist',
+				periodType,
+				periodValue,
+				artistId: artist.id,
+				achievementType: 'topListener',
+				achievementValue: 'first'
+			})
+			const secondKeys = keyMakerPlaceAndDay({
+				perspective: primaryId,
+				relationType: 'artist',
+				periodType,
+				periodValue,
+				artistId: artist.id,
+				achievementType: 'topListener',
+				achievementValue: 'second'
+			})
+			const thirdKeys = keyMakerPlaceAndDay({
+				perspective: primaryId,
+				relationType: 'artist',
+				periodType,
+				periodValue,
+				artistId: artist.id,
+				achievementType: 'topListener',
+				achievementValue: 'third'
+			})
 
-			// const first = await tableAchievement.getArtistTopListeners({
-			// 	artistId: artist.id,
-			// 	achievementType: 'topListener',
-			// 	achievementValue: 'first',
-			// 	periodType: 'life',
-			// 	periodValue: 'life',
-			// 	date: endDate
-			// })
-			// console.log('Insights Dash first', first)
-			// if (first) {
-			// 	enrichedArtist.topListeners.push(first)
+			const keys = [firstKeys, secondKeys, thirdKeys]
+			const topListeners = await Promise.all(
+				keys.map(async (keyData: KeyData) => {
+					const data = await tableAchievement.getArtistTopListeners(keyData)
+					console.log('TCL: data', data)
+					return data
+				})
+			)
 
-			// 	const second = await tableAchievement.getArtistTopListeners({
-			// 		artistId: artist.id,
-			// 		achievementType: 'topListener',
-			// 		achievementValue: 'second',
-			// 		periodType: 'life',
-			// 		periodValue: 'life',
-			// 		date: endDate
-			// 	})
+			artist.topListeners = topListeners
 
-			// 	console.log('Insights Dash second', second)
-			// 	if (second && first.user.pk !== second.user.pk) {
-			// 		enrichedArtist.topListeners.push(second)
-
-			// 		const third = await tableAchievement.getArtistTopListeners({
-			// 			artistId: artist.id,
-			// 			achievementType: 'topListener',
-			// 			achievementValue: 'third',
-			// 			periodType: 'life',
-			// 			periodValue: 'life',
-			// 			date: endDate
-			// 		})
-
-			// 		console.log('Insights Dash third', third)
-			// 		if (
-			// 			third &&
-			// 			(second.user.pk !== third.user.pk &&
-			// 				third.user.pk !== first.user.pk)
-			// 		) {
-			// 			enrichedArtist.topListeners.push(third)
-			// 		}
-
-			// 		console.log(
-			// 			'TCL: perspectiveTopArtists -> enrichedArtist.topListeners',
-			// 			enrichedArtist.topListeners
-			// 		)
-			// 	}
-			// }
-
-			// console.log(
-			// 	'TCL: perspectiveTopArtists -> enrichedArtist.topListeners',
-			// 	enrichedArtist.topListeners
-			// )
-
-			console.log(enrichedArtist)
 			const secondary = await tableStat.getArtistStat({
 				uid: secondaryId,
 				artistId: artist.id,
@@ -259,7 +281,7 @@ const perspectiveTopArtists = async (
 					? playDurationMs / 3600000
 					: secondary / 3600000
 			return {
-				artist: enrichedArtist,
+				artist,
 				personal,
 				group
 			}
@@ -279,7 +301,7 @@ const perspectiveTopArtistAndGenres = async (
 		endDate,
 		perspectiveTopKeys
 	)
-	console.log('TCL: artists insightsDash', artists)
+	
 	return {
 		artists: artists,
 		genres: await perspectiveTopGenres(tableStat, perspectiveTopKeys)

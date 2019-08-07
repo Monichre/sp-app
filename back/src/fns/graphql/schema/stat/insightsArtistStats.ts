@@ -15,7 +15,8 @@ import {
 import { timeSeries, TMomentUnits } from './shared/timeSeries'
 import {
 	TableAchievement,
-	TTableAchievement
+	TTableAchievement,
+	KeyData
 } from '../../../../shared/tables/TableAchievement'
 const typeDefs = `
 type Query {
@@ -99,12 +100,49 @@ type Delta {
 }
 `
 
-// none of the other ones do what we want -- leaving here for reference
-// const localt = moment(dts).utcOffset(utcOffset, true).toISOString(true)
-// const localf = moment(dts).utcOffset(utcOffset, false).toISOString(true)
-// const utct = moment.utc(dts).utcOffset(utcOffset, true).toISOString(true)
-// const pzt = moment.parseZone(dts).utcOffset(utcOffset, true).toISOString(true)
-// const pzf = moment.parseZone(dts).utcOffset(utcOffset, false).toISOString(true)
+
+type EnrichedKeyMakerParams = {
+	perspective: string
+	relationType: 'artist'
+	periodType: PeriodType
+	periodValue: string
+	artistId: string
+	achievementType: 'topListener'
+	achievementValue: 'first' | 'second' | 'third'
+}
+
+const keyMaker = args => [...args].join('#')
+const keyMakerPlaceAndDay = ({
+	perspective,
+	relationType,
+	periodType,
+	periodValue,
+	artistId,
+	achievementType,
+	achievementValue
+}: EnrichedKeyMakerParams) => {
+	const pk = keyMaker([
+		perspective,
+		relationType,
+		periodType,
+		periodValue,
+		achievementType,
+		achievementValue
+	])
+	const sk = keyMaker([
+		perspective,
+		periodType,
+		artistId,
+		achievementType,
+		achievementValue
+	])
+	return {
+		sk,
+		pk
+	}
+}
+
+
 const localizedMoment = (utcOffset: number, m: moment.Moment) =>
 	moment.utc(m).utcOffset(utcOffset, false)
 
@@ -246,69 +284,189 @@ const playtimeStats = async (
 	)
 
 	const artist = await tableStat.getArtistInfo(artistId)
-	console.log('TCL: artist', artist)
-	let enrichedArtist = Object.assign({}, artist)
+		const firstKeysDaily = keyMakerPlaceAndDay({
+			perspective: gid,
+			relationType: 'artist',
+			periodType: 'day',
+			periodValue: today,
+			artistId: artistId,
+			achievementType: 'topListener',
+			achievementValue: 'first'
+		})
+		const secondKeysDaily = keyMakerPlaceAndDay({
+			perspective: gid,
+			relationType: 'artist',
+			periodType: 'day',
+			periodValue: today,
+			artistId: artistId,
+			achievementType: 'topListener',
+			achievementValue: 'second'
+		})
+		const thirdKeysDaily = keyMakerPlaceAndDay({
+			perspective: gid,
+			relationType: 'artist',
+			periodType: 'day',
+			periodValue: today,
+			artistId: artistId,
+			achievementType: 'topListener',
+			achievementValue: 'third'
+		})
 
-	enrichedArtist.topListeners = []
+		const keys = [firstKeysDaily, secondKeysDaily, thirdKeysDaily]
+		const dailyTopListeners = await Promise.all(
+			keys.map(async (keyData: KeyData) => {
+				const data = await tableAchievement.getArtistTopListeners(keyData)
+				console.log('TCL: data', data)
+				return data
+			})
+		)
 
-	// const first = await tableAchievement.getArtistTopListeners({
-	// 	artistId: artist.id,
-	// 	achievementType: 'topListener',
-	// 	achievementValue: 'first',
-	// 	periodType: 'life',
-	// 	periodValue: 'life',
-	// 	date: now
-	// })
-	// console.log('TCL: perspectiveTopArtists -> first', first)
-	// if (first) {
-	// 	enrichedArtist.topListeners.push(first)
+	const topListeners: any = {}
 
-	// 	const second = await tableAchievement.getArtistTopListeners({
-	// 		artistId: artist.id,
-	// 		achievementType: 'topListener',
-	// 		achievementValue: 'second',
-	// 		periodType: 'life',
-	// 		periodValue: 'life',
-	// 		date: now
-	// 	})
+	topListeners.daily = dailyTopListeners
+	
 
-	// 	console.log('TCL: perspectiveTopArtists -> second', second)
-	// 	if (second && first.user.pk !== second.user.pk) {
-	// 		enrichedArtist.topListeners.push(second)
+	/**
+	 *
+	 * Weekly Enriched Top Artists w/Top Listeners
+	 *
+	 */
 
-	// 		const third = await tableAchievement.getArtistTopListeners({
-	// 			artistId: artist.id,
-	// 			achievementType: 'topListener',
-	// 			achievementValue: 'third',
-	// 			periodType: 'life',
-	// 			periodValue: 'life',
-	// 			date: now
-	// 		})
+	const firstKeysWeekly = keyMakerPlaceAndDay({
+		perspective: gid,
+		relationType: 'artist',
+		periodType: 'week',
+		periodValue: thisWeek,
+		artistId: artistId,
+		achievementType: 'topListener',
+		achievementValue: 'first'
+	})
+	const secondKeysWeekly = keyMakerPlaceAndDay({
+		perspective: gid,
+		relationType: 'artist',
+		periodType: 'week',
+		periodValue: thisWeek,
+		artistId: artistId,
+		achievementType: 'topListener',
+		achievementValue: 'second'
+	})
+	const thirdKeysWeekly = keyMakerPlaceAndDay({
+		perspective: gid,
+		relationType: 'artist',
+		periodType: 'week',
+		periodValue: thisWeek,
+		artistId: artistId,
+		achievementType: 'topListener',
+		achievementValue: 'third'
+	})
 
-	// 		console.log('TCL: perspectiveTopArtists -> third', third)
-	// 		if (
-	// 			third &&
-	// 			(second.user.pk !== third.user.pk && third.user.pk !== first.user.pk)
-	// 		) {
-	// 			enrichedArtist.topListeners.push(third)
-	// 		}
+	const keysWeekly = [firstKeysWeekly, secondKeysWeekly, thirdKeysWeekly]
+	const weeklyTopListeners = await Promise.all(
+		keysWeekly.map(async (keyData: KeyData) => {
+			const data = await tableAchievement.getArtistTopListeners(keyData)
+			console.log('TCL: data', data)
+			return data
+		})
+	)
 
-	// 		console.log(
-	// 			'TCL: perspectiveTopArtists -> enrichedArtist.topListeners',
-	// 			enrichedArtist.topListeners
-	// 		)
-	// 	}
-	// }
+	topListeners.weekly = weeklyTopListeners
 
-	// console.log(
-	// 	'TCL: perspectiveTopArtists -> enrichedArtist.topListeners',
-	// 	enrichedArtist.topListeners
-	// )
+	/**
+	 *
+	 * Monthly Top Artists Enriched w/TopListeners
+	 *
+	 */
 
-	// console.log(enrichedArtist)
+	const firstKeysMonthly = keyMakerPlaceAndDay({
+		perspective: gid,
+		relationType: 'artist',
+		periodType: 'month',
+		periodValue: thisMonth,
+		artistId: artistId,
+		achievementType: 'topListener',
+		achievementValue: 'first'
+	})
+	const secondKeysMonthly = keyMakerPlaceAndDay({
+		perspective: gid,
+		relationType: 'artist',
+		periodType: 'month',
+		periodValue: thisMonth,
+		artistId: artistId,
+		achievementType: 'topListener',
+		achievementValue: 'second'
+	})
+	const thirdKeysMonthly = keyMakerPlaceAndDay({
+		perspective: gid,
+		relationType: 'artist',
+		periodType: 'month',
+		periodValue: thisMonth,
+		artistId: artistId,
+		achievementType: 'topListener',
+		achievementValue: 'third'
+	})
+
+	const keysMonthly = [firstKeysMonthly, secondKeysMonthly, thirdKeysMonthly]
+	const monthlyTopListeners = await Promise.all(
+		keysMonthly.map(async (keyData: KeyData) => {
+			const data = await tableAchievement.getArtistTopListeners(keyData)
+			console.log('TCL: data', data)
+			return data
+		})
+	)
+
+	topListeners.monthly = monthlyTopListeners
+
+	/**
+	 *
+	 * LifeTime Top Artists w/Listeners
+	 *
+	 */
+
+	const firstKeysLifetime = keyMakerPlaceAndDay({
+		perspective: gid,
+		relationType: 'artist',
+		periodType: 'life',
+		periodValue: 'life',
+		artistId: artistId,
+		achievementType: 'topListener',
+		achievementValue: 'first'
+	})
+	const secondKeysLifetime = keyMakerPlaceAndDay({
+		perspective: gid,
+		relationType: 'artist',
+		periodType: 'life',
+		periodValue: 'life',
+		artistId: artistId,
+		achievementType: 'topListener',
+		achievementValue: 'second'
+	})
+	const thirdKeysLifetime = keyMakerPlaceAndDay({
+		perspective: gid,
+		relationType: 'artist',
+		periodType: 'life',
+		periodValue: 'life',
+		artistId: artistId,
+		achievementType: 'topListener',
+		achievementValue: 'third'
+	})
+
+	const keysLifetime = [firstKeysLifetime, secondKeysLifetime, thirdKeysLifetime]
+	const lifetimeTopListeners = await Promise.all(
+		keysLifetime.map(async (keyData: KeyData) => {
+			const data = await tableAchievement.getArtistTopListeners(keyData)
+			console.log('TCL: data', data)
+			return data
+		})
+	)
+
+	topListeners.lifetime = lifetimeTopListeners
+
+	artist.topListeners = topListeners
+    console.log('TCL: artist.topListeners', artist.topListeners)
+
 
 	return {
-		artist: enrichedArtist,
+		artist,
 		today: await playtimeTimescopeStats(tableStat, {
 			uid,
 			gid,
