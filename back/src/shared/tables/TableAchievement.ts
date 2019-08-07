@@ -32,15 +32,8 @@ export type AchievementValue = 'first' | 'second' | 'third'
 // }
 
 export type Achievement = {
-	artistId: string
-	achievementType: AchievementType
-	achievementValue: AchievementValue
-	periodType: PeriodType
-	periodValue: string
-	uid: string
+	keyData: any
 	total: number
-	date: string
-	lastUpdated?: moment.Moment
 	user?: any
 }
 
@@ -69,10 +62,19 @@ type TopListenerParameterType = {
 	date: moment.Moment // Will become a string
 }
 
-type Timeseries = {
-	playDurationMs: number
-	period: string
+type TimeseriesKeys = {
+  uid: string
+  relationType: RelationType
+  relationId: string
+  periodType: PeriodType
+  startPeriod: string
+  endPeriod: string
 }
+type Timeseries = {
+  playDurationMs: number
+  period: string
+}
+
 
 /**
  *
@@ -80,6 +82,11 @@ type Timeseries = {
  *
  */
 
+//  {
+// 	pk: `${pk}#${achievementType}#${achievementValue}`,
+// 	sk: `${sk}#${achievementType}#${achievementValue}`,
+// 	fk: `#${achievementType}#${achievementValue}#${uid}`
+// }
 export type TTableAchievement = {
 	makePk: (
 		artistId: string,
@@ -95,6 +102,19 @@ export type TTableAchievement = {
 		periodValue: string,
 		date: string
 	) => string
+
+	periodsFor: (
+		isoDateString: string
+	) => {
+		day: string
+		dow: string
+		week: string
+		month: string
+		moy: string
+		year: string
+		life: string
+	}
+	getTimeseries: (timeseriesKeys: TimeseriesKeys) => Promise<Timeseries[]>
 
 	makeFk: (
 		artistId: string,
@@ -138,6 +158,53 @@ export type TTableAchievement = {
 		uid
 	}: UserAchievementByArtistParams) => Promise<PromiseResult<any, AWSError>>
 }
+
+export type Stat = {
+  uid: string,
+  relationType: RelationType,
+  relationKey: string,
+  periodType: PeriodType,
+  periodValue: string,
+  playDurationMs: number,
+}
+
+export type StatTotal = Stat
+export type StatArtist = Stat & {
+  artist: { name: string, genres: string[] }
+}
+
+export type StatGenre = Stat & {
+  genre: string
+}
+type Artist = {
+  id: string,
+  name: string,
+  images: Image[],
+  external_urls: SpotifyUrl
+  genres: string[]
+  topListeners?: Object []
+}
+type SpotifyUrl = {
+  spotify: string
+}
+type Image = {
+  url: string
+}
+
+
+type TopArtistsRow = {
+  artist: Artist,
+  playDurationMs: number,
+}
+
+const byTimeThenArtistName = R.sortWith<TopArtistsRow>([
+	R.descend(R.prop('playDurationMs')),
+	R.ascend(R.path(['artist', 'name']))
+])
+
+const byPeriod = R.sortWith<Timeseries>([R.ascend(R.path(['period']))])
+
+
 
 export const TableAchievement = (
 	endpoint: string,
@@ -186,47 +253,103 @@ export const TableAchievement = (
 			date,
 			artistId
 		].join('#')
+	
+	
+	  const periodsFor = (isoDateString: string) => {
+			const m = moment.parseZone(isoDateString)
+			return {
+				day: m.format('YYYY-MM-DD'),
+				dow: m.format('d'),
+				week: m.format('YYYY-WW'),
+				month: m.format('YYYY-MM'),
+				moy: m.format('MM'),
+				year: m.format('YYYY'),
+				life: 'life'
+			}
+	  }
+	
+	  const getTimeseries = async ({
+			uid,
+			relationId,
+			relationType,
+			periodType,
+			startPeriod,
+			endPeriod
+		}: TimeseriesKeys): Promise<Timeseries[]> => {
+			const sk = [uid, periodType, relationId].join('#')
+			const startPk = [uid, relationType, periodType, startPeriod].join('#')
+			const endPk = [uid, relationType, periodType, endPeriod].join('#')
+			// console.log('getting stats for', { sk, startPk, endPk })
 
-	const encode = ({
-		artistId,
-		achievementType,
-		achievementValue,
-		periodType,
-		periodValue,
-		date, // Current time here is coming in a string
-		uid,
-		...rest
-	}: Achievement) => {
-		// @ts-ignore
-		const lastUpdated = moment(date).format()
-		// @ts-ignore
-		const calendarDay = moment(date).format('MMMM-Do-YYYY')
-
-		console.log('TCL: date inside encode, should be a string', date)
-		console.log('TCL: lastUpdated', lastUpdated)
-
-		return {
-			pk: makePk(artistId, achievementType, periodType, periodValue),
-			sk: makeSk(
-				artistId,
-				achievementValue,
-				periodType,
-				periodValue,
-				calendarDay // Current time here is coming in a string
-			),
-			fk: makeFk(
-				artistId,
-				achievementType,
-				achievementValue,
-				periodType,
-				periodValue,
-				calendarDay, // Current time here is coming in a string
-				uid
-			),
-			lastUpdated,
-			...rest
+			const params = {
+				TableName,
+				// Limit,
+				KeyConditionExpression: `sk = :sk and pk BETWEEN :s and :e`,
+				IndexName: 'GSIReverse',
+				// ScanIndexForward: false,
+				ExpressionAttributeValues: {
+					':sk': sk,
+					':s': startPk,
+					':e': endPk
+				}
+			}
+			const result = await doc
+				.query(params)
+				.promise()
+				.then(d =>
+					d.Items.map(i => ({
+						// artist: i.artist,
+						period: i.pk.split('#')[3],
+						playDurationMs: i.playDurationMs
+					}))
+				)
+				.then(byPeriod)
+			// console.log('artistStatsFor', uid, id, result)
+			return result
 		}
-	}
+
+
+
+	// const encode = ({
+	// 	artistId,
+	// 	achievementType,
+	// 	achievementValue,
+	// 	periodType,
+	// 	periodValue,
+	// 	date, // Current time here is coming in a string
+	// 	uid,
+	// 	...rest
+	// }: Achievement) => {
+	// 	// @ts-ignore
+	// 	const lastUpdated = moment(date).format()
+	// 	// @ts-ignore
+	// 	const calendarDay = moment(date).format('MMMM-Do-YYYY')
+
+	// 	console.log('TCL: date inside encode, should be a string', date)
+	// 	console.log('TCL: lastUpdated', lastUpdated)
+
+	// 	return {
+	// 		pk: makePk(artistId, achievementType, periodType, periodValue),
+	// 		sk: makeSk(
+	// 			artistId,
+	// 			achievementValue,
+	// 			periodType,
+	// 			periodValue,
+	// 			calendarDay // Current time here is coming in a string
+	// 		),
+	// 		fk: makeFk(
+	// 			artistId,
+	// 			achievementType,
+	// 			achievementValue,
+	// 			periodType,
+	// 			periodValue,
+	// 			calendarDay, // Current time here is coming in a string
+	// 			uid
+	// 		),
+	// 		lastUpdated,
+	// 		...rest
+	// 	}
+	// }
 
 	// cc:Achievements Lambda#5; Function createOrModifyAchievement;
 	const getArtistTopListeners = async ({
@@ -369,49 +492,18 @@ export const TableAchievement = (
 	 */
 
 	const createOrModifyAchievement = async ({
-		artistId,
-		achievementType,
-		achievementValue,
-		periodType,
-		periodValue,
-		date, // Current time here is coming in a string
-		uid,
+		keyData,
 		total,
 		user
 	}: Achievement) => {
-		let item = {
-			Item: {
-				...encode({
-					artistId,
-					achievementType,
-					achievementValue,
-					periodType,
-					periodValue,
-					date, // Therefore this is a string
-					uid,
-					total,
-					user
-				})
-			}
-		}
-
-		console.log('Use this item object to write tests', item)
-
+	
 		return await doc
 			.put({
 				TableName,
 				Item: {
-					...encode({
-						artistId,
-						achievementType,
-						achievementValue,
-						periodType,
-						periodValue,
-						date, // Therefore this is a string
-						uid,
-						total,
-						user
-					})
+					...keyData,
+					total,
+					user
 				}
 			})
 			.promise()
@@ -421,6 +513,8 @@ export const TableAchievement = (
 		makePk,
 		makeSk,
 		makeFk,
+		periodsFor,
+		getTimeseries,
 		getArtistTopListeners,
 		getUserAchievementsByArtist,
 		getUserAchievements,
