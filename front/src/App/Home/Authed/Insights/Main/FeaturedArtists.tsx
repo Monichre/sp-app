@@ -86,7 +86,7 @@ const featuredArtists: FeaturedArtist[] = [
   {
     title: 'Liftoff',
     hover: '598, 212 monthly streamers on Spotify',
-    name: 'Suga.wa',
+    name: 'Sugi.wa',
     href: 'https://open.spotify.com/artist/0XUBVuE1odesNug0oKt9Me',
     src: 'https://f4.bcbits.com/img/a1557745303_16.jpg'
   },
