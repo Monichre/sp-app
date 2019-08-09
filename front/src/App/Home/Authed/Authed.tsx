@@ -2,7 +2,7 @@ import React, { useContext, useReducer, useState, Reducer, SetStateAction} from 
 import styled from 'styled-components'
 import { Route, Switch, Redirect } from 'react-router';
 import { Loading } from '../../../shared/Loading';
-import { useGetUserInfo, ArtistFragmentFragment } from '../../../types';
+import { useGetUserInfo, ArtistFragmentFragment, ArtistsFragmentArtist } from '../../../types';
 import { ErrorFallback } from '../ErrorBoundary';
 import { Insights } from './Insights/Insights';
 import { largeQuery, notLargeQuery } from '../../../shared/media';
@@ -76,9 +76,15 @@ background-color: #030616;
   }
 `
 
+type AchievementDataItem = {
+  total: number
+  artist: ArtistsFragmentArtist
+}
+
 export type AchievementData = {
   achievement: 'Top Listener' | 'Second Top Listener' | 'Third Top Listener'
-  artists: ArtistFragmentFragment[]
+  earned: boolean
+  data: AchievementDataItem[]
   Badge: any
 }
 

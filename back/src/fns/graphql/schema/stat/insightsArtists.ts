@@ -16,8 +16,10 @@ import {
 	PerspectiveTops,
 	InsightsArtistsResponse,
 	TimescopeTopArtists,
-	TopArtistStat
+	TopArtistStat,
+	QueryResolvers,
 } from '../../types'
+
 import {
 	TableAchievement,
 	TTableAchievement
@@ -126,7 +128,7 @@ type EnrichedKeyMakerParams = {
 	achievementType: 'topListener'
 	achievementValue: 'first' | 'second' | 'third'
 }
-const keyMaker = args => [...args].join('#')
+const keyMaker = (args: any) => [...args].join('#')
 const keyMakerPlaceAndDay = ({
 	perspective,
 	relationType,
@@ -556,13 +558,12 @@ const insightsArtists = async (
 	if (invalid) {
 		throw new Error(`user info invalid for uid ${uid}`)
 	}
-	const { utcOffset } = valid
-
+	const { utcOffset }: any = valid
 	const tableStat = TableStat(context.DYNAMO_ENDPOINT, context.TABLE_STAT)
-
+	// @ts-ignore
 	const now = localizedMoment(utcOffset, moment())
-
 	const ret = await topArtists(tableStat, tableAchievement, uid, gid, now)
+
 	console.log('ret', ret)
 	return ret
 }
@@ -578,139 +579,3 @@ export const insightsArtistsSchema = makeExecutableSchema({
 	resolvers
 })
 
-
-
-/*
-
-	const calcAglForTSA: any = async (
-		tableStat: TTableStat,
-		uid: string,
-		gid: string,
-		periodType: PeriodType,
-		periodCurrent: string,
-		periodPrev?: string
-	) => {
-		// const { personal, group } = await func
-		// const personalClone = [...personal]
-		// const groupClone = [...group]
-		// personalClone.map(async (item) => {
-		// 	const clone = Object.assign({}, item)
-		// 	const { artist } = clone
-		// const pk = keyMaker([
-		// 	secondaryUid,
-		// 	'artist',
-		// 	periodType,
-		// 	periodCurrent,
-		// 	'topListener',
-		// 	'first'
-		// ])
-		// const sk = keyMaker([
-		// 	secondaryUid,
-		// 	periodType,
-		// 	artist.id,
-		// 	'topListener',
-		// 	'first'
-		// ])
-		// 	artist.topListeners = []
-		// 	const first = await tableAchievement.getArtistTopListeners({
-		// 		artistId: artist.id,
-		// 		achievementType: 'topListener',
-		// 		achievementValue: 'first',
-		// 		periodType: 'life',
-		// 		periodValue: 'life',
-		// 		date: now
-		// 	})
-		// 	console.log('TCL: perspectiveTopArtists -> first', first)
-		// 	if (first) {
-		// 		artist.topListeners.push(first)
-		// 		const second = await tableAchievement.getArtistTopListeners({
-		// 			artistId: artist.id,
-		// 			achievementType: 'topListener',
-		// 			achievementValue: 'second',
-		// 			periodType: 'life',
-		// 			periodValue: 'life',
-		// 			date: now
-		// 		})
-		// 		console.log('TCL: perspectiveTopArtists -> second', second)
-		// 		if (second && first.user.pk !== second.user.pk) {
-		// 			artist.topListeners.push(second)
-		// 			const third = await tableAchievement.getArtistTopListeners({
-		// 				artistId: artist.id,
-		// 				achievementType: 'topListener',
-		// 				achievementValue: 'third',
-		// 				periodType: 'life',
-		// 				periodValue: 'life',
-		// 				date: now
-		// 			})
-		// 			console.log('TCL: perspectiveTopArtists -> third', third)
-		// 			if (
-		// 				third &&
-		// 				(second.user.pk !== third.user.pk &&
-		// 					third.user.pk !== first.user.pk)
-		// 			) {
-		// 				artist.topListeners.push(third)
-		// 			}
-		// 			console.log(
-		// 				'TCL: perspectiveTopArtists -> artist.topListeners',
-		// 				artist.topListeners
-		// 			)
-		// 		}
-		// 	}
-		// })
-		// groupClone.map(async item => {
-		// 	const clone = Object.assign({}, item)
-		// 	const { artist } = clone
-		// 	artist.topListeners = []
-		// 	const first = await tableAchievement.getArtistTopListeners({
-		// 		artistId: artist.id,
-		// 		achievementType: 'topListener',
-		// 		achievementValue: 'first',
-		// 		periodType: 'life',
-		// 		periodValue: 'life',
-		// 		date: now
-		// 	})
-		// 	console.log('TCL: perspectiveTopArtists -> first', first)
-		// 	if (first) {
-		// 		artist.topListeners.push(first)
-		// 		const second = await tableAchievement.getArtistTopListeners({
-		// 			artistId: artist.id,
-		// 			achievementType: 'topListener',
-		// 			achievementValue: 'second',
-		// 			periodType: 'life',
-		// 			periodValue: 'life',
-		// 			date: now
-		// 		})
-		// 		console.log('TCL: perspectiveTopArtists -> second', second)
-		// 		if (second && first.user.pk !== second.user.pk) {
-		// 			artist.topListeners.push(second)
-		// 			const third = await tableAchievement.getArtistTopListeners({
-		// 				artistId: artist.id,
-		// 				achievementType: 'topListener',
-		// 				achievementValue: 'third',
-		// 				periodType: 'life',
-		// 				periodValue: 'life',
-		// 				date: now
-		// 			})
-		// 			console.log('TCL: perspectiveTopArtists -> third', third)
-		// 			if (
-		// 				third &&
-		// 				(second.user.pk !== third.user.pk &&
-		// 					third.user.pk !== first.user.pk)
-		// 			) {
-		// 				artist.topListeners.push(third)
-		// 			}
-		// 			console.log(
-		// 				'TCL: perspectiveTopArtists -> artist.topListeners',
-		// 				artist.topListeners
-		// 			)
-		// 		}
-		// 	}
-		// })
-		// return {
-		// 	personal: personalClone,
-		// 	group: groupClone
-		// }
-	}
-
-
-*/

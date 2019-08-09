@@ -40,41 +40,60 @@ const Row = styled.div`
 `
 
 
-
+const isUser = (userId: string, achievementHolder: any) => achievementHolder && achievementHolder.user.uid === userId
 
 const determineAchievements = (artists: any[], userId: string) => {
- 
+  console.log('TCL: determineAchievements -> userId', userId)
+
   const isUser = (userId: string, achievementHolder: any) => achievementHolder && achievementHolder.user.uid === userId
 
   // AchievementData
   const updatedAchievements: AchievementsState = {
     1: {
+      earned: false,
       achievement: 'Top Listener',
-      artists: [],
+      data: [],
       Badge: <FirstPlaceBadge />
     },
     2: {
+      earned: false,
       achievement: 'Second Top Listener',
-      artists: [],
+      data: [],
       Badge: <SecondPlaceBadge />
     },
     3: {
+      earned: false,
       achievement: 'Third Top Listener',
-      artists: [],
+      data: [],
       Badge: <ThirdPlaceBadge />
     }
- }
-  
+  }
+
   artists.forEach(artist => {
-    const { topListeners  } = artist
+    const { topListeners } = artist
 
     topListeners.forEach((listener: any, i: any) => {
-      let itIs: boolean = isUser(userId, listener)
+      if (listener) {
+        const { user, total } = listener
+        console.log(`determineAchievements -> listener ${listener.user.displayName ? listener.user.displayName : listener.user.email} for artist ${artist.name}`)
 
-      // @ts-ignore
-      if (itIs) { updatedAchievements[i + 1].artists.push(artist) }
+        let itIs: boolean = isUser(userId, listener)
+        console.log('TCL: determineAchievements -> itIs', itIs)
 
+        // @ts-ignore
+        if (itIs) { updatedAchievements[i + 1].earned = true }
+
+
+        // @ts-ignore
+        updatedAchievements[i + 1].data.push({
+          total,
+          artist
+        })
+
+      }
+      
     })
+
   })
 
   return {
@@ -92,13 +111,13 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
       }
     }
   } = suspensefulHook(useInsightsDash({ variables: { uid }, suspend: true, pollInterval: 10000 }))
-  
+
   const theArtists = artists.map(({ artist }) => artist)
   const { updatedAchievements } = determineAchievements(theArtists, uid)
 
   console.log('TCL: updatedAchievements', updatedAchievements)
   console.count('Overview Render: ')
-  
+
   return <>
     <TimeseriesChart {...{ timeSeries, showOnly: pathParams.perspective }} />
     <Row>

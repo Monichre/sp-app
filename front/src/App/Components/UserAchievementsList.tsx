@@ -1,14 +1,45 @@
 import * as React from 'react'
 import { useState, useRef, useEffect, memo } from 'react';
 import { useSpring, animated, useTransition, useChain, config  } from 'react-spring'
-import styled from 'styled-components';
+import styled, { css} from 'styled-components';
 import { Achievement } from '../../../../back/src/shared/tables/TableAchievement';
 import { AchievementsState, AchievementData } from '../Home/Authed/Authed';
 import ResizeObserver from 'resize-observer-polyfill'
 import * as Icons from '../../shared/icons'
-import {AlbumBackgroundDiv, ArtistAvatarDiv, ArtistInfoDiv, ArtistNameDiv, ArtistNavLink, TrackDiv, TrackNameDiv, TrackWhenDiv } from '../Home/Authed/History/Play'
+import { hrsAndMinsAndSecs } from '../../lib/durationFormats';
 
-const bgSize = 16
+const bgSize = 6
+const AlbumBackgroundDiv = styled.div<{ src: string }>`
+  content: "";
+  position: absolute;
+  height: ${bgSize}rem;
+  width: ${bgSize}rem;
+  z-index: -1;
+  background: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.4) ), url("${({ src }) => src}");
+  background-repeat: no-repeat;
+  border-radius: 1rem;
+  background-size: cover;
+`
+
+const ArtistAvatarDiv = styled.div<{ src: string }>`
+  height: ${bgSize / 2}rem;
+  width: ${bgSize / 2}rem;
+  border-radius: ${bgSize / 2 / 2}rem;
+  background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("${({ src }) => src}");
+  background-size: cover;
+  `
+
+const ArtistInfoDiv = styled.div`
+`
+const ArtistNameDiv = styled.div`
+  /* font-size: ${bgSize / 8}rem; */
+  font-weight: 500;
+    position: absolute;
+  top:0;
+  left: 0;
+  font-size: 12px;
+`
+
 const PlayDiv = styled.div`
 height: ${bgSize * 1.25}rem;
 width: ${bgSize * 1.25}rem;
@@ -42,10 +73,11 @@ const Item = styled(animated.div)`
 
 const Frame = styled('div')`
   position: relative;
-  padding: 4px 0px 0px 0px;
+  /* padding:  10px 0; */
   text-overflow: ellipsis;
   white-space: nowrap;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
+  
   vertical-align: middle;
   color: white;
   fill: white;
@@ -53,6 +85,7 @@ const Frame = styled('div')`
 
 const Title = styled('span')`
   vertical-align: middle;
+
 `
 
 const Content = styled(animated.div)`
@@ -61,6 +94,7 @@ const Content = styled(animated.div)`
   padding: 0px 0px 0px 14px;
   border-left: 1px dashed rgba(255, 255, 255, 0.4);
   overflow: hidden;
+  
 `
 
 const toggle = {
@@ -74,14 +108,18 @@ const toggle = {
 
 
 
-const ListItem = styled.li`
-
+const ListItem: any = styled.li`
     display: flex;
-    align-items: center;
-    padding: 12px 0;
-    max-height: 151px;
     overflow: visible;
+    align-items: center;
+    align-content: center;
+    padding: 12px 0;
+    overflow: hidden;
     position: relative;
+
+    ${(props: any) => props.clicked && css`
+        overflow: visible;
+    `}
 
 &::before {
   /* content: counters(index, ".", decimal-leading-zero); */
@@ -92,7 +130,7 @@ const ListItem = styled.li`
   min-width: 50px;
   padding-right: 12px;
   font-variant-numeric: tabular-nums;
-  align-self: flex-start;
+  align-self: center;
   background-image: linear-gradient(to bottom, aquamarine, orangered);
   background-attachment: fixed;
   -webkit-background-clip: text;
@@ -102,8 +140,9 @@ const ListItem = styled.li`
 `
 
 const ListStyle = styled.ul`
-    padding: 0 1.5rem;
+    padding: 0 .5rem;
     counter-reset: index;  
+    overflow: visible;
 
 
 li + li {
@@ -116,9 +155,10 @@ const ListWrap = styled.div`
     background-color: #030616;
     position: fixed;
     left: 0;
-    top: 40vh;
-    margin-top: 80px;
+    top: 30vh;
     width: 200px;
+    overflow: visible;
+    height: auto; 
     border-right: 1px solid rgba(255,255,255,.1);
     z-index: 20;
 
@@ -142,6 +182,30 @@ const HeaderFlexDiv = styled.div`
     background-color: rgba(216,216,216,.05);
 `
 
+const FlexDiv = styled.div`
+    display: flex;
+    justify-content: space-evenly;
+    align-content: center;
+    width: 100%;
+    margin: 10px 0;
+    position: relative;
+    z-index: 20;
+    /* border-top: 1px solid rgba(255,255,255,.1); */
+    /* border-bottom: 1px solid rgba(255,255,255,.1); */
+    /* background-color: rgba(216,216,216,.05); */
+    background-color: #030616;
+
+    &::before {
+        position: absolute;
+        top: 0;
+        content: '';
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(216,216,216,.05);
+    }
+`
+
 export function usePrevious (value: any) {
     const ref = useRef()
     useEffect(() => void (ref.current = value), [value])
@@ -159,70 +223,26 @@ export function useMeasure () {
     return [{ ref }, bounds]
 }
 
+export interface UserAchievementsListProps {
+    userAchievements: any
+}
+
+export interface TreeProps {
+    children?: any,
+    name: any,
+    style?: any,
+    defaultOpen?: any
+    onClick: Function
+
+}
+
 
 
 export interface AchievementItemProps {
     achievementData: AchievementData
 }
 
-const AchievementItem: React.SFC<AchievementItemProps> = ({ achievementData }) => {
-    const { achievement, artists, Badge } = achievementData
-    
-    const [open, set] = useState(false)
-    const springRef: any = useRef()
-
-    const { size, opacity, ...rest }: any = useSpring({
-        ref: springRef,
-        config: config.stiff,
-        from: { size: '20%', background: 'hotpink' },
-        to: { size: open ? '100%' : '20%', background: open ? 'white' : 'hotpink' }
-    })
-
-    const transRef: any = useRef()
-
-    const transitions: any = useTransition(open ? artists : [], (item: any) => item, {
-        ref: transRef,
-        unique: true,
-        trail: 400 / artists.length,
-        from: { opacity: 0, transform: 'scale(0)' },
-        enter: { opacity: 1, transform: 'scale(1)' },
-        leave: { opacity: 0, transform: 'scale(0)' }
-    })
-
-    useChain(open ? [springRef, transRef] : [transRef, springRef], [0, open ? 0.1 : 0.6])
-
-    return <ListItem data-total={artists.length} style={{ ...rest, width: size, height: size }} onClick={() => set(open => !open)}>
-        {achievement}
-        {/* {open ? <Container>
-              {transitions.map(({ item, key, props }: any) => {
-              console.log('TCL: key', ...key)
-              console.log('TCL: props', props)
-              console.log('TCL: item', item)
-                  
-                  return (
-                      <Item key={{...key}} style={{ ...props, background: item.css }}>{item.name}</Item>
-            )})}
-        </Container> : null}
-         */}
-      
-    </ListItem>
-}
-
-
-
-export interface UserAchievementsListProps {
-    userAchievements: any
-}
-
-export interface TreeProps {
-    children: any,
-    name: any,
-    style?: any,
-    defaultOpen: any
-
-}
- 
-const Tree: React.SFC<TreeProps> = memo(({ children, name, style, defaultOpen = false }) => {
+const Tree: React.SFC<TreeProps> = memo(({ children = false, name, style, defaultOpen = false, onClick }) => {
     const [isOpen, setOpen] = useState(defaultOpen)
     const previous = usePrevious(isOpen)
 
@@ -235,9 +255,14 @@ const Tree: React.SFC<TreeProps> = memo(({ children, name, style, defaultOpen = 
     // @ts-ignore
     const Icon: any = Icons[`${children ? (isOpen ? 'Minus' : 'Plus') : 'Close'}SquareO`]
 
+    const handleClick = () => {
+        onClick()
+        setOpen(!isOpen)
+    }
+
     return (
         <Frame>
-            <Icon style={{ ...toggle, opacity: children ? 1 : 0.3 }} onClick={() => setOpen(!isOpen)} />
+            <Icon style={{ ...toggle, opacity: children ? 1 : 0.3 }} onClick={handleClick} />
             <Title style={style}>{name}</Title>
             <Content style={{ opacity, height: isOpen && previous === isOpen ? 'auto' : height }}>
                 <animated.div style={{ transform }} {...bind} children={children} />
@@ -245,93 +270,53 @@ const Tree: React.SFC<TreeProps> = memo(({ children, name, style, defaultOpen = 
         </Frame>
     )
 })
+
+
+
+const AchievementItem: React.SFC<AchievementItemProps> = ({ achievementData }) => {
+    const { achievement, data, Badge } = achievementData
+    const [wasClicked, setClicked] = useState(false)
+    const handleClick = () => setClicked(wasClicked => !wasClicked)
+
     
-    
+
+    return <ListItem data-total={data.length} clicked={wasClicked}>
+        <Tree name={achievement} onClick={handleClick}>
+            <FlexDiv>
+                {data.length ? data.map(dataItem => {
+                    const timeData = hrsAndMinsAndSecs(dataItem.total)
+                    console.log('TCL: timeData', timeData)
+                    return (
+                        <div style={{ margin: '10px', position: 'relative', padding: '10px' }}>
+                            <ArtistAvatarDiv src={dataItem.artist.images[0].url} />
+                            <ArtistNameDiv>{dataItem.artist.name}</ArtistNameDiv>
+                            {/* <p>{hrs}{mins}</p> */}
+                        </div>
+
+                    )
+                }) : null}
+            </FlexDiv>
+        </Tree>
+
+    </ListItem>
+}
+
+
+
+
  
 
 export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ userAchievements }) => {
-  
-
     return (
         <ListWrap>
             <HeaderFlexDiv><img src='/icons/award.svg' /> <h4>Achievements</h4></HeaderFlexDiv>
             <ListStyle>
-                {Object.keys(userAchievements).map((key: any, index: number) => {
+                {Object.keys(userAchievements).filter((key: any) => userAchievements[key].data.length).map((key: any, index: number) => {
                     
-                    return (
-                        <AchievementItem key={index} achievementData={userAchievements[key]}  />
-                    )
+                    return userAchievements[key].earned ? <AchievementItem key={index} achievementData={userAchievements[key]}  /> : null
                 })}
                 
             </ListStyle>
         </ListWrap>
     );
 }
-
-
-
-
-
-// const App = () => (
-//   <>
-//     <Global />
-//     <Tree name="main" defaultOpen>
-//       <Tree name="hello" />
-//       <Tree name="subtree with children">
-//         <Tree name="hello" />
-//         <Tree name="sub-subtree with children">
-//           <Tree name="child 1" style={{ color: '#37ceff' }} />
-//           <Tree name="child 2" style={{ color: '#37ceff' }} />
-//           <Tree name="child 3" style={{ color: '#37ceff' }} />
-//           <Tree name="custom content">
-//             <div style={{ position: 'relative', width: '100%', height: 200, padding: 10 }}>
-//               <div style={{ width: '100%', height: '100%', background: 'black', borderRadius: 5 }} />
-//             </div>
-//           </Tree>
-//         </Tree>
-//         <Tree name="hello" />
-//       </Tree>
-//       <Tree name="world" />
-//       <Tree name={<span>🙀 something something</span>} />
-//     </Tree>
-//   </>
-// )
-
-
-// import {AlbumBackgroundDiv, ArtistAvatarDiv, ArtistInfoDiv, ArtistNameDiv, ArtistNavLink, PlayDiv, TrackDiv, TrackNameDiv, TrackWhenDiv } from '../Home/Authed/History/Play'
-//   return <ListItem data-total={artists.length} style={{ ...rest, width: size, height: size }} onClick={() => set(open => !open)}>
-//         {achievement}
-//         {open ? <Container>
-//             {artists.map((artist: any) => transitions.map(({ item, key, props }: any) => {
-
-//                 console.log('TCL: props', props)
-//                 console.log('TCL: item', item)
-//                 const { name, images, topListeners, id } = item
-//                 const artistImgUrl = images[0].url
-
-//                 return (
-//                     <Item key={item ? item.id : key} style={{ ...props, background: item.css }}>
-//                         {name}
-//                         <PlayDiv>
-//                             <AlbumBackgroundDiv {...{ src: images[0].url }} />
-//                             {id ? <ArtistNavLink to={`/insights/lifetime/global/personal/artists/${id}`}>
-//                                 <ArtistAvatarDiv src={artistImgUrl} />
-//                                 <ArtistInfoDiv>
-//                                     <ArtistNameDiv>{name}</ArtistNameDiv>
-//                                     {/* {artistSpotifyUrl ? <SpotifyLogoLink href={artistSpotifyUrl} /> : ''} */}
-//                                 </ArtistInfoDiv>
-//                             </ArtistNavLink> : ''}
-//                             <TrackDiv>
-//                             </TrackDiv>
-//                         </PlayDiv>
-//                     </Item>
-//                 )
-//             }))}
-                
-
-//             })
-              
-//         </Container> : null}
-        
-      
-//     </ListItem>

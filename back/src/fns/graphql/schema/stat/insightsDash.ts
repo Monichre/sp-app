@@ -5,7 +5,7 @@ import {
 	PeriodType,
 	RelationType
 } from '../../../../shared/tables/TableStat'
-import moment = require('moment')
+import * as moment from 'moment'
 import { TableUser } from '../../../../shared/tables/TableUser'
 import {
 	TableAchievement,
@@ -115,7 +115,7 @@ type EnrichedKeyMakerParams = {
 	achievementValue: 'first' | 'second' | 'third'
 }
 
-const keyMaker = args => [...args].join('#')
+const keyMaker = (args: any) => [...args].join('#')
 const keyMakerPlaceAndDay = ({
 	perspective,
 	relationType,
@@ -478,7 +478,7 @@ const insightsDash: QueryResolvers.InsightsDashResolver = async (
 		throw new Error(`user info invalid for uid ${uid}`)
 	}
 
-	const { utcOffset } = valid
+	const { utcOffset }: any = valid
 	const now = localizedMoment(utcOffset, moment())
 
 	const ret = await topArtistsAndGenres(tableStat, tableAchievement, {

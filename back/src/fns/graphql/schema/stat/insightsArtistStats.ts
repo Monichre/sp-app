@@ -4,12 +4,10 @@ import {
 	TTableStat,
 	PeriodType
 } from '../../../../shared/tables/TableStat'
-import moment = require('moment')
+import * as moment from 'moment'
 import { TableUser } from '../../../../shared/tables/TableUser'
 import { verifyEnv } from '../../../../shared/env'
 import {
-	InsightsArtistStatsResponse,
-	InsightsArtistStatsResponseResolvers,
 	QueryResolvers
 } from '../../types'
 import { timeSeries, TMomentUnits } from './shared/timeSeries'
@@ -18,6 +16,8 @@ import {
 	TTableAchievement,
 	KeyData
 } from '../../../../shared/tables/TableAchievement'
+
+
 const typeDefs = `
 type Query {
   insightsArtistStats(uid: String!, gid: String!, artistId: String!): InsightsArtistStatsResponse!
@@ -111,7 +111,7 @@ type EnrichedKeyMakerParams = {
 	achievementValue: 'first' | 'second' | 'third'
 }
 
-const keyMaker = args => [...args].join('#')
+const keyMaker = (args: any) => [...args].join('#')
 const keyMakerPlaceAndDay = ({
 	perspective,
 	relationType,
@@ -462,7 +462,7 @@ const playtimeStats = async (
 	topListeners.lifetime = lifetimeTopListeners
 
 	artist.topListeners = topListeners
-    console.log('TCL: artist.topListeners', artist.topListeners)
+    
 
 
 	return {
@@ -546,12 +546,13 @@ const insightsArtistStats: QueryResolvers.InsightsArtistStatsResolver = async (
 		context.DYNAMO_ENDPOINT,
 		context.TABLE_ACHIEVEMENT
 	)
-	const { valid, invalid } = await tableUser.getUser(uid)
+	const { valid, invalid }:any = await tableUser.getUser(uid)
 	if (invalid) {
 		throw new Error(`user info invalid for uid ${uid}`)
 	}
 	const { utcOffset } = valid
 
+	// @ts-ignore
 	const now = localizedMoment(utcOffset, moment())
 
 	const playTimeStats: any = await playtimeStats(
