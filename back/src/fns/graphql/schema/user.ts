@@ -52,11 +52,11 @@ type TopListener {
 }
 
 type Artist {
-  id: String!
-  name: String!
-  images: [Image!]!
-  external_urls: SpotifyUrl!
-  genres: [String!]!
+  id: String
+  name: String
+  images: [Image!]
+  external_urls: SpotifyUrl
+  genres: [String!]
   topListeners: [TopListener]
 }
 
@@ -66,6 +66,7 @@ type UserAchievement {
 	pk: String
 	fk: String
 	sk: String
+	user: User
 }
 
 type UserInfoResponse {
@@ -165,9 +166,9 @@ const getUserAchievements: any = async (
 	console.log('TCL: fk', fk)
 	console.log('TCL: pk', pk)
 	const data = await tableAchievement.getUserAchievements(pk, fk)
-    console.log('TCL: data', data)
+    console.log('TCL: getUserAchievements Query data', data)
 	
-	return data
+	return {success: data.length, data}
 }
 
 const UserInfoResponse = {

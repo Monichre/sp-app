@@ -3,22 +3,7 @@ import * as moment from 'moment'
 import * as R from 'ramda'
 import { UpdateItemOutput } from 'aws-sdk/clients/dynamodb'
 import { PromiseResult } from 'aws-sdk/lib/request'
-import { AWSError } from 'aws-sdk'
-
-
-
-/*=============================================
-	KeyMaker
-/*=============================================
-
-pk: `${pk}#${achievementType}#${achievementValue}`,
-sk: `${sk}#${achievementType}#${achievementValue}`,
-fk: `#${achievementType}#${achievementValue}#${uid}`
-
-=============================================*/
-
-
-
+import { AWSError, Response } from 'aws-sdk'
 
 export type PeriodType =
 	| 'day'
@@ -46,8 +31,18 @@ export type Achievement = {
 	keyData: any
 	total: number
 	lastUpdated: string
-	user?: any
+	user: any
 	artist: Artist
+}
+
+export type GetUserAchievementItem = {
+	lastUpdated: any
+	total: number
+	fk: string
+	artist: any
+	sk: string
+	pk: string
+	user: any
 }
 
 export type AchievementTotal = number
@@ -67,28 +62,25 @@ type UserAchievementByArtistParams = {
 }
 
 export type KeyData = {
-		sk: string
-		pk: string
-		fk?: string
-	}
-
-type TopListenerParameterType  = KeyData & {
-	
+	sk: string
+	pk: string
+	fk?: string
 }
+
+type TopListenerParameterType = KeyData & {}
 
 type TimeseriesKeys = {
-  uid: string
-  relationType: RelationType
-  relationId: string
-  periodType: PeriodType
-  startPeriod: string
-  endPeriod: string
+	uid: string
+	relationType: RelationType
+	relationId: string
+	periodType: PeriodType
+	startPeriod: string
+	endPeriod: string
 }
 type Timeseries = {
-  playDurationMs: number
-  period: string
+	playDurationMs: number
+	period: string
 }
-
 
 /**
  *
@@ -140,13 +132,19 @@ export type TTableAchievement = {
 	) => Promise<PromiseResult<UpdateItemOutput, AWSError>>
 
 	getArtistTopListeners: ({
-		sk, pk
+		sk,
+		pk
 	}: KeyData) => Promise<PromiseResult<any, AWSError>>
 
 	getUserAchievements: (
 		pk: string,
 		fk: string
-	) => Promise<PromiseResult<any, AWSError>>
+	) => Promise<
+		PromiseResult<
+			any | [GetUserAchievementItem] | GetUserAchievementItem,
+			AWSError
+		>
+	>
 
 	getUserAchievementsByArtist: ({
 		artistId,
@@ -159,41 +157,40 @@ export type TTableAchievement = {
 }
 
 export type Stat = {
-  uid: string,
-  relationType: RelationType,
-  relationKey: string,
-  periodType: PeriodType,
-  periodValue: string,
-  playDurationMs: number,
+	uid: string
+	relationType: RelationType
+	relationKey: string
+	periodType: PeriodType
+	periodValue: string
+	playDurationMs: number
 }
 
 export type StatTotal = Stat
 export type StatArtist = Stat & {
-  artist: { name: string, genres: string[] }
+	artist: { name: string; genres: string[] }
 }
 
 export type StatGenre = Stat & {
-  genre: string
+	genre: string
 }
 type Artist = {
-  id: string,
-  name: string,
-  images: Image[],
-  external_urls: SpotifyUrl
-  genres: string[]
-  topListeners?: Object []
+	id: string
+	name: string
+	images: Image[]
+	external_urls: SpotifyUrl
+	genres: string[]
+	topListeners?: Object[]
 }
 type SpotifyUrl = {
-  spotify: string
+	spotify: string
 }
 type Image = {
-  url: string
+	url: string
 }
 
-
 type TopArtistsRow = {
-  artist: Artist,
-  playDurationMs: number,
+	artist: Artist
+	playDurationMs: number
 }
 
 const byTimeThenArtistName = R.sortWith<TopArtistsRow>([
@@ -203,13 +200,13 @@ const byTimeThenArtistName = R.sortWith<TopArtistsRow>([
 
 const byPeriod = R.sortWith<Timeseries>([R.ascend(R.path(['period']))])
 
-
-
 export const TableAchievement = (
 	endpoint: string,
 	TableName: string
 ): TTableAchievement => {
-	const doc = new AWS.DynamoDB.DocumentClient({ endpoint })
+	const doc = new AWS.DynamoDB.DocumentClient({
+		endpoint
+	})
 
 	const makeKey = (args: any[]) => [...args].join('#')
 
@@ -252,68 +249,67 @@ export const TableAchievement = (
 			date,
 			artistId
 		].join('#')
-	
-	
-	  const periodsFor = (isoDateString: string) => {
-			const m = moment.parseZone(isoDateString)
-			return {
-				day: m.format('YYYY-MM-DD'),
-				dow: m.format('d'),
-				week: m.format('YYYY-WW'),
-				month: m.format('YYYY-MM'),
-				moy: m.format('MM'),
-				year: m.format('YYYY'),
-				life: 'life'
-			}
-	  }
-	
-	  const getTimeseries = async ({
-			uid,
-			relationId,
-			relationType,
-			periodType,
-			startPeriod,
-			endPeriod
-		}: TimeseriesKeys): Promise<Timeseries[]> => {
-			const sk = [uid, periodType, relationId].join('#')
-			const startPk = [uid, relationType, periodType, startPeriod].join('#')
-			const endPk = [uid, relationType, periodType, endPeriod].join('#')
-			// console.log('getting stats for', { sk, startPk, endPk })
 
-			const params = {
-				TableName,
-				// Limit,
-				KeyConditionExpression: `sk = :sk and pk BETWEEN :s and :e`,
-				IndexName: 'GSIReverse',
-				// ScanIndexForward: false,
-				ExpressionAttributeValues: {
-					':sk': sk,
-					':s': startPk,
-					':e': endPk
-				}
-			}
-			const result = await doc
-				.query(params)
-				.promise()
-				.then(d =>
-					d.Items.map(i => ({
-						// artist: i.artist,
-						period: i.pk.split('#')[3],
-						playDurationMs: i.playDurationMs
-					}))
-				)
-				.then(byPeriod)
-			
-			return result
+	const periodsFor = (isoDateString: string) => {
+		const m = moment.parseZone(isoDateString)
+		return {
+			day: m.format('YYYY-MM-DD'),
+			dow: m.format('d'),
+			week: m.format('YYYY-WW'),
+			month: m.format('YYYY-MM'),
+			moy: m.format('MM'),
+			year: m.format('YYYY'),
+			life: 'life'
 		}
+	}
 
+	const getTimeseries = async ({
+		uid,
+		relationId,
+		relationType,
+		periodType,
+		startPeriod,
+		endPeriod
+	}: TimeseriesKeys): Promise<Timeseries[]> => {
+		const sk = [uid, periodType, relationId].join('#')
+		const startPk = [uid, relationType, periodType, startPeriod].join('#')
+		const endPk = [uid, relationType, periodType, endPeriod].join('#')
+		// console.log('getting stats for', { sk, startPk, endPk })
 
-	// cc:Achievements Lambda#5; Function createOrModifyAchievement;
-	const getArtistTopListeners = async ({
-		sk, pk
-	}: KeyData) => {
-		
-	
+		const params = {
+			TableName,
+			// Limit,
+			KeyConditionExpression: `sk = :sk and pk BETWEEN :s and :e`,
+			IndexName: 'GSIReverse',
+			// ScanIndexForward: false,
+			ExpressionAttributeValues: {
+				':sk': sk,
+				':s': startPk,
+				':e': endPk
+			}
+		}
+		const result = await doc
+			.query(params)
+			.promise()
+			.then(d =>
+				d.Items.map(i => ({
+					// artist: i.artist,
+					period: i.pk.split('#')[3],
+					playDurationMs: i.playDurationMs
+				}))
+			)
+			.then(byPeriod)
+
+		return result
+	}
+
+	/**
+	 *
+	 * cc:Achievements Lambda#5; Function createOrModifyAchievement;
+	 *
+	 */
+
+	const getArtistTopListeners = async ({ sk, pk }: KeyData) => {
 		return await doc
 			.query({
 				TableName,
@@ -326,11 +322,9 @@ export const TableAchievement = (
 			})
 			.promise()
 			.then(res => {
-				console.log(`Im the reponse for top listeners`, res)
 				if (res && res.Items && res.Items.length) {
-                    
 					let user = res.Items.pop()
-					
+
 					return user
 				} else {
 					return null
@@ -390,12 +384,7 @@ export const TableAchievement = (
 			})
 	}
 
-	const getUserAchievements = async (
-		pk: string,
-		fk: string) => {
-
-		console.log('TCL: fk', fk)
-
+	const getUserAchievements = async (pk: string, fk: string) => {
 		return await doc
 			.query({
 				TableName,
@@ -408,9 +397,18 @@ export const TableAchievement = (
 				Limit: 3
 			})
 			.promise()
-			.then(res => {
+			.then((res: any) => {
 				console.log('TCL: res for getUserAchievements', res)
-				return res && res.Items && res.Items.length ? res.Items : null
+				const achievements:
+					| [GetUserAchievementItem]
+					| GetUserAchievementItem
+					| [] = res && res.Items && res.Items.length ? res.Items : []
+				console.log(
+					'TCL: user achievements from db table achievements',
+					achievements
+				)
+
+				return achievements
 			})
 	}
 
@@ -420,7 +418,6 @@ export const TableAchievement = (
 	 *
 	 */
 
-
 	const createOrModifyAchievement = async ({
 		keyData,
 		total,
@@ -428,7 +425,6 @@ export const TableAchievement = (
 		user,
 		artist
 	}: Achievement) => {
-
 		return await doc
 			.put({
 				TableName,
@@ -441,6 +437,7 @@ export const TableAchievement = (
 				}
 			})
 			.promise()
+			
 	}
 
 	return {

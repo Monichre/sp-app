@@ -4,6 +4,18 @@ import { makeLogger, TLogger } from '../logger'
 import { TableStat } from '../../shared/tables/TableStat'
 import { TableUser } from '../../shared/tables/TableUser'
 import { TableAchievement } from '../../shared/tables/TableAchievement'
+import {
+	getDailyTopAchievers,
+	getWeeklyTopAchievers,
+	getMonthlyTopAchievers,
+	getLifetimeTopAchievers,
+	indexToAchievementMap,
+	extractPeriodTypeAndValue,
+	makeKeys,
+	keyMaker,
+	extractKeys
+} from '../agl/functions'
+
 import * as _ from 'lodash'
 
 type Env = {
@@ -16,42 +28,6 @@ type Env = {
 
 const isArtistOrGlobal = NewImage => (NewImage.artist ? 'artist' : 'global')
 
-const getGlobalStatForUser = async (user, periodType, periodValue, tableStat) =>
-	await tableStat.getStat({
-		uid: user.uid,
-		periodType,
-		periodValue
-	})
-
-const extractKeys = ({ pk, sk }) => ({
-	pk: pk.S,
-	sk: sk.S
-})
-
-const extractPeriodTypeAndValue = ({ pk, sk }) => {
-	const split = pk.split('#')
-	const end = split.length - 1
-
-	const periodType = split[end - 1]
-	const periodValue = split[end]
-
-	return {
-		periodType,
-		periodValue
-	}
-}
-
-const makeKeys = ({ recordKeys, achievementType, achievementValue, uid }) => {
-	const { pk, sk } = recordKeys
-
-	return {
-		pk: `${pk}#${achievementType}#${achievementValue}`,
-		sk: `${sk}#${achievementType}#${achievementValue}`,
-		fk: `#${achievementType}#${achievementValue}#${uid}`
-	}
-}
-
-const keyMaker = args => [...args].join('#')
 
 
 
@@ -93,54 +69,57 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 			dynamodb: { Keys, ApproximateCreationDateTime, NewImage }
 		} = record
 
+		console.log('TCL: handleRecord -> NewImage', NewImage)
+
+		const { artist } = NewImage
+		const artistInfo = artist
+			? await tableStat.getArtistInfo(artist.M.id.S)
+			: null
+
+		console.log('TCL: handleRecord -> artist', artist)
+		console.log('TCL: handleRecord -> artistInfo', artistInfo)
+
 		const { day, week, month, life } = tableAchievement.periodsFor(
 			ApproximateCreationDateTime
 		)
-	
+
 		const typeOfStat = isArtistOrGlobal(NewImage)
-		const indexToAchievementMap = {
-			0: 'first',
-			1: 'second',
-			2: 'third'
-		}
+        console.log('TCL: handleRecord -> typeOfStat', typeOfStat)
 		const recordKeys = extractKeys(Keys)
 		const lastUpdated = ApproximateCreationDateTime
+		
 
-		if (typeOfStat === 'artist') {
-			const { artist } = NewImage
-
+		/**
+		 *
+		 * cc: tableStat #2; Function getArtistStat
+		 *
+		 */
+		if (typeOfStat === 'artist' && artist && artistInfo) {
 			const userData = await Promise.all(
 				valids.map(async (user: any) => {
-
-					/**
-					 *
-					 * cc: tableStat #2; Function getArtistStat
-					 *
-					 */
-
 					const dayData = await tableStat.getArtistStat({
 						uid: user.uid,
-						artistId: artist.M.id.S,
+						artistId: artistInfo.id,
 						periodType: 'day',
 						periodValue: day
 					})
 					console.log('TCL: handleRecord -> dayData', dayData)
 					const weekData = await tableStat.getArtistStat({
 						uid: user.uid,
-						artistId: artist.M.id.S,
+						artistId: artistInfo.id,
 						periodType: 'week',
 						periodValue: week
 					})
 					console.log('TCL: handleRecord -> weekData Artist', weekData)
 					const monthData = await tableStat.getArtistStat({
 						uid: user.uid,
-						artistId: artist.M.id.S,
+						artistId: artistInfo.id,
 						periodType: 'month',
 						periodValue: month
 					})
 					const lifeData = await tableStat.getArtistStat({
 						uid: user.uid,
-						artistId: artist.M.id.S,
+						artistId: artistInfo.id,
 						periodType: 'life',
 						periodValue: life
 					})
@@ -167,168 +146,47 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 			const lifetimeTops = _.sortBy(userData, d => d.lifeData)
 				.reverse()
 				.filter(d => d.lifeData > 0)
-
-			const dailyTopAchievers = dailyTops.length
-				? await Promise.all(
-						dailyTops.map(async (daily, index) => {
-							console.log('TCL: handleRecord -> index', index)
-							if (index <= 2) {
-								const { recordKeys, user, dayData } = daily
-								const achievementType = 'topListener'
-								const achievementValue = indexToAchievementMap[index]
-								const { uid } = user
-								const total = dayData
-
-								console.log('TCL: handleRecord -> dayData', dayData)
-								const keyData = makeKeys({
-									recordKeys,
-									achievementType,
-									achievementValue,
-									uid
-								})
-								const newAchievement = await tableAchievement.createOrModifyAchievement(
-									{
-										keyData,
-										total,
-										lastUpdated,
-										user,
-										artist: {...artist.M}
-									}
-								)
-								console.log(
-									'TCL: handleRecord -> newAchievement',
-									newAchievement
-								)
-							}
-						})
-				  )
-				: null
-
+			
 			/**
 			 *
-			 * Weekly Achievement Creation
+			 * cc: Daily Achievement Creation
 			 *
 			 */
 
-			const weeklyTopAchievers = weeklyTops.length
-				? await Promise.all(
-						weeklyTops.map(async (weekly, index) => {
-							console.log('TCL: handleRecord -> index', index)
-							if (index <= 2) {
-								const { recordKeys, user, weekData } = weekly
-								const achievementType = 'topListener'
-								const achievementValue = indexToAchievementMap[index]
-								const { uid } = user
-								const total = weekData
-
-								console.log('TCL: handleRecord -> weekData', weekData)
-
-								const keyData = makeKeys({
-									recordKeys,
-									achievementType,
-									achievementValue,
-									uid
-								})
-
-								const newAchievement = await tableAchievement.createOrModifyAchievement(
-									{
-										keyData,
-										total,
-										lastUpdated,
-										user,
-										artist: { ...artist.M }
-									}
-								)
-								console.log(
-									'TCL: handleRecord -> newAchievement',
-									newAchievement
-								)
-							}
-						})
-				  )
-				: null
+			const dailyTopAchievers = await getDailyTopAchievers(dailyTops, artistInfo, tableAchievement,lastUpdated) 
 
 			/**
 			 *
-			 * Weekly Achievement Creation
+			 * cc: Weekly Achievement Creation
 			 *
 			 */
 
-			const monthlyTopAchievers = monthlyTops.length
-				? await Promise.all(
-						monthlyTops.map(async (monthly, index) => {
-							console.log('TCL: handleRecord -> index', index)
-							if (index <= 2) {
-								const { recordKeys, user, monthData } = monthly
-								const achievementType = 'topListener'
-								const achievementValue = indexToAchievementMap[index]
-								const { uid } = user
-								const total = monthData
+			const weeklyTopAchievers = await getWeeklyTopAchievers(weeklyTops, artistInfo, tableAchievement,lastUpdated)
 
-								console.log('TCL: handleRecord -> monthData', monthData)
+			/**
+			 *
+			 * cc: Monthly Achievement Creation
+			 *
+			 */
 
-								const keyData = makeKeys({
-									recordKeys,
-									achievementType,
-									achievementValue,
-									uid
-								})
+			const monthlyTopAchievers = await getMonthlyTopAchievers(
+				monthlyTops,
+				artistInfo,
+				tableAchievement,
+				lastUpdated)
+			
+			/**
+			 *
+			 * cc: Lifetime Achievement Creation
+			 *
+			 */
 
-								const newAchievement = await tableAchievement.createOrModifyAchievement(
-									{
-										keyData,
-										total,
-										lastUpdated,
-										user,
-										artist: { ...artist.M }
-									}
-								)
-								console.log(
-									'TCL: handleRecord -> newAchievement',
-									newAchievement
-								)
-							}
-						})
-				  )
-				: null
-
-			const lifetimeTopAchievers = lifetimeTops.length
-				? await Promise.all(
-						lifetimeTops.map(async (lifetime, index) => {
-							console.log('TCL: handleRecord -> index', index)
-							if (index <= 2) {
-								const { recordKeys, user, lifeData } = lifetime
-								const achievementType = 'topListener'
-								const achievementValue = indexToAchievementMap[index]
-								const { uid } = user
-								const total = lifeData
-
-								console.log('TCL: handleRecord -> monthData', lifeData)
-
-								const keyData = makeKeys({
-									recordKeys,
-									achievementType,
-									achievementValue,
-									uid
-								})
-
-								const newAchievement = await tableAchievement.createOrModifyAchievement(
-									{
-										keyData,
-										total,
-										lastUpdated,
-										user,
-										artist: { ...artist.M }
-									}
-								)
-								console.log(
-									'TCL: handleRecord -> newAchievement',
-									newAchievement
-								)
-							}
-						})
-				  )
-				: null
+			const lifetimeTopAchievers = await getLifetimeTopAchievers(
+				lifetimeTops,
+				artistInfo,
+				tableAchievement,
+				lastUpdated
+			)
 
 			return {
 				dailyTopAchievers,
@@ -336,56 +194,51 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 				monthlyTopAchievers,
 				lifetimeTopAchievers
 			}
-		} else {
 
+
+		} else {
 			
 			/**
 			 *
 			 * Unused code for performing same achievement logic for general music listening volume
 			 *
-			 */
-			
-			
-			// const userData = await Promise.all(
-			// 	valids.map(async (user: any) => {
-			// 		const dayData = await tableStat.getStat({
-			// 			uid: user.uid,
-			// 			periodType: 'day',
-			// 			periodValue: day
-			// 		})
-			// 		const weekData = await tableStat.getStat({
-			// 			uid: user.uid,
-			// 			periodType: 'week',
-			// 			periodValue: week
-			// 		})
-			// 		const monthData = await tableStat.getStat({
-			// 			uid: user.uid,
-			// 			periodType: 'month',
-			// 			periodValue: month
-			// 		})
-			// 		const lifeData = await tableStat.getStat({
-			// 			uid: user.uid,
-			// 			periodType: 'life',
-			// 			periodValue: life
-			// 		})
-			// 		return {
-			// 			recordKeys,
-			// 			user,
-			// 			dayData,
-			// 			weekData,
-			// 			monthData,
-			// 			lifeData
-			// 		}
-			// 	})
-			// )
-			// const dailyTops = _.sortBy(userData, d => d.dayData).reverse()
-			// const weeklyTops = _.sortBy(userData, d => d.weekData).reverse()
-			// const monthlyTops = _.sortBy(userData, d => d.monthData).reverse()
-			// const lifetimeTops = _.sortBy(userData, d => d.lifeData).reverse()
-			// return userData
-		}
+			 
+			/*==========================================================================================
+			const userData = await Promise.all(
+				valids.map(async (user: any) => {
+					const dayData = await tableStat.getStat({
+						uid: user.uid,
+						periodType: 'day',
+						periodValue: day
+					})
+					const weekData = await tableStat.getStat({
+						uid: user.uid,
+						periodType: 'week',
+						periodValue: week
+					})
+					const monthData = await tableStat.getStat({
+						uid: user.uid,
+						periodType: 'month',
+						periodValue: month
+					})
+					const lifeData = await tableStat.getStat({
+						uid: user.uid,
+						periodType: 'life',
+						periodValue: life
+					})
+					return {
+						recordKeys,
+						user,
+						dayData,
+						weekData,
+						monthData,
+						lifeData
+					}
+				})
+			)
+			=============================================*/
+						}
 	}
-
 
 	await Promise.all(
 		event.Records.map(async record => await handleRecord(record))

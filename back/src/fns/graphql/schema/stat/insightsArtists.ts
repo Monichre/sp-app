@@ -294,7 +294,7 @@ const topArtists = async (
 				const topListeners = await Promise.all(
 					keys.map(async (keyData: KeyData) => {
 						const data = await tableAchievement.getArtistTopListeners(keyData)
-						console.log('TCL: data', data)
+						
 						return data
 					})
 				)
@@ -366,7 +366,7 @@ const topArtists = async (
 				const topListeners = await Promise.all(
 					keys.map(async (keyData: KeyData) => {
 						const data = await tableAchievement.getArtistTopListeners(keyData)
-						console.log('TCL: data', data)
+						
 						return data
 					})
 				)
@@ -437,7 +437,7 @@ const topArtists = async (
 				const topListeners = await Promise.all(
 					keys.map(async (keyData: KeyData) => {
 						const data = await tableAchievement.getArtistTopListeners(keyData)
-						console.log('TCL: data', data)
+						
 						return data
 					})
 				)
@@ -507,7 +507,7 @@ const topArtists = async (
 				const topListeners = await Promise.all(
 					keys.map(async (keyData: KeyData) => {
 						const data = await tableAchievement.getArtistTopListeners(keyData)
-						console.log('TCL: data', data)
+						
 						return data
 					})
 				)

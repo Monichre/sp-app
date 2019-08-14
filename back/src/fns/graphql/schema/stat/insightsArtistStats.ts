@@ -316,7 +316,7 @@ const playtimeStats = async (
 		const dailyTopListeners = await Promise.all(
 			keys.map(async (keyData: KeyData) => {
 				const data = await tableAchievement.getArtistTopListeners(keyData)
-				console.log('TCL: data', data)
+				
 				return data
 			})
 		)
@@ -364,7 +364,7 @@ const playtimeStats = async (
 	const weeklyTopListeners = await Promise.all(
 		keysWeekly.map(async (keyData: KeyData) => {
 			const data = await tableAchievement.getArtistTopListeners(keyData)
-			console.log('TCL: data', data)
+			
 			return data
 		})
 	)
@@ -409,7 +409,7 @@ const playtimeStats = async (
 	const monthlyTopListeners = await Promise.all(
 		keysMonthly.map(async (keyData: KeyData) => {
 			const data = await tableAchievement.getArtistTopListeners(keyData)
-			console.log('TCL: data', data)
+			
 			return data
 		})
 	)
@@ -454,7 +454,7 @@ const playtimeStats = async (
 	const lifetimeTopListeners = await Promise.all(
 		keysLifetime.map(async (keyData: KeyData) => {
 			const data = await tableAchievement.getArtistTopListeners(keyData)
-			console.log('TCL: data', data)
+			
 			return data
 		})
 	)

@@ -222,8 +222,6 @@ const perspectiveTopArtists = async (
 		Limit: 3
 	})
 
-	console.log('TCL: endDate', endDate)
-
 	return await Promise.all(
 		artistsPrimary.map(async ({ artist, playDurationMs }) => {
 			
@@ -259,7 +257,7 @@ const perspectiveTopArtists = async (
 			const topListeners = await Promise.all(
 				keys.map(async (keyData: KeyData) => {
 					const data = await tableAchievement.getArtistTopListeners(keyData)
-					console.log('TCL: data', data)
+					
 					return data
 				})
 			)

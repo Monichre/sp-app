@@ -1,141 +1,228 @@
-// import * as R from 'ramda'
-// import { makeExecutableSchema } from 'graphql-tools'
-// import {
-// 	TableStat,
-// 	TTableStat,
-// 	PeriodType
-// } from '../../shared/tables/TableStat'
-// import moment = require('moment')
-// import { TableUser } from '../../shared/tables/TableUser'
-// import { verifyEnv } from '../../shared/env'
-// import {
-// 	InsightsArtistsResponse,
-// 	TimescopeTopArtists,
-// 	TopArtistStat
-// } from '../graphql/types'
+import { Artist, User } from '../graphql/types'
+import { TTableAchievement } from '../../shared/tables/TableAchievement'
 
+type UserTopRecordArtistStat = {
+	recordKeys: {
+		pk: string
+		sk: string
+		fk: string
+	}
+	user: User
+	dayData: number
+	weekData: number
+	monthData: number
+	lifeData: number
+}
+export const extractKeys = ({ pk, sk }) => ({
+	pk: pk.S,
+	sk: sk.S
+})
 
-// type PerspectiveTypes = 'personal' | 'group'
+export const extractPeriodTypeAndValue = ({ pk, sk }) => {
+	const split = pk.split('#')
+	const end = split.length - 1
 
-// const perspectiveTopArtists = async (tableStat: TTableStat, primaryUid: string, primaryType: PerspectiveTypes, secondaryUid: string, secondaryType: PerspectiveTypes, periodType: PeriodType, periodCurrent: string, periodPrev?: string): Promise<TopArtistStat[]> => {
-//   const artistsPrimary = await tableStat.getTopArtists({uid: primaryUid, periodType, periodValue: periodCurrent, Limit: 20})
-//   const artists = await Promise.all(artistsPrimary.map(async ({artist, playDurationMs}) => {
-//     const secondary = await tableStat.getArtistStat({uid: secondaryUid, artistId: artist.id, periodType, periodValue: periodCurrent})
-//     const personal = primaryType === 'personal' ? playDurationMs / 3600000 : secondary / 3600000
-//     const group = primaryType === 'group' ? playDurationMs / 3600000 : secondary / 3600000
-//     return {
-//       artist,
-//       personal,
-//       group,
-//     }
-//   }))
+	const periodType = split[end - 1]
+	const periodValue = split[end]
 
-//   return artists
-// }
+	return {
+		periodType,
+		periodValue
+	}
+}
 
+export const makeKeys = ({
+	recordKeys,
+	achievementType,
+	achievementValue,
+	uid
+}) => {
+	const { pk, sk } = recordKeys
 
-// const localizedMoment = (utcOffset: number, m: moment.Moment) =>
-// 	moment.utc(m).utcOffset(utcOffset, false)
+	return {
+		pk: `${pk}#${achievementType}#${achievementValue}`,
+		sk: `${sk}#${achievementType}#${achievementValue}`,
+		fk: `#${achievementType}#${achievementValue}#${uid}`
+	}
+}
 
-// const localizedISOString = (m: moment.Moment) => m.toISOString(true)
-// const timescopeTopArtists = async (
-// 	tableStat: TTableStat,
-// 	uid: string,
-// 	gid: string,
-// 	periodType: PeriodType,
-// 	periodCurrent: string,
-// 	periodPrev?: string
-// ): Promise<TimescopeTopArtists> => ({
-// 	personal: await perspectiveTopArtists(
-// 		tableStat,
-// 		uid,
-// 		'personal',
-// 		'global',
-// 		'group',
-// 		periodType,
-// 		periodCurrent,
-// 		periodPrev
-// 	),
-// 	group: await perspectiveTopArtists(
-// 		tableStat,
-// 		'global',
-// 		'group',
-// 		uid,
-// 		'personal',
-// 		periodType,
-// 		periodCurrent,
-// 		periodPrev
-// 	)
-// })
+export const keyMaker = args => [...args].join('#')
 
+export const indexToAchievementMap = {
+	0: 'first',
+	1: 'second',
+	2: 'third'
+}
 
-// const topArtists = async (
-// 	tableStat: TTableStat,
-// 	uid: string,
-// 	gid: string,
-// 	now: moment.Moment
-// ) => {
-// 	const { day: today, week: thisWeek, month: thisMonth } = tableStat.periodsFor(
-// 		localizedISOString(now)
-// 	)
-// 	const { day: yest } = tableStat.periodsFor(
-// 		localizedISOString(now.subtract(1, 'days'))
-// 	)
-// 	const { week: lastWeek } = tableStat.periodsFor(
-// 		localizedISOString(now.subtract(1, 'days'))
-// 	)
-// 	const { month: lastMonth } = tableStat.periodsFor(
-// 		localizedISOString(now.subtract(1, 'days'))
-// 	)
+export const makeRecordKeys = Keys => extractKeys(Keys)
 
-// 	return {
-// 		today: await timescopeTopArtists(tableStat, uid, gid, 'day', today, yest),
-// 		thisWeek: await timescopeTopArtists(
-// 			tableStat,
-// 			uid,
-// 			gid,
-// 			'week',
-// 			thisWeek,
-// 			lastWeek
-// 		),
-// 		thisMonth: await timescopeTopArtists(
-// 			tableStat,
-// 			uid,
-// 			gid,
-// 			'month',
-// 			thisMonth,
-// 			lastMonth
-// 		),
-// 		lifetime: await timescopeTopArtists(tableStat, uid, gid, 'life', 'life')
-// 	}
-// }
-// const insightsArtists = async (
-// 	_,
-// 	{ uid, gid },
-// 	context
-// ): Promise<InsightsArtistsResponse> => {
-// 	const log = context.log
-// 	log.info('called by', { uid })
-// 	const env = verifyEnv(
-// 		{
-// 			DYNAMO_ENDPOINT: process.env.DYNAMO_ENDPOINT,
-// 			TABLE_STAT: process.env.TABLE_STAT
-// 		},
-// 		log
-// 	)
+export const getDailyTopAchievers = async (
+	dailyTops: UserTopRecordArtistStat[],
+	artistInfo: Artist,
+	tableAchievement: TTableAchievement,
+	lastUpdated: string
+) =>
+	dailyTops.length
+		? await Promise.all(
+				dailyTops.map(async (daily, index) => {
+					console.log('TCL: handleRecord -> index', index)
+					if (index <= 2) {
+						const { recordKeys, user, dayData } = daily
+						const achievementType = 'topListener'
+						const achievementValue = indexToAchievementMap[index]
+						const { uid } = user
+						const total = dayData
 
-// 	const tableUser = TableUser(process.env.DYNAMO_ENDPOINT, process.env.TABLE_USER)
-// 	const { valid, invalid } = await tableUser.getUser(uid)
-// 	if (invalid) {
-// 		throw new Error(`user info invalid for uid ${uid}`)
-// 	}
-// 	const { utcOffset } = valid
+						console.log('TCL: handleRecord -> dayData', dayData)
+						const keyData = makeKeys({
+							recordKeys,
+							achievementType,
+							achievementValue,
+							uid
+						})
+						const newAchievement = await tableAchievement.createOrModifyAchievement(
+							{
+								keyData,
+								total,
+								lastUpdated,
+								user,
+								artist: artistInfo
+							}
+						)
+						return newAchievement
+					}
+				})
+		  )
+		: null
 
-// 	const tableStat = TableStat(context.DYNAMO_ENDPOINT, context.TABLE_STAT)
+/**
+ *
+ * Weekly Achievement Creation
+ *
+ */
 
-// 	const now = localizedMoment(utcOffset, moment())
+export const getWeeklyTopAchievers = async (
+	weeklyTops: UserTopRecordArtistStat[],
+	artistInfo: Artist,
+	tableAchievement: TTableAchievement,
+	lastUpdated: string
+) =>
+	weeklyTops.length
+		? await Promise.all(
+				weeklyTops.map(async (weekly, index) => {
+					console.log('TCL: handleRecord -> index', index)
+					if (index <= 2) {
+						const { recordKeys, user, weekData } = weekly
+						const achievementType = 'topListener'
+						const achievementValue = indexToAchievementMap[index]
+						const { uid } = user
+						const total = weekData
 
-// 	const ret = await topArtists(tableStat, uid, gid, now)
-// 	console.log('ret', ret)
-// 	return ret
-// }
+						console.log('TCL: handleRecord -> weekData', weekData)
+
+						const keyData = makeKeys({
+							recordKeys,
+							achievementType,
+							achievementValue,
+							uid
+						})
+
+						const newAchievement = await tableAchievement.createOrModifyAchievement(
+							{
+								keyData,
+								total,
+								lastUpdated,
+								user,
+								artist: artistInfo
+							}
+						)
+						return newAchievement
+					}
+				})
+		  )
+		: null
+
+/**
+ *
+ * Weekly Achievement Creation
+ *
+ */
+
+export const getMonthlyTopAchievers = async (
+	monthlyTops: UserTopRecordArtistStat[],
+	artistInfo: Artist,
+	tableAchievement: TTableAchievement,
+	lastUpdated: string
+) =>
+	monthlyTops.length
+		? await Promise.all(
+				monthlyTops.map(async (monthly, index) => {
+					console.log('TCL: handleRecord -> index', index)
+					if (index <= 2) {
+						const { recordKeys, user, monthData } = monthly
+						const achievementType = 'topListener'
+						const achievementValue = indexToAchievementMap[index]
+						const { uid } = user
+						const total = monthData
+
+						console.log('TCL: handleRecord -> monthData', monthData)
+
+						const keyData = makeKeys({
+							recordKeys,
+							achievementType,
+							achievementValue,
+							uid
+						})
+
+						const newAchievement = await tableAchievement.createOrModifyAchievement(
+							{
+								keyData,
+								total,
+								lastUpdated,
+								user,
+								artist: artistInfo
+							}
+						)
+						return newAchievement
+					}
+				})
+		  )
+		: null
+
+export const getLifetimeTopAchievers = async (
+	lifetimeTops: UserTopRecordArtistStat[],
+	artistInfo: Artist,
+	tableAchievement: TTableAchievement,
+	lastUpdated: string
+) =>
+	lifetimeTops.length
+		? await Promise.all(
+				lifetimeTops.map(async (lifetime, index) => {
+					if (index <= 2) {
+						const { recordKeys, user, lifeData } = lifetime
+						const achievementType = 'topListener'
+						const achievementValue = indexToAchievementMap[index]
+						const { uid } = user
+						const total = lifeData
+
+						const keyData = makeKeys({
+							recordKeys,
+							achievementType,
+							achievementValue,
+							uid
+						})
+
+						const newAchievement = await tableAchievement.createOrModifyAchievement(
+							{
+								keyData,
+								total,
+								lastUpdated,
+								user,
+								artist: artistInfo
+							}
+						)
+						return newAchievement
+					}
+				})
+		  )
+		: null

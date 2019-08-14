@@ -1,4 +1,4 @@
-// Generated in 2019-08-04T21:33:46-07:00
+// Generated in 2019-08-14T09:39:54-04:00
 // REGENERATE THIS BY STARTING THE LOCAL BACKEND
 // AND THEN RUNNING `front % yarn generate`
 
@@ -7,6 +7,65 @@ export type Maybe<T> = T | null;
 // ====================================================
 // Documents
 // ====================================================
+
+export type GetUserAchievementsVariables = {
+  pk: string;
+  fk: string;
+};
+
+export type GetUserAchievementsQuery = {
+  __typename?: "Query";
+
+  getUserAchievements: Maybe<(Maybe<GetUserAchievementsGetUserAchievements>)[]>;
+};
+
+export type GetUserAchievementsGetUserAchievements = {
+  __typename?: "UserAchievement";
+
+  total: Maybe<number>;
+
+  artist: Maybe<GetUserAchievementsArtist>;
+
+  user: Maybe<GetUserAchievementsUser>;
+};
+
+export type GetUserAchievementsArtist = {
+  __typename?: "Artist";
+
+  name: string;
+
+  genres: string[];
+
+  images: GetUserAchievementsImages[];
+
+  external_urls: GetUserAchievementsExternalUrls;
+};
+
+export type GetUserAchievementsImages = {
+  __typename?: "Image";
+
+  url: string;
+};
+
+export type GetUserAchievementsExternalUrls = {
+  __typename?: "SpotifyUrl";
+
+  spotify: string;
+};
+
+export type GetUserAchievementsUser = {
+  __typename?: "User";
+
+  uid: Maybe<string>;
+
+  email: Maybe<string>;
+
+  displayName: Maybe<string>;
+
+  lastUpdate: Maybe<string>;
+
+  photoURL: Maybe<string>;
+};
 
 export type GetUserInfoVariables = {
   uid: string;
@@ -1081,6 +1140,38 @@ export const TimescopeTopGenresFragmentFragmentDoc = gql`
 // Components
 // ====================================================
 
+export const GetUserAchievementsDocument = gql`
+  query GetUserAchievements($pk: String!, $fk: String!) {
+    getUserAchievements(pk: $pk, fk: $fk) {
+      total
+      artist {
+        name
+        genres
+        images {
+          url
+        }
+        external_urls {
+          spotify
+        }
+      }
+      user {
+        uid
+        email
+        displayName
+        lastUpdate
+        photoURL
+      }
+    }
+  }
+`;
+export function useGetUserAchievements(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<GetUserAchievementsVariables>
+) {
+  return ReactApolloHooks.useQuery<
+    GetUserAchievementsQuery,
+    GetUserAchievementsVariables
+  >(GetUserAchievementsDocument, baseOptions);
+}
 export const GetUserInfoDocument = gql`
   query GetUserInfo($uid: String!) {
     getUserInfo(uid: $uid) {

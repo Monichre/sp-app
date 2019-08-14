@@ -1,4 +1,4 @@
-// Generated in 2019-08-09T19:38:37-04:00
+// Generated in 2019-08-14T09:39:47-04:00
 // REGENERATE THIS BY STARTING THE LOCAL SERVER
 // AND THEN RUNNING `back % yarn generate`
 
@@ -56,6 +56,8 @@ export interface UserAchievement {
   fk?: Maybe<string>;
 
   sk?: Maybe<string>;
+
+  user?: Maybe<User>;
 }
 
 export interface Artist {
@@ -631,6 +633,8 @@ export namespace UserAchievementResolvers {
     fk?: FkResolver<Maybe<string>, TypeParent, TContext>;
 
     sk?: SkResolver<Maybe<string>, TypeParent, TContext>;
+
+    user?: UserResolver<Maybe<User>, TypeParent, TContext>;
   }
 
   export type ArtistResolver<
@@ -655,6 +659,11 @@ export namespace UserAchievementResolvers {
   > = Resolver<R, Parent, TContext>;
   export type SkResolver<
     R = Maybe<string>,
+    Parent = UserAchievement,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type UserResolver<
+    R = Maybe<User>,
     Parent = UserAchievement,
     TContext = Context
   > = Resolver<R, Parent, TContext>;

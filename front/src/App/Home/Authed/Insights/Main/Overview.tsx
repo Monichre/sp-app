@@ -113,15 +113,13 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
   } = suspensefulHook(useInsightsDash({ variables: { uid }, suspend: true, pollInterval: 10000 }))
 
   const theArtists = artists.map(({ artist }) => artist)
-  const { updatedAchievements } = determineAchievements(theArtists, uid)
 
-  console.log('TCL: updatedAchievements', updatedAchievements)
   console.count('Overview Render: ')
 
   return <>
     <TimeseriesChart {...{ timeSeries, showOnly: pathParams.perspective }} />
     <Row>
-      <UserAchievementsList userAchievements={updatedAchievements} />
+      <UserAchievementsList userId={uid} />
       <ArtistsChartBlock {...{ artists, pathParams }} userId={uid}>
         <BlockTitle to={`${insightLink(pathParams)}/artists`}>Top Artists <BlockTitleMore>see all</BlockTitleMore></BlockTitle>
       </ArtistsChartBlock>

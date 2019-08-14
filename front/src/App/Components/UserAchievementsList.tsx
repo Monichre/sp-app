@@ -7,6 +7,8 @@ import { AchievementsState, AchievementData } from '../Home/Authed/Authed';
 import ResizeObserver from 'resize-observer-polyfill'
 import * as Icons from '../../shared/icons'
 import { hrsAndMinsAndSecs } from '../../lib/durationFormats';
+import { useGetUserAchievements } from '../../types';
+import { suspensefulHook } from '../../lib/suspensefulHook';
 
 const bgSize = 6
 const AlbumBackgroundDiv = styled.div<{ src: string }>`
@@ -224,7 +226,7 @@ export function useMeasure () {
 }
 
 export interface UserAchievementsListProps {
-    userAchievements: any
+    userId: string
 }
 
 export interface TreeProps {
@@ -303,19 +305,43 @@ const AchievementItem: React.SFC<AchievementItemProps> = ({ achievementData }) =
 
 
 
+/*
 
+    pk: global#artist#life#life#topListener#first
+    fk : #topListener#first#spotify:124053034
+
+*/
  
+// useGetUserAchievements
+export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ userId }) => {
 
-export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ userAchievements }) => {
+    const topsBitch = {
+        first: {
+            pk: `global#artist#life#life#topListener#first`,
+            fk: `#topListener#first#${userId}`,
+        },
+        second: {
+            pk: `global#artist#life#life#topListener#second`,
+            fk: `#topListener#second#${userId}`,
+        },
+        third: {
+            pk: `global#artist#life#life#topListener#third`,
+            fk: `#topListener#third#${userId}`,
+        }
+    }
+    console.log('TCL: topsBitch', topsBitch)
+    const data = suspensefulHook(useGetUserAchievements({ variables: { pk: topsBitch.first.pk, fk: topsBitch.first.fk }, suspend: true, pollInterval: 4000 }))
+    console.log('TCL: data', data)
+    
     return (
         <ListWrap>
             <HeaderFlexDiv><img src='/icons/award.svg' /> <h4>Achievements</h4></HeaderFlexDiv>
             <ListStyle>
-                {Object.keys(userAchievements).filter((key: any) => userAchievements[key].data.length).map((key: any, index: number) => {
+                {/* {Object.keys(userAchievements).filter((key: any) => userAchievements[key].data.length).map((key: any, index: number) => {
                     
                     return userAchievements[key].earned ? <AchievementItem key={index} achievementData={userAchievements[key]}  /> : null
                 })}
-                
+                 */}
             </ListStyle>
         </ListWrap>
     );
