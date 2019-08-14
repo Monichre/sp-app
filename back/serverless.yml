@@ -697,4 +697,12 @@ resources:
                   KeyType: RANGE
               Projection:
                 ProjectionType: ALL
+            - IndexName: UserAchievementIndexTwo
+              KeySchema:
+                - AttributeName: pk
+                  KeyType: HASH
+                - AttributeName: fk
+                  KeyType: RANGE
+              Projection:
+                ProjectionType: ALL
       

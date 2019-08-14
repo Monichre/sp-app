@@ -191,7 +191,8 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 										keyData,
 										total,
 										lastUpdated,
-										user
+										user,
+										artist: {...artist.M}
 									}
 								)
 								console.log(
@@ -234,7 +235,8 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 										keyData,
 										total,
 										lastUpdated,
-										user
+										user,
+										artist: { ...artist.M }
 									}
 								)
 								console.log(
@@ -277,7 +279,8 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 										keyData,
 										total,
 										lastUpdated,
-										user
+										user,
+										artist: { ...artist.M }
 									}
 								)
 								console.log(
@@ -314,7 +317,8 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 										keyData,
 										total,
 										lastUpdated,
-										user
+										user,
+										artist: { ...artist.M }
 									}
 								)
 								console.log(

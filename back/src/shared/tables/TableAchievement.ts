@@ -1,10 +1,24 @@
 import * as AWS from 'aws-sdk'
 import * as moment from 'moment'
 import * as R from 'ramda'
-import { renameKeysWith } from 'ramda-adjunct'
 import { UpdateItemOutput } from 'aws-sdk/clients/dynamodb'
 import { PromiseResult } from 'aws-sdk/lib/request'
 import { AWSError } from 'aws-sdk'
+
+
+
+/*=============================================
+	KeyMaker
+/*=============================================
+
+pk: `${pk}#${achievementType}#${achievementValue}`,
+sk: `${sk}#${achievementType}#${achievementValue}`,
+fk: `#${achievementType}#${achievementValue}#${uid}`
+
+=============================================*/
+
+
+
 
 export type PeriodType =
 	| 'day'
@@ -28,15 +42,12 @@ export type AchievementType = 'topListener' | 'firstToStream'
 
 export type AchievementValue = 'first' | 'second' | 'third'
 
-// type AchievementDateParam = {
-// 	date: moment.Moment
-// }
-
 export type Achievement = {
 	keyData: any
 	total: number
 	lastUpdated: string
 	user?: any
+	artist: Artist
 }
 
 export type AchievementTotal = number
@@ -84,12 +95,6 @@ type Timeseries = {
  * cc: Type Declaration of TableAchievement class
  *
  */
-
-//  {
-// 	pk: `${pk}#${achievementType}#${achievementValue}`,
-// 	sk: `${sk}#${achievementType}#${achievementValue}`,
-// 	fk: `#${achievementType}#${achievementValue}#${uid}`
-// }
 export type TTableAchievement = {
 	makePk: (
 		artistId: string,
@@ -139,12 +144,8 @@ export type TTableAchievement = {
 	}: KeyData) => Promise<PromiseResult<any, AWSError>>
 
 	getUserAchievements: (
-		uid: string,
-		achievementType: AchievementType,
-		achievementValue: AchievementValue,
-		periodType: PeriodType,
-		periodValue: string,
-		date: string
+		pk: string,
+		fk: string
 	) => Promise<PromiseResult<any, AWSError>>
 
 	getUserAchievementsByArtist: ({
@@ -302,52 +303,10 @@ export const TableAchievement = (
 					}))
 				)
 				.then(byPeriod)
-			// console.log('artistStatsFor', uid, id, result)
+			
 			return result
 		}
 
-
-
-	// const encode = ({
-	// 	artistId,
-	// 	achievementType,
-	// 	achievementValue,
-	// 	periodType,
-	// 	periodValue,
-	// 	date, // Current time here is coming in a string
-	// 	uid,
-	// 	...rest
-	// }: Achievement) => {
-	// 	// @ts-ignore
-	// 	const lastUpdated = moment(date).format()
-	// 	// @ts-ignore
-	// 	const calendarDay = moment(date).format('MMMM-Do-YYYY')
-
-	// 	console.log('TCL: date inside encode, should be a string', date)
-	// 	console.log('TCL: lastUpdated', lastUpdated)
-
-	// 	return {
-	// 		pk: makePk(artistId, achievementType, periodType, periodValue),
-	// 		sk: makeSk(
-	// 			artistId,
-	// 			achievementValue,
-	// 			periodType,
-	// 			periodValue,
-	// 			calendarDay // Current time here is coming in a string
-	// 		),
-	// 		fk: makeFk(
-	// 			artistId,
-	// 			achievementType,
-	// 			achievementValue,
-	// 			periodType,
-	// 			periodValue,
-	// 			calendarDay, // Current time here is coming in a string
-	// 			uid
-	// 		),
-	// 		lastUpdated,
-	// 		...rest
-	// 	}
-	// }
 
 	// cc:Achievements Lambda#5; Function createOrModifyAchievement;
 	const getArtistTopListeners = async ({
@@ -369,9 +328,9 @@ export const TableAchievement = (
 			.then(res => {
 				console.log(`Im the reponse for top listeners`, res)
 				if (res && res.Items && res.Items.length) {
-                    console.log('TCL: res.Items', res.Items)
+                    
 					let user = res.Items.pop()
-					console.log('TCL: user', user)
+					
 					return user
 				} else {
 					return null
@@ -431,31 +390,26 @@ export const TableAchievement = (
 			})
 	}
 
-	const getUserAchievements = async ({
-		uid,
-		achievementType,
-		achievementValue,
-		periodType,
-		periodValue,
-		date
-	}: any) => {
-		const _pk = makeKey([achievementType, periodType, periodValue])
-		const _sk = makeKey([achievementValue, periodType, periodValue, date])
+	const getUserAchievements = async (
+		pk: string,
+		fk: string) => {
+
+		console.log('TCL: fk', fk)
 
 		return await doc
 			.query({
 				TableName,
-				KeyConditionExpression: 'pk contains :p AND sk contains :s AND fk BEGINS WITH :f',
+				IndexName: 'UserAchievementIndexTwo',
+				KeyConditionExpression: 'pk = :p AND fk = :f',
 				ExpressionAttributeValues: {
-					':p': _pk,
-					':s': _sk,
-					':f': uid
+					':p': pk,
+					':f': fk
 				},
 				Limit: 3
 			})
 			.promise()
 			.then(res => {
-				console.log('TCL: res', res)
+				console.log('TCL: res for getUserAchievements', res)
 				return res && res.Items && res.Items.length ? res.Items : null
 			})
 	}
@@ -471,31 +425,10 @@ export const TableAchievement = (
 		keyData,
 		total,
 		lastUpdated,
-		user
+		user,
+		artist
 	}: Achievement) => {
 
-		const allData = {
-			keyData,
-			total,
-			lastUpdated,
-			user
-		}
-		console.log('TCL: allData', allData)
-		console.log('TCL: keyData', keyData)
-
-		// const UpdateExpression = 'ADD totalUpdates :v SET lastUpdate = :lastUpdate SET ' + Object.keys(allData).map(k => `${allData[k]} = :${k}`).join(', ')
-		// const ExpressionAttributeValues = renameKeysWith(k => `:${k}`, allData)
-		
-		
-		// return await doc
-		// 	.update({
-		// 		TableName,
-		// 		Key: keyData,
-		// 		UpdateExpression,
-		// 		ExpressionAttributeValues
-		// 	})
-		// 	.promise()
-	
 		return await doc
 			.put({
 				TableName,
@@ -503,7 +436,8 @@ export const TableAchievement = (
 					...keyData,
 					total,
 					lastUpdated,
-					user
+					user,
+					artist
 				}
 			})
 			.promise()

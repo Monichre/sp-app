@@ -1,4 +1,4 @@
-// Generated in 2019-08-04T21:32:51-07:00
+// Generated in 2019-08-09T19:38:37-04:00
 // REGENERATE THIS BY STARTING THE LOCAL SERVER
 // AND THEN RUNNING `back % yarn generate`
 
@@ -49,19 +49,13 @@ export interface UserInfoResponse {
 export interface UserAchievement {
   artist?: Maybe<Artist>;
 
-  achievementType?: Maybe<string>;
-
-  achievementValue?: Maybe<string>;
-
-  periodType?: Maybe<string>;
-
-  periodValue?: Maybe<string>;
-
   total?: Maybe<number>;
 
-  date?: Maybe<string>;
+  pk?: Maybe<string>;
 
-  lastUpdated?: Maybe<string>;
+  fk?: Maybe<string>;
+
+  sk?: Maybe<string>;
 }
 
 export interface Artist {
@@ -310,17 +304,9 @@ export interface GetUserInfoQueryArgs {
   uid: string;
 }
 export interface GetUserAchievementsQueryArgs {
-  uid: string;
+  pk: string;
 
-  achievementType: string;
-
-  achievementValue: string;
-
-  periodType: string;
-
-  periodValue: string;
-
-  date: string;
+  fk: string;
 }
 export interface RecentPlaysQueryArgs {
   uid: string;
@@ -485,17 +471,9 @@ export namespace QueryResolvers {
     TContext = Context
   > = Resolver<R, Parent, TContext, GetUserAchievementsArgs>;
   export interface GetUserAchievementsArgs {
-    uid: string;
+    pk: string;
 
-    achievementType: string;
-
-    achievementValue: string;
-
-    periodType: string;
-
-    periodValue: string;
-
-    date: string;
+    fk: string;
   }
 
   export type _Resolver<
@@ -646,51 +624,17 @@ export namespace UserAchievementResolvers {
   export interface Resolvers<TContext = Context, TypeParent = UserAchievement> {
     artist?: ArtistResolver<Maybe<Artist>, TypeParent, TContext>;
 
-    achievementType?: AchievementTypeResolver<
-      Maybe<string>,
-      TypeParent,
-      TContext
-    >;
-
-    achievementValue?: AchievementValueResolver<
-      Maybe<string>,
-      TypeParent,
-      TContext
-    >;
-
-    periodType?: PeriodTypeResolver<Maybe<string>, TypeParent, TContext>;
-
-    periodValue?: PeriodValueResolver<Maybe<string>, TypeParent, TContext>;
-
     total?: TotalResolver<Maybe<number>, TypeParent, TContext>;
 
-    date?: DateResolver<Maybe<string>, TypeParent, TContext>;
+    pk?: PkResolver<Maybe<string>, TypeParent, TContext>;
 
-    lastUpdated?: LastUpdatedResolver<Maybe<string>, TypeParent, TContext>;
+    fk?: FkResolver<Maybe<string>, TypeParent, TContext>;
+
+    sk?: SkResolver<Maybe<string>, TypeParent, TContext>;
   }
 
   export type ArtistResolver<
     R = Maybe<Artist>,
-    Parent = UserAchievement,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-  export type AchievementTypeResolver<
-    R = Maybe<string>,
-    Parent = UserAchievement,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-  export type AchievementValueResolver<
-    R = Maybe<string>,
-    Parent = UserAchievement,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-  export type PeriodTypeResolver<
-    R = Maybe<string>,
-    Parent = UserAchievement,
-    TContext = Context
-  > = Resolver<R, Parent, TContext>;
-  export type PeriodValueResolver<
-    R = Maybe<string>,
     Parent = UserAchievement,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
@@ -699,12 +643,17 @@ export namespace UserAchievementResolvers {
     Parent = UserAchievement,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
-  export type DateResolver<
+  export type PkResolver<
     R = Maybe<string>,
     Parent = UserAchievement,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
-  export type LastUpdatedResolver<
+  export type FkResolver<
+    R = Maybe<string>,
+    Parent = UserAchievement,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type SkResolver<
     R = Maybe<string>,
     Parent = UserAchievement,
     TContext = Context
