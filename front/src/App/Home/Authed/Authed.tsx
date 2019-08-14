@@ -76,16 +76,37 @@ background-color: #030616;
   }
 `
 
-type AchievementDataItem = {
+export type OverviewAchievementDataItem = {
+  total: number
+  artist: ArtistsFragmentArtist
+}
+
+export type OverviewAchievementData = {
+  achievement: 'Top Listener' | 'Second Top Listener' | 'Third Top Listener'
+  earned: boolean
+  data: AchievementDataItem[]
+  Badge?: any
+}
+
+export type OverviewAchievementsState = {
+  1: OverviewAchievementData
+  2: OverviewAchievementData
+  3: OverviewAchievementData
+}
+
+export type AchievementDataItem = {
   total: number
   artist: ArtistsFragmentArtist
 }
 
 export type AchievementData = {
-  achievement: 'Top Listener' | 'Second Top Listener' | 'Third Top Listener'
-  earned: boolean
-  data: AchievementDataItem[]
-  Badge: any
+  artist: ArtistsFragmentArtist
+  fk: string
+  pk: string
+  sk: string
+  total: number
+  user: any
+  Badge?: any
 }
 
 export type AchievementsState = {
@@ -93,7 +114,6 @@ export type AchievementsState = {
   2: AchievementData
   3: AchievementData
 }
-
 /**
  *
  * cc:signin#2;User is Authenticated
@@ -101,39 +121,6 @@ export type AchievementsState = {
  */
 
 
-// const initialAchievements: AchievementsState = {
-//   1: {
-//     achievement: 'Top Listener',
-//     artists: [],
-//     Badge: <FirstPlaceBadge />
-//   },
-//   2: {
-//     achievement: 'Second Top Listener',
-//     artists: [],
-//     Badge: <SecondPlaceBadge />
-//   },
-//   3: {
-//     achievement: 'Third Top Listener',
-//     artists: [],
-//     Badge: <ThirdPlaceBadge />
-//   }
-// }
-
-
-// const reducer: Reducer<any, Action> = (state: AchievementsState, payload: any) => {
-//   const { action, data } = payload
-//   console.log('TCL: data', data)
-//   console.log('TCL: action', action)
-  
-//   switch (action) {
-    
-//     case 'updateAchievments':
-//       return { ...data }
-
-//     default:
-//       throw new Error("what's going on?")
-//   }
-// }
 
 
 export const Authed: React.SFC<{ user: { uid: string } }> = ({ user: firebaseUser }) => {
@@ -169,7 +156,7 @@ export const Authed: React.SFC<{ user: { uid: string } }> = ({ user: firebaseUse
 */
   return (
     <AuthedView>
-      <NavMenu {...{ initialHarvestComplete: initialHarvestComplete || false, lastUpdate: lastUpdate || '' }} />
+      <NavMenu {...{ initialHarvestComplete: initialHarvestComplete || false, lastUpdate: lastUpdate || '', userId: user.uid }} />
       <React.Suspense fallback={<Loading/>}>
         <Switch>
           <Route path='/insights/:timeScope/:groupId/:perspective' render={(props) => <Insights user={user} {...props} uid={uid} />} />
@@ -182,5 +169,10 @@ export const Authed: React.SFC<{ user: { uid: string } }> = ({ user: firebaseUse
     
   )
 }
+
+
+
+
+
 
 

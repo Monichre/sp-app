@@ -1,4 +1,4 @@
-// Generated in 2019-08-14T09:39:54-04:00
+// Generated in 2019-08-14T10:53:43-04:00
 // REGENERATE THIS BY STARTING THE LOCAL BACKEND
 // AND THEN RUNNING `front % yarn generate`
 
@@ -23,6 +23,12 @@ export type GetUserAchievementsGetUserAchievements = {
   __typename?: "UserAchievement";
 
   total: Maybe<number>;
+
+  sk: Maybe<string>;
+
+  pk: Maybe<string>;
+
+  fk: Maybe<string>;
 
   artist: Maybe<GetUserAchievementsArtist>;
 
@@ -55,6 +61,8 @@ export type GetUserAchievementsExternalUrls = {
 
 export type GetUserAchievementsUser = {
   __typename?: "User";
+
+  achievements: Maybe<(Maybe<string>)[]>;
 
   uid: Maybe<string>;
 
@@ -1144,6 +1152,9 @@ export const GetUserAchievementsDocument = gql`
   query GetUserAchievements($pk: String!, $fk: String!) {
     getUserAchievements(pk: $pk, fk: $fk) {
       total
+      sk
+      pk
+      fk
       artist {
         name
         genres
@@ -1155,6 +1166,7 @@ export const GetUserAchievementsDocument = gql`
         }
       }
       user {
+        achievements
         uid
         email
         displayName

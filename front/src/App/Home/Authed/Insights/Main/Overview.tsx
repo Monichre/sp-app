@@ -12,7 +12,7 @@ import { TimeseriesChart } from '../shared/TimeseriesChart';
 import { suspensefulHook } from '../../../../../lib/suspensefulHook';
 import { FeaturedArtists } from './FeaturedArtists';
 import ReactTooltip from 'react-tooltip'
-import { AchievementsState } from '../../Authed';
+import { OverviewAchievementDataItem, OverviewAchievementData, OverviewAchievementsState } from '../../Authed';
 import { FirstPlaceBadge, SecondPlaceBadge, ThirdPlaceBadge } from '../../../../Components/Badge'
 import { UserAchievementsList } from '../../../../Components/UserAchievementsList'
 
@@ -40,67 +40,6 @@ const Row = styled.div`
 `
 
 
-const isUser = (userId: string, achievementHolder: any) => achievementHolder && achievementHolder.user.uid === userId
-
-const determineAchievements = (artists: any[], userId: string) => {
-  console.log('TCL: determineAchievements -> userId', userId)
-
-  const isUser = (userId: string, achievementHolder: any) => achievementHolder && achievementHolder.user.uid === userId
-
-  // AchievementData
-  const updatedAchievements: AchievementsState = {
-    1: {
-      earned: false,
-      achievement: 'Top Listener',
-      data: [],
-      Badge: <FirstPlaceBadge />
-    },
-    2: {
-      earned: false,
-      achievement: 'Second Top Listener',
-      data: [],
-      Badge: <SecondPlaceBadge />
-    },
-    3: {
-      earned: false,
-      achievement: 'Third Top Listener',
-      data: [],
-      Badge: <ThirdPlaceBadge />
-    }
-  }
-
-  artists.forEach(artist => {
-    const { topListeners } = artist
-
-    topListeners.forEach((listener: any, i: any) => {
-      if (listener) {
-        const { user, total } = listener
-        console.log(`determineAchievements -> listener ${listener.user.displayName ? listener.user.displayName : listener.user.email} for artist ${artist.name}`)
-
-        let itIs: boolean = isUser(userId, listener)
-        console.log('TCL: determineAchievements -> itIs', itIs)
-
-        // @ts-ignore
-        if (itIs) { updatedAchievements[i + 1].earned = true }
-
-
-        // @ts-ignore
-        updatedAchievements[i + 1].data.push({
-          total,
-          artist
-        })
-
-      }
-      
-    })
-
-  })
-
-  return {
-    updatedAchievements
-  }
-
-}
 
 export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams: TPathParams }> = ({ uid, pathParams }) => {
   const {
@@ -112,14 +51,14 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
     }
   } = suspensefulHook(useInsightsDash({ variables: { uid }, suspend: true, pollInterval: 10000 }))
 
-  const theArtists = artists.map(({ artist }) => artist)
+  
 
   console.count('Overview Render: ')
 
   return <>
     <TimeseriesChart {...{ timeSeries, showOnly: pathParams.perspective }} />
     <Row>
-      <UserAchievementsList userId={uid} />
+      
       <ArtistsChartBlock {...{ artists, pathParams }} userId={uid}>
         <BlockTitle to={`${insightLink(pathParams)}/artists`}>Top Artists <BlockTitleMore>see all</BlockTitleMore></BlockTitle>
       </ArtistsChartBlock>

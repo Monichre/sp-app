@@ -310,6 +310,28 @@ export const TableAchievement = (
 	 */
 
 	const getArtistTopListeners = async ({ sk, pk }: KeyData) => {
+		const status = () => {
+			let place
+			if(pk.split('#').includes('topListener') &&
+				pk.split('#').includes('first')) {
+				place = 'first'
+			}
+			
+			if(pk.split('#').includes('topListener') &&
+				pk.split('#').includes('second')) {
+				place = 'second'
+			}
+			
+			if(pk.split('#').includes('topListener') &&
+				pk.split('#').includes('third')) {
+				place = 'third'
+				}
+		}
+		const aglStatus = {
+			type: 'topListener',
+			place: status()
+		}
+
 		return await doc
 			.query({
 				TableName,
@@ -324,7 +346,7 @@ export const TableAchievement = (
 			.then(res => {
 				if (res && res.Items && res.Items.length) {
 					let user = res.Items.pop()
-
+					user.achievements = aglStatus
 					return user
 				} else {
 					return null
@@ -393,12 +415,10 @@ export const TableAchievement = (
 				ExpressionAttributeValues: {
 					':p': pk,
 					':f': fk
-				},
-				Limit: 3
+				}
 			})
 			.promise()
 			.then((res: any) => {
-				console.log('TCL: res for getUserAchievements', res)
 				const achievements:
 					| [GetUserAchievementItem]
 					| GetUserAchievementItem

@@ -9,6 +9,8 @@ import * as Icons from '../../shared/icons'
 import { hrsAndMinsAndSecs } from '../../lib/durationFormats';
 import { useGetUserAchievements } from '../../types';
 import { suspensefulHook } from '../../lib/suspensefulHook';
+import moment from 'moment'
+import {PopUp} from './PopUp'
 
 const bgSize = 6
 const AlbumBackgroundDiv = styled.div<{ src: string }>`
@@ -116,7 +118,9 @@ const ListItem: any = styled.li`
     align-items: center;
     align-content: center;
     padding: 12px 0;
-    overflow: hidden;
+       overflow-x: scroll;
+    width: 100%;
+
     position: relative;
 
     ${(props: any) => props.clicked && css`
@@ -189,8 +193,11 @@ const FlexDiv = styled.div`
     justify-content: space-evenly;
     align-content: center;
     width: 100%;
+    max-width: 100vw;
     margin: 10px 0;
     position: relative;
+    overflow-x: scroll;
+    padding: 0 40px;
     z-index: 20;
     /* border-top: 1px solid rgba(255,255,255,.1); */
     /* border-bottom: 1px solid rgba(255,255,255,.1); */
@@ -227,6 +234,7 @@ export function useMeasure () {
 
 export interface UserAchievementsListProps {
     userId: string
+    children?: any
 }
 
 export interface TreeProps {
@@ -238,10 +246,25 @@ export interface TreeProps {
 
 }
 
+const extractAchievementTypeAndValue = (pk: any) => {
+    const split = pk.split('#')
+    const end = split.length - 1
+
+    const achievementType = split[end - 1]
+    const achievementValue = split[end]
+
+    return {
+        achievementType,
+        achievementValue
+    }
+}
+
 
 
 export interface AchievementItemProps {
     achievementData: AchievementData
+    title: string,
+    achievements: any[]
 }
 
 const Tree: React.SFC<TreeProps> = memo(({ children = false, name, style, defaultOpen = false, onClick }) => {
@@ -274,46 +297,62 @@ const Tree: React.SFC<TreeProps> = memo(({ children = false, name, style, defaul
 })
 
 
+const AchievementItem: any = ({achievement}: any) => {
+    let [loaded, setLoaded] = useState(false)
+       const { artist, fk, pk, sk, total, user } = achievement
+        const { achievementType, achievementValue } = extractAchievementTypeAndValue(pk)
+        const { hrs, mins} = hrsAndMins(total)
+        const ttl = loaded ? useSpring({ total: mins, from: { total: 0 } }) : {total: 0}
 
-const AchievementItem: React.SFC<AchievementItemProps> = ({ achievementData }) => {
-    const { achievement, data, Badge } = achievementData
+            useEffect(() => setLoaded(loaded => !loaded))
+
+     return (
+                                            <div style={{ margin: '10px 10px 0', position: 'relative', padding: '10px 10px 0' }}>
+                                                <ArtistAvatarDiv src={artist.images[0].url} />
+                                                <ArtistNameDiv>{artist.name}</ArtistNameDiv>
+                                                <p><animated.span>{ttl.total}</animated.span> minutes</p>
+                                            </div>
+                                        )
+}
+
+
+const FirstPlaceAchievements: any = ({firsts, wasClicked, handleClick}: any) => {
+   
+    return (
+         <ListItem data-total={firsts.length} clicked={wasClicked}>
+                        <Tree name='First' onClick={handleClick}>
+                            <FlexDiv>
+                                {firsts.length ? firsts.map((achievement: any) => <AchievementItem achievement={achievement} />) : null}
+
+                            </FlexDiv>
+                        </Tree>
+
+                    </ListItem>
+    )
+}
+
+
+export const hrsAndMins = (durationMs: number) => {
+  const d = moment.duration(durationMs)
+  return {
+    hrs: Math.abs(Math.trunc(d.asHours())),
+    mins: Math.abs(d.minutes()),
+  }
+}
+
+const hrsMaybeMins = ({hrs, mins}: {hrs: number, mins: number}) =>
+  hrs > 100 ? { hrs } : { hrs, mins }
+
+const decimalToHrsMins = (value: number) => `${Math.floor(value)}:${Math.floor((value % 1) * 60).toString().padStart(2, '0')}`
+
+export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ userId }) => {
+
+      
+
     const [wasClicked, setClicked] = useState(false)
     const handleClick = () => setClicked(wasClicked => !wasClicked)
 
     
-
-    return <ListItem data-total={data.length} clicked={wasClicked}>
-        <Tree name={achievement} onClick={handleClick}>
-            <FlexDiv>
-                {data.length ? data.map(dataItem => {
-                    const timeData = hrsAndMinsAndSecs(dataItem.total)
-                    console.log('TCL: timeData', timeData)
-                    return (
-                        <div style={{ margin: '10px', position: 'relative', padding: '10px' }}>
-                            <ArtistAvatarDiv src={dataItem.artist.images[0].url} />
-                            <ArtistNameDiv>{dataItem.artist.name}</ArtistNameDiv>
-                            {/* <p>{hrs}{mins}</p> */}
-                        </div>
-
-                    )
-                }) : null}
-            </FlexDiv>
-        </Tree>
-
-    </ListItem>
-}
-
-
-
-/*
-
-    pk: global#artist#life#life#topListener#first
-    fk : #topListener#first#spotify:124053034
-
-*/
- 
-// useGetUserAchievements
-export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ userId }) => {
 
     const topsBitch = {
         first: {
@@ -329,19 +368,75 @@ export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ use
             fk: `#topListener#third#${userId}`,
         }
     }
-    console.log('TCL: topsBitch', topsBitch)
-    const data = suspensefulHook(useGetUserAchievements({ variables: { pk: topsBitch.first.pk, fk: topsBitch.first.fk }, suspend: true, pollInterval: 4000 }))
-    console.log('TCL: data', data)
     
+    const data: any = suspensefulHook(useGetUserAchievements({ variables: { pk: topsBitch.first.pk, fk: topsBitch.first.fk }, suspend: true, pollInterval: 15000 }))
+    
+
+    const { getUserAchievements }: any = data
+    const achievements: any = getUserAchievements.length ? getUserAchievements.map((achievement: any) => {
+
+        let total: any = hrsAndMins(achievement.total)
+        achievement.formattedTotal = total
+
+        return achievement
+    }) : []
+
+    const [firsts, seconds, thirds]: any = [achievements.filter((achievement: any) => achievement.pk === topsBitch.first.pk), achievements.filter((achievement: any) => achievement.pk === topsBitch.second.pk), achievements.filter((achievement: any) => achievement.pk === topsBitch.third.pk)]
+
     return (
         <ListWrap>
             <HeaderFlexDiv><img src='/icons/award.svg' /> <h4>Achievements</h4></HeaderFlexDiv>
             <ListStyle>
-                {/* {Object.keys(userAchievements).filter((key: any) => userAchievements[key].data.length).map((key: any, index: number) => {
-                    
-                    return userAchievements[key].earned ? <AchievementItem key={index} achievementData={userAchievements[key]}  /> : null
-                })}
-                 */}
+                <ListItem data-total={firsts.length} clicked={wasClicked}>
+                    {/* <PopUp artists={firsts.map((first: any) => first.artist)} /> */}
+                        <Tree name='First' onClick={handleClick}>
+                            <FlexDiv>
+
+                                
+                                {firsts.length ? firsts.map((achievement: any) => {
+                                    const { artist, fk, pk, sk, total, user } = achievement
+                                    const { achievementType, achievementValue } = extractAchievementTypeAndValue(pk)
+                                    const { hrs, mins} = hrsAndMins(total)
+                                   
+                                        return (
+                                            // <PopUp artists={firsts.map(first => first.artist)} />
+                                            <div style={{ margin: '10px', position: 'relative', padding: '10px' }}>
+                                                <ArtistAvatarDiv src={artist.images[0].url} />
+                                                <ArtistNameDiv>{artist.name}</ArtistNameDiv>
+                                                <p>{mins} minutes</p>
+                                            </div>
+                                        )
+                                }) : null} 
+
+                            </FlexDiv>
+                        </Tree>
+
+                    </ListItem>
+                    {seconds.length ? 
+                     <ListItem data-total={firsts.length} clicked={wasClicked}>
+                        <Tree name='Second' onClick={handleClick}>
+                            <FlexDiv>
+                                {seconds.map((achievement: any) => {
+                                    const { artist, fk, pk, sk, total, user } = achievement
+                                    const { hrs, mins} = hrsAndMins(total)
+                                    const { achievementType, achievementValue } = extractAchievementTypeAndValue(pk)
+    
+                                        return (
+                                            <div style={{ margin: '10px', position: 'relative', padding: '10px' }}>
+                                                <ArtistAvatarDiv src={artist.images[0].url} />
+                                                <ArtistNameDiv>{artist.name}</ArtistNameDiv>
+                                                <p>{hrs}{mins}</p>
+                                            </div>
+                                        )})
+                                    }
+
+
+                            </FlexDiv>
+                        </Tree>
+
+                    </ListItem>
+                    : null}
+                
             </ListStyle>
         </ListWrap>
     );

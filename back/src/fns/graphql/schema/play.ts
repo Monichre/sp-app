@@ -33,6 +33,7 @@ type TopListener {
 }
 
 type User {
+  achievements: [String]
   photoURL: String
   uid: String
   email: String

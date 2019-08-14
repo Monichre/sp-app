@@ -34,6 +34,7 @@ type User {
   photoURL: String
   uid: String
   email: String
+  achievements: [String]
   utcOffset: Int
   displayName: String
   lastUpdate: String

@@ -1,4 +1,4 @@
-// Generated in 2019-08-14T09:39:47-04:00
+// Generated in 2019-08-14T10:53:36-04:00
 // REGENERATE THIS BY STARTING THE LOCAL SERVER
 // AND THEN RUNNING `back % yarn generate`
 
@@ -98,6 +98,8 @@ export interface User {
   uid?: Maybe<string>;
 
   email?: Maybe<string>;
+
+  achievements?: Maybe<(Maybe<string>)[]>;
 
   utcOffset?: Maybe<number>;
 
@@ -785,6 +787,12 @@ export namespace UserResolvers {
 
     email?: EmailResolver<Maybe<string>, TypeParent, TContext>;
 
+    achievements?: AchievementsResolver<
+      Maybe<(Maybe<string>)[]>,
+      TypeParent,
+      TContext
+    >;
+
     utcOffset?: UtcOffsetResolver<Maybe<number>, TypeParent, TContext>;
 
     displayName?: DisplayNameResolver<Maybe<string>, TypeParent, TContext>;
@@ -814,6 +822,11 @@ export namespace UserResolvers {
   > = Resolver<R, Parent, TContext>;
   export type EmailResolver<
     R = Maybe<string>,
+    Parent = User,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type AchievementsResolver<
+    R = Maybe<(Maybe<string>)[]>,
     Parent = User,
     TContext = Context
   > = Resolver<R, Parent, TContext>;

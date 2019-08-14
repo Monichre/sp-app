@@ -1,6 +1,9 @@
 query GetUserAchievements($pk: String!, $fk: String!) {
 	getUserAchievements(pk: $pk, fk: $fk) {
 		total
+        sk
+        pk
+        fk
 		artist {
 			name
 			genres
@@ -12,6 +15,7 @@ query GetUserAchievements($pk: String!, $fk: String!) {
 			}
 		}
 		user {
+            achievements
 			uid
 			email
 			displayName

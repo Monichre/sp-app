@@ -59,6 +59,7 @@ type SpotifyUrl {
 
 type User {
   photoURL: String
+  achievements: [String]
   uid: String
   email: String
   utcOffset: Int

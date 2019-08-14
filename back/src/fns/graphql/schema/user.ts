@@ -31,6 +31,7 @@ type SpotifyUrl {
 
 type User {
   photoURL: String
+  achievements: [String]
   uid: String
   email: String
   utcOffset: Int
@@ -168,7 +169,7 @@ const getUserAchievements: any = async (
 	const data = await tableAchievement.getUserAchievements(pk, fk)
     console.log('TCL: getUserAchievements Query data', data)
 	
-	return {success: data.length, data}
+	return data
 }
 
 const UserInfoResponse = {

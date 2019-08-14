@@ -1,7 +1,21 @@
 import { Artist, User } from '../graphql/types'
-import { TTableAchievement } from '../../shared/tables/TableAchievement'
+import {
+	TTableAchievement,
+	KeyData
+} from '../../shared/tables/TableAchievement'
+import { PeriodType } from '../../shared/tables/TableStat'
 
-type UserTopRecordArtistStat = {
+export type EnrichedKeyMakerParams = {
+	perspective: string
+	relationType: 'artist'
+	periodType: PeriodType
+	periodValue: string
+	artistId: string
+	achievementType: 'topListener'
+	achievementValue: 'first' | 'second' | 'third'
+}
+
+export type UserTopRecordArtistStat = {
 	recordKeys: {
 		pk: string
 		sk: string
@@ -61,8 +75,25 @@ export const getDailyTopAchievers = async (
 	artistInfo: Artist,
 	tableAchievement: TTableAchievement,
 	lastUpdated: string
-) =>
-	dailyTops.length
+) => {
+	const { day, week, month, life } = tableAchievement.periodsFor(lastUpdated)
+
+	const topListenerDailyParams = {
+		perspective: 'global',
+		relationType: 'artist',
+		periodType: 'day',
+		periodValue: day,
+		artistId: artistInfo.id
+	}
+	const topThree = await topThreeListeners({
+		...topListenerDailyParams,
+		tableAchievement
+	})
+	console.log('TCL: daily topThree', topThree)
+
+	artistInfo.topListeners = topThree
+
+	const achieverData = dailyTops.length
 		? await Promise.all(
 				dailyTops.map(async (daily, index) => {
 					console.log('TCL: handleRecord -> index', index)
@@ -95,6 +126,9 @@ export const getDailyTopAchievers = async (
 		  )
 		: null
 
+	return achieverData
+}
+
 /**
  *
  * Weekly Achievement Creation
@@ -106,8 +140,27 @@ export const getWeeklyTopAchievers = async (
 	artistInfo: Artist,
 	tableAchievement: TTableAchievement,
 	lastUpdated: string
-) =>
-	weeklyTops.length
+) => {
+	const { day, week, month, life } = tableAchievement.periodsFor(lastUpdated)
+
+	const topListenerWeekParams = {
+		perspective: 'global',
+		relationType: 'artist',
+		periodType: 'week',
+		periodValue: week,
+		artistId: artistInfo.id
+	}
+
+	const topThree = await topThreeListeners({
+		...topListenerWeekParams,
+		tableAchievement
+	})
+
+	console.log('TCL: topThree', topThree)
+
+	artistInfo.topListeners = topThree
+
+	const achieverData = weeklyTops.length
 		? await Promise.all(
 				weeklyTops.map(async (weekly, index) => {
 					console.log('TCL: handleRecord -> index', index)
@@ -142,9 +195,12 @@ export const getWeeklyTopAchievers = async (
 		  )
 		: null
 
+	return achieverData
+}
+
 /**
  *
- * Weekly Achievement Creation
+ * cc: Monthly Achievement Creation
  *
  */
 
@@ -153,8 +209,27 @@ export const getMonthlyTopAchievers = async (
 	artistInfo: Artist,
 	tableAchievement: TTableAchievement,
 	lastUpdated: string
-) =>
-	monthlyTops.length
+) => {
+	const { day, week, month, life } = tableAchievement.periodsFor(lastUpdated)
+
+	const topListenerMonthParams = {
+		perspective: 'global',
+		relationType: 'artist',
+		periodType: 'month',
+		periodValue: month,
+		artistId: artistInfo.id
+	}
+
+	const topThree = await topThreeListeners({
+		...topListenerMonthParams,
+		tableAchievement
+	})
+
+	console.log('TCL: topThree', topThree)
+
+	artistInfo.topListeners = topThree
+
+	const achieverData = monthlyTops.length
 		? await Promise.all(
 				monthlyTops.map(async (monthly, index) => {
 					console.log('TCL: handleRecord -> index', index)
@@ -189,13 +264,35 @@ export const getMonthlyTopAchievers = async (
 		  )
 		: null
 
+	return achieverData
+}
+
 export const getLifetimeTopAchievers = async (
 	lifetimeTops: UserTopRecordArtistStat[],
 	artistInfo: Artist,
 	tableAchievement: TTableAchievement,
 	lastUpdated: string
-) =>
-	lifetimeTops.length
+) => {
+	const { day, week, month, life } = tableAchievement.periodsFor(lastUpdated)
+
+	const topListenerLifeParams = {
+		perspective: 'global',
+		relationType: 'artist',
+		periodType: 'life',
+		periodValue: life,
+		artistId: artistInfo.id
+	}
+
+	const topThree = await topThreeListeners({
+		...topListenerLifeParams,
+		tableAchievement
+	})
+
+	console.log('TCL: topThree', topThree)
+
+	artistInfo.topListeners = topThree
+
+	const achieverData = lifetimeTops.length
 		? await Promise.all(
 				lifetimeTops.map(async (lifetime, index) => {
 					if (index <= 2) {
@@ -226,3 +323,86 @@ export const getLifetimeTopAchievers = async (
 				})
 		  )
 		: null
+}
+
+export const keyMakerPlaceAndDay = ({
+	perspective,
+	relationType,
+	periodType,
+	periodValue,
+	artistId,
+	achievementType,
+	achievementValue
+}: EnrichedKeyMakerParams) => {
+	const pk = keyMaker([
+		perspective,
+		relationType,
+		periodType,
+		periodValue,
+		achievementType,
+		achievementValue
+	])
+	const sk = keyMaker([
+		perspective,
+		periodType,
+		artistId,
+		achievementType,
+		achievementValue
+	])
+	return {
+		sk,
+		pk
+	}
+}
+
+export const topThreeListeners = async ({
+	perspective,
+	relationType,
+	periodType,
+	periodValue,
+	artistId,
+	tableAchievement
+}) => {
+	const firstKeys: any = keyMakerPlaceAndDay({
+		perspective,
+		relationType,
+		periodType,
+		periodValue,
+		artistId,
+		achievementType: 'topListener',
+		achievementValue: 'first'
+	})
+	const secondKeys = keyMakerPlaceAndDay({
+		perspective,
+		relationType,
+		periodType,
+		periodValue,
+		artistId,
+		achievementType: 'topListener',
+		achievementValue: 'second'
+	})
+	const thirdKeys = keyMakerPlaceAndDay({
+		perspective,
+		relationType,
+		periodType,
+		periodValue,
+		artistId,
+		achievementType: 'topListener',
+		achievementValue: 'third'
+	})
+
+	const keys = [firstKeys, secondKeys, thirdKeys]
+	const topListeners = await Promise.all(
+		keys.map(
+			async (keyData: KeyData) =>
+				await tableAchievement.getArtistTopListeners(keyData)
+		)
+    )
+    //   const topListeners = {
+	// 			first: tableAchievement.getArtistTopListeners(firstKeys),
+	// 			second: tableAchievement.getArtistTopListeners(secondKeys),
+	// 			third: tableAchievement.getArtistTopListeners(thirdKeys)
+	// 		}
+	console.log('TCL: topListeners', topListeners)
+	return topListeners
+}
