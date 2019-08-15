@@ -1,4 +1,4 @@
-// Generated in 2019-08-14T10:53:43-04:00
+// Generated in 2019-08-15T14:29:18-04:00
 // REGENERATE THIS BY STARTING THE LOCAL BACKEND
 // AND THEN RUNNING `front % yarn generate`
 
@@ -626,6 +626,10 @@ export type ArtistFragmentTopListeners = {
 
   total: Maybe<number>;
 
+  pk: Maybe<string>;
+
+  sk: Maybe<string>;
+
   user: Maybe<ArtistFragmentUser>;
 };
 
@@ -956,6 +960,8 @@ export const ArtistFragmentFragmentDoc = gql`
     }
     topListeners {
       total
+      pk
+      sk
       user {
         photoURL
         email

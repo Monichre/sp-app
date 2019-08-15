@@ -12,9 +12,7 @@ import { TimeseriesChart } from '../shared/TimeseriesChart';
 import { suspensefulHook } from '../../../../../lib/suspensefulHook';
 import { FeaturedArtists } from './FeaturedArtists';
 import ReactTooltip from 'react-tooltip'
-import { OverviewAchievementDataItem, OverviewAchievementData, OverviewAchievementsState } from '../../Authed';
-import { FirstPlaceBadge, SecondPlaceBadge, ThirdPlaceBadge } from '../../../../Components/Badge'
-import { UserAchievementsList } from '../../../../Components/UserAchievementsList'
+
 
 const Row = styled.div`
   display: flex;

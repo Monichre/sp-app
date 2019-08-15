@@ -1,3 +1,9 @@
+/**
+ *
+ * cc: InsightsArtistsStats#1; Business Logic Query Resolver
+ *
+ */
+
 import { makeExecutableSchema } from 'graphql-tools'
 import {
 	TableStat,
@@ -7,16 +13,13 @@ import {
 import * as moment from 'moment'
 import { TableUser } from '../../../../shared/tables/TableUser'
 import { verifyEnv } from '../../../../shared/env'
-import {
-	QueryResolvers
-} from '../../types'
+import { QueryResolvers } from '../../types'
 import { timeSeries, TMomentUnits } from './shared/timeSeries'
 import {
 	TableAchievement,
 	TTableAchievement,
 	KeyData
 } from '../../../../shared/tables/TableAchievement'
-
 
 const typeDefs = `
 type Query {
@@ -101,7 +104,6 @@ type Delta {
 }
 `
 
-
 type EnrichedKeyMakerParams = {
 	perspective: string
 	relationType: 'artist'
@@ -142,7 +144,6 @@ const keyMakerPlaceAndDay = ({
 		pk
 	}
 }
-
 
 const localizedMoment = (utcOffset: number, m: moment.Moment) =>
 	moment.utc(m).utcOffset(utcOffset, false)
@@ -285,51 +286,54 @@ const playtimeStats = async (
 	)
 
 	const artist = await tableStat.getArtistInfo(artistId)
-		const firstKeysDaily = keyMakerPlaceAndDay({
-			perspective: gid,
-			relationType: 'artist',
-			periodType: 'day',
-			periodValue: today,
-			artistId: artistId,
-			achievementType: 'topListener',
-			achievementValue: 'first'
-		})
-		const secondKeysDaily = keyMakerPlaceAndDay({
-			perspective: gid,
-			relationType: 'artist',
-			periodType: 'day',
-			periodValue: today,
-			artistId: artistId,
-			achievementType: 'topListener',
-			achievementValue: 'second'
-		})
-		const thirdKeysDaily = keyMakerPlaceAndDay({
-			perspective: gid,
-			relationType: 'artist',
-			periodType: 'day',
-			periodValue: today,
-			artistId: artistId,
-			achievementType: 'topListener',
-			achievementValue: 'third'
-		})
+	let topListeners: any = []
 
-		const keys = [firstKeysDaily, secondKeysDaily, thirdKeysDaily]
-		const dailyTopListeners = await Promise.all(
-			keys.map(async (keyData: KeyData) => {
-				const data = await tableAchievement.getArtistTopListeners(keyData)
-				
-				return data
-			})
-		)
+	const firstKeysDaily = keyMakerPlaceAndDay({
+		perspective: gid,
+		relationType: 'artist',
+		periodType: 'day',
+		periodValue: today,
+		artistId: artistId,
+		achievementType: 'topListener',
+		achievementValue: 'first'
+	})
+	const secondKeysDaily = keyMakerPlaceAndDay({
+		perspective: gid,
+		relationType: 'artist',
+		periodType: 'day',
+		periodValue: today,
+		artistId: artistId,
+		achievementType: 'topListener',
+		achievementValue: 'second'
+	})
+	const thirdKeysDaily = keyMakerPlaceAndDay({
+		perspective: gid,
+		relationType: 'artist',
+		periodType: 'day',
+		periodValue: today,
+		artistId: artistId,
+		achievementType: 'topListener',
+		achievementValue: 'third'
+	})
 
-	const topListeners: any = {}
+	const keys = [firstKeysDaily, secondKeysDaily, thirdKeysDaily]
+	const dailyTopListeners = await Promise.all(
+		keys.map(async (keyData: KeyData) => {
+			const data = await tableAchievement.getArtistTopListeners(keyData)
 
-	topListeners.daily = dailyTopListeners
-	
+			return data
+		})
+	)
+
+	if (dailyTopListeners.length) {
+		topListeners = topListeners.length
+			? [...topListeners, ...dailyTopListeners]
+			: [...dailyTopListeners]
+	}
 
 	/**
 	 *
-	 * Weekly Enriched Top Artists w/Top Listeners
+	 * cc: Weekly Enriched Top Artists w/Top Listeners
 	 *
 	 */
 
@@ -365,16 +369,20 @@ const playtimeStats = async (
 	const weeklyTopListeners = await Promise.all(
 		keysWeekly.map(async (keyData: KeyData) => {
 			const data = await tableAchievement.getArtistTopListeners(keyData)
-			
+
 			return data
 		})
 	)
 
-	topListeners.weekly = weeklyTopListeners
+	if (weeklyTopListeners.length) {
+		topListeners = topListeners.length
+			? [...topListeners, ...weeklyTopListeners]
+			: [...weeklyTopListeners]
+	}
 
 	/**
 	 *
-	 * Monthly Top Artists Enriched w/TopListeners
+	 * cc: Monthly Top Artists Enriched w/TopListeners
 	 *
 	 */
 
@@ -410,16 +418,20 @@ const playtimeStats = async (
 	const monthlyTopListeners = await Promise.all(
 		keysMonthly.map(async (keyData: KeyData) => {
 			const data = await tableAchievement.getArtistTopListeners(keyData)
-			
+
 			return data
 		})
 	)
 
-	topListeners.monthly = monthlyTopListeners
+	if (monthlyTopListeners.length) {
+		topListeners = topListeners.length
+			? [...topListeners, ...monthlyTopListeners]
+			: [...monthlyTopListeners]
+	}
 
 	/**
 	 *
-	 * LifeTime Top Artists w/Listeners
+	 * cc: LifeTime Top Artists w/Listeners
 	 *
 	 */
 
@@ -451,20 +463,28 @@ const playtimeStats = async (
 		achievementValue: 'third'
 	})
 
-	const keysLifetime = [firstKeysLifetime, secondKeysLifetime, thirdKeysLifetime]
+	const keysLifetime = [
+		firstKeysLifetime,
+		secondKeysLifetime,
+		thirdKeysLifetime
+	]
 	const lifetimeTopListeners = await Promise.all(
 		keysLifetime.map(async (keyData: KeyData) => {
 			const data = await tableAchievement.getArtistTopListeners(keyData)
-			
+
 			return data
 		})
 	)
 
-	topListeners.lifetime = lifetimeTopListeners
+	if (lifetimeTopListeners.length) {
+		topListeners = topListeners.length
+			? [...topListeners, ...lifetimeTopListeners]
+			: [...lifetimeTopListeners]
+	}
 
-	artist.topListeners = topListeners
-    
+	
 
+	artist.topListeners = topListeners.length ? topListeners.filter((listener: any) => listener != null) : []
 
 	return {
 		artist,
@@ -519,9 +539,7 @@ const playtimeStats = async (
 			unit: 'weeks',
 			distance: 12
 		})
-		// thisWeek: await playtimeTimescopeStats(tableStat, uid, gid, artistId, 'week', thisWeek, lastWeek),
-		// thisMonth: await playtimeTimescopeStats(tableStat, uid, gid, artistId, 'month', thisMonth, lastMonth),
-		// lifetime: await playtimeTimescopeStats(tableStat, uid, gid, artistId, 'life', 'life'),
+		
 	}
 }
 
@@ -547,7 +565,7 @@ const insightsArtistStats: QueryResolvers.InsightsArtistStatsResolver = async (
 		context.DYNAMO_ENDPOINT,
 		context.TABLE_ACHIEVEMENT
 	)
-	const { valid, invalid }:any = await tableUser.getUser(uid)
+	const { valid, invalid }: any = await tableUser.getUser(uid)
 	if (invalid) {
 		throw new Error(`user info invalid for uid ${uid}`)
 	}

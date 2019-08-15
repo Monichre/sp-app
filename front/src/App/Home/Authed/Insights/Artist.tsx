@@ -50,13 +50,16 @@ const ArtistBanner: React.SFC<{artist: ArtistFragmentFragment}> = ({artist}) => 
 
 export const Artist: React.SFC<RouteComponentProps<{artistId: string}> & { uid: string, pathParams: TPathParams }> =
 ({uid, history, match: {path, params: { artistId }}, pathParams}) => {
-  const { insightsArtistStats: stats} = suspensefulHook(useInsightsArtistStats({variables: { uid, artistId }, suspend: true}))
+
+  const { insightsArtistStats: stats } = suspensefulHook(useInsightsArtistStats({ variables: { uid, artistId }, suspend: true }))
   console.log('TCL: stats', stats)
   
   const { artist, [pathParams.timeScope]: { timeseries: timeSeries }} = stats
-  console.log('TCL: artist', artist)
-  return <StatPage {...{stats, history, path, pathParams}}>
-    <ArtistBanner {...{artist}}/>
-    <TimeseriesChart {...{timeSeries}}/>
-  </StatPage>
+  
+  return (
+    <StatPage {...{ stats, history, path, pathParams }}>
+      <ArtistBanner {...{ artist }} />
+      <TimeseriesChart {...{ timeSeries }} />
+    </StatPage>
+  )
 }

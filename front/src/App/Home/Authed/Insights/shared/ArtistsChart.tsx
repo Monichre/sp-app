@@ -70,8 +70,6 @@ const TopListenerYaxis: React.SFC<TickProps & any> = React.memo(({ x, y, offset,
   const firstPlaceBadge: any = '/icons/first-currentUser.png'
   const secondPlaceBadge = '/icons/second-currentUser.png'
 
-
-
   console.log('TCL: isTopListener', isTopListener)
 
   const TopListenerLink: any = ({ className, isTopListener }: any) => (

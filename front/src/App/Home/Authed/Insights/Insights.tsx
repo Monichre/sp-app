@@ -18,6 +18,7 @@ export const Insights: React.SFC<RouteComponentProps<TPathParams> & { uid: strin
   const focus = pathname.split('/').slice(5,99).join('/')
   const pathParams = { focus, ...params }
 
+  console.log('TCL: pathParams', pathParams)
     useEffect(() => {
 
       //@ts-ignore
@@ -37,7 +38,10 @@ export const Insights: React.SFC<RouteComponentProps<TPathParams> & { uid: strin
   
   return (
     <Switch>
-      <Route path={`${path}/artists/:artistId`} render={props => <Artist {...{uid, pathParams, ...props}}/>}/>
+      <Route path={`${path}/artists/:artistId`} render={props => {
+        console.log('TCL: Insights Route props', props)
+        return <Artist {...{ uid, pathParams, ...props, ...rest }} />
+      }}/>
       <Route path={`${path}/genres/:genre`} render={props => <Genre {...{uid, pathParams, ...props}}/>}/>
       <Route path={path} render={props => <Main {...{uid, pathParams, ...props, ...rest}}/>}/>
     </Switch>

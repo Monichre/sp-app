@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { TopListener } from '../../../../../../back/src/fns/graphql/types';
 import { ArtistFragmentTopListeners } from '../../../../types';
+import { hrsAndMins } from '../../../../lib/durationFormats';
 
 const TopListenerRow: any = styled.ul`
 	padding: 0;
@@ -169,32 +170,67 @@ interface ArtistTopListenersProps {
     topListeners: ArtistFragmentTopListeners[] | any
 }
 
+const Badge: React.SFC = ({ children }) => <BadgeWrap>{children}</BadgeWrap>
+
 export const ArtistTopListeners: React.SFC<ArtistTopListenersProps> = ({ topListeners }) => {
     return (
         <TopListenerRow>
-            {topListeners.length ? topListeners.map((topListener: TopListener, index: number) => {
+            {/* {topListeners.length ? topListeners.map((topListener: TopListener, index: number) => {
 				const { total, user }: any = topListener
 				const achievementIconMap: any = {
-					1: (): any => <img src='/icons/first-currentUser.png' />,
-					2: (): any => <img src='/icons/second-currentUser.png' />,
-					3: (): any => <img src='/icons/third.svg' />,
+					1: '/icons/first-currentUser.png',
+					2: '/icons/second-currentUser.png',
+					3: '/icons/third.svg',
 				}
-				const BadgeImg: React.SFC = achievementIconMap[index + 1]
-				const Badge: React.SFC = () => <BadgeWrap><BadgeImg /></BadgeWrap>
+				const { hrs, mins } = hrsAndMins(total)
 
                 return (
 					<TopListenerCard key={index}>
                         <div className='inner'>
-                        <h2><Badge /></h2>
+							<h2>
+								<Badge>
+									<img src={achievementIconMap[index + 1]} />
+								</Badge>
+							</h2>
                         <h3>{user.displayName ? user.displayName : user.email}</h3>
                         <p>
-                                Total: {Math.round((total / 3600000) * 100)} mins
+								Total: {mins} mins
                         </p>
                             {user.photoURL ? <button><img src={user.photoURL} /></button> : null}
                         </div>
                     </TopListenerCard>
                 )
-            }) : null}
+			}) : null} */}
+			{topListeners.length ? topListeners.map((topListener: TopListener, index: number) => {
+
+				if (index === 0) {
+					const { total, user }: any = topListener
+					const achievementIconMap: any = {
+						1: '/icons/first-currentUser.png',
+						2: '/icons/second-currentUser.png',
+						3: '/icons/third.svg',
+					}
+					const { hrs, mins } = hrsAndMins(total)
+
+					return (
+						<TopListenerCard key={index}>
+							<div className='inner'>
+								<h2>
+									<Badge>
+										<img src={achievementIconMap[index + 1]} />
+									</Badge>
+								</h2>
+								<h3>{user.displayName ? user.displayName : user.email}</h3>
+								<p>
+									Total: {mins} mins
+                        </p>
+								{user.photoURL ? <button><img src={user.photoURL} /></button> : null}
+							</div>
+						</TopListenerCard>
+					)
+				}
+
+			}) : null}
         </TopListenerRow>
 
     );

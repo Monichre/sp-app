@@ -300,7 +300,7 @@ const topArtists = async (
 					})
 				)
 
-				artist.topListeners = topListeners
+				artist.topListeners = topListeners.length ? topListeners : []
 
 				return pArtistData
 			})
@@ -372,7 +372,7 @@ const topArtists = async (
 					})
 				)
 
-				artist.topListeners = topListeners
+				artist.topListeners = topListeners.length ? topListeners : []
 
 				return pArtistData
 			})
@@ -443,7 +443,7 @@ const topArtists = async (
 					})
 				)
 
-				artist.topListeners = topListeners
+				artist.topListeners = topListeners.length ? topListeners : []
 
 				return pArtistData
 			})
@@ -513,7 +513,7 @@ const topArtists = async (
 					})
 				)
 
-				artist.topListeners = topListeners
+				artist.topListeners = topListeners.length ? topListeners : []
 
 				return pArtistData
 			})
