@@ -52,13 +52,8 @@ export type AchievementArtist = Achievement & {
 }
 
 type UserAchievementByArtistParams = {
-	artistId: string
-	achievementType: AchievementType
-	achievementValue: AchievementValue
-	periodType: PeriodType
-	periodValue: string
-	date: moment.Moment
-	uid: string
+	aglPK: string
+	userFK: string
 }
 
 export type KeyData = {
@@ -147,12 +142,8 @@ export type TTableAchievement = {
 	>
 
 	getUserAchievementsByArtist: ({
-		artistId,
-		achievementType,
-		achievementValue,
-		periodType,
-		periodValue,
-		uid
+		aglPK,
+		userFK
 	}: UserAchievementByArtistParams) => Promise<PromiseResult<any, AWSError>>
 }
 
@@ -353,57 +344,34 @@ export const TableAchievement = (
 				}
 			})
 	}
-
+{
+	
+}
 	const getUserAchievementsByArtist = async ({
-		artistId,
-		achievementType,
-		achievementValue,
-		periodType,
-		periodValue,
-		date,
-		uid
+		aglPK,
+		userFK
 	}: UserAchievementByArtistParams) => {
-		const _pk = makePk(artistId, achievementType, periodType, periodValue)
-		const _sk = makeSk(
-			artistId,
-			achievementValue,
-			periodType,
-			periodValue,
-			date.format('MMMM-Do-YYYY') // cc: Current time here is coming in as a moment object parameter and needs to be made into a string
-		)
+		
+			return await doc
+				.query({
+					TableName,
+					IndexName: 'UserAchievementIndexTwo',
+					KeyConditionExpression: 'pk = :p AND fk = :f',
+					ExpressionAttributeValues: {
+						':p': aglPK,
+						':f': userFK
+					}
+				})
+				.promise()
+				.then((res: any) => {
+					const achievements:
+						| [GetUserAchievementItem]
+						| GetUserAchievementItem
+						| [] = res && res.Items && res.Items.length ? res.Items : []
+					console.log('getUserAchievementsByArtist: ', achievements)
 
-		/**
-		 *
-		 * cc: Do we need the current time?
-		 *
-		 */
-
-		const _fk = makeFk(
-			artistId,
-			achievementType,
-			achievementValue,
-			periodType,
-			periodValue,
-			date.format('MMMM-Do-YYYY'), // cc: Current time here is coming in as a moment object parameter and needs to be made into a string
-			uid
-		)
-
-		return await doc
-			.query({
-				TableName,
-				KeyConditionExpression: 'pk = :p AND sk <= :s AND fk <= :f',
-				ExpressionAttributeValues: {
-					':p': _pk,
-					':s': _sk,
-					':f': _fk
-				},
-				Limit: 3
-			})
-			.promise()
-			.then(res => {
-				console.log('TCL: res', res)
-				return res && res.Items && res.Items.length ? res.Items[0] : null
-			})
+					return achievements
+				})
 	}
 
 	const getUserAchievements = async (pk: string, fk: string) => {

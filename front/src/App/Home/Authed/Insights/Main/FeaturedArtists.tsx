@@ -68,27 +68,28 @@ type FeaturedArtist = {
 }
 
 
+
 const featuredArtists: FeaturedArtist[] = [
   {
     title: 'Ready',
-    hover: '18,480 monthly streamers on Spotify',
-    name: 'Douchka',
-    href: 'https://open.spotify.com/artist/79QKsfh6iw68qfdIijntNh',
-    src: 'https://scontent-lax3-1.xx.fbcdn.net/v/t31.0-8/17191851_10155212060869276_3642745785806716490_o.jpg?_nc_cat=101&_nc_oc=AQm7obRvNtQHPFAn24Pxw9dc-i-kpf49WP1x9RcgQoDY7sOsbtfsyIbzlA_SjZWySac&_nc_ht=scontent-lax3-1.xx&oh=a27d38c02061a4265b6811613fc6dc04&oe=5DD87795'
+    hover: '5,000 monthly streamers on Spotify',
+    name: 'Why Not',
+    href: 'https://open.spotify.com/artist/0gU8JtrXa3Df75VOVRGuWP?si=ZxAev2DjT5qLEa5KJdqI1Q',
+    src: '/why-not.jpg'
   },
   {
     title: 'Set',
-    hover: '59,239 monthly streamers on Spotify',
-    name: 'Blac Rabbit',
-    href: 'https://open.spotify.com/artist/0UvgR4VckgdEkBhTOjxwCc?si=3vY8K0gOSgCtGtW1cZOKtA',
-    src: 'https://f4.bcbits.com/img/0016322553_10.jpg'
+    hover: '200,000 monthly streamers on Spotify',
+    name: 'Spillage Village',
+    href: 'https://open.spotify.com/artist/7izarc0fRIPbdZ8cVyChRf?si=v8q2QuvHQPuvlahc9M2ufQ',
+    src: '/spillage.jpg'
   },
   {
     title: 'Liftoff',
-    hover: '598, 212 monthly streamers on Spotify',
-    name: 'Sugi.wa',
-    href: 'https://open.spotify.com/artist/0XUBVuE1odesNug0oKt9Me',
-    src: 'https://f4.bcbits.com/img/a1557745303_16.jpg'
+    hover: '2,500,000 monthly streamers on Spotify',
+    name: 'JPEGMAFIA',
+    href: 'https://open.spotify.com/artist/6yJ6QQ3Y5l0s0tn7b0arrO?si=aCRfgbexRZKkpCIJXhTTJg',
+    src: '/mafia.jpg'
   },
 ]
 

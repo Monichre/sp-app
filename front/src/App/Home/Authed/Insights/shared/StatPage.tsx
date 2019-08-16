@@ -54,6 +54,9 @@ const navOptions: TNavOption[]  = [
 ]
 
 
+const FullHeight = styled.div`
+min-height: 100vh;
+`
 
 const NavTabView = styled.div`
 display: block;
@@ -105,7 +108,7 @@ export const StatPage: React.SFC<{stats: Stats, path: string, pathParams: TPathP
 ({stats, history, path, pathParams, children }) => {
   const navTo = (path: string) => history.push(path)
   return (
-    <>
+    <FullHeight>
       <Large>
         <NavTabs {...{pathParams, stats}}/>
       </Large>
@@ -120,6 +123,6 @@ export const StatPage: React.SFC<{stats: Stats, path: string, pathParams: TPathP
         {children}
         <VerticalSpacer height='110px'/>
       </Container>
-    </>
+    </FullHeight>
   )
 }

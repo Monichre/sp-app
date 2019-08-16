@@ -61,9 +61,9 @@ export const AchievementListItem: React.SFC<AchievementListItemProps> = ({ title
 
                     return (
                         <div style={{ margin: '10px', position: 'relative', padding: '10px' }}>
-                            <ArtistAvatarDiv src={artist.images[0].url} />
+                            <ArtistAvatarDiv src={artist.images && artist.images[0] ? artist.images[0].url : ''} />
                             <ArtistNameDiv>{artist.name}</ArtistNameDiv>
-                            <p>{mins} minutes</p>
+                            <p>{hrs ? `${hrs} hours and` : null} {mins} minutes</p>
                         </div>
                     )
                 }) : null}

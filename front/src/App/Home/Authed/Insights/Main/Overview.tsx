@@ -20,6 +20,9 @@ const Row = styled.div`
   width: 100%;
   margin: 30px 0; 
 
+  h1 {
+    color: #fff;
+  }
   .isTopListener {
     border: 1px solid #64d6ee;
   }
@@ -49,7 +52,16 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
     }
   } = suspensefulHook(useInsightsDash({ variables: { uid }, suspend: true, pollInterval: 10000 }))
 
-  
+  const normalizetimeScopeMap: any = {
+    thisWeek: 'This Week',
+    thisMonth: 'This Month',
+    thisYear: 'This Year',
+    life: 'Life Time',
+
+  }
+  const { timeScope, perspective }: any = pathParams
+  const translatedPerspective: string = perspective === 'personal' ? 'Your' : 'Everyone'
+
 
   console.count('Overview Render: ')
 
@@ -58,7 +70,7 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
     <Row>
       
       <ArtistsChartBlock {...{ artists, pathParams }} userId={uid}>
-        <BlockTitle to={`${insightLink(pathParams)}/artists`}>Top Artists <BlockTitleMore>see all</BlockTitleMore></BlockTitle>
+        <BlockTitle to={`${insightLink(pathParams)}/artists`}>{translatedPerspective} Top Artists {normalizetimeScopeMap[timeScope]} <BlockTitleMore>see all</BlockTitleMore></BlockTitle>
       </ArtistsChartBlock>
       <GenresChartBlock {...{ genres, pathParams }}>
         <BlockTitle to={`${insightLink(pathParams)}/genres`}>Top Genres <BlockTitleMore>see all</BlockTitleMore></BlockTitle>

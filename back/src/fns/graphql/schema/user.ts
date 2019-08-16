@@ -172,6 +172,36 @@ const getUserAchievements: any = async (
 	return data
 }
 
+
+/**
+ *
+ * cc: GetUserAchievementsByArtist;  
+ *
+ */
+
+ 
+ /*=============================================
+ =            FUNCTION PARAMS: KEYS            =
+
+
+ aglPK
+ =============================================*/
+ 
+ 
+
+
+// const getUserAchievementsByArtist: any = async (
+// 	_: any,
+// 	{ aglPK, userFK }: any,
+// 	{ log, DYNAMO_ENDPOINT, TABLE_ACHIEVEMENT }: any
+// ) => {
+	
+// 	const data = await tableAchievement.getUserAchievementsByArtist(aglPK, fk)
+// 	console.log('TCL: getUserAchievements Query data', data)
+
+// 	return data
+// }
+
 const UserInfoResponse = {
 	initialHarvestComplete
 }

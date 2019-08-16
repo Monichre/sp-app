@@ -1,0 +1,1 @@
+export { ArtistsChartBlock } from './ArtistsChart';

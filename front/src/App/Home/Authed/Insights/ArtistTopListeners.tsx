@@ -1,13 +1,15 @@
 import * as React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { TopListener } from '../../../../../../back/src/fns/graphql/types';
 import { ArtistFragmentTopListeners } from '../../../../types';
 import { hrsAndMins } from '../../../../lib/durationFormats';
 
 const TopListenerRow: any = styled.ul`
-	padding: 0;
+	margin-top: 100px;
+	padding: 20px;
 	list-style: none;
-    display: flex;
+	display: flex;
+	justify-content: space-evenly;
 `
 
 const TopListenerCard: any = styled.li`
@@ -21,10 +23,15 @@ const TopListenerCard: any = styled.li`
 	border: 1px solid #252727;
 	text-align: left;
 
+	${(props: any) => props.lifetime && css`
+		margin-top: 80px;
+	`}
+
     .inner {
         z-index: 1;
         position: relative;
-        background: transparent;
+		background: transparent;
+		padding-top: 30px;
     h2 {
 	font-size: 114px;
 	margin: 0;
@@ -164,75 +171,146 @@ img {
 }
 `
 
+const TimeScopeTitle: any = styled.h3`
+	position: absolute;
+	top: -62px;
+	right:  -50%;
+	color: white;
+	width: max-content;
+	font-weight: bold;
+	font-size: 20px;
+	z-index: 10;
 
+	&::before {
+		    content: '';
+    position: absolute;
+    top: 2px;
+    height: 50%;
+    border-bottom: 3px solid #64d6ee;
+    width: 27px;
+    /* z-index: 53; */
+    left: -31px;
+	}
+
+	${(props: any) => props.lifetime && css`
+		top: -42px;
+	`}
+
+`
 
 interface ArtistTopListenersProps {
-    topListeners: ArtistFragmentTopListeners[] | any
+	topListeners: ArtistFragmentTopListeners[] | any
+}
+
+interface LifeTimeTopProps {
+	life: ArtistFragmentTopListeners
 }
 
 const Badge: React.SFC = ({ children }) => <BadgeWrap>{children}</BadgeWrap>
 
+const achievementIconMap: any = {
+	1: '/icons/first-currentUser.png',
+	2: '/icons/second-currentUser.png',
+	3: '/icons/third.svg',
+}
+
+export const scopeTheListeners = (topListeners: any[]) => {
+
+	const timePerspectiveAchievementMap: any = {
+		'day': {
+			title: "Today's Top Listener",
+			listener: null
+		},
+		'week': {
+			title: "Weekly Top Listener",
+			listener: null
+		},
+		'month': {
+			title: "Monthly Top Listener",
+			listener: null
+		},
+		'life': {
+			title: "Lifetime Top Listener",
+			listener: null
+		}
+	}
+
+	for (let time in timePerspectiveAchievementMap) {
+		const tScopeTopListener = topListeners.find((listener: any) => listener.pk.split('#').includes(time))
+
+		timePerspectiveAchievementMap[time].listener = tScopeTopListener ? { ...tScopeTopListener } : null
+
+		if (!timePerspectiveAchievementMap[time].listener) {
+			delete timePerspectiveAchievementMap[time]
+		}
+
+	}
+
+	return timePerspectiveAchievementMap
+}
+
+
+
+export const LifeTimeTopListener: React.SFC<LifeTimeTopProps> = ({ life }) => {
+
+	const { listener: { total, user } }: any = life
+
+	// const { hrs, mins } = hrsAndMins(total)
+
+	return (
+		<TopListenerCard lifetime={true}>
+			<TimeScopeTitle lifetime={true}>
+				All Time Top Listener
+			</TimeScopeTitle>
+			<div className='inner'>
+				<h2>
+					<Badge>
+						<img src={achievementIconMap[1]} />
+					</Badge>
+				</h2>
+				<h3>{user.displayName ? user.displayName : user.email}</h3>
+
+				{user.photoURL ? <button><img src={user.photoURL} /></button> : null}
+			</div>
+		</TopListenerCard>
+	)
+
+
+}
 export const ArtistTopListeners: React.SFC<ArtistTopListenersProps> = ({ topListeners }) => {
-    return (
-        <TopListenerRow>
-            {/* {topListeners.length ? topListeners.map((topListener: TopListener, index: number) => {
-				const { total, user }: any = topListener
-				const achievementIconMap: any = {
-					1: '/icons/first-currentUser.png',
-					2: '/icons/second-currentUser.png',
-					3: '/icons/third.svg',
-				}
+	return (
+
+		<TopListenerRow>
+			{topListeners.map((listenerData: any, index: number) => {
+				const { listener, title }: any = listenerData
+				const { total, user } = listener
+
 				const { hrs, mins } = hrsAndMins(total)
 
-                return (
+				return index !== 3 ? (
 					<TopListenerCard key={index}>
-                        <div className='inner'>
+						<TimeScopeTitle>
+							{title}
+						</TimeScopeTitle >
+						<div className='inner'>
 							<h2>
 								<Badge>
 									<img src={achievementIconMap[index + 1]} />
 								</Badge>
 							</h2>
-                        <h3>{user.displayName ? user.displayName : user.email}</h3>
-                        <p>
-								Total: {mins} mins
-                        </p>
-                            {user.photoURL ? <button><img src={user.photoURL} /></button> : null}
-                        </div>
-                    </TopListenerCard>
-                )
-			}) : null} */}
-			{topListeners.length ? topListeners.map((topListener: TopListener, index: number) => {
+							<h3>{user.displayName ? user.displayName : user.email}</h3>
 
-				if (index === 0) {
-					const { total, user }: any = topListener
-					const achievementIconMap: any = {
-						1: '/icons/first-currentUser.png',
-						2: '/icons/second-currentUser.png',
-						3: '/icons/third.svg',
-					}
-					const { hrs, mins } = hrsAndMins(total)
+							{user.photoURL ? <button><img src={user.photoURL} /></button> : null}
+						</div>
+					</TopListenerCard>
+				) : null
+			})
+			}
 
-					return (
-						<TopListenerCard key={index}>
-							<div className='inner'>
-								<h2>
-									<Badge>
-										<img src={achievementIconMap[index + 1]} />
-									</Badge>
-								</h2>
-								<h3>{user.displayName ? user.displayName : user.email}</h3>
-								<p>
-									Total: {mins} mins
-                        </p>
-								{user.photoURL ? <button><img src={user.photoURL} /></button> : null}
-							</div>
-						</TopListenerCard>
-					)
-				}
+		</TopListenerRow>
 
-			}) : null}
-        </TopListenerRow>
 
-    );
+
+	);
 }
 

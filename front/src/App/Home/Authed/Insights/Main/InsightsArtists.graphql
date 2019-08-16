@@ -37,6 +37,8 @@ fragment ArtistsFragment on TopArtistStat {
 		}
 		topListeners {
 			total
+			pk
+			sk
 			user {
 				photoURL
 				email

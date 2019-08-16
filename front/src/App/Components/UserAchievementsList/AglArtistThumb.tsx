@@ -28,7 +28,7 @@ export const AglArtistThumb: React.SFC<AglArtistThumbProps> = ({ achievement }) 
 
     return (
         <div style={{ margin: '10px 10px 0', position: 'relative', padding: '10px 10px 0' }}>
-            <ArtistAvatarDiv src={artist.images[0].url} />
+            <ArtistAvatarDiv src={artist.images ? artist.images[0].url : ''} />
             <ArtistNameDiv>{artist.name}</ArtistNameDiv>
             <p><animated.span>{ttl.total}</animated.span> minutes</p>
         </div>
