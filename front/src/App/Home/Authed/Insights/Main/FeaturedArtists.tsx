@@ -72,24 +72,24 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: 'Ready',
-    hover: '5,000 monthly streamers on Spotify',
-    name: 'Why Not',
-    href: 'https://open.spotify.com/artist/0gU8JtrXa3Df75VOVRGuWP?si=ZxAev2DjT5qLEa5KJdqI1Q',
-    src: '/why-not.jpg'
+    hover: '170 monthly streamers on Spotify',
+    name: 'Ryan Traster',
+    href: 'https://open.spotify.com/artist/7teZWy6PojgN4JRIXQVqhk?si=WnCeVlbCRC-SCpLPKUNA8g',
+    src: 'http://stmedia.stimg.co/Ryan_Traster_by_Gab_Stueve.jpg?w=800'
   },
   {
     title: 'Set',
-    hover: '200,000 monthly streamers on Spotify',
-    name: 'Spillage Village',
-    href: 'https://open.spotify.com/artist/7izarc0fRIPbdZ8cVyChRf?si=v8q2QuvHQPuvlahc9M2ufQ',
-    src: '/spillage.jpg'
+    hover: '90,364 monthly streamers on Spotify',
+    name: 'Squid',
+    href: 'https://open.spotify.com/artist/685XjGzGztyivfR3fAjoxo?si=KQ5pelCgSleMoTbSVQ8aYg',
+    src: 'http://www.newsoundwales.com/wp-content/uploads/2019/04/SQUID+1.jpg'
   },
   {
     title: 'Liftoff',
-    hover: '2,500,000 monthly streamers on Spotify',
-    name: 'JPEGMAFIA',
-    href: 'https://open.spotify.com/artist/6yJ6QQ3Y5l0s0tn7b0arrO?si=aCRfgbexRZKkpCIJXhTTJg',
-    src: '/mafia.jpg'
+    hover: '1,013,641 monthly streamers on Spotify',
+    name: 'Raveena',
+    href: 'https://open.spotify.com/artist/2kQnsbKnIiMahOetwlfcaS?si=rclsdyRCRrKJ7crwEpFGQQ',
+    src: 'https://galoremag.com/wp-content/uploads/2018/09/raveena-feature-image-galore-legal-1024x576.jpg'
   },
 ]
 
