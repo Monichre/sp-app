@@ -63,7 +63,7 @@ export const Artist: React.SFC<RouteComponentProps<{ artistId: string }> & { uid
     const { topListeners }: any = artist
     const tops = topListeners.length ? topListeners.filter((listener: any) => listener !== null) : null
 
-    const { life = false, month = false, week = false, day = false } = scopeTheListeners(topListeners)
+    const { life = false, month = false, week = false, day = false } = scopeTheListeners(tops)
 
     const scoped: any = [month, week, day].filter(Boolean)
 
@@ -88,3 +88,4 @@ export const Artist: React.SFC<RouteComponentProps<{ artistId: string }> & { uid
       </StatPage>
     )
   }
+// TARGET=test CONFIG=test yarn build && TARGET=test CONFIG=test yarn deploy

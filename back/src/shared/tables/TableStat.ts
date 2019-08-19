@@ -275,7 +275,7 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 
   /**
    *
-   * cc: tableStat #1; Function getArtistStat
+   * // cc: tableStat #1; Function getArtistStat
    *
    */
 

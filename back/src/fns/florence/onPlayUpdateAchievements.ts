@@ -9,27 +9,11 @@ import {
 	getWeeklyTopAchievers,
 	getMonthlyTopAchievers,
 	getLifetimeTopAchievers,
-	indexToAchievementMap,
-	extractPeriodTypeAndValue,
-	makeKeys,
-	keyMaker,
 	extractKeys
 } from '../agl/functions'
-
 import * as _ from 'lodash'
 
-type Env = {
-	DYNAMO_ENDPOINT: string
-	TABLE_ACHIEVEMENT: string
-	TABLE_STAT: string
-	TABLE_USER: string
-	QUEUE_VALIDATION_ERRORS: string
-}
-
 const isArtistOrGlobal = NewImage => (NewImage.artist ? 'artist' : 'global')
-
-
-
 
 /**
  *
@@ -38,7 +22,6 @@ const isArtistOrGlobal = NewImage => (NewImage.artist ? 'artist' : 'global')
  */
 
 export const handler: DynamoDBStreamHandler = async (event, context) => {
-	console.log('TCL: handler:DynamoDBStreamHandler -> event', event)
 	const log = makeLogger({
 		handler: 'onPlayUpdateAchievements',
 		awsEvent: 'ddbs'
@@ -61,7 +44,6 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 	const tableStat = TableStat(env.DYNAMO_ENDPOINT, env.TABLE_STAT)
 	const tableUser = TableUser(env.DYNAMO_ENDPOINT, env.TABLE_USER)
 	const allUsers: any = await tableUser.getAllSpotifyCreds()
-
 	const { valids } = allUsers
 
 	const handleRecord = async (record: any) => {
@@ -196,48 +178,7 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 			}
 
 
-		} else {
-			
-			/**
-			 *
-			 * Unused code for performing same achievement logic for general music listening volume
-			 *
-			 
-			/*==========================================================================================
-			const userData = await Promise.all(
-				valids.map(async (user: any) => {
-					const dayData = await tableStat.getStat({
-						uid: user.uid,
-						periodType: 'day',
-						periodValue: day
-					})
-					const weekData = await tableStat.getStat({
-						uid: user.uid,
-						periodType: 'week',
-						periodValue: week
-					})
-					const monthData = await tableStat.getStat({
-						uid: user.uid,
-						periodType: 'month',
-						periodValue: month
-					})
-					const lifeData = await tableStat.getStat({
-						uid: user.uid,
-						periodType: 'life',
-						periodValue: life
-					})
-					return {
-						recordKeys,
-						user,
-						dayData,
-						weekData,
-						monthData,
-						lifeData
-					}
-				})
-			)
-			=============================================*/
-						}
+		} 
 	}
 
 	await Promise.all(

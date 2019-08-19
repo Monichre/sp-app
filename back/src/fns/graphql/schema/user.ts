@@ -86,10 +86,11 @@ const MAGIC_DELAY = 10
 const MAGIC_STALE_THRESHOLD = 30
 
 /*=============================================
-=            cc: User Type#1            =
+=            // cc: User Type#1            =
 =============================================*/
 
-/* cc: Helper */
+// cc: User Type#1 
+// cc: Helper 
 const isInitialHarvestComplete = ({
 	totalUpdates,
 	lastUpdate
