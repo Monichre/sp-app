@@ -689,7 +689,7 @@ resources:
             StreamSpecification:
               StreamViewType: NEW_AND_OLD_IMAGES
             GlobalSecondaryIndexes:
-            - IndexName: UserAchievementIndex
+            - IndexName: ArtistUserIndex
               KeySchema:
                 - AttributeName: sk
                   KeyType: HASH
@@ -697,7 +697,7 @@ resources:
                   KeyType: RANGE
               Projection:
                 ProjectionType: ALL
-            - IndexName: UserAchievementIndexTwo
+            - IndexName: UserTimeIndex
               KeySchema:
                 - AttributeName: pk
                   KeyType: HASH
@@ -705,4 +705,43 @@ resources:
                   KeyType: RANGE
               Projection:
                 ProjectionType: ALL
+      
+
+
+    # # TableAchievement:
+    # #       Type: AWS::DynamoDB::Table
+    # #       Properties:
+    # #         TableName: ${self:custom.ns}-TableAchievement
+    # #         AttributeDefinitions:
+    # #           - AttributeName: pk # Will be Artist's pk/spotify uid
+    # #             AttributeType: S
+    # #           - AttributeName: sk 
+    # #             AttributeType: S
+    # #           - AttributeName: fk 
+    # #             AttributeType: S
+    # #         KeySchema:
+    # #           - AttributeName: pk
+    # #             KeyType: HASH
+    # #           - AttributeName: sk
+    # #             KeyType: RANGE
+    # #         BillingMode: PAY_PER_REQUEST
+    # #         StreamSpecification:
+    # #           StreamViewType: NEW_AND_OLD_IMAGES
+    # #         GlobalSecondaryIndexes:
+    # #         - IndexName: UserAchievementIndex
+    # #           KeySchema:
+    # #             - AttributeName: sk
+    # #               KeyType: HASH
+    # #             - AttributeName: fk
+    # #               KeyType: RANGE
+    # #           Projection:
+    # #             ProjectionType: ALL
+    # #         - IndexName: UserAchievementIndexTwo
+    # #           KeySchema:
+    # #             - AttributeName: pk
+    # #               KeyType: HASH
+    # #             - AttributeName: fk
+    # #               KeyType: RANGE
+    # #           Projection:
+    # #             ProjectionType: ALL
       

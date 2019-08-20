@@ -248,3 +248,9 @@ Any modifications to the backend GraphQL resolvers or types must be recompiled o
 **This can be accomplished on the backend** by executing `yarn generate`
 
 **On the frontend** this can be accomplished by running `yarn gql-gen`
+
+
+CLUBHOUSE_TOKEN=5d5b22be-f9c9-42cb-8058-5a777176c7dd
+AGL Project ID=10
+
+ASANA_PROJECT_ID=1115096210838428

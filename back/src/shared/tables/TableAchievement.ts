@@ -355,7 +355,7 @@ export const TableAchievement = (
 			return await doc
 				.query({
 					TableName,
-					IndexName: 'UserAchievementIndexTwo',
+					IndexName: 'UserTimeIndex',
 					KeyConditionExpression: 'pk = :p AND fk = :f',
 					ExpressionAttributeValues: {
 						':p': aglPK,
@@ -378,7 +378,7 @@ export const TableAchievement = (
 		return await doc
 			.query({
 				TableName,
-				IndexName: 'UserAchievementIndexTwo',
+				IndexName: 'UserTimeIndex',
 				KeyConditionExpression: 'pk = :p AND fk = :f',
 				ExpressionAttributeValues: {
 					':p': pk,

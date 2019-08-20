@@ -4,6 +4,7 @@ import {
 	KeyData
 } from '../../shared/tables/TableAchievement'
 import { PeriodType } from '../../shared/tables/TableStat'
+import * as moment from 'moment'
 
 export type EnrichedKeyMakerParams = {
 	perspective: string
@@ -26,7 +27,14 @@ export type UserTopRecordArtistStat = {
 	weekData: number
 	monthData: number
 	lifeData: number
+	lastUpdated: string
 }
+
+export const localizedMoment = (utcOffset: number, m: moment.Moment) =>
+	moment.utc(m).utcOffset(utcOffset, false)
+
+export const localizedISOString = (m: moment.Moment) => m.toISOString(true)
+
 export const extractKeys = ({ pk, sk }) => ({
 	pk: pk.S,
 	sk: sk.S
@@ -73,38 +81,22 @@ export const makeRecordKeys = Keys => extractKeys(Keys)
 export const getDailyTopAchievers = async (
 	dailyTops: UserTopRecordArtistStat[],
 	artistInfo: Artist,
-	tableAchievement: TTableAchievement,
-	lastUpdated: string
+	tableAchievement: TTableAchievement
 ) => {
-	const { day, week, month, life } = tableAchievement.periodsFor(lastUpdated)
-
-	const topListenerDailyParams = {
-		perspective: 'global',
-		relationType: 'artist',
-		periodType: 'day',
-		periodValue: day,
-		artistId: artistInfo.id
-	}
-	const topThree = await topThreeListeners({
-		...topListenerDailyParams,
-		tableAchievement
-	})
-	console.log('TCL: daily topThree', topThree)
-
-	artistInfo.topListeners = topThree
-
 	const achieverData = dailyTops.length
 		? await Promise.all(
 				dailyTops.map(async (daily, index) => {
-					console.log('TCL: handleRecord -> index', index)
+					
 					if (index <= 2) {
-						const { recordKeys, user, dayData } = daily
+						const { recordKeys, user, lastUpdated, dayData } = daily
+						const { day } = tableAchievement.periodsFor(
+							lastUpdated
+						)
+
 						const achievementType = 'topListener'
 						const achievementValue = indexToAchievementMap[index]
 						const { uid } = user
 						const total = dayData
-
-						console.log('TCL: handleRecord -> dayData', dayData)
 						const keyData = makeKeys({
 							recordKeys,
 							achievementType,
@@ -138,34 +130,15 @@ export const getDailyTopAchievers = async (
 export const getWeeklyTopAchievers = async (
 	weeklyTops: UserTopRecordArtistStat[],
 	artistInfo: Artist,
-	tableAchievement: TTableAchievement,
-	lastUpdated: string
+	tableAchievement: TTableAchievement
 ) => {
-	const { day, week, month, life } = tableAchievement.periodsFor(lastUpdated)
-
-	const topListenerWeekParams = {
-		perspective: 'global',
-		relationType: 'artist',
-		periodType: 'week',
-		periodValue: week,
-		artistId: artistInfo.id
-	}
-
-	const topThree = await topThreeListeners({
-		...topListenerWeekParams,
-		tableAchievement
-	})
-
-	console.log('TCL: topThree', topThree)
-
-	artistInfo.topListeners = topThree
-
+	
 	const achieverData = weeklyTops.length
 		? await Promise.all(
 				weeklyTops.map(async (weekly, index) => {
 					console.log('TCL: handleRecord -> index', index)
 					if (index <= 2) {
-						const { recordKeys, user, weekData } = weekly
+						const { recordKeys, user, lastUpdated, weekData } = weekly
 						const achievementType = 'topListener'
 						const achievementValue = indexToAchievementMap[index]
 						const { uid } = user
@@ -207,34 +180,16 @@ export const getWeeklyTopAchievers = async (
 export const getMonthlyTopAchievers = async (
 	monthlyTops: UserTopRecordArtistStat[],
 	artistInfo: Artist,
-	tableAchievement: TTableAchievement,
-	lastUpdated: string
+	tableAchievement: TTableAchievement
 ) => {
-	const { day, week, month, life } = tableAchievement.periodsFor(lastUpdated)
-
-	const topListenerMonthParams = {
-		perspective: 'global',
-		relationType: 'artist',
-		periodType: 'month',
-		periodValue: month,
-		artistId: artistInfo.id
-	}
-
-	const topThree = await topThreeListeners({
-		...topListenerMonthParams,
-		tableAchievement
-	})
-
-	console.log('TCL: topThree', topThree)
-
-	artistInfo.topListeners = topThree
 
 	const achieverData = monthlyTops.length
 		? await Promise.all(
 				monthlyTops.map(async (monthly, index) => {
 					console.log('TCL: handleRecord -> index', index)
 					if (index <= 2) {
-						const { recordKeys, user, monthData } = monthly
+
+						const { recordKeys, user, lastUpdated, monthData } = monthly
 						const achievementType = 'topListener'
 						const achievementValue = indexToAchievementMap[index]
 						const { uid } = user
@@ -270,33 +225,20 @@ export const getMonthlyTopAchievers = async (
 export const getLifetimeTopAchievers = async (
 	lifetimeTops: UserTopRecordArtistStat[],
 	artistInfo: Artist,
-	tableAchievement: TTableAchievement,
-	lastUpdated: string
+	tableAchievement: TTableAchievement
 ) => {
-	const { day, week, month, life } = tableAchievement.periodsFor(lastUpdated)
-
-	const topListenerLifeParams = {
-		perspective: 'global',
-		relationType: 'artist',
-		periodType: 'life',
-		periodValue: life,
-		artistId: artistInfo.id
-	}
-
-	const topThree = await topThreeListeners({
-		...topListenerLifeParams,
-		tableAchievement
-	})
-
-	console.log('TCL: topThree', topThree)
-
-	artistInfo.topListeners = topThree
-
+	
 	const achieverData = lifetimeTops.length
 		? await Promise.all(
 				lifetimeTops.map(async (lifetime, index) => {
 					if (index <= 2) {
-						const { recordKeys, user, lifeData } = lifetime
+						const {
+							recordKeys,
+							user,
+							lastUpdated,
+							lifeData,
+						} = lifetime
+					
 						const achievementType = 'topListener'
 						const achievementValue = indexToAchievementMap[index]
 						const { uid } = user
@@ -323,6 +265,8 @@ export const getLifetimeTopAchievers = async (
 				})
 		  )
 		: null
+	
+	return achieverData
 }
 
 export const keyMakerPlaceAndDay = ({
@@ -397,12 +341,7 @@ export const topThreeListeners = async ({
 			async (keyData: KeyData) =>
 				await tableAchievement.getArtistTopListeners(keyData)
 		)
-    )
-    //   const topListeners = {
-	// 			first: tableAchievement.getArtistTopListeners(firstKeys),
-	// 			second: tableAchievement.getArtistTopListeners(secondKeys),
-	// 			third: tableAchievement.getArtistTopListeners(thirdKeys)
-	// 		}
-	console.log('TCL: topListeners', topListeners)
+	)
+
 	return topListeners
 }

@@ -4,14 +4,17 @@ import { makeLogger, TLogger } from '../logger'
 import { TableStat } from '../../shared/tables/TableStat'
 import { TableUser } from '../../shared/tables/TableUser'
 import { TableAchievement } from '../../shared/tables/TableAchievement'
+
 import {
 	getDailyTopAchievers,
 	getWeeklyTopAchievers,
 	getMonthlyTopAchievers,
 	getLifetimeTopAchievers,
-	extractKeys
+	extractKeys,
+	localizedMoment
 } from '../agl/functions'
 import * as _ from 'lodash'
+import moment = require('moment')
 
 const isArtistOrGlobal = NewImage => (NewImage.artist ? 'artist' : 'global')
 
@@ -21,7 +24,7 @@ const isArtistOrGlobal = NewImage => (NewImage.artist ? 'artist' : 'global')
  *
  */
 
-export const handler: DynamoDBStreamHandler = async (event, context) => {
+export const handler: DynamoDBStreamHandler | any = async (event, context) => {
 	const log = makeLogger({
 		handler: 'onPlayUpdateAchievements',
 		awsEvent: 'ddbs'
@@ -51,25 +54,22 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 			dynamodb: { Keys, ApproximateCreationDateTime, NewImage }
 		} = record
 
-		console.log('TCL: handleRecord -> NewImage', NewImage)
-
 		const { artist } = NewImage
 		const artistInfo = artist
 			? await tableStat.getArtistInfo(artist.M.id.S)
 			: null
 
-		console.log('TCL: handleRecord -> artist', artist)
-		console.log('TCL: handleRecord -> artistInfo', artistInfo)
-
 		const { day, week, month, life } = tableAchievement.periodsFor(
 			ApproximateCreationDateTime
 		)
 
+		console.log(
+			'TCL: handleRecord -> ApproximateCreationDateTime',
+			ApproximateCreationDateTime
+		)
+
 		const typeOfStat = isArtistOrGlobal(NewImage)
-        console.log('TCL: handleRecord -> typeOfStat', typeOfStat)
 		const recordKeys = extractKeys(Keys)
-		const lastUpdated = ApproximateCreationDateTime
-		
 
 		/**
 		 *
@@ -79,6 +79,9 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 		if (typeOfStat === 'artist' && artist && artistInfo) {
 			const userData = await Promise.all(
 				valids.map(async (user: any) => {
+					const { utcOffset }: any = user
+					const lastUpdated = localizedMoment(utcOffset, moment())
+
 					const dayData = await tableStat.getArtistStat({
 						uid: user.uid,
 						artistId: artistInfo.id,
@@ -105,9 +108,11 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 						periodType: 'life',
 						periodValue: life
 					})
+
 					return {
 						recordKeys,
 						user,
+						lastUpdated,
 						dayData,
 						weekData,
 						monthData,
@@ -128,14 +133,18 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 			const lifetimeTops = _.sortBy(userData, d => d.lifeData)
 				.reverse()
 				.filter(d => d.lifeData > 0)
-			
+
 			/**
 			 *
 			 * cc: Daily Achievement Creation
 			 *
 			 */
 
-			const dailyTopAchievers = await getDailyTopAchievers(dailyTops, artistInfo, tableAchievement,lastUpdated) 
+			const dailyTopAchievers = await getDailyTopAchievers(
+				dailyTops,
+				artistInfo,
+				tableAchievement
+			)
 
 			/**
 			 *
@@ -143,7 +152,11 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 			 *
 			 */
 
-			const weeklyTopAchievers = await getWeeklyTopAchievers(weeklyTops, artistInfo, tableAchievement,lastUpdated)
+			const weeklyTopAchievers = await getWeeklyTopAchievers(
+				weeklyTops,
+				artistInfo,
+				tableAchievement
+			)
 
 			/**
 			 *
@@ -154,9 +167,9 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 			const monthlyTopAchievers = await getMonthlyTopAchievers(
 				monthlyTops,
 				artistInfo,
-				tableAchievement,
-				lastUpdated)
-			
+				tableAchievement
+			)
+
 			/**
 			 *
 			 * cc: Lifetime Achievement Creation
@@ -166,8 +179,7 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 			const lifetimeTopAchievers = await getLifetimeTopAchievers(
 				lifetimeTops,
 				artistInfo,
-				tableAchievement,
-				lastUpdated
+				tableAchievement
 			)
 
 			return {
@@ -176,10 +188,10 @@ export const handler: DynamoDBStreamHandler = async (event, context) => {
 				monthlyTopAchievers,
 				lifetimeTopAchievers
 			}
-
-
-		} 
+		}
 	}
+
+	// close the stream
 
 	await Promise.all(
 		event.Records.map(async record => await handleRecord(record))
