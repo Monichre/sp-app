@@ -2,6 +2,14 @@ import React from 'react';
 import styled from 'styled-components'
 import { RouteComponentProps } from 'react-router';
 import { ButtonSignout, Container } from '../../../../shared/ui';
+import { ProfileCard } from './ProfileCard';
+
+const Placement = styled.div`
+position: absolute;
+top: 30px;
+right: 30px;
+
+`
 
 export const Profile: React.SFC<RouteComponentProps & { user: any }> = ({ user }) => {
   //@ts-ignore
@@ -18,8 +26,8 @@ export const Profile: React.SFC<RouteComponentProps & { user: any }> = ({ user }
 
   return (
     <Container>
-      <h1>Profile</h1>
-      <ButtonSignout />
+      <ProfileCard user={user} />
+      <Placement><ButtonSignout /></Placement>
     </Container>
   )
 }

@@ -289,7 +289,6 @@ const playtimeStats = async (
 	let topListeners: any = []
 
 	const firstKeysDaily = keyMakerPlaceAndDay({
-		perspective: gid,
 		relationType: 'artist',
 		periodType: 'day',
 		periodValue: today,
@@ -298,7 +297,6 @@ const playtimeStats = async (
 		achievementValue: 'first'
 	})
 	const secondKeysDaily = keyMakerPlaceAndDay({
-		perspective: gid,
 		relationType: 'artist',
 		periodType: 'day',
 		periodValue: today,
@@ -307,7 +305,6 @@ const playtimeStats = async (
 		achievementValue: 'second'
 	})
 	const thirdKeysDaily = keyMakerPlaceAndDay({
-		perspective: gid,
 		relationType: 'artist',
 		periodType: 'day',
 		periodValue: today,
@@ -337,8 +334,7 @@ const playtimeStats = async (
 	 *
 	 */
 
-	const firstKeysWeekly = keyMakerPlaceAndDay({
-		perspective: gid,
+	const firstKeysWeekly = keyMakerPlaceAndDay(
 		relationType: 'artist',
 		periodType: 'week',
 		periodValue: thisWeek,
@@ -346,8 +342,7 @@ const playtimeStats = async (
 		achievementType: 'topListener',
 		achievementValue: 'first'
 	})
-	const secondKeysWeekly = keyMakerPlaceAndDay({
-		perspective: gid,
+	const secondKeysWeekly = keyMakerPlaceAndDay(
 		relationType: 'artist',
 		periodType: 'week',
 		periodValue: thisWeek,
@@ -355,8 +350,7 @@ const playtimeStats = async (
 		achievementType: 'topListener',
 		achievementValue: 'second'
 	})
-	const thirdKeysWeekly = keyMakerPlaceAndDay({
-		perspective: gid,
+	const thirdKeysWeekly = keyMakerPlaceAndDay(
 		relationType: 'artist',
 		periodType: 'week',
 		periodValue: thisWeek,
@@ -386,8 +380,7 @@ const playtimeStats = async (
 	 *
 	 */
 
-	const firstKeysMonthly = keyMakerPlaceAndDay({
-		perspective: gid,
+	const firstKeysMonthly = keyMakerPlaceAndDay(
 		relationType: 'artist',
 		periodType: 'month',
 		periodValue: thisMonth,
@@ -395,8 +388,7 @@ const playtimeStats = async (
 		achievementType: 'topListener',
 		achievementValue: 'first'
 	})
-	const secondKeysMonthly = keyMakerPlaceAndDay({
-		perspective: gid,
+	const secondKeysMonthly = keyMakerPlaceAndDay(
 		relationType: 'artist',
 		periodType: 'month',
 		periodValue: thisMonth,
@@ -404,8 +396,7 @@ const playtimeStats = async (
 		achievementType: 'topListener',
 		achievementValue: 'second'
 	})
-	const thirdKeysMonthly = keyMakerPlaceAndDay({
-		perspective: gid,
+	const thirdKeysMonthly = keyMakerPlaceAndDay(
 		relationType: 'artist',
 		periodType: 'month',
 		periodValue: thisMonth,
@@ -435,8 +426,7 @@ const playtimeStats = async (
 	 *
 	 */
 
-	const firstKeysLifetime = keyMakerPlaceAndDay({
-		perspective: gid,
+	const firstKeysLifetime = keyMakerPlaceAndDay(
 		relationType: 'artist',
 		periodType: 'life',
 		periodValue: 'life',
@@ -444,8 +434,7 @@ const playtimeStats = async (
 		achievementType: 'topListener',
 		achievementValue: 'first'
 	})
-	const secondKeysLifetime = keyMakerPlaceAndDay({
-		perspective: gid,
+	const secondKeysLifetime = keyMakerPlaceAndDay(
 		relationType: 'artist',
 		periodType: 'life',
 		periodValue: 'life',
@@ -453,8 +442,7 @@ const playtimeStats = async (
 		achievementType: 'topListener',
 		achievementValue: 'second'
 	})
-	const thirdKeysLifetime = keyMakerPlaceAndDay({
-		perspective: gid,
+	const thirdKeysLifetime = keyMakerPlaceAndDay(
 		relationType: 'artist',
 		periodType: 'life',
 		periodValue: 'life',

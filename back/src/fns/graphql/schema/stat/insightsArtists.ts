@@ -121,13 +121,13 @@ type TopArtistsRow = {
 
 type PerspectiveTypes = 'personal' | 'group'
 type EnrichedKeyMakerParams = {
-	perspective: string
 	relationType: 'artist'
 	periodType: PeriodType
 	periodValue: string
 	artistId: string
 	achievementType: 'topListener'
 	achievementValue: 'first' | 'second' | 'third'
+	uid?: string
 }
 const keyMaker = (args: any) => [...args].join('#')
 const keyMakerPlaceAndDay = ({
@@ -137,23 +137,29 @@ const keyMakerPlaceAndDay = ({
 	periodValue,
 	artistId,
 	achievementType,
-	achievementValue
+	achievementValue,
+	uid=false
 }: EnrichedKeyMakerParams) => {
+
+	// pk: `${artistId}#${periodType}#${periodValue}#${achievementType}#${achievementValue}`,
+		// sk: `${artistId}#${periodType}#${periodValue}#user#${uid}#${achievementValue}`,
+		// fk: `${uid}#${achievementType}#${achievementValue}`
 	const pk = keyMaker([
-		perspective,
+		artistId,
 		relationType,
 		periodType,
 		periodValue,
 		achievementType,
 		achievementValue
 	])
-	const sk = keyMaker([
-		perspective,
-		periodType,
+	const sk = uid ? keyMaker([
 		artistId,
-		achievementType,
+		periodType,
+		periodValue,
+		'user',
 		achievementValue
-	])
+	]) : null
+	
 	return {
 		sk,
 		pk
@@ -264,7 +270,6 @@ const topArtists = async (
 			personal.map(async pArtistData => {
 				const { artist } = pArtistData
 				const firstKeys = keyMakerPlaceAndDay({
-					perspective: gid,
 					relationType: 'artist',
 					periodType: 'day',
 					periodValue: today,
@@ -273,7 +278,6 @@ const topArtists = async (
 					achievementValue: 'first'
 				})
 				const secondKeys = keyMakerPlaceAndDay({
-					perspective: gid,
 					relationType: 'artist',
 					periodType: 'day',
 					periodValue: today,
@@ -282,7 +286,6 @@ const topArtists = async (
 					achievementValue: 'second'
 				})
 				const thirdKeys = keyMakerPlaceAndDay({
-					perspective: gid,
 					relationType: 'artist',
 					periodType: 'day',
 					periodValue: today,
@@ -336,7 +339,6 @@ const topArtists = async (
 			personal.map(async pArtistData => {
 				const { artist } = pArtistData
 				const firstKeys = keyMakerPlaceAndDay({
-					perspective: gid,
 					relationType: 'artist',
 					periodType: 'week',
 					periodValue: thisWeek,
@@ -345,7 +347,6 @@ const topArtists = async (
 					achievementValue: 'first'
 				})
 				const secondKeys = keyMakerPlaceAndDay({
-					perspective: gid,
 					relationType: 'artist',
 					periodType: 'week',
 					periodValue: thisWeek,
@@ -354,7 +355,6 @@ const topArtists = async (
 					achievementValue: 'second'
 				})
 				const thirdKeys = keyMakerPlaceAndDay({
-					perspective: gid,
 					relationType: 'artist',
 					periodType: 'week',
 					periodValue: thisWeek,
@@ -407,7 +407,6 @@ const topArtists = async (
 			personal.map(async pArtistData => {
 				const { artist } = pArtistData
 				const firstKeys = keyMakerPlaceAndDay({
-					perspective: gid,
 					relationType: 'artist',
 					periodType: 'month',
 					periodValue: thisMonth,
@@ -416,7 +415,6 @@ const topArtists = async (
 					achievementValue: 'first'
 				})
 				const secondKeys = keyMakerPlaceAndDay({
-					perspective: gid,
 					relationType: 'artist',
 					periodType: 'month',
 					periodValue: thisMonth,
@@ -425,7 +423,6 @@ const topArtists = async (
 					achievementValue: 'second'
 				})
 				const thirdKeys = keyMakerPlaceAndDay({
-					perspective: gid,
 					relationType: 'artist',
 					periodType: 'month',
 					periodValue: thisMonth,
@@ -477,7 +474,6 @@ const topArtists = async (
 			personal.map(async pArtistData => {
 				const { artist } = pArtistData
 				const firstKeys = keyMakerPlaceAndDay({
-					perspective: gid,
 					relationType: 'artist',
 					periodType: 'life',
 					periodValue: 'life',
@@ -486,7 +482,6 @@ const topArtists = async (
 					achievementValue: 'first'
 				})
 				const secondKeys = keyMakerPlaceAndDay({
-					perspective: gid,
 					relationType: 'artist',
 					periodType: 'life',
 					periodValue: 'life',
@@ -495,7 +490,6 @@ const topArtists = async (
 					achievementValue: 'second'
 				})
 				const thirdKeys = keyMakerPlaceAndDay({
-					perspective: gid,
 					relationType: 'artist',
 					periodType: 'life',
 					periodValue: 'life',

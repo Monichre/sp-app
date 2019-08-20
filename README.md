@@ -250,7 +250,12 @@ Any modifications to the backend GraphQL resolvers or types must be recompiled o
 **On the frontend** this can be accomplished by running `yarn gql-gen`
 
 
-CLUBHOUSE_TOKEN=5d5b22be-f9c9-42cb-8058-5a777176c7dd
-AGL Project ID=10
+	/*
+			Key Example
+		====================================================================================
 
-ASANA_PROJECT_ID=1115096210838428
+			sk: { S: 'spotify:124053034#life#1kDGbuxWknIKx4FlgWxiSp' },
+  			pk: { S: 'spotify:124053034#artist#life#life' }
+
+		====================================================================================
+		*/

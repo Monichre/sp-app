@@ -5,6 +5,7 @@ import {
 } from '../../shared/tables/TableAchievement'
 import { PeriodType } from '../../shared/tables/TableStat'
 import * as moment from 'moment'
+import * as _ from 'lodash'
 
 export type EnrichedKeyMakerParams = {
 	perspective: string
@@ -54,17 +55,19 @@ export const extractPeriodTypeAndValue = ({ pk, sk }) => {
 }
 
 export const makeKeys = ({
+	artistId,
 	recordKeys,
 	achievementType,
 	achievementValue,
 	uid
 }) => {
 	const { pk, sk } = recordKeys
+	const {periodType, periodValue} = extractPeriodTypeAndValue({pk, sk})
 
 	return {
-		pk: `${pk}#${achievementType}#${achievementValue}`,
-		sk: `${sk}#${achievementType}#${achievementValue}`,
-		fk: `#${achievementType}#${achievementValue}#${uid}`
+		pk: `${artistId}#${periodType}#${periodValue}#${achievementType}#${achievementValue}`,
+		sk: `${artistId}#${periodType}#${periodValue}#user#${uid}#${achievementValue}`,
+		fk: `${uid}#${achievementType}#${achievementValue}`
 	}
 }
 
@@ -78,194 +81,40 @@ export const indexToAchievementMap = {
 
 export const makeRecordKeys = Keys => extractKeys(Keys)
 
-export const getDailyTopAchievers = async (
-	dailyTops: UserTopRecordArtistStat[],
+export const bulkRecordUserAchievements = async (
+	usersWithStats: any[],
 	artistInfo: Artist,
+	recordKeys: any,
 	tableAchievement: TTableAchievement
 ) => {
-	const achieverData = dailyTops.length
-		? await Promise.all(
-				dailyTops.map(async (daily, index) => {
-					
-					if (index <= 2) {
-						const { recordKeys, user, lastUpdated, dayData } = daily
-						const { day } = tableAchievement.periodsFor(
-							lastUpdated
-						)
+	const achieverData = await Promise.all(
+		usersWithStats.map(async (userData, index) => {
+			console.log('TCL: userData', userData)
+			const achievementType = 'topListener'
+			const achievementValue = indexToAchievementMap[index]
+			const { user, stat: total, lastUpdated } = userData
+			const { uid } = user
 
-						const achievementType = 'topListener'
-						const achievementValue = indexToAchievementMap[index]
-						const { uid } = user
-						const total = dayData
-						const keyData = makeKeys({
-							recordKeys,
-							achievementType,
-							achievementValue,
-							uid
-						})
-						const newAchievement = await tableAchievement.createOrModifyAchievement(
-							{
-								keyData,
-								total,
-								lastUpdated,
-								user,
-								artist: artistInfo
-							}
-						)
-						return newAchievement
-					}
-				})
-		  )
-		: null
+			const keyData = makeKeys({
+				artistId:artistInfo,
+				recordKeys,
+				achievementType,
+				achievementValue,
+				uid
+			})
+			const newAchievement = await tableAchievement.createOrModifyAchievement({
+				keyData,
+				total,
+				lastUpdated,
+				user,
+				artist: artistInfo
+			})
+			console.log('TCL: newAchievement', newAchievement)
+			return newAchievement
+		})
+	)
+	console.log('TCL: achieverData', achieverData)
 
-	return achieverData
-}
-
-/**
- *
- * Weekly Achievement Creation
- *
- */
-
-export const getWeeklyTopAchievers = async (
-	weeklyTops: UserTopRecordArtistStat[],
-	artistInfo: Artist,
-	tableAchievement: TTableAchievement
-) => {
-	
-	const achieverData = weeklyTops.length
-		? await Promise.all(
-				weeklyTops.map(async (weekly, index) => {
-					console.log('TCL: handleRecord -> index', index)
-					if (index <= 2) {
-						const { recordKeys, user, lastUpdated, weekData } = weekly
-						const achievementType = 'topListener'
-						const achievementValue = indexToAchievementMap[index]
-						const { uid } = user
-						const total = weekData
-
-						console.log('TCL: handleRecord -> weekData', weekData)
-
-						const keyData = makeKeys({
-							recordKeys,
-							achievementType,
-							achievementValue,
-							uid
-						})
-
-						const newAchievement = await tableAchievement.createOrModifyAchievement(
-							{
-								keyData,
-								total,
-								lastUpdated,
-								user,
-								artist: artistInfo
-							}
-						)
-						return newAchievement
-					}
-				})
-		  )
-		: null
-
-	return achieverData
-}
-
-/**
- *
- * cc: Monthly Achievement Creation
- *
- */
-
-export const getMonthlyTopAchievers = async (
-	monthlyTops: UserTopRecordArtistStat[],
-	artistInfo: Artist,
-	tableAchievement: TTableAchievement
-) => {
-
-	const achieverData = monthlyTops.length
-		? await Promise.all(
-				monthlyTops.map(async (monthly, index) => {
-					console.log('TCL: handleRecord -> index', index)
-					if (index <= 2) {
-
-						const { recordKeys, user, lastUpdated, monthData } = monthly
-						const achievementType = 'topListener'
-						const achievementValue = indexToAchievementMap[index]
-						const { uid } = user
-						const total = monthData
-
-						console.log('TCL: handleRecord -> monthData', monthData)
-
-						const keyData = makeKeys({
-							recordKeys,
-							achievementType,
-							achievementValue,
-							uid
-						})
-
-						const newAchievement = await tableAchievement.createOrModifyAchievement(
-							{
-								keyData,
-								total,
-								lastUpdated,
-								user,
-								artist: artistInfo
-							}
-						)
-						return newAchievement
-					}
-				})
-		  )
-		: null
-
-	return achieverData
-}
-
-export const getLifetimeTopAchievers = async (
-	lifetimeTops: UserTopRecordArtistStat[],
-	artistInfo: Artist,
-	tableAchievement: TTableAchievement
-) => {
-	
-	const achieverData = lifetimeTops.length
-		? await Promise.all(
-				lifetimeTops.map(async (lifetime, index) => {
-					if (index <= 2) {
-						const {
-							recordKeys,
-							user,
-							lastUpdated,
-							lifeData,
-						} = lifetime
-					
-						const achievementType = 'topListener'
-						const achievementValue = indexToAchievementMap[index]
-						const { uid } = user
-						const total = lifeData
-
-						const keyData = makeKeys({
-							recordKeys,
-							achievementType,
-							achievementValue,
-							uid
-						})
-
-						const newAchievement = await tableAchievement.createOrModifyAchievement(
-							{
-								keyData,
-								total,
-								lastUpdated,
-								user,
-								artist: artistInfo
-							}
-						)
-						return newAchievement
-					}
-				})
-		  )
-		: null
-	
 	return achieverData
 }
 
@@ -278,6 +127,9 @@ export const keyMakerPlaceAndDay = ({
 	achievementType,
 	achievementValue
 }: EnrichedKeyMakerParams) => {
+		// pk: `${artistId}#${periodType}#${periodValue}#${achievementType}#${achievementValue}`,
+		// sk: `${artistId}#${periodType}#${periodValue}#user#${uid}#${achievementValue}`,
+		// fk: `${uid}#${achievementType}#${achievementValue}`
 	const pk = keyMaker([
 		perspective,
 		relationType,
@@ -344,4 +196,141 @@ export const topThreeListeners = async ({
 	)
 
 	return topListeners
+}
+
+export const organizeUserStatsByPeriod = async (
+	valids: any,
+	artistInfo: any,
+	ApproximateCreationDateTime,
+	tableStat,
+	tableAchievement
+) => {
+	const { day, week, month, life } = tableAchievement.periodsFor(
+		ApproximateCreationDateTime
+	)
+
+	const byDay = await Promise.all(
+		valids
+			.map(async (user: any) => {
+				const { utcOffset }: any = user
+				const lastUpdated = localizedMoment(utcOffset, moment()).format(
+					'MMMM Do YYYY, h:mm:ss a'
+				)
+
+				const stat = await tableStat.getArtistStat({
+					uid: user.uid,
+					artistId: artistInfo.id,
+					periodType: 'day',
+					periodValue: day
+				})
+				return {
+					user,
+					lastUpdated,
+					stat
+				}
+			})
+	).then(res => {
+		console.log('res', res)
+		const filtered = res.filter((item: any) => item.stat && item.stat > 0)
+
+		return filtered && filtered.length ? _.sortBy(filtered, d => d.stat).reverse() : null
+	})
+		
+
+	const byWeek = await Promise.all(
+		valids
+			.map(async (user: any) => {
+				const { utcOffset }: any = user
+				const lastUpdated = localizedMoment(utcOffset, moment()).format(
+					'MMMM Do YYYY, h:mm:ss a'
+				)
+
+				const stat = await tableStat.getArtistStat({
+					uid: user.uid,
+					artistId: artistInfo.id,
+					periodType: 'week',
+					periodValue: week
+				})
+				console.log('TCL: stat', stat)
+
+				return {
+					user,
+					lastUpdated,
+					stat
+				}
+			})
+	).then(res => {
+		console.log('res', res)
+		const filtered = res.filter((item: any) => item.stat && item.stat > 0)
+		console.log('filtered', filtered)
+
+		return filtered && filtered.length ? _.sortBy(filtered, d => d.stat).reverse() : null
+	})
+		
+
+	const byMonth = await Promise.all(
+		valids
+			.map(async (user: any) => {
+				const { utcOffset }: any = user
+				const lastUpdated = localizedMoment(utcOffset, moment()).format(
+					'MMMM Do YYYY, h:mm:ss a'
+				)
+
+				const stat = await tableStat.getArtistStat({
+					uid: user.uid,
+					artistId: artistInfo.id,
+					periodType: 'month',
+					periodValue: month
+				})
+				return {
+					user,
+					lastUpdated,
+					stat
+				}
+			})
+		
+	).then(res => {
+		console.log('res', res)
+		const filtered = res.filter((item: any) => item.stat && item.stat > 0)
+
+		return filtered && filtered.length ? _.sortBy(filtered, d => d.stat).reverse() : null
+	})
+		
+
+	const byLifetime = await Promise.all(
+		valids
+			.map(async (user: any) => {
+				const { utcOffset }: any = user
+				const lastUpdated = localizedMoment(utcOffset, moment()).format(
+					'MMMM Do YYYY, h:mm:ss a'
+				)
+
+				const stat = await tableStat.getArtistStat({
+					uid: user.uid,
+					artistId: artistInfo.id,
+					periodType: 'life',
+					periodValue: life
+				})
+
+				const data = {
+					user,
+					lastUpdated,
+					stat
+				}
+				return data
+			})
+	).then(res => {
+		console.log('res', res)
+		const filtered = res.filter((item: any) => item.stat && item.stat > 0)
+
+		return filtered && filtered.length ? _.sortBy(filtered, d => d.stat).reverse() : null
+	})
+		
+
+	return {
+		byDay,
+		byWeek,
+		byMonth,
+		byLifetime
+	}
 }

@@ -118,29 +118,34 @@ type EnrichedKeyMakerParams = {
 
 const keyMaker = (args: any) => [...args].join('#')
 const keyMakerPlaceAndDay = ({
-	perspective,
 	relationType,
 	periodType,
 	periodValue,
 	artistId,
 	achievementType,
-	achievementValue
+	achievementValue,
+	uid=false
 }: EnrichedKeyMakerParams) => {
+
+	// pk: `${artistId}#${periodType}#${periodValue}#${achievementType}#${achievementValue}`,
+		// sk: `${artistId}#${periodType}#${periodValue}#user#${uid}#${achievementValue}`,
+		// fk: `${uid}#${achievementType}#${achievementValue}`
 	const pk = keyMaker([
-		perspective,
+		artistId,
 		relationType,
 		periodType,
 		periodValue,
 		achievementType,
 		achievementValue
 	])
-	const sk = keyMaker([
-		perspective,
-		periodType,
+	const sk = uid ? keyMaker([
 		artistId,
-		achievementType,
+		periodType,
+		periodValue,
+		'user',
 		achievementValue
-	])
+	]) : null
+
 	return {
 		sk,
 		pk
@@ -225,9 +230,10 @@ const perspectiveTopArtists = async (
 
 	return await Promise.all(
 		artistsPrimary.map(async ({ artist, playDurationMs }) => {
+
+			
 			
 			const firstKeys: any = keyMakerPlaceAndDay({
-				perspective: primaryId,
 				relationType: 'artist',
 				periodType,
 				periodValue,
@@ -236,7 +242,6 @@ const perspectiveTopArtists = async (
 				achievementValue: 'first'
 			})
 			const secondKeys = keyMakerPlaceAndDay({
-				perspective: primaryId,
 				relationType: 'artist',
 				periodType,
 				periodValue,
@@ -245,7 +250,6 @@ const perspectiveTopArtists = async (
 				achievementValue: 'second'
 			})
 			const thirdKeys = keyMakerPlaceAndDay({
-				perspective: primaryId,
 				relationType: 'artist',
 				periodType,
 				periodValue,

@@ -4,17 +4,44 @@ import { makeLogger, TLogger } from '../logger'
 import { TableStat } from '../../shared/tables/TableStat'
 import { TableUser } from '../../shared/tables/TableUser'
 import { TableAchievement } from '../../shared/tables/TableAchievement'
+import * as fs from 'fs'
 
 import {
-	getDailyTopAchievers,
-	getWeeklyTopAchievers,
-	getMonthlyTopAchievers,
-	getLifetimeTopAchievers,
+	bulkRecordUserAchievements,
 	extractKeys,
-	localizedMoment
+	localizedMoment,
+	organizeUserStatsByPeriod
 } from '../agl/functions'
 import * as _ from 'lodash'
 import moment = require('moment')
+
+type GenreImage = {
+	genre: { S: string }
+	sk: { S: string }
+	pk: { S: string }
+	playDurationMs: { N: string }
+}
+
+type ArtistImage = {
+	artist: {
+		M: {
+			images: any[]
+			genres: any[]
+			name: any[]
+			id: any[]
+			external_urls: any[]
+		}
+	}
+	sk: {
+		S: string
+	}
+	pk: {
+		S: string
+	}
+	playDurationMs: {
+		N: string
+	}
+}
 
 const isArtistOrGlobal = NewImage => (NewImage.artist ? 'artist' : 'global')
 
@@ -59,129 +86,78 @@ export const handler: DynamoDBStreamHandler | any = async (event, context) => {
 			? await tableStat.getArtistInfo(artist.M.id.S)
 			: null
 
-		const { day, week, month, life } = tableAchievement.periodsFor(
-			ApproximateCreationDateTime
-		)
-
-		console.log(
-			'TCL: handleRecord -> ApproximateCreationDateTime',
-			ApproximateCreationDateTime
-		)
-
-		const typeOfStat = isArtistOrGlobal(NewImage)
+	
 		const recordKeys = extractKeys(Keys)
 
-		/**
-		 *
-		 * cc: tableStat #2; Function getArtistStat
-		 *
-		 */
-		if (typeOfStat === 'artist' && artist && artistInfo) {
-			const userData = await Promise.all(
-				valids.map(async (user: any) => {
-					const { utcOffset }: any = user
-					const lastUpdated = localizedMoment(utcOffset, moment())
 
-					const dayData = await tableStat.getArtistStat({
-						uid: user.uid,
-						artistId: artistInfo.id,
-						periodType: 'day',
-						periodValue: day
-					})
-					console.log('TCL: handleRecord -> dayData', dayData)
-					const weekData = await tableStat.getArtistStat({
-						uid: user.uid,
-						artistId: artistInfo.id,
-						periodType: 'week',
-						periodValue: week
-					})
-					console.log('TCL: handleRecord -> weekData Artist', weekData)
-					const monthData = await tableStat.getArtistStat({
-						uid: user.uid,
-						artistId: artistInfo.id,
-						periodType: 'month',
-						periodValue: month
-					})
-					const lifeData = await tableStat.getArtistStat({
-						uid: user.uid,
-						artistId: artistInfo.id,
-						periodType: 'life',
-						periodValue: life
-					})
+		if (artist && artistInfo) {
+			const {
+				byDay,
+				byWeek,
+				byMonth,
+				byLifetime
+			}: any = await organizeUserStatsByPeriod(
+				valids,
+				artistInfo,
+				ApproximateCreationDateTime,
+				tableStat,
+				tableAchievement
+				)
+			
+			
 
-					return {
+			console.log('byDay', byDay)
+			
+			console.log('byWeek.length', byWeek)
+			console.log('byMonth.length', byMonth)
+			console.log('byLifetime.length', byLifetime)
+
+			let dailyTopAchievers 
+			let weeklyTopAchievers 
+			let monthlyTopAchievers 
+			let lifetimeTopAchievers 
+
+			if(byDay){
+				dailyTopAchievers = byDay.length ? await bulkRecordUserAchievements(
+					byDay,
+					artistInfo,
+					recordKeys,
+					tableAchievement
+				) : null
+				console.log('TCL: handleRecord -> dailyTopAchievers', dailyTopAchievers)
+
+			}
+				if(byWeek){
+					weeklyTopAchievers = byWeek.length ? await bulkRecordUserAchievements(
+						byWeek,
+						artistInfo,
 						recordKeys,
-						user,
-						lastUpdated,
-						dayData,
-						weekData,
-						monthData,
-						lifeData
-					}
-				})
-			)
+						tableAchievement
+					) : null
+					console.log('TCL: handleRecord -> weeklyTopAchievers', weeklyTopAchievers)
+				}
 
-			const dailyTops = _.sortBy(userData, d => d.dayData)
-				.reverse()
-				.filter(d => d.dayData > 0)
-			const weeklyTops = _.sortBy(userData, d => d.weekData)
-				.reverse()
-				.filter(d => d.weekData > 0)
-			const monthlyTops = _.sortBy(userData, d => d.monthData)
-				.reverse()
-				.filter(d => d.monthData > 0)
-			const lifetimeTops = _.sortBy(userData, d => d.lifeData)
-				.reverse()
-				.filter(d => d.lifeData > 0)
+				if(byMonth){
+					monthlyTopAchievers = byMonth.length ? await bulkRecordUserAchievements(
+						byMonth,
+						artistInfo,
+						recordKeys,
+						tableAchievement
+					) : null
+				}
 
-			/**
-			 *
-			 * cc: Daily Achievement Creation
-			 *
-			 */
+				if(byLifetime){
+					lifetimeTopAchievers = byLifetime.length ? await bulkRecordUserAchievements(
+						byLifetime,
+						artistInfo,
+						recordKeys,
+						tableAchievement
+					) : null
 
-			const dailyTopAchievers = await getDailyTopAchievers(
-				dailyTops,
-				artistInfo,
-				tableAchievement
-			)
+				}
 
-			/**
-			 *
-			 * cc: Weekly Achievement Creation
-			 *
-			 */
 
-			const weeklyTopAchievers = await getWeeklyTopAchievers(
-				weeklyTops,
-				artistInfo,
-				tableAchievement
-			)
-
-			/**
-			 *
-			 * cc: Monthly Achievement Creation
-			 *
-			 */
-
-			const monthlyTopAchievers = await getMonthlyTopAchievers(
-				monthlyTops,
-				artistInfo,
-				tableAchievement
-			)
-
-			/**
-			 *
-			 * cc: Lifetime Achievement Creation
-			 *
-			 */
-
-			const lifetimeTopAchievers = await getLifetimeTopAchievers(
-				lifetimeTops,
-				artistInfo,
-				tableAchievement
-			)
-
+		
 			return {
 				dailyTopAchievers,
 				weeklyTopAchievers,
@@ -193,9 +169,29 @@ export const handler: DynamoDBStreamHandler | any = async (event, context) => {
 
 	// close the stream
 
-	await Promise.all(
-		event.Records.map(async record => await handleRecord(record))
+	const artistEventStreams: ArtistImage[] = event.Records.filter(
+		(record: any) => {
+			const {
+				dynamodb: { Keys, ApproximateCreationDateTime, NewImage }
+			} = record
+		
+			if (NewImage.artist && NewImage.pk.S.includes('spotify')) {
+				return record
+			}
+		}
 	)
+
+	if (artistEventStreams.length) {
+		await Promise.all(
+			artistEventStreams.map(async record => await handleRecord(record))
+		)
+	}
+
+	const genreEventStreams: GenreImage[] = event.Records.filter(
+		({ dynamodb: { Keys, ApproximateCreationDateTime, NewImage } }) =>
+			NewImage.genre && NewImage.pk.S.includes('spotify')
+	)
+
 
 	log.close()
 }
