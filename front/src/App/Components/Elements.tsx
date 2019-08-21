@@ -16,12 +16,32 @@ export const AlbumBackgroundDiv = styled.div<{ src: string }>`
   background-size: cover;
 `
 
-export const ArtistAvatarDiv = styled.div<{ src: string }>`
+export const AvatarBg: any = styled.div<{ src: string }>`
   height: ${bgSize / 2}rem;
   width: ${bgSize / 2}rem;
   border-radius: ${bgSize / 2 / 2}rem;
-  background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("${({ src }) => src}");
+  background: linear-gradient( rgba(192, 54, 208, .15), rgba(192, 54, 208, .15) ), url("${({ src }) => src}");
   background-size: cover;
+  
+
+  &:before {
+    border-radius: 50%;
+    content: '';
+    background-image: linear-gradient(to bottom, #e64a19 0%, #ffa726 100%);
+     height: 3.2rem;
+    width: 3.2rem;
+    position:absolute;
+    z-index:-1;
+}
+
+${(props: any) => props.sideNav && css`
+    left: 25px;
+    position: absolute;
+
+    &:before {
+      left: 0;
+    }
+`}
   `
 
 export const ArtistInfoDiv = styled.div`
@@ -63,16 +83,15 @@ export const Item = styled(animated.div)`
   background: white;
   border-radius: 5px;
   will-change: transform, opacity;
+  overflow: visible;
 `
 
 
 export const Frame = styled('div')`
   position: relative;
-  /* padding:  10px 0; */
+  padding:  10px 0 0;
   text-overflow: ellipsis;
-  white-space: nowrap;
-  /* overflow-x: hidden; */
-  
+
   vertical-align: middle;
   color: white;
   fill: white;
@@ -91,13 +110,15 @@ export const HeaderFlexDiv = styled.div`
 export const FlexDiv = styled.div`
     display: flex;
     justify-content: space-evenly;
-    align-content: center;
+    /* align-content: center; */
+    flex-direction: column;
     width: 100%;
     max-width: 100vw;
     margin: 10px 0;
+    padding-left: 15px;
     position: relative;
-    overflow-x: scroll;
-    padding: 0 40px;
+    overflow: visible;
+    
     z-index: 20;
     /* border-top: 1px solid rgba(255,255,255,.1); */
     /* border-bottom: 1px solid rgba(255,255,255,.1); */
@@ -111,6 +132,6 @@ export const FlexDiv = styled.div`
         left: 0;
         height: 100%;
         width: 100%;
-        background-color: rgba(216,216,216,.05);
+        /* background-color: rgba(216,216,216,.05); */
     }
 `

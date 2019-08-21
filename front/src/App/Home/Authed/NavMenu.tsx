@@ -7,6 +7,8 @@ import { LogoHorizontal } from '../../../shared/Logo';
 import { UserAchievementsList } from '../../Components/UserAchievementsList'
 
 import Moment from 'react-moment';
+import { AvatarBg } from '../../Components/Elements';
+import { PhotoWrapper, CircleOne, CircleTwo } from './Profile/ProfileCardStyles';
 
 
 
@@ -112,17 +114,6 @@ background-color: #AAA;
 color: #030616;
 `
 
-
-const UserAvatar = styled.img`
-  border-radius: 50%;
-  height: 40px;
-  position: absolute;
-  top: 24px;
-  left: 18px;
-  width: 40px;
-`
-
-
 const HarvestingNotice: React.SFC = () =>
   <HarvestingNoticeDiv>
     Watch your stats grow as we complete your initial harvest.
@@ -131,14 +122,10 @@ const HarvestingNotice: React.SFC = () =>
 export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: string, user: any}> = ({ initialHarvestComplete, lastUpdate, user}) => {
 
 
-  
-  console.count('NavMenu Render: ')
-  
   return (
     <NavMenuView>
       <NavPrimaryLink to='#'>
-        <UserAvatar src={user.photoURL ? user.photoURL : '/icons/headphones.svg'}  />
-          {/* <img src={user.photoURL ? user.photoURL : '/icons/headphones.svg'} /> */}
+        <AvatarBg sideNav={true} src={user.photoURL ? user.photoURL : '/icons/headphones.svg'} />
         <NavLabel>{user.displayName ? user.displayName : user.email}</NavLabel>
       </NavPrimaryLink>
       <NavPrimaryLink to='/insights'>

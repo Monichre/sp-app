@@ -5,7 +5,7 @@ import { User } from '../../../../../back/src/fns/graphql/types';
 import { ArtistsFragmentArtist } from '../../../types';
 import { hrsAndMins } from '../../../lib/durationFormats';
 import { useSpring, animated } from 'react-spring';
-import { ArtistAvatarDiv, ArtistNameDiv } from '../Elements';
+import { AvatarBg, ArtistNameDiv } from '../Elements';
 
 export interface AglArtistThumbProps {
     achievement: {
@@ -28,7 +28,7 @@ export const AglArtistThumb: React.SFC<AglArtistThumbProps> = ({ achievement }) 
 
     return (
         <div style={{ margin: '10px 10px 0', position: 'relative', padding: '10px 10px 0' }}>
-            <ArtistAvatarDiv src={artist.images ? artist.images[0].url : ''} />
+            <AvatarBg src={artist.images ? artist.images[0].url : ''} />
             <ArtistNameDiv>{artist.name}</ArtistNameDiv>
             <p><animated.span>{ttl.total}</animated.span> minutes</p>
         </div>

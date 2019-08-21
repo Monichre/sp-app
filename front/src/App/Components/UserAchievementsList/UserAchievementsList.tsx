@@ -6,12 +6,14 @@ import { hrsAndMins } from '../../../lib/durationFormats';
 import { useGetUserAchievements } from '../../../types';
 import { suspensefulHook } from '../../../lib/suspensefulHook';
 import { AchievementListItem } from './AchievementListItem'
-import { HeaderFlexDiv } from '../Elements';
-import moment from 'moment'
+import { HeaderFlexDiv } from '../Elements'
+import * as _ from 'lodash'
+import { parseAchievementsByPeriod } from './achievements-utils';
+
 
 
 const ListStyle = styled.ul`
-    padding: 0 .5rem;
+    padding: 0;
     counter-reset: index;  
     overflow: visible;
 
@@ -42,9 +44,7 @@ const ListWrap = styled.div`
     color: #fff;
 }
     background-color: #030616;
-    position: fixed;
-    left: 0;
-    top: 30vh;
+    margin-top: 30px;
     width: 200px;
     overflow: visible;
     height: auto; 
@@ -91,112 +91,24 @@ export interface AchievementItemProps {
 
 
 
-
 export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ userId }) => {
 
+    const { dailyAchievements,
+        weeklyAchievements,
+        monthlyAchievements,
+        lifetimeAchievements,
+        diffAchievementsByPeriod
+    } = parseAchievementsByPeriod(userId)
 
+    const { dayAndWeekDiff,
+        weekAndMonthDiff,
+        monthAndLifeDiff } = diffAchievementsByPeriod
 
     const [wasClicked, setClicked] = useState(false)
     const handleClick = () => setClicked(wasClicked => !wasClicked)
-    const day = moment().format('YYYY-MM-DD')
-    const week = `${moment().year()}-${moment().week()}`
-    const month = `${moment().year()}-${moment().month()}`
-
-    const topsBitch: any = {
-
-        day: {
-            first: {
-
-                pk: `topListener#first#day#${day}`,
-                fk: `${userId}#topListener#first`,
-            },
-            second: {
-                pk: `topListener#second#day#${day}`,
-                fk: `${userId}#topListener#second`,
-
-            },
-            third: {
-                pk: `topListener#third#day#${day}`,
-                fk: `${userId}#topListener#third`,
-            }
-        },
-        week: {
-            first: {
-
-                pk: `topListener#first#week#${week}`,
-                fk: `${userId}#topListener#first`,
-            },
-            second: {
-                pk: `topListener#second#week#${week}`,
-                fk: `${userId}#topListener#second`,
-
-            },
-            third: {
-                pk: `topListener#third#week#${week}`,
-                fk: `${userId}#topListener#third`,
-            }
-        },
-        month: {
-            first: {
-
-                pk: `topListener#first#month#${month}`,
-                fk: `${userId}#topListener#first`,
-            },
-            second: {
-                pk: `topListener#second#month#${month}`,
-                fk: `${userId}#topListener#second`,
-
-            },
-            third: {
-                pk: `topListener#third#month#${month}`,
-                fk: `${userId}#topListener#third`,
-            }
-        },
-        life: {
-            first: {
-
-                pk: `topListener#first#life#life`,
-                fk: `${userId}#topListener#first`,
-            },
-            second: {
-                pk: `topListener#second#life#life`,
-                fk: `${userId}#topListener#second`,
-
-            },
-            third: {
-                pk: `topListener#third#life#life`,
-                fk: `${userId}#topListener#third`,
-            }
-        }
-    }
 
 
-    const lifeTimeAchievementData: any = suspensefulHook(useGetUserAchievements({ variables: { pk: topsBitch.life.first.pk, fk: topsBitch.life.first.fk }, suspend: true, pollInterval: 15000 }))
-
-    const { getUserAchievements: lifetimeAchievements }: any = lifeTimeAchievementData
-
-
-
-    const monthlyAchievementData: any = suspensefulHook(useGetUserAchievements({ variables: { pk: topsBitch.week.first.pk, fk: topsBitch.week.first.fk }, suspend: true, pollInterval: 15000 }))
-
-    const { getUserAchievements: monthlyAchievements }: any = monthlyAchievementData
-
-
-
-    const weeklyAchievementData: any = suspensefulHook(useGetUserAchievements({ variables: { pk: topsBitch.week.first.pk, fk: topsBitch.week.first.fk }, suspend: true, pollInterval: 15000 }))
-
-    const { getUserAchievements: weeklyAchievements }: any = weeklyAchievementData
-
-
-
-    const dailyAchievementData: any = suspensefulHook(useGetUserAchievements({ variables: { pk: topsBitch.week.first.pk, fk: topsBitch.week.first.fk }, suspend: true, pollInterval: 15000 }))
-
-    const { getUserAchievements: dailyAchievements }: any = dailyAchievementData
-
-
-    
-
-    const la: any = (lifetimeAchievements && lifetimeAchievements.length) ? lifetimeAchievements.map((achievement: any) => {
+    const la: any = (lifetimeAchievements && lifetimeAchievements.length) ? lifetimeAchievements.slice(0, 3).map((achievement: any) => {
 
         let total: any = hrsAndMins(achievement.total)
         achievement.formattedTotal = total
@@ -205,7 +117,7 @@ export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ use
     }) : []
 
 
-    const ma: any = (monthlyAchievementData && monthlyAchievementData.length) ? monthlyAchievementData.map((achievement: any) => {
+    const ma: any = (monthlyAchievements && monthlyAchievements.length) ? monthlyAchievements.slice(0, 3).map((achievement: any) => {
 
         let total: any = hrsAndMins(achievement.total)
         achievement.formattedTotal = total
@@ -213,7 +125,7 @@ export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ use
         return achievement
     }) : []
 
-    const wa: any = (weeklyAchievements && weeklyAchievements.length) ? weeklyAchievements.map((achievement: any) => {
+    const wa: any = (weeklyAchievements && weeklyAchievements.length) ? weeklyAchievements.slice(0, 3).map((achievement: any) => {
 
         let total: any = hrsAndMins(achievement.total)
         achievement.formattedTotal = total
@@ -222,13 +134,14 @@ export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ use
     }) : []
 
 
-    const da: any = (dailyAchievements && dailyAchievements.length) ? dailyAchievements.map((achievement: any) => {
+    const da: any = (dailyAchievements && dailyAchievements.length) ? dailyAchievements.slice(0, 3).map((achievement: any) => {
 
         let total: any = hrsAndMins(achievement.total)
         achievement.formattedTotal = total
 
         return achievement
     }) : []
+
 
 
     return (
@@ -237,16 +150,16 @@ export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ use
             <ListStyle>
 
 
-                {la.length ? <AchievementListItem achievements={la} title='LifeTime ' wasClicked={wasClicked} handleClick={handleClick} /> : null}
+                {/* {la.length ? <AchievementListItem achievementTotal={dailyAchievements.length} achievements={la} title='LifeTime ' wasClicked={wasClicked} handleClick={handleClick} /> : null} */}
 
 
-                {ma.length ? <AchievementListItem achievements={ma} title='This Month' wasClicked={wasClicked} handleClick={handleClick} /> : null}
+                {weekAndMonthDiff.status && ma.length ? <AchievementListItem achievementTotal={weeklyAchievements.length} achievements={ma} title='This Month' wasClicked={wasClicked} handleClick={handleClick} /> : null}
 
 
-                {wa.length ? <AchievementListItem achievements={wa} title='This Week' wasClicked={wasClicked} handleClick={handleClick} /> : null}
+                {weekAndMonthDiff.status && wa.length ? <AchievementListItem achievementTotal={monthlyAchievements.length} achievements={wa} title='This Week' wasClicked={wasClicked} handleClick={handleClick} /> : null}
 
 
-                {da.length ? <AchievementListItem achievements={da} title='Today' wasClicked={wasClicked} handleClick={handleClick} /> : null}
+                {/* {da.length ? <AchievementListItem achievementTotal={lifetimeAchievements.length} achievements={da} title='Today' wasClicked={wasClicked} handleClick={handleClick} /> : null} */}
 
 
             </ListStyle>
