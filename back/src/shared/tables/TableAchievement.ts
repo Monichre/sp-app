@@ -301,48 +301,56 @@ export const TableAchievement = (
 	 */
 
 	const getArtistTopListeners = async ({ sk, pk }: KeyData) => {
-		const status = () => {
-			let place
-			if(pk.split('#').includes('topListener') &&
-				pk.split('#').includes('first')) {
-				place = 'first'
-			}
+		console.log('pk', pk)
+		console.log('sk', sk)
+		// const status = () => {
+		// 	let place
+		// 	if(pk.split('#').includes('topListener') &&
+		// 		pk.split('#').includes('first')) {
+		// 		place = 'first'
+		// 	}
 			
-			if(pk.split('#').includes('topListener') &&
-				pk.split('#').includes('second')) {
-				place = 'second'
-			}
+		// 	if(pk.split('#').includes('topListener') &&
+		// 		pk.split('#').includes('second')) {
+		// 		place = 'second'
+		// 	}
 			
-			if(pk.split('#').includes('topListener') &&
-				pk.split('#').includes('third')) {
-				place = 'third'
-				}
-		}
-		const aglStatus = {
-			type: 'topListener',
-			place: status()
-		}
+		// 	if(pk.split('#').includes('topListener') &&
+		// 		pk.split('#').includes('third')) {
+		// 		place = 'third'
+		// 		}
+		// }
+		// const aglStatus = {
+		// 	type: 'topListener',
+		// 	place: status()
+		// }
 
-		return await doc
-			.query({
-				TableName,
-				KeyConditionExpression: 'pk = :p and sk <= :s',
-				ExpressionAttributeValues: {
-					':p': pk,
-					':s': sk
-				},
-				Limit: 3
-			})
-			.promise()
-			.then(res => {
+		const tops = await doc.query({
+					TableName,
+					KeyConditionExpression: 'pk = :p AND sk = :s',
+					ExpressionAttributeValues: {
+						':p': pk,
+						':s': sk
+					}
+				}).promise().then(res => {
+				console.log('res', res)
 				if (res && res.Items && res.Items.length) {
+					console.log('res.Items', res.Items)
 					let user = res.Items.pop()
-					user.achievements = aglStatus
+					
 					return user
 				} else {
 					return null
 				}
 			})
+			.catch(err => {
+				console.log(err)
+			})
+
+			console.log('tops', tops)
+			
+			return tops
+			
 	}
 {
 	

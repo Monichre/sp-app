@@ -8,13 +8,13 @@ import * as moment from 'moment'
 import * as _ from 'lodash'
 
 export type EnrichedKeyMakerParams = {
-	perspective: string
 	relationType: 'artist'
 	periodType: PeriodType
 	periodValue: string
 	artistId: string
 	achievementType: 'topListener'
 	achievementValue: 'first' | 'second' | 'third'
+	uid?: string | null
 }
 
 export type UserTopRecordArtistStat = {
@@ -65,8 +65,8 @@ export const makeKeys = ({
 	const {periodType, periodValue} = extractPeriodTypeAndValue({pk, sk})
 
 	return {
-		pk: `${artistId}#${periodType}#${periodValue}#${achievementType}#${achievementValue}`,
-		sk: `${artistId}#${periodType}#${periodValue}#user#${uid}#${achievementValue}`,
+		pk: `${achievementType}#${achievementValue}#${periodType}#${periodValue}`,
+		sk: `${artistId}#${periodType}#${achievementType}#${achievementValue}`,
 		fk: `${uid}#${achievementType}#${achievementValue}`
 	}
 }
@@ -96,7 +96,7 @@ export const bulkRecordUserAchievements = async (
 			const { uid } = user
 
 			const keyData = makeKeys({
-				artistId:artistInfo,
+				artistId:artistInfo.id,
 				recordKeys,
 				achievementType,
 				achievementValue,
@@ -118,85 +118,83 @@ export const bulkRecordUserAchievements = async (
 	return achieverData
 }
 
-export const keyMakerPlaceAndDay = ({
-	perspective,
+const keyMakerPlaceAndDay = ({
 	relationType,
 	periodType,
 	periodValue,
 	artistId,
 	achievementType,
-	achievementValue
+	achievementValue,
+	uid=null
 }: EnrichedKeyMakerParams) => {
-		// pk: `${artistId}#${periodType}#${periodValue}#${achievementType}#${achievementValue}`,
-		// sk: `${artistId}#${periodType}#${periodValue}#user#${uid}#${achievementValue}`,
-		// fk: `${uid}#${achievementType}#${achievementValue}`
+
 	const pk = keyMaker([
-		perspective,
-		relationType,
-		periodType,
-		periodValue,
 		achievementType,
-		achievementValue
+		achievementValue,
+		periodType,
+		periodValue
 	])
+		
 	const sk = keyMaker([
-		perspective,
-		periodType,
 		artistId,
+		periodType,
 		achievementType,
 		achievementValue
 	])
+
+	
 	return {
 		sk,
 		pk
 	}
 }
 
-export const topThreeListeners = async ({
-	perspective,
-	relationType,
-	periodType,
-	periodValue,
-	artistId,
-	tableAchievement
-}) => {
-	const firstKeys: any = keyMakerPlaceAndDay({
-		perspective,
-		relationType,
-		periodType,
-		periodValue,
-		artistId,
-		achievementType: 'topListener',
-		achievementValue: 'first'
-	})
-	const secondKeys = keyMakerPlaceAndDay({
-		perspective,
-		relationType,
-		periodType,
-		periodValue,
-		artistId,
-		achievementType: 'topListener',
-		achievementValue: 'second'
-	})
-	const thirdKeys = keyMakerPlaceAndDay({
-		perspective,
-		relationType,
-		periodType,
-		periodValue,
-		artistId,
-		achievementType: 'topListener',
-		achievementValue: 'third'
-	})
+// export const topThreeListeners = async ({
+// 	perspective,
+// 	relationType,
+// 	periodType,
+// 	periodValue,
+// 	artistId,
+// 	tableAchievement
+// }) => {
+// 	const firstKeys: any = keyMakerPlaceAndDay({
+// 		perspective,
+// 		relationType,
+// 		periodType,
+// 		periodValue,
+// 		artistId,
+// 		achievementType: 'topListener',
+// 		achievementValue: 'first'
+// 	})
+// 	const secondKeys = keyMakerPlaceAndDay({
+// 		perspective,
+// 		relationType,
+// 		periodType,
+// 		periodValue,
+// 		artistId,
+// 		achievementType: 'topListener',
+// 		achievementValue: 'second'
+// 	})
+// 	const thirdKeys = keyMakerPlaceAndDay({
+// 		perspective,
+// 		relationType,
+// 		periodType,
+// 		periodValue,
+// 		artistId,
+// 		achievementType: 'topListener',
+// 		achievementValue: 'third'
+// 	})
 
-	const keys = [firstKeys, secondKeys, thirdKeys]
-	const topListeners = await Promise.all(
-		keys.map(
-			async (keyData: KeyData) =>
-				await tableAchievement.getArtistTopListeners(keyData)
-		)
-	)
+// 	const keys = [firstKeys, secondKeys, thirdKeys]
+// 	const topListeners = await Promise.all(
+// 		keys.map(
+// 			async (keyData: KeyData) =>
+// 				await tableAchievement.getArtistTopListeners(keyData)
+// 		)
+// 	)
 
-	return topListeners
-}
+// 	return topListeners
+// }
 
 export const organizeUserStatsByPeriod = async (
 	valids: any,

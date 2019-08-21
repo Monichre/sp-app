@@ -127,38 +127,32 @@ type EnrichedKeyMakerParams = {
 	artistId: string
 	achievementType: 'topListener'
 	achievementValue: 'first' | 'second' | 'third'
-	uid?: string
+	uid?: string | null
 }
 const keyMaker = (args: any) => [...args].join('#')
 const keyMakerPlaceAndDay = ({
-	perspective,
 	relationType,
 	periodType,
 	periodValue,
 	artistId,
 	achievementType,
 	achievementValue,
-	uid=false
+	uid=null
 }: EnrichedKeyMakerParams) => {
 
-	// pk: `${artistId}#${periodType}#${periodValue}#${achievementType}#${achievementValue}`,
-		// sk: `${artistId}#${periodType}#${periodValue}#user#${uid}#${achievementValue}`,
-		// fk: `${uid}#${achievementType}#${achievementValue}`
+	
 	const pk = keyMaker([
-		artistId,
-		relationType,
+		achievementType,
+		achievementValue,
 		periodType,
-		periodValue,
+		periodValue
+	])
+	const sk = keyMaker([
+		artistId,
+		periodType,
 		achievementType,
 		achievementValue
 	])
-	const sk = uid ? keyMaker([
-		artistId,
-		periodType,
-		periodValue,
-		'user',
-		achievementValue
-	]) : null
 	
 	return {
 		sk,
@@ -265,7 +259,7 @@ const topArtists = async (
 		yest
 	).then(async res => {
 		const { personal, group } = res
-		console.log('TCL: personal', personal)
+		
 		await Promise.all(
 			personal.map(async pArtistData => {
 				const { artist } = pArtistData
@@ -298,12 +292,13 @@ const topArtists = async (
 				const topListeners = await Promise.all(
 					keys.map(async (keyData: KeyData) => {
 						const data = await tableAchievement.getArtistTopListeners(keyData)
-						
+						console.log('toplistener data', data)
 						return data
 					})
 				)
 
 				artist.topListeners = topListeners.length ? topListeners : []
+				console.log('artist.topListeners', artist.topListeners)
 
 				return pArtistData
 			})
@@ -334,7 +329,7 @@ const topArtists = async (
 		lastWeek
 	).then(async res => {
 		const { personal, group } = res
-		console.log('TCL: personal', personal)
+		
 		await Promise.all(
 			personal.map(async pArtistData => {
 				const { artist } = pArtistData
@@ -346,6 +341,7 @@ const topArtists = async (
 					achievementType: 'topListener',
 					achievementValue: 'first'
 				})
+				console.log("firstKeys", firstKeys)
 				const secondKeys = keyMakerPlaceAndDay({
 					relationType: 'artist',
 					periodType: 'week',
@@ -354,6 +350,7 @@ const topArtists = async (
 					achievementType: 'topListener',
 					achievementValue: 'second'
 				})
+				console.log("secondKeys", secondKeys)
 				const thirdKeys = keyMakerPlaceAndDay({
 					relationType: 'artist',
 					periodType: 'week',
@@ -362,6 +359,7 @@ const topArtists = async (
 					achievementType: 'topListener',
 					achievementValue: 'third'
 				})
+				console.log("thirdKeys", thirdKeys)
 
 				const keys = [firstKeys, secondKeys, thirdKeys]
 				const topListeners = await Promise.all(
@@ -402,7 +400,7 @@ const topArtists = async (
 		lastMonth
 	).then(async res => {
 		const { personal, group } = res
-		console.log('TCL: personal', personal)
+		
 		await Promise.all(
 			personal.map(async pArtistData => {
 				const { artist } = pArtistData
@@ -469,7 +467,7 @@ const topArtists = async (
 		'life'
 	).then(async res => {
 		const { personal, group } = res
-		console.log('TCL: personal', personal)
+		
 		await Promise.all(
 			personal.map(async pArtistData => {
 				const { artist } = pArtistData
@@ -559,7 +557,7 @@ const insightsArtists = async (
 	const now = localizedMoment(utcOffset, moment())
 	const ret = await topArtists(tableStat, tableAchievement, uid, gid, now)
 
-	console.log('ret', ret)
+	
 	return ret
 }
 

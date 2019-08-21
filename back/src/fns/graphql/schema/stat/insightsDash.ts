@@ -106,14 +106,15 @@ type TopGenreStat {
 
 `
 
+
 type EnrichedKeyMakerParams = {
-	perspective: string
 	relationType: 'artist'
 	periodType: PeriodType
 	periodValue: string
 	artistId: string
 	achievementType: 'topListener'
 	achievementValue: 'first' | 'second' | 'third'
+	uid?: string | null
 }
 
 const keyMaker = (args: any) => [...args].join('#')
@@ -124,27 +125,22 @@ const keyMakerPlaceAndDay = ({
 	artistId,
 	achievementType,
 	achievementValue,
-	uid=false
+	uid=null
 }: EnrichedKeyMakerParams) => {
 
-	// pk: `${artistId}#${periodType}#${periodValue}#${achievementType}#${achievementValue}`,
-		// sk: `${artistId}#${periodType}#${periodValue}#user#${uid}#${achievementValue}`,
-		// fk: `${uid}#${achievementType}#${achievementValue}`
+	
 	const pk = keyMaker([
-		artistId,
-		relationType,
+		achievementType,
+		achievementValue,
 		periodType,
-		periodValue,
+		periodValue
+	])
+	const sk = keyMaker([
+		artistId,
+		periodType,
 		achievementType,
 		achievementValue
 	])
-	const sk = uid ? keyMaker([
-		artistId,
-		periodType,
-		periodValue,
-		'user',
-		achievementValue
-	]) : null
 
 	return {
 		sk,
@@ -233,7 +229,7 @@ const perspectiveTopArtists = async (
 
 			
 			
-			const firstKeys: any = keyMakerPlaceAndDay({
+			const firstKeys = keyMakerPlaceAndDay({
 				relationType: 'artist',
 				periodType,
 				periodValue,

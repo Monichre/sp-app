@@ -104,41 +104,44 @@ type Delta {
 }
 `
 
+
 type EnrichedKeyMakerParams = {
-	perspective: string
 	relationType: 'artist'
 	periodType: PeriodType
 	periodValue: string
 	artistId: string
 	achievementType: 'topListener'
 	achievementValue: 'first' | 'second' | 'third'
+	uid?: string | null
 }
+
+
 
 const keyMaker = (args: any) => [...args].join('#')
 const keyMakerPlaceAndDay = ({
-	perspective,
 	relationType,
 	periodType,
 	periodValue,
 	artistId,
 	achievementType,
-	achievementValue
+	achievementValue,
+	uid=null
 }: EnrichedKeyMakerParams) => {
+
+	
 	const pk = keyMaker([
-		perspective,
-		relationType,
-		periodType,
-		periodValue,
 		achievementType,
-		achievementValue
+		achievementValue,
+		periodType,
+		periodValue
 	])
 	const sk = keyMaker([
-		perspective,
-		periodType,
 		artistId,
+		periodType,
 		achievementType,
 		achievementValue
 	])
+	
 	return {
 		sk,
 		pk
@@ -286,6 +289,7 @@ const playtimeStats = async (
 	)
 
 	const artist = await tableStat.getArtistInfo(artistId)
+
 	let topListeners: any = []
 
 	const firstKeysDaily = keyMakerPlaceAndDay({
@@ -334,7 +338,7 @@ const playtimeStats = async (
 	 *
 	 */
 
-	const firstKeysWeekly = keyMakerPlaceAndDay(
+	const firstKeysWeekly = keyMakerPlaceAndDay({
 		relationType: 'artist',
 		periodType: 'week',
 		periodValue: thisWeek,
@@ -342,7 +346,7 @@ const playtimeStats = async (
 		achievementType: 'topListener',
 		achievementValue: 'first'
 	})
-	const secondKeysWeekly = keyMakerPlaceAndDay(
+	const secondKeysWeekly = keyMakerPlaceAndDay({
 		relationType: 'artist',
 		periodType: 'week',
 		periodValue: thisWeek,
@@ -350,7 +354,7 @@ const playtimeStats = async (
 		achievementType: 'topListener',
 		achievementValue: 'second'
 	})
-	const thirdKeysWeekly = keyMakerPlaceAndDay(
+	const thirdKeysWeekly = keyMakerPlaceAndDay({
 		relationType: 'artist',
 		periodType: 'week',
 		periodValue: thisWeek,
@@ -380,7 +384,7 @@ const playtimeStats = async (
 	 *
 	 */
 
-	const firstKeysMonthly = keyMakerPlaceAndDay(
+	const firstKeysMonthly = keyMakerPlaceAndDay({
 		relationType: 'artist',
 		periodType: 'month',
 		periodValue: thisMonth,
@@ -388,7 +392,7 @@ const playtimeStats = async (
 		achievementType: 'topListener',
 		achievementValue: 'first'
 	})
-	const secondKeysMonthly = keyMakerPlaceAndDay(
+	const secondKeysMonthly = keyMakerPlaceAndDay({
 		relationType: 'artist',
 		periodType: 'month',
 		periodValue: thisMonth,
@@ -396,7 +400,7 @@ const playtimeStats = async (
 		achievementType: 'topListener',
 		achievementValue: 'second'
 	})
-	const thirdKeysMonthly = keyMakerPlaceAndDay(
+	const thirdKeysMonthly = keyMakerPlaceAndDay({
 		relationType: 'artist',
 		periodType: 'month',
 		periodValue: thisMonth,
@@ -426,7 +430,7 @@ const playtimeStats = async (
 	 *
 	 */
 
-	const firstKeysLifetime = keyMakerPlaceAndDay(
+	const firstKeysLifetime = keyMakerPlaceAndDay({
 		relationType: 'artist',
 		periodType: 'life',
 		periodValue: 'life',
@@ -434,7 +438,7 @@ const playtimeStats = async (
 		achievementType: 'topListener',
 		achievementValue: 'first'
 	})
-	const secondKeysLifetime = keyMakerPlaceAndDay(
+	const secondKeysLifetime = keyMakerPlaceAndDay({
 		relationType: 'artist',
 		periodType: 'life',
 		periodValue: 'life',
@@ -442,7 +446,7 @@ const playtimeStats = async (
 		achievementType: 'topListener',
 		achievementValue: 'second'
 	})
-	const thirdKeysLifetime = keyMakerPlaceAndDay(
+	const thirdKeysLifetime = keyMakerPlaceAndDay({
 		relationType: 'artist',
 		periodType: 'life',
 		periodValue: 'life',
