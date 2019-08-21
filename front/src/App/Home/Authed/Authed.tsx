@@ -156,7 +156,7 @@ export const Authed: React.SFC<{ user: { uid: string } }> = ({ user: firebaseUse
 */
   return (
     <AuthedView>
-      <NavMenu {...{ initialHarvestComplete: initialHarvestComplete || false, lastUpdate: lastUpdate || '', userId: user.uid }} />
+      <NavMenu {...{ initialHarvestComplete: initialHarvestComplete || false, lastUpdate: lastUpdate || '', user: user }} />
       <React.Suspense fallback={<Loading/>}>
         <Switch>
           <Route path='/insights/:timeScope/:groupId/:perspective' render={(props) => <Insights user={user} {...props} uid={uid} />} />

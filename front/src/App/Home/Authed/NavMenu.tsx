@@ -112,17 +112,35 @@ background-color: #AAA;
 color: #030616;
 `
 
+
+const UserAvatar = styled.img`
+  border-radius: 50%;
+  height: 40px;
+  position: absolute;
+  top: 24px;
+  left: 18px;
+  width: 40px;
+`
+
+
 const HarvestingNotice: React.SFC = () =>
   <HarvestingNoticeDiv>
     Watch your stats grow as we complete your initial harvest.
   </HarvestingNoticeDiv>
 
-export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: string, userId: string}> = ({ initialHarvestComplete, lastUpdate, userId}) => {
+export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: string, user: any}> = ({ initialHarvestComplete, lastUpdate, user}) => {
+
+
   
   console.count('NavMenu Render: ')
   
   return (
     <NavMenuView>
+      <NavPrimaryLink to='#'>
+        <UserAvatar src={user.photoURL ? user.photoURL : '/icons/headphones.svg'}  />
+          {/* <img src={user.photoURL ? user.photoURL : '/icons/headphones.svg'} /> */}
+        <NavLabel>{user.displayName ? user.displayName : user.email}</NavLabel>
+      </NavPrimaryLink>
       <NavPrimaryLink to='/insights'>
         <LineChart color='white' />
         <NavLabel>Insights</NavLabel>
@@ -136,7 +154,7 @@ export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: s
         <NavLabel>Profile</NavLabel>
       </NavPrimaryLink>
       <Large>
-        <UserAchievementsList userId={userId} />
+        <UserAchievementsList userId={user.uid} />
         <FillSpace>
           {!initialHarvestComplete ? <HarvestingNotice /> : <LastUpdate {...{ lastUpdate }} />}
           <LogoHorizontal size={8} />

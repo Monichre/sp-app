@@ -295,7 +295,7 @@ export const ArtistTopListeners: React.SFC<ArtistTopListenersProps> = ({ topList
 						<div className='inner'>
 							<h2>
 								<Badge>
-									<img src={achievementIconMap[index + 1]} />
+									<img src={achievementIconMap[1]} />
 								</Badge>
 							</h2>
 							<h3>{user.displayName ? user.displayName : user.email}</h3>

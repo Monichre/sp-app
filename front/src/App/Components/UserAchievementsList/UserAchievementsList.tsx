@@ -1,20 +1,13 @@
 import * as React from 'react'
-import { useState, useRef, useEffect, memo } from 'react';
-import { useSpring, animated, useTransition, useChain, config  } from 'react-spring'
-import styled, { css} from 'styled-components';
-import { Achievement } from '../../../../../back/src/shared/tables/TableAchievement';
-import { AchievementsState, AchievementData } from '../../Home/Authed/Authed';
-import { hrsAndMinsAndSecs, hrsAndMins } from '../../../lib/durationFormats';
+import { useState } from 'react';
+import styled from 'styled-components';
+import { AchievementData } from '../../Home/Authed/Authed';
+import { hrsAndMins } from '../../../lib/durationFormats';
 import { useGetUserAchievements } from '../../../types';
 import { suspensefulHook } from '../../../lib/suspensefulHook';
-import { AchievementListItem} from './AchievementListItem'
-import { ArtistAvatarDiv, ArtistNameDiv, HeaderFlexDiv } from '../Elements';
-
-// import { Collapse } from 'antd';
-// import 'antd/es/collapse/style/css'
-
-// const { Panel } = Collapse;
-
+import { AchievementListItem } from './AchievementListItem'
+import { HeaderFlexDiv } from '../Elements';
+import moment from 'moment'
 
 
 const ListStyle = styled.ul`
@@ -101,33 +94,109 @@ export interface AchievementItemProps {
 
 export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ userId }) => {
 
-      
+
 
     const [wasClicked, setClicked] = useState(false)
     const handleClick = () => setClicked(wasClicked => !wasClicked)
+    const day = moment().format('YYYY-MM-DD')
+    const week = `${moment().year()}-${moment().week()}`
+    const month = `${moment().year()}-${moment().month()}`
 
-    
+    const topsBitch: any = {
 
-    const topsBitch = {
-        first: {
-            pk: `global#artist#life#life#topListener#first`,
-            fk: `#topListener#first#${userId}`,
+        day: {
+            first: {
+
+                pk: `topListener#first#day#${day}`,
+                fk: `${userId}#topListener#first`,
+            },
+            second: {
+                pk: `topListener#second#day#${day}`,
+                fk: `${userId}#topListener#second`,
+
+            },
+            third: {
+                pk: `topListener#third#day#${day}`,
+                fk: `${userId}#topListener#third`,
+            }
         },
-        second: {
-            pk: `global#artist#life#life#topListener#second`,
-            fk: `#topListener#second#${userId}`,
+        week: {
+            first: {
+
+                pk: `topListener#first#week#${week}`,
+                fk: `${userId}#topListener#first`,
+            },
+            second: {
+                pk: `topListener#second#week#${week}`,
+                fk: `${userId}#topListener#second`,
+
+            },
+            third: {
+                pk: `topListener#third#week#${week}`,
+                fk: `${userId}#topListener#third`,
+            }
         },
-        third: {
-            pk: `global#artist#life#life#topListener#third`,
-            fk: `#topListener#third#${userId}`,
+        month: {
+            first: {
+
+                pk: `topListener#first#month#${month}`,
+                fk: `${userId}#topListener#first`,
+            },
+            second: {
+                pk: `topListener#second#month#${month}`,
+                fk: `${userId}#topListener#second`,
+
+            },
+            third: {
+                pk: `topListener#third#month#${month}`,
+                fk: `${userId}#topListener#third`,
+            }
+        },
+        life: {
+            first: {
+
+                pk: `topListener#first#life#life`,
+                fk: `${userId}#topListener#first`,
+            },
+            second: {
+                pk: `topListener#second#life#life`,
+                fk: `${userId}#topListener#second`,
+
+            },
+            third: {
+                pk: `topListener#third#life#life`,
+                fk: `${userId}#topListener#third`,
+            }
         }
     }
-    
-    const data: any = suspensefulHook(useGetUserAchievements({ variables: { pk: topsBitch.first.pk, fk: topsBitch.first.fk }, suspend: true, pollInterval: 15000 }))
+
+
+    const lifeTimeAchievementData: any = suspensefulHook(useGetUserAchievements({ variables: { pk: topsBitch.life.first.pk, fk: topsBitch.life.first.fk }, suspend: true, pollInterval: 15000 }))
+
+    const { getUserAchievements: lifetimeAchievements }: any = lifeTimeAchievementData
+
+
+
+    const monthlyAchievementData: any = suspensefulHook(useGetUserAchievements({ variables: { pk: topsBitch.week.first.pk, fk: topsBitch.week.first.fk }, suspend: true, pollInterval: 15000 }))
+
+    const { getUserAchievements: monthlyAchievements }: any = monthlyAchievementData
+
+
+
+    const weeklyAchievementData: any = suspensefulHook(useGetUserAchievements({ variables: { pk: topsBitch.week.first.pk, fk: topsBitch.week.first.fk }, suspend: true, pollInterval: 15000 }))
+
+    const { getUserAchievements: weeklyAchievements }: any = weeklyAchievementData
+
+
+
+    const dailyAchievementData: any = suspensefulHook(useGetUserAchievements({ variables: { pk: topsBitch.week.first.pk, fk: topsBitch.week.first.fk }, suspend: true, pollInterval: 15000 }))
+
+    const { getUserAchievements: dailyAchievements }: any = dailyAchievementData
+
+
     
 
-    const { getUserAchievements }: any = data
-    const achievements: any = (getUserAchievements && getUserAchievements.length) ? getUserAchievements.map((achievement: any) => {
+    const la: any = (lifetimeAchievements && lifetimeAchievements.length) ? lifetimeAchievements.map((achievement: any) => {
 
         let total: any = hrsAndMins(achievement.total)
         achievement.formattedTotal = total
@@ -135,38 +204,52 @@ export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ use
         return achievement
     }) : []
 
-    const [firsts, seconds, thirds]: any = [achievements.filter((achievement: any) => achievement.pk === topsBitch.first.pk), achievements.filter((achievement: any) => achievement.pk === topsBitch.second.pk), achievements.filter((achievement: any) => achievement.pk === topsBitch.third.pk)]
-    function callback (key: any) {
-        console.log(key);
-    }
 
-    const text = `
-  A dog is a type of domesticated animal.
-  Known for its loyalty and faithfulness,
-  it can be found as a welcome guest in many households across the world.
-`;
+    const ma: any = (monthlyAchievementData && monthlyAchievementData.length) ? monthlyAchievementData.map((achievement: any) => {
+
+        let total: any = hrsAndMins(achievement.total)
+        achievement.formattedTotal = total
+
+        return achievement
+    }) : []
+
+    const wa: any = (weeklyAchievements && weeklyAchievements.length) ? weeklyAchievements.map((achievement: any) => {
+
+        let total: any = hrsAndMins(achievement.total)
+        achievement.formattedTotal = total
+
+        return achievement
+    }) : []
+
+
+    const da: any = (dailyAchievements && dailyAchievements.length) ? dailyAchievements.map((achievement: any) => {
+
+        let total: any = hrsAndMins(achievement.total)
+        achievement.formattedTotal = total
+
+        return achievement
+    }) : []
 
 
     return (
         <ListWrap>
             <HeaderFlexDiv><img src='/icons/award.svg' /> <h4>Achievements</h4></HeaderFlexDiv>
             <ListStyle>
-                {firsts.length ? <AchievementListItem achievements={firsts} title='First' wasClicked={wasClicked} handleClick={handleClick} /> : null}
-                {seconds.length ? <AchievementListItem achievements={seconds} title='Second' wasClicked={wasClicked} handleClick={handleClick} /> : null}
+
+
+                {la.length ? <AchievementListItem achievements={la} title='LifeTime ' wasClicked={wasClicked} handleClick={handleClick} /> : null}
+
+
+                {ma.length ? <AchievementListItem achievements={ma} title='This Month' wasClicked={wasClicked} handleClick={handleClick} /> : null}
+
+
+                {wa.length ? <AchievementListItem achievements={wa} title='This Week' wasClicked={wasClicked} handleClick={handleClick} /> : null}
+
+
+                {da.length ? <AchievementListItem achievements={da} title='Today' wasClicked={wasClicked} handleClick={handleClick} /> : null}
+
+
             </ListStyle>
         </ListWrap>
     );
 }
-
-
-// <Collapse defaultActiveKey={['1']} onChange={callback}>
-//                 <Panel header="This is panel header 1" key="1">
-//                     <p>{text}</p>
-//                 </Panel>
-//                 <Panel header="This is panel header 2" key="2">
-//                     <p>{text}</p>
-//                 </Panel>
-//                 <Panel header="This is panel header 3" key="3" disabled>
-//                     <p>{text}</p>
-//                 </Panel>
-//             </Collapse>

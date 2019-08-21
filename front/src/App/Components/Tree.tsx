@@ -92,7 +92,7 @@ export const Tree: React.SFC<TreeProps> = memo(({ children = false, name, style,
     return (
         <Frame>
             <Icon style={{ ...toggle, opacity: children ? 1 : 0.3 }} onClick={handleClick} />
-            <Title style={style}>{name} {name === 'First' ? <img src={firstPlaceBadge} /> : name === 'Second' ? <img src={secondPlaceBadge} /> : <img src={thirdPlaceBadge} />} </Title>
+            <Title style={style}>{name}</Title>
             <Content style={{ opacity, height: isOpen && previous === isOpen ? 'auto' : height }}>
                 <animated.div style={{ transform }} {...bind} children={children} />
             </Content>
