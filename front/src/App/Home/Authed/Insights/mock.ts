@@ -1,5 +1,5 @@
 
-import { InsightsDashInsightsDash, PerspectiveDashArtist, ArtistsFragmentUser } from "../../../../types";
+import { InsightsDashInsightsDash, PerspectiveDashArtist, ArtistsFragmentUser, PerspectiveDashTopListeners } from '../../../../types';
 
 
 const dirksPhoto = 'http://arnoldzwicky.s3.amazonaws.com/WahlbergDiggler.jpg'
@@ -10,48 +10,141 @@ const user: ArtistsFragmentUser = {
 	uid: 'spotify:1121486086'
 }
 
-const AR1: PerspectiveDashArtist = { id: '1', name: 'A Long Ass Artist Name', images: [ { url: 'https://i.scdn.co/image/5e05e74fb744d3c80005fd68a49f74ef6e4fa3cb' }], topListeners: [
-{  
-  
-  user: user,
-  total: 1002000
+const topListeners: any = {
+		day: {
+			first: {
+				total: 12300,
+				user: {
+					displayName: 'Dirk Diggler',
+					email: 'dirk@diggler.com',
+					photoURL: dirksPhoto,
+					uid: 'spotify:1121486086'
+				}
+			},
+			second: {
+        	total: 12300,
+				user: {
+					displayName: 'Dirk Diggler',
+					email: 'dirk@diggler.com',
+					photoURL: dirksPhoto,
+					uid: 'spotify:1121486086'
+				}
+      },
+			third: {
+        	total: 12300,
+				user: {
+					displayName: 'Dirk Diggler',
+					email: 'dirk@diggler.com',
+					photoURL: dirksPhoto,
+					uid: 'spotify:1121486086'
+				}
+      }
+		},
+		week: {
+			first: {
+				total: 12300,
+				user: {
+					displayName: 'Dirk Diggler',
+					email: 'dirk@diggler.com',
+					photoURL: dirksPhoto,
+					uid: 'spotify:1121486086'
+				}
+			},
+			second: {
+        	total: 12300,
+				user: {
+					displayName: 'Dirk Diggler',
+					email: 'dirk@diggler.com',
+					photoURL: dirksPhoto,
+					uid: 'spotify:1121486086'
+				}
+      },
+			third: {
+        	total: 12300,
+				user: {
+					displayName: 'Dirk Diggler',
+					email: 'dirk@diggler.com',
+					photoURL: dirksPhoto,
+					uid: 'spotify:1121486086'
+				}
+      }
+		},
+		month: {
+			first: {
+				total: 12300,
+				user: {
+					displayName: 'Dirk Diggler',
+					email: 'dirk@diggler.com',
+					photoURL: dirksPhoto,
+					uid: 'spotify:1121486086'
+				}
+			},
+			second: {
+        	total: 12300,
+				user: {
+					displayName: 'Dirk Diggler',
+					email: 'dirk@diggler.com',
+					photoURL: dirksPhoto,
+					uid: 'spotify:1121486086'
+				}
+      },
+			third: {
+        	total: 12300,
+				user: {
+					displayName: 'Dirk Diggler',
+					email: 'dirk@diggler.com',
+					photoURL: dirksPhoto,
+					uid: 'spotify:1121486086'
+				}
+      }
+		},
+		life: {
+			first: {
+				total: 12300,
+				user: {
+					displayName: 'Dirk Diggler',
+					email: 'dirk@diggler.com',
+					photoURL: dirksPhoto,
+					uid: 'spotify:1121486086'
+				}
+			},
+			second: {
+        	total: 12300,
+				user: {
+					displayName: 'Dirk Diggler',
+					email: 'dirk@diggler.com',
+					photoURL: dirksPhoto,
+					uid: 'spotify:1121486086'
+				}
+      },
+			third: {
+        	total: 12300,
+				user: {
+					displayName: 'Dirk Diggler',
+					email: 'dirk@diggler.com',
+					photoURL: dirksPhoto,
+					uid: 'spotify:1121486086'
+				}
+      }
+		}
+	}
+
+const AR1: PerspectiveDashArtist = {
+	id: '1',
+	name: 'A Long Ass Artist Name',
+	images: [
+		{ url: 'https://i.scdn.co/image/5e05e74fb744d3c80005fd68a49f74ef6e4fa3cb' }
+	],
+	topListeners
 }
-]}
-const AR2: PerspectiveDashArtist = { id: '2', name: 'A2', images: [ { url: 'https://i.scdn.co/image/5e05e74fb744d3c80005fd68a49f74ef6e4fa3cb' }], topListeners: [
-{  
-  
-  user: user,
-  total: 1002000
+const AR2: PerspectiveDashArtist = {
+  id: '2', name: 'A2', images: [{ url: 'https://i.scdn.co/image/5e05e74fb744d3c80005fd68a49f74ef6e4fa3cb' }],
+ topListeners
 }
-]}
-const AR3: PerspectiveDashArtist = { id: '3', name: 'A3', images: [ { url: 'https://i.scdn.co/image/5e05e74fb744d3c80005fd68a49f74ef6e4fa3cb' }], topListeners: [
-{  
-  
-  user: user,
-  total: 1002000
-}
-]}
-const AR4: PerspectiveDashArtist = { id: '4', name: 'A4', images: [ { url: 'https://i.scdn.co/image/5e05e74fb744d3c80005fd68a49f74ef6e4fa3cb' }], topListeners: [
-{  
-  
-  user: user,
-  total: 1002000
-}
-]}
-const AR5: PerspectiveDashArtist = { id: '5', name: 'A5', images: [ { url: 'https://i.scdn.co/image/5e05e74fb744d3c80005fd68a49f74ef6e4fa3cb' }], topListeners: [
-{  
-  
-  user: user,
-  total: 1002000
-}
-]}
-const AR6: PerspectiveDashArtist = { id: '6', name: 'A6', images: [ { url: 'https://i.scdn.co/image/5e05e74fb744d3c80005fd68a49f74ef6e4fa3cb' }], topListeners: [
-{  
-  
-  user: user,
-  total: 1002000
-}
-]}
+const AR3: PerspectiveDashArtist = { id: '3', name: 'A3', images: [ { url: 'https://i.scdn.co/image/5e05e74fb744d3c80005fd68a49f74ef6e4fa3cb' }],topListeners}
+const AR4: PerspectiveDashArtist = { id: '4', name: 'A4', images: [ { url: 'https://i.scdn.co/image/5e05e74fb744d3c80005fd68a49f74ef6e4fa3cb' }],topListeners}
+const AR5: PerspectiveDashArtist = { id: '5', name: 'A5', images: [ { url: 'https://i.scdn.co/image/5e05e74fb744d3c80005fd68a49f74ef6e4fa3cb' }],topListeners}
+const AR6: PerspectiveDashArtist = { id: '6', name: 'A6', images: [ { url: 'https://i.scdn.co/image/5e05e74fb744d3c80005fd68a49f74ef6e4fa3cb' }],topListeners}
 
 export const useInsightsData = (): InsightsDashInsightsDash => {
 

@@ -12,6 +12,7 @@ import { TimeseriesChart } from '../shared/TimeseriesChart';
 import { suspensefulHook } from '../../../../../lib/suspensefulHook';
 import { FeaturedArtists } from './FeaturedArtists';
 import ReactTooltip from 'react-tooltip'
+import { AchievementHoverSummary } from '../../../../Components/AchievementHoverSummary.tsx';
 
 
 const Row = styled.div`
@@ -62,19 +63,28 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
   const { timeScope, perspective }: any = pathParams
   const translatedPerspective: string = perspective === 'personal' ? 'Your' : 'Everyone'
 
+  const genreContentSummary = `We're currently building out new features for platform genre leaders`
+  
+  const artistContentSummary = `Introducing our new platform artist leaders. These achievements are for those Soundpruf users who have streamed the most of any given artist. View Your Achievements based on the current time perspective to the left.`
+
 
   console.count('Overview Render: ')
 
   return <>
     <TimeseriesChart {...{ timeSeries, showOnly: pathParams.perspective }} />
     <Row>
+      <AchievementHoverSummary content={artistContentSummary} userId={uid}>
+        <ArtistsChartBlock {...{ artists, pathParams }} userId={uid}>
+          <BlockTitle to={`${insightLink(pathParams)}/artists`}>{translatedPerspective} Top Artists {normalizetimeScopeMap[timeScope]} <BlockTitleMore>see all</BlockTitleMore></BlockTitle>
+        </ArtistsChartBlock>
+      </AchievementHoverSummary>
+
+      <AchievementHoverSummary content={genreContentSummary} userId={uid}>
+        <GenresChartBlock {...{ genres, pathParams }}>
+          <BlockTitle to={`${insightLink(pathParams)}/genres`}>Top Genres <BlockTitleMore>see all</BlockTitleMore></BlockTitle>
+        </GenresChartBlock>
+      </AchievementHoverSummary>
       
-      <ArtistsChartBlock {...{ artists, pathParams }} userId={uid}>
-        <BlockTitle to={`${insightLink(pathParams)}/artists`}>{translatedPerspective} Top Artists {normalizetimeScopeMap[timeScope]} <BlockTitleMore>see all</BlockTitleMore></BlockTitle>
-      </ArtistsChartBlock>
-      <GenresChartBlock {...{ genres, pathParams }}>
-        <BlockTitle to={`${insightLink(pathParams)}/genres`}>Top Genres <BlockTitleMore>see all</BlockTitleMore></BlockTitle>
-      </GenresChartBlock>
     </Row>
     <Row>
       <BlockTitle>Emerging Artists: Staff Picks</BlockTitle>

@@ -1,4 +1,4 @@
-import React, { useContext, useReducer, useState, Reducer, SetStateAction} from 'react';
+import React, { useContext, createContext, useReducer, useState, Reducer, SetStateAction} from 'react';
 import styled from 'styled-components'
 import { Route, Switch, Redirect } from 'react-router';
 import { Loading } from '../../../shared/Loading';
@@ -121,9 +121,8 @@ export type AchievementsState = {
  */
 
 
-
-
-export const Authed: React.SFC<{ user: { uid: string } }> = ({ user: firebaseUser }) => {
+export const Authed: React.SFC<{ user: { uid: string } }> = ({ user: firebaseUser, ...rest }) => {
+console.log('TCL: rest', rest)
 
   const result = useGetUserInfo({ variables: { uid: firebaseUser.uid }, pollInterval: 4000, suspend: true})
   const user = result.data && result.data.getUserInfo
@@ -134,9 +133,7 @@ export const Authed: React.SFC<{ user: { uid: string } }> = ({ user: firebaseUse
   //@ts-ignore
   const intercomUser: any = JSON.parse(localStorage.getItem('intercomUser'))
 
-  // const [userAchievements, setUserAchievements]: any = useReducer(reducer, initialAchievements)  
-  // console.log('TCL: userAchievements', userAchievements)
- 
+
   if (process.env.NODE_ENV === 'production') {
     IntercomHandler.boot(user, 'boot')
   }
@@ -154,9 +151,13 @@ export const Authed: React.SFC<{ user: { uid: string } }> = ({ user: firebaseUse
 * cc: userAchievementsFrontEnd#2;Passing down the state setting function
 *
 */
+
+
   return (
     <AuthedView>
-      <NavMenu {...{ initialHarvestComplete: initialHarvestComplete || false, lastUpdate: lastUpdate || '', user: user }} />
+      
+        <NavMenu {...{ initialHarvestComplete: initialHarvestComplete || false, lastUpdate: lastUpdate || '', user: user }} {...rest}  />
+      
       <React.Suspense fallback={<Loading/>}>
         <Switch>
           <Route path='/insights/:timeScope/:groupId/:perspective' render={(props) => <Insights user={user} {...props} uid={uid} />} />

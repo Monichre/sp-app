@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState, useRef, useEffect, memo } from 'react';
 import { useSpring, animated, useTransition, useChain, config } from 'react-spring'
+import { AvatarBg} from './Elements'
 import ResizeObserver from 'resize-observer-polyfill'
 import * as Icons from '../../shared/icons'
 import styled from 'styled-components';
@@ -92,7 +93,8 @@ export const Tree: React.SFC<TreeProps> = memo(({ children = false, name, style,
     return (
         <Frame>
             <Icon style={{ ...toggle, opacity: children ? 1 : 0.3 }} onClick={handleClick} />
-            <Title style={style}>{name}</Title>
+            <Title style={style}>{name} <AvatarBg tiny={true} src={firstPlaceBadge} />
+            </Title>
             <Content style={{ opacity, height: isOpen && previous === isOpen ? 'auto' : height }}>
                 <animated.div style={{ transform }} {...bind} children={children} />
             </Content>

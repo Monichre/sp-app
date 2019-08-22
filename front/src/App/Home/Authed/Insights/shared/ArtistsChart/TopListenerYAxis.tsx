@@ -28,14 +28,42 @@ const TopListenerLink: any = ({ className, handleClick, children }: any) => (
 
 
 
+
+
 export const TopListenerYaxis: React.SFC<TickProps & any> = React.memo(({ x, y, offset, artist, pathParams, userId, totalTimeListened }) => {
 
     let [visible, setVisible] = useState(false)
 
     const handleClick = () => setVisible(visible => !visible)
 
-    const topListeners = artist.topListeners && artist.topListeners.length ? artist.topListeners.filter((listener: any) => listener != null && artist.topListeners.indexOf(listener) === artist.topListeners.lastIndexOf(listener)) : []
-    const [first, second = false, third = false]: any = topListeners
+    const { topListeners } = artist
+    const { timeScope, perspective }: any = pathParams
+    const { day, week, month, life } = topListeners
+
+    const normalizetimeScopeMap: any = {
+        thisWeek: {
+            title: 'This Week',
+            data: week
+        },
+        thisMonth: {
+            title: 'This Month',
+            data: month
+        },
+        life: {
+            title: 'Life Time',
+            data: life
+        },
+
+    }
+
+    const { title, data } = normalizetimeScopeMap[timeScope]
+    const { first, second, third } = data ? data : {
+        first: null,
+        second: null,
+        third: null
+    }
+    const listeners = [first, second, third].filter(Boolean)
+    
     const currentUserIsTopListener: any = first && first.user ? first.user.uid === userId : false
     const currentUserIsSecond: any = second && second.user ? second.user.uid === userId : false
     const secondPlaceExists: any = second && second.user 
@@ -56,7 +84,7 @@ export const TopListenerYaxis: React.SFC<TickProps & any> = React.memo(({ x, y, 
 
     const ToolTipListeners = <ListStyle>
         <List itemLayout="horizontal">
-            {topListeners.length ? topListeners.map((listener: any, index: number) => {
+            {listeners.length ? listeners.map((listener: any, index: number) => {
                 return (
                     <List.Item>
                         <List.Item.Meta

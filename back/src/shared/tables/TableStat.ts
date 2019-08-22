@@ -1,14 +1,10 @@
-import * as AWS from 'aws-sdk';
+import * as AWS from 'aws-sdk'
 import * as moment from 'moment'
 import * as R from 'ramda'
-import { UpdateItemOutput } from 'aws-sdk/clients/dynamodb';
-import { PromiseResult } from 'aws-sdk/lib/request';
-import { AWSError } from 'aws-sdk';
-
-// import {
-// 	TableAchievement,
-// 	TTableAchievement
-// } from './TableAchievement'
+import { UpdateItemOutput } from 'aws-sdk/clients/dynamodb'
+import { PromiseResult } from 'aws-sdk/lib/request'
+import { AWSError } from 'aws-sdk'
+import { TTableAchievement } from './TableAchievement'
 
 export type PeriodType =
 	| 'day'
@@ -22,6 +18,14 @@ export type PeriodType =
 export type RelationType = 'total' | 'artist' | 'genre' | 'user'
 
 export type TopKeys = {
+	uid: string
+	periodType: PeriodType
+	periodValue: string
+	Limit: number
+}
+
+export type ArtistAglTopKeys = {
+	tableAchievement: TTableAchievement
 	uid: string
 	periodType: PeriodType
 	periodValue: string
@@ -49,48 +53,80 @@ export type GenreStatKeys = {
 }
 
 export type Stat = {
-  uid: string,
-  relationType: RelationType,
-  relationKey: string,
-  periodType: PeriodType,
-  periodValue: string,
-  playDurationMs: number,
+	uid: string
+	relationType: RelationType
+	relationKey: string
+	periodType: PeriodType
+	periodValue: string
+	playDurationMs: number
 }
 
 export type StatTotal = Stat
 export type StatArtist = Stat & {
-  artist: { name: string, genres: string[] }
+	artist: { name: string; genres: string[] }
 }
 
 export type StatGenre = Stat & {
-  genre: string
+	genre: string
 }
+
+
+
+type TopListenerData = {
+  day: {
+    first: any
+    second: any
+    third: any
+
+  }
+  week: {
+    first: any
+    second: any
+    third: any
+
+  }
+  month: {
+    first: any
+    second: any
+    third: any
+
+  }
+  life: {
+    first: any
+    second: any
+    third: any
+
+  }
+}
+
 type Artist = {
-  id: string,
-  name: string,
-  images: Image[],
-  external_urls: SpotifyUrl
-  genres: string[]
-  topListeners?: Object []
+	id: string
+	name: string
+	images: Image[]
+	external_urls: SpotifyUrl
+	genres: string[]
+	topListeners: TopListenerData
 }
+
+
 type SpotifyUrl = {
-  spotify: string
+	spotify: string
 }
 type Image = {
-  url: string
+	url: string
 }
 
 type TimeseriesKeys = {
-  uid: string
-  relationType: RelationType
-  relationId: string
-  periodType: PeriodType
-  startPeriod: string
-  endPeriod: string
+	uid: string
+	relationType: RelationType
+	relationId: string
+	periodType: PeriodType
+	startPeriod: string
+	endPeriod: string
 }
 type Timeseries = {
-  playDurationMs: number
-  period: string
+	playDurationMs: number
+	period: string
 }
 
 export type TTableStat = {
@@ -116,10 +152,8 @@ export type TTableStat = {
 	getStat: (statKeys: StatKeys) => Promise<number>
 	getTopGenres: (topKeys: TopKeys) => Promise<TopGenreRow[]>
 	getGenreStat: (genreStatKeys: GenreStatKeys) => Promise<number>
-	getArtistInfo: (
-		artistId: string
-	) => Promise<Artist>
-	getTopArtists: (topKeys: TopKeys) => Promise<TopArtistsRow[]>
+	getArtistInfo: (artistId: string) => Promise<Artist>
+	getTopArtists: (topKeys: ArtistAglTopKeys) => Promise<TopArtistsRow[]>
 	getArtistStat: (artistStatKeys: ArtistStatKeys) => Promise<number>
 	writeTotalStat: (
 		stat: StatTotal
@@ -133,117 +167,147 @@ export type TTableStat = {
 }
 
 type TopArtistsRow = {
-  artist: Artist,
-  playDurationMs: number,
+	artist: Artist
+	playDurationMs: number
 }
 type TopGenreRow = {
-  genre: string,
-  playDurationMs: number,
+	genre: string
+	playDurationMs: number
 }
 const byTimeThenArtistName = R.sortWith<TopArtistsRow>([
-  R.descend(R.prop('playDurationMs')),
-  R.ascend(R.path(['artist', 'name']))
+	R.descend(R.prop('playDurationMs')),
+	R.ascend(R.path(['artist', 'name']))
 ])
 const byTimeThenGenre = R.sortWith<TopGenreRow>([
-  R.descend(R.prop('playDurationMs')),
-  R.ascend(R.prop('genre'))
+	R.descend(R.prop('playDurationMs')),
+	R.ascend(R.prop('genre'))
 ])
 
-const byPeriod = R.sortWith<Timeseries>([
-  R.ascend(R.path(['period']))
-])
-
+const byPeriod = R.sortWith<Timeseries>([R.ascend(R.path(['period']))])
 
 export const TableStat = (endpoint: string, TableName: string): TTableStat => {
-  const doc = new AWS.DynamoDB.DocumentClient({endpoint})
+	const doc = new AWS.DynamoDB.DocumentClient({ endpoint })
 
-  const makePk = (uid: string, relationType: RelationType, periodType: PeriodType, periodValue: string) =>
-    [uid, relationType, periodType, periodValue].join('#')
+	const makePk = (
+		uid: string,
+		relationType: RelationType,
+		periodType: PeriodType,
+		periodValue: string
+	) => [uid, relationType, periodType, periodValue].join('#')
 
-  const makeSk = (uid: string, periodType: PeriodType, relationKey: string) =>
-    [uid, periodType, relationKey].join('#')
+	const makeSk = (uid: string, periodType: PeriodType, relationKey: string) =>
+		[uid, periodType, relationKey].join('#')
 
-  const periodsFor = (isoDateString: string) => {
-    const m = moment.parseZone(isoDateString)
-    return {
-      day: m.format('YYYY-MM-DD'),
-      dow: m.format('d'),
-      week: m.format('YYYY-WW'),
-      month: m.format('YYYY-MM'),
-      moy: m.format('MM'),
-      year: m.format('YYYY'),
-      life: 'life'
-    }
-  }
+	const periodsFor = (isoDateString: string) => {
+		const m = moment.parseZone(isoDateString)
+		return {
+			day: m.format('YYYY-MM-DD'),
+			dow: m.format('d'),
+			week: m.format('YYYY-WW'),
+			month: m.format('YYYY-MM'),
+			moy: m.format('MM'),
+			year: m.format('YYYY'),
+			life: 'life'
+		}
+	}
 
-  const getTimeseries = async ({uid, relationId, relationType, periodType, startPeriod, endPeriod}: TimeseriesKeys): Promise<Timeseries[]> => {
-    const sk = [uid, periodType, relationId].join('#')
-    const startPk = [uid, relationType, periodType, startPeriod].join('#')
-    const endPk = [uid, relationType, periodType, endPeriod].join('#')
-    // console.log('getting stats for', { sk, startPk, endPk })
+	const getTimeseries = async ({
+		uid,
+		relationId,
+		relationType,
+		periodType,
+		startPeriod,
+		endPeriod
+	}: TimeseriesKeys): Promise<Timeseries[]> => {
+		const sk = [uid, periodType, relationId].join('#')
+		const startPk = [uid, relationType, periodType, startPeriod].join('#')
+		const endPk = [uid, relationType, periodType, endPeriod].join('#')
+		// console.log('getting stats for', { sk, startPk, endPk })
 
-    const params = {
-      TableName,
-      // Limit,
-      KeyConditionExpression: `sk = :sk and pk BETWEEN :s and :e`,
-      IndexName: 'GSIReverse',
-      // ScanIndexForward: false,
-      ExpressionAttributeValues: {
-        ':sk': sk,
-        ':s': startPk,
-        ':e': endPk
-      }
-    }
-    const result = await doc.query(params).promise()
-      .then(d => d.Items.map(i => ({
-        // artist: i.artist,
-        period: i.pk.split('#')[3],
-        playDurationMs: i.playDurationMs
-      })))
-      .then(byPeriod)
-    // console.log('artistStatsFor', uid, id, result)
-    return result
-  }
+		const params = {
+			TableName,
+			// Limit,
+			KeyConditionExpression: `sk = :sk and pk BETWEEN :s and :e`,
+			IndexName: 'GSIReverse',
+			// ScanIndexForward: false,
+			ExpressionAttributeValues: {
+				':sk': sk,
+				':s': startPk,
+				':e': endPk
+			}
+		}
+		const result = await doc
+			.query(params)
+			.promise()
+			.then(d =>
+				d.Items.map(i => ({
+					// artist: i.artist,
+					period: i.pk.split('#')[3],
+					playDurationMs: i.playDurationMs
+				}))
+			)
+			.then(byPeriod)
+		// console.log('artistStatsFor', uid, id, result)
+		return result
+	}
 
-  const getStat = async ({uid, periodType, periodValue}: StatKeys) => {
-    return await doc.get({
-      TableName,
-      Key: {
-        pk: [uid, 'total', periodType, periodValue].join('#'),
-        sk: [uid, periodType, 'total'].join('#'),
-      }
-    }).promise().then(r => r.Item && r.Item.playDurationMs as number || 0)
-  }
-    
-  const getTopGenres = async ({uid, periodType, periodValue, Limit = 5}: TopKeys) => {
-    const params = {
-      TableName,
-      Limit,
-      KeyConditionExpression: `pk = :pk`,
-      IndexName: 'LSIPlayDuration',
-      ScanIndexForward: false,
-      ExpressionAttributeValues: {
-        ':pk': [uid, 'genre', periodType, periodValue].join('#')
-      }
-    }
-    return await doc.query(params).promise()
-      .then(d => d.Items.map(i => ({genre: i.genre, playDurationMs: i.playDurationMs})))
-      .then(byTimeThenGenre)
-  }
+	const getStat = async ({ uid, periodType, periodValue }: StatKeys) => {
+		return await doc
+			.get({
+				TableName,
+				Key: {
+					pk: [uid, 'total', periodType, periodValue].join('#'),
+					sk: [uid, periodType, 'total'].join('#')
+				}
+			})
+			.promise()
+			.then(r => (r.Item && (r.Item.playDurationMs as number)) || 0)
+	}
 
-  const getGenreStat = async ({uid, genre, periodType, periodValue}: GenreStatKeys) => {
-    return await doc.get({
-      TableName,
-      Key: {
-        pk: makePk(uid, 'genre', periodType, periodValue),
-        sk: makeSk(uid, periodType, genre)
-      }
-    }).promise().then(r => r.Item && r.Item.playDurationMs as number || 0)
-  }
+	const getTopGenres = async ({
+		uid,
+		periodType,
+		periodValue,
+		Limit = 5
+	}: TopKeys) => {
+		const params = {
+			TableName,
+			Limit,
+			KeyConditionExpression: `pk = :pk`,
+			IndexName: 'LSIPlayDuration',
+			ScanIndexForward: false,
+			ExpressionAttributeValues: {
+				':pk': [uid, 'genre', periodType, periodValue].join('#')
+			}
+		}
+		return await doc
+			.query(params)
+			.promise()
+			.then(d =>
+				d.Items.map(i => ({ genre: i.genre, playDurationMs: i.playDurationMs }))
+			)
+			.then(byTimeThenGenre)
+	}
 
-  const getArtistInfo = async (
-		artistId: string
-	): Promise<Artist> => {
+	const getGenreStat = async ({
+		uid,
+		genre,
+		periodType,
+		periodValue
+	}: GenreStatKeys) => {
+		return await doc
+			.get({
+				TableName,
+				Key: {
+					pk: makePk(uid, 'genre', periodType, periodValue),
+					sk: makeSk(uid, periodType, genre)
+				}
+			})
+			.promise()
+			.then(r => (r.Item && (r.Item.playDurationMs as number)) || 0)
+	}
+
+	const getArtistInfo = async (artistId: string): Promise<Artist> => {
 		return await doc
 			.get({
 				TableName,
@@ -256,88 +320,204 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 			.then(r => r.Item && (r.Item.artist as Artist))
 	}
 
+	const getTopArtists = async ({
+		tableAchievement,
+		uid,
+		periodType,
+		periodValue,
+		Limit = 5
+	}: ArtistAglTopKeys) => {
+		const statParams = {
+			TableName,
+			Limit,
+			KeyConditionExpression: `pk = :pk`,
+			IndexName: 'LSIPlayDuration',
+			ScanIndexForward: false,
+			ExpressionAttributeValues: {
+				':pk': [uid, 'artist', periodType, periodValue].join('#')
+			}
+		}
 
-  const getTopArtists = async ({uid, periodType, periodValue, Limit = 5}: TopKeys) => {
-    const params = {
-      TableName,
-      Limit,
-      KeyConditionExpression: `pk = :pk`,
-      IndexName: 'LSIPlayDuration',
-      ScanIndexForward: false,
-      ExpressionAttributeValues: {
-        ':pk': [uid, 'artist', periodType, periodValue].join('#')
-      }
-    }
-    return await doc.query(params).promise()
-      .then(d => d.Items.map(i => ({artist: i.artist, playDurationMs: i.playDurationMs})))
-      .then(byTimeThenArtistName)
-  }
+		const artists = await doc
+			.query(statParams)
+			.promise()
+			.then(d =>
+				d.Items.map(i => ({
+					artist: i.artist,
+					playDurationMs: i.playDurationMs
+				}))
+			)
+			.then(byTimeThenArtistName)
 
-  /**
-   *
-   * // cc: tableStat #1; Function getArtistStat
-   *
-   */
+		const enriched = await Promise.all(
+			artists.map(async (artistDataItem: any) => {
+				const { artist } = artistDataItem
+				const artistId = artist.id
+				const achievementType = 'topListener'
+				const topListeners: any = {}
 
-  const getArtistStat = async ({uid, artistId, periodType, periodValue}: ArtistStatKeys) => {
-    return await doc.get({
-      TableName,
-      Key: {
-        pk: makePk(uid, 'artist', periodType, periodValue),
-        sk: makeSk(uid, periodType, artistId)
-      }
-    }).promise().then(r => r.Item && r.Item.playDurationMs as number || 0)
-  }
+				topListeners[periodType] = {
+					first: null,
+					second: null,
+					third: null
+				}
 
-  const writeTotalStat = async ({uid, relationType, relationKey, periodType, periodValue, playDurationMs}: StatTotal) => {
-    return await doc.update({
-      TableName,
-      Key: {
-        pk: makePk(uid, relationType, periodType, periodValue),
-        sk: makeSk(uid, periodType, relationKey)
-      },
-      UpdateExpression: 'ADD playDurationMs :v',
-      ExpressionAttributeValues: { ':v': playDurationMs },
-    }).promise()
-  }
+				const topsParamsMap = {
+					first: tableAchievement.makeKeys({
+						periodType,
+						periodValue,
+						artistId,
+						achievementType,
+						achievementValue: 'first'
+					}),
+					second: tableAchievement.makeKeys({
+						periodType,
+						periodValue,
+						artistId,
+						achievementType,
+						achievementValue: 'second'
+					}),
+					
+					third: tableAchievement.makeKeys({
+						periodType,
+						periodValue,
+						artistId,
+						achievementType,
+						achievementValue: 'third'
+					})
+				}
 
-  const writeArtistStat = async ({uid, relationType, relationKey, periodType, periodValue, playDurationMs, artist}: StatArtist) => {
-    return await doc.update({
-      TableName,
-      Key: {
-        pk: makePk(uid, relationType, periodType, periodValue),
-        sk: makeSk(uid, periodType, relationKey)
-      },
-      UpdateExpression: 'ADD playDurationMs :v SET artist = :a',
-      ExpressionAttributeValues: { ':v': playDurationMs, ':a': artist },
-    }).promise()
-  }
+				topListeners[
+					periodType
+				].first = await tableAchievement.getArtistTopListener({
+					...topsParamsMap.first
+				})
 
-  const writeGenreStat = async ({uid, relationType, relationKey, periodType, periodValue, playDurationMs, genre}: StatGenre) => {
-    return await doc.update({
-      TableName,
-      Key: {
-        pk: makePk(uid, relationType, periodType, periodValue),
-        sk: makeSk(uid, periodType, relationKey)
-      },
-      UpdateExpression: 'ADD playDurationMs :v SET genre = :g',
-      ExpressionAttributeValues: { ':v': playDurationMs, ':g': genre },
-    }).promise()
-  }
+				topListeners[
+					periodType
+				].second = await tableAchievement.getArtistTopListener({
+					...topsParamsMap.second
+				})
 
-  return {
-    makePk,
-    makeSk,
-    periodsFor,
-    getTimeseries,
-    getStat,
-    getTopGenres,
-    getGenreStat,
-    getArtistInfo,
-    getTopArtists,
-    getArtistStat,
-    writeTotalStat,
-    writeArtistStat,
-    writeGenreStat,
-  }
+				topListeners[
+					periodType
+				].third = await tableAchievement.getArtistTopListener({
+					...topsParamsMap.third
+				})
+
+				
+				console.log('TCL: topListeners', topListeners)
+
+				artist.topListeners = topListeners
+				return artistDataItem
+			})
+		)
+
+		return enriched
+	}
+
+	/**
+	 *
+	 * // cc: tableStat #1; Function getArtistStat
+	 *
+	 */
+
+	const getArtistStat = async ({
+		uid,
+		artistId,
+		periodType,
+		periodValue
+	}: ArtistStatKeys) => {
+		return await doc
+			.get({
+				TableName,
+				Key: {
+					pk: makePk(uid, 'artist', periodType, periodValue),
+					sk: makeSk(uid, periodType, artistId)
+				}
+			})
+			.promise()
+			.then(r => (r.Item && (r.Item.playDurationMs as number)) || 0)
+	}
+
+	const writeTotalStat = async ({
+		uid,
+		relationType,
+		relationKey,
+		periodType,
+		periodValue,
+		playDurationMs
+	}: StatTotal) => {
+		return await doc
+			.update({
+				TableName,
+				Key: {
+					pk: makePk(uid, relationType, periodType, periodValue),
+					sk: makeSk(uid, periodType, relationKey)
+				},
+				UpdateExpression: 'ADD playDurationMs :v',
+				ExpressionAttributeValues: { ':v': playDurationMs }
+			})
+			.promise()
+	}
+
+	const writeArtistStat = async ({
+		uid,
+		relationType,
+		relationKey,
+		periodType,
+		periodValue,
+		playDurationMs,
+		artist
+	}: StatArtist) => {
+		return await doc
+			.update({
+				TableName,
+				Key: {
+					pk: makePk(uid, relationType, periodType, periodValue),
+					sk: makeSk(uid, periodType, relationKey)
+				},
+				UpdateExpression: 'ADD playDurationMs :v SET artist = :a',
+				ExpressionAttributeValues: { ':v': playDurationMs, ':a': artist }
+			})
+			.promise()
+	}
+
+	const writeGenreStat = async ({
+		uid,
+		relationType,
+		relationKey,
+		periodType,
+		periodValue,
+		playDurationMs,
+		genre
+	}: StatGenre) => {
+		return await doc
+			.update({
+				TableName,
+				Key: {
+					pk: makePk(uid, relationType, periodType, periodValue),
+					sk: makeSk(uid, periodType, relationKey)
+				},
+				UpdateExpression: 'ADD playDurationMs :v SET genre = :g',
+				ExpressionAttributeValues: { ':v': playDurationMs, ':g': genre }
+			})
+			.promise()
+	}
+
+	return {
+		makePk,
+		makeSk,
+		periodsFor,
+		getTimeseries,
+		getStat,
+		getTopGenres,
+		getGenreStat,
+		getArtistInfo,
+		getTopArtists,
+		getArtistStat,
+		writeTotalStat,
+		writeArtistStat,
+		writeGenreStat
+	}
 }

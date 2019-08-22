@@ -83,7 +83,7 @@ export const makeRecordKeys = Keys => extractKeys(Keys)
 
 export const bulkRecordUserAchievements = async (
 	usersWithStats: any[],
-	artistInfo: Artist,
+	artistInfo: any,
 	recordKeys: any,
 	tableAchievement: TTableAchievement
 ) => {
@@ -189,7 +189,7 @@ const keyMakerPlaceAndDay = ({
 // 	const topListeners = await Promise.all(
 // 		keys.map(
 // 			async (keyData: KeyData) =>
-// 				await tableAchievement.getArtistTopListeners(keyData)
+// 				await tableAchievement.getArtistTopListener(keyData)
 // 		)
 // 	)
 

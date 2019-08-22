@@ -1,6 +1,6 @@
 import { makeExecutableSchema } from "graphql-tools";
 import { TableStat, TTableStat, PeriodType } from "../../../../shared/tables/TableStat";
-import moment = require("moment");
+import * as moment from 'moment'
 import { TableUser } from "../../../../shared/tables/TableUser";
 import { verifyEnv } from "../../../../shared/env";
 
@@ -112,12 +112,13 @@ const insightsStats = async (_, {uid, gid}, context) => {
   }, log)
 
   const tableUser = TableUser(context.DYNAMO_ENDPOINT, context.TABLE_USER)
-  const { valid, invalid } = await tableUser.getUser(uid)
+  const { valid, invalid }: any = await tableUser.getUser(uid)
   if (invalid) { throw new Error(`user info invalid for uid ${uid}`) }
-  const { utcOffset } = valid
+  const { utcOffset }: any = valid
 
   const tableStat = TableStat(context.DYNAMO_ENDPOINT, context.TABLE_STAT)
 
+  // @ts-ignore
   const now = localizedMoment(utcOffset, moment())
 
   return await playtimeStats(tableStat, uid, gid, now)

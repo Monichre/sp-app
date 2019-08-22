@@ -75,9 +75,27 @@ type User {
 type TopListener {
   sk: String
   pk: String
+  fk: String
+  lastUpdated: String
   total: Float
   user: User
 }
+
+
+type TopListenerDataPeriod {
+  first: TopListener
+  second: TopListener
+  third: TopListener
+}
+
+type TopListenerData {
+  day: TopListenerDataPeriod
+  week: TopListenerDataPeriod
+  month: TopListenerDataPeriod
+  life: TopListenerDataPeriod
+}
+
+
 
 type Artist {
   id: String!
@@ -85,7 +103,7 @@ type Artist {
   images: [Image!]!
   external_urls: SpotifyUrl!
   genres: [String!]!
-  topListeners: [TopListener]
+  topListeners: TopListenerData
 }
 
 `
@@ -101,18 +119,42 @@ type SpotifyUrl = {
 type Image = {
 	url: string
 }
+export type TopListenerData = {
+  day: {
+    first: any
+    second: any
+    third: any
+
+  }
+  week: {
+    first: any
+    second: any
+    third: any
+
+  }
+  month: {
+    first: any
+    second: any
+    third: any
+
+  }
+  life: {
+    first: any
+    second: any
+    third: any
+
+  }
+}
+
 type Artist = {
 	id: string
 	name: string
 	images: Image[]
 	external_urls: SpotifyUrl
 	genres: string[]
-	topListeners?: Object[]
+	topListeners: TopListenerData
 }
-// type TopGenresRow = {
-//   name: string,
-//   playDurationMs: number,
-// }
+
 
 type TopArtistsRow = {
 	artist: Artist
@@ -162,6 +204,7 @@ const keyMakerPlaceAndDay = ({
 
 const perspectiveTopArtists = async (
 	tableStat: TTableStat,
+	tableAchievement: TTableAchievement,
 	primaryUid: string,
 	primaryType: PerspectiveTypes,
 	secondaryUid: string,
@@ -171,11 +214,13 @@ const perspectiveTopArtists = async (
 	periodPrev?: string
 ): Promise<TopArtistStat[]> => {
 	const artistsPrimary = await tableStat.getTopArtists({
+		tableAchievement,
 		uid: primaryUid,
 		periodType,
 		periodValue: periodCurrent,
 		Limit: 20
 	})
+	// @ts-ignore
 	return await Promise.all(
 		artistsPrimary.map(async ({ artist, playDurationMs }) => {
 			const secondary = await tableStat.getArtistStat({
@@ -202,6 +247,7 @@ const perspectiveTopArtists = async (
 
 const timescopeTopArtists = async (
 	tableStat: TTableStat,
+	tableAchievement: TTableAchievement,
 	uid: string,
 	gid: string,
 	periodType: PeriodType,
@@ -210,6 +256,7 @@ const timescopeTopArtists = async (
 ): Promise<TimescopeTopArtists> => ({
 	personal: await perspectiveTopArtists(
 		tableStat,
+		tableAchievement,
 		uid,
 		'personal',
 		'global',
@@ -220,6 +267,7 @@ const timescopeTopArtists = async (
 	),
 	group: await perspectiveTopArtists(
 		tableStat,
+		tableAchievement,
 		'global',
 		'group',
 		uid,
@@ -252,58 +300,17 @@ const topArtists = async (
 
 	const dailyArtists: any = await timescopeTopArtists(
 		tableStat,
+		tableAchievement,
 		uid,
 		gid,
 		'day',
 		today,
-		yest
+		yest,
+		
 	).then(async res => {
 		const { personal, group } = res
-		
-		await Promise.all(
-			personal.map(async pArtistData => {
-				const { artist } = pArtistData
-				const firstKeys = keyMakerPlaceAndDay({
-					relationType: 'artist',
-					periodType: 'day',
-					periodValue: today,
-					artistId: artist.id,
-					achievementType: 'topListener',
-					achievementValue: 'first'
-				})
-				const secondKeys = keyMakerPlaceAndDay({
-					relationType: 'artist',
-					periodType: 'day',
-					periodValue: today,
-					artistId: artist.id,
-					achievementType: 'topListener',
-					achievementValue: 'second'
-				})
-				const thirdKeys = keyMakerPlaceAndDay({
-					relationType: 'artist',
-					periodType: 'day',
-					periodValue: today,
-					artistId: artist.id,
-					achievementType: 'topListener',
-					achievementValue: 'third'
-				})
 
-				const keys = [firstKeys, secondKeys, thirdKeys]
-				const topListeners = await Promise.all(
-					keys.map(async (keyData: KeyData) => {
-						const data = await tableAchievement.getArtistTopListeners(keyData)
-						console.log('toplistener data', data)
-						return data
-					})
-				)
-
-				artist.topListeners = topListeners.length ? topListeners : []
-				console.log('artist.topListeners', artist.topListeners)
-
-				return pArtistData
-			})
-		)
-
+	
 		return {
 			personal,
 			group
@@ -322,59 +329,14 @@ const topArtists = async (
 	
 	const weeklyArtists = await timescopeTopArtists(
 		tableStat,
+		tableAchievement,
 		uid,
 		gid,
 		'week',
 		thisWeek,
-		lastWeek
+		lastWeek,
 	).then(async res => {
 		const { personal, group } = res
-		
-		await Promise.all(
-			personal.map(async pArtistData => {
-				const { artist } = pArtistData
-				const firstKeys = keyMakerPlaceAndDay({
-					relationType: 'artist',
-					periodType: 'week',
-					periodValue: thisWeek,
-					artistId: artist.id,
-					achievementType: 'topListener',
-					achievementValue: 'first'
-				})
-				console.log("firstKeys", firstKeys)
-				const secondKeys = keyMakerPlaceAndDay({
-					relationType: 'artist',
-					periodType: 'week',
-					periodValue: thisWeek,
-					artistId: artist.id,
-					achievementType: 'topListener',
-					achievementValue: 'second'
-				})
-				console.log("secondKeys", secondKeys)
-				const thirdKeys = keyMakerPlaceAndDay({
-					relationType: 'artist',
-					periodType: 'week',
-					periodValue: thisWeek,
-					artistId: artist.id,
-					achievementType: 'topListener',
-					achievementValue: 'third'
-				})
-				console.log("thirdKeys", thirdKeys)
-
-				const keys = [firstKeys, secondKeys, thirdKeys]
-				const topListeners = await Promise.all(
-					keys.map(async (keyData: KeyData) => {
-						const data = await tableAchievement.getArtistTopListeners(keyData)
-						
-						return data
-					})
-				)
-
-				artist.topListeners = topListeners.length ? topListeners : []
-
-				return pArtistData
-			})
-		)
 
 		return {
 			personal,
@@ -393,56 +355,14 @@ const topArtists = async (
 
 	const monthlyArtists = await timescopeTopArtists(
 		tableStat,
+		tableAchievement,
 		uid,
 		gid,
 		'month',
 		thisMonth,
-		lastMonth
+		lastMonth,
 	).then(async res => {
 		const { personal, group } = res
-		
-		await Promise.all(
-			personal.map(async pArtistData => {
-				const { artist } = pArtistData
-				const firstKeys = keyMakerPlaceAndDay({
-					relationType: 'artist',
-					periodType: 'month',
-					periodValue: thisMonth,
-					artistId: artist.id,
-					achievementType: 'topListener',
-					achievementValue: 'first'
-				})
-				const secondKeys = keyMakerPlaceAndDay({
-					relationType: 'artist',
-					periodType: 'month',
-					periodValue: thisMonth,
-					artistId: artist.id,
-					achievementType: 'topListener',
-					achievementValue: 'second'
-				})
-				const thirdKeys = keyMakerPlaceAndDay({
-					relationType: 'artist',
-					periodType: 'month',
-					periodValue: thisMonth,
-					artistId: artist.id,
-					achievementType: 'topListener',
-					achievementValue: 'third'
-				})
-
-				const keys = [firstKeys, secondKeys, thirdKeys]
-				const topListeners = await Promise.all(
-					keys.map(async (keyData: KeyData) => {
-						const data = await tableAchievement.getArtistTopListeners(keyData)
-						
-						return data
-					})
-				)
-
-				artist.topListeners = topListeners.length ? topListeners : []
-
-				return pArtistData
-			})
-		)
 
 		return {
 			personal,
@@ -461,56 +381,15 @@ const topArtists = async (
 
 	const lifetimeArtists = await timescopeTopArtists(
 		tableStat,
+		tableAchievement,
 		uid,
 		gid,
 		'life',
 		'life'
 	).then(async res => {
 		const { personal, group } = res
-		
-		await Promise.all(
-			personal.map(async pArtistData => {
-				const { artist } = pArtistData
-				const firstKeys = keyMakerPlaceAndDay({
-					relationType: 'artist',
-					periodType: 'life',
-					periodValue: 'life',
-					artistId: artist.id,
-					achievementType: 'topListener',
-					achievementValue: 'first'
-				})
-				const secondKeys = keyMakerPlaceAndDay({
-					relationType: 'artist',
-					periodType: 'life',
-					periodValue: 'life',
-					artistId: artist.id,
-					achievementType: 'topListener',
-					achievementValue: 'second'
-				})
-				const thirdKeys = keyMakerPlaceAndDay({
-					relationType: 'artist',
-					periodType: 'life',
-					periodValue: 'life',
-					artistId: artist.id,
-					achievementType: 'topListener',
-					achievementValue: 'third'
-				})
 
-				const keys = [firstKeys, secondKeys, thirdKeys]
-				const topListeners = await Promise.all(
-					keys.map(async (keyData: KeyData) => {
-						const data = await tableAchievement.getArtistTopListeners(keyData)
-						
-						return data
-					})
-				)
-
-				artist.topListeners = topListeners.length ? topListeners : []
-
-				return pArtistData
-			})
-		)
-
+	
 		return {
 			personal,
 			group
@@ -526,11 +405,8 @@ const topArtists = async (
 	}
 }
 
-const insightsArtists = async (
-	_,
-	{ uid, gid },
-	context
-): Promise<InsightsArtistsResponse> => {
+// @ts-ignore
+const insightsArtists = async (_, { uid, gid }, context): Promise<InsightsArtistsResponse> => {
 	const log = context.log
 	log.info('called by', { uid })
 	const env = verifyEnv(

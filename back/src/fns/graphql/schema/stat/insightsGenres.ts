@@ -1,10 +1,11 @@
 import * as R from 'ramda';
 import { makeExecutableSchema } from "graphql-tools";
 import { TableStat, TTableStat, PeriodType } from "../../../../shared/tables/TableStat";
-import moment = require("moment");
+import * as moment from 'moment'
 import { TableUser } from "../../../../shared/tables/TableUser";
 import { verifyEnv } from "../../../../shared/env";
 import { InsightsDashResponseResolvers, InsightsDashResponse, TimescopeTops, PerspectiveTops, InsightsGenresResponse, TimescopeTopGenres, TopGenreStat, QueryResolvers } from "../../types";
+import { TopListenerData } from './insightsArtists';
 
 const typeDefs = `
 type Query {
@@ -50,12 +51,12 @@ type Image = {
   url: string
 }
 type Artist = {
-  id: string,
-  name: string,
-  images: Image[],
-  external_urls: SpotifyUrl
-  genres: string[]
-  topListeners?: Object[]
+	id: string
+	name: string
+	images: Image[]
+	external_urls: SpotifyUrl
+	genres: string[]
+	topListeners: TopListenerData
 }
 
 type TopArtistsRow = {
@@ -116,10 +117,13 @@ const insightsGenres: QueryResolvers.InsightsGenresResolver = async (_, {uid, gi
   const tableUser = TableUser(DYNAMO_ENDPOINT, TABLE_USER)
   const { valid, invalid } = await tableUser.getUser(uid)
   if (invalid) { throw new Error(`user info invalid for uid ${uid}`) }
+
+  // @ts-ignore
   const { utcOffset } = valid
 
   const tableStat = TableStat(DYNAMO_ENDPOINT, TABLE_STAT)
 
+// @ts-ignore
   const now = localizedMoment(utcOffset, moment())
 
   const ret = await topGenres(tableStat, uid, gid, now)

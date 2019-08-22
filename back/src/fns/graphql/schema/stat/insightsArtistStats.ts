@@ -51,18 +51,36 @@ type User {
 type TopListener {
   sk: String
   pk: String
+  fk: String
+  lastUpdated: String
   total: Float
   user: User
 }
 
+type TopListenerDataPeriod {
+  first: TopListener
+  second: TopListener
+  third: TopListener
+}
+
+type TopListenerData {
+  day: TopListenerDataPeriod
+  week: TopListenerDataPeriod
+  month: TopListenerDataPeriod
+  life: TopListenerDataPeriod
+}
+
+
+
 type Artist {
-   id: String!
+  id: String!
   name: String!
   images: [Image!]!
   external_urls: SpotifyUrl!
   genres: [String!]!
-  topListeners: [TopListener]
+  topListeners: TopListenerData
 }
+
 type Image {
   url: String!
 }
@@ -320,7 +338,7 @@ const playtimeStats = async (
 	const keys = [firstKeysDaily, secondKeysDaily, thirdKeysDaily]
 	const dailyTopListeners = await Promise.all(
 		keys.map(async (keyData: KeyData) => {
-			const data = await tableAchievement.getArtistTopListeners(keyData)
+			const data = await tableAchievement.getArtistTopListener(keyData)
 
 			return data
 		})
@@ -366,7 +384,7 @@ const playtimeStats = async (
 	const keysWeekly = [firstKeysWeekly, secondKeysWeekly, thirdKeysWeekly]
 	const weeklyTopListeners = await Promise.all(
 		keysWeekly.map(async (keyData: KeyData) => {
-			const data = await tableAchievement.getArtistTopListeners(keyData)
+			const data = await tableAchievement.getArtistTopListener(keyData)
 
 			return data
 		})
@@ -412,7 +430,7 @@ const playtimeStats = async (
 	const keysMonthly = [firstKeysMonthly, secondKeysMonthly, thirdKeysMonthly]
 	const monthlyTopListeners = await Promise.all(
 		keysMonthly.map(async (keyData: KeyData) => {
-			const data = await tableAchievement.getArtistTopListeners(keyData)
+			const data = await tableAchievement.getArtistTopListener(keyData)
 
 			return data
 		})
@@ -462,7 +480,7 @@ const playtimeStats = async (
 	]
 	const lifetimeTopListeners = await Promise.all(
 		keysLifetime.map(async (keyData: KeyData) => {
-			const data = await tableAchievement.getArtistTopListeners(keyData)
+			const data = await tableAchievement.getArtistTopListener(keyData)
 
 			return data
 		})

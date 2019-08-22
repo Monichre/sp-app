@@ -5,8 +5,8 @@ import { ErrorBoundary } from './ErrorBoundary'
 import { Public } from './Public/Public';
 import { Authed } from './Authed/Authed';
 
-export const Home: React.SFC = () => {
+export const Home: React.SFC = (props) => {
   const { user, isLoading } = useUser()
   if (isLoading) return <Loading/>
-  return <ErrorBoundary>{user ? <Authed {...{user}}/> : <Public/>}</ErrorBoundary>
+  return <ErrorBoundary>{user ? <Authed {...{ user }} {...props}/> : <Public/>}</ErrorBoundary>
 }

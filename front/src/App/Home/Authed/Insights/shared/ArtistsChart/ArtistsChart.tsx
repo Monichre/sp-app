@@ -65,11 +65,11 @@ const ArtistsChart: React.SFC<RouteComponentProps & ChartProps & UserIdProp> = (
           <Label position='insideTopLeft' offset={0} stroke='#fff'>hours</Label>
         </XAxis>
 
-      <YAxis width={200} yAxisId="left" orientation="left" type='category' stroke={BRAND_PERSONAL_COLOR} interval={0} tick={({ payload, ...props }) =>
+      <YAxis width={150} yAxisId="left" orientation="left" type='category' stroke={BRAND_PERSONAL_COLOR} interval={0} tick={({ payload, ...props }) =>
             <CustomArtistTick {...props} pathParams={pathParams} artist={artists[payload.value].artist} /> }
       />
 
-      <YAxis width={50} yAxisId="right" orientation="right" type='category' stroke={BRAND_PERSONAL_COLOR} interval={0} tick={({ payload, ...props }) =>
+      <YAxis width={75} yAxisId="right" orientation="right" type='category' stroke={BRAND_PERSONAL_COLOR} interval={0} tick={({ payload, ...props }) =>
         <TopListenerYaxis {...props} pathParams={pathParams} artist={artists[payload.value].artist} totalTimeListened={artists[payload.value].personal} userId={userId} />}
       />
       

@@ -1,0 +1,223 @@
+# cc: InsightsArtistsStats#2; Front end graphQL definition
+
+fragment ArtistFragment on Artist {
+	id
+	name
+	images {
+		url
+	}
+	external_urls {
+		spotify
+	}
+
+	topListeners {
+		day {
+			first {
+				total
+				pk
+				lastUpdated
+				sk
+				user {
+					photoURL
+					email
+					uid
+					displayName
+				}
+			}
+
+			second {
+				total
+				pk
+				lastUpdated
+				sk
+				user {
+					photoURL
+					email
+					uid
+					displayName
+				}
+			}
+			third {
+				total
+				pk
+				lastUpdated
+				sk
+				user {
+					photoURL
+					email
+					uid
+					displayName
+				}
+			}
+		}
+
+		week {
+			first {
+				total
+				pk
+				lastUpdated
+				sk
+				user {
+					photoURL
+					email
+					uid
+					displayName
+				}
+			}
+
+			second {
+				total
+				pk
+				lastUpdated
+				sk
+				user {
+					photoURL
+					email
+					uid
+					displayName
+				}
+			}
+			third {
+				total
+				pk
+				lastUpdated
+				sk
+				user {
+					photoURL
+					email
+					uid
+					displayName
+				}
+			}
+		}
+		month {
+			first {
+				total
+				pk
+				lastUpdated
+				sk
+				user {
+					photoURL
+					email
+					uid
+					displayName
+				}
+			}
+
+			second {
+				total
+				pk
+				lastUpdated
+				sk
+				user {
+					photoURL
+					email
+					uid
+					displayName
+				}
+			}
+			third {
+				total
+				pk
+				lastUpdated
+				sk
+				user {
+					photoURL
+					email
+					uid
+					displayName
+				}
+			}
+		}
+
+		life {
+			first {
+				total
+				pk
+				lastUpdated
+				sk
+				user {
+					photoURL
+					email
+					uid
+					displayName
+				}
+			}
+
+			second {
+				total
+				pk
+				lastUpdated
+				sk
+				user {
+					photoURL
+					email
+					uid
+					displayName
+				}
+			}
+			third {
+				total
+				pk
+				lastUpdated
+				sk
+				user {
+					photoURL
+					email
+					uid
+					displayName
+				}
+			}
+		}
+	}
+}
+
+fragment TimescopeStatsFragment on TimescopeStats {
+  timeseries {
+    label
+    values {
+      period
+      personal
+      group
+    }
+  }
+  personal {
+    ...PerspectiveStatsFragment
+  }
+  group {
+    ...PerspectiveStatsFragment
+  }
+}
+
+fragment PerspectiveStatsFragment on PerspectiveStats {
+  current {
+    hrs
+    mins
+  }
+  delta {
+    direction
+    hrs
+    mins
+  }
+}
+
+query InsightsArtistStats($uid: String!, $artistId: String!) {
+	
+	insightsArtistStats(uid: $uid, gid: "global", artistId: $artistId) {
+		artist {
+			...ArtistFragment
+		}
+		today {
+			...TimescopeStatsFragment
+		}
+		thisWeek {
+			...TimescopeStatsFragment
+		}
+		thisMonth {
+			...TimescopeStatsFragment
+		}
+		lifetime {
+			...TimescopeStatsFragment
+		}
+	}
+}

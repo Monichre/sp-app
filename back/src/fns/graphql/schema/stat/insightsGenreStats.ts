@@ -1,6 +1,6 @@
 import { makeExecutableSchema } from "graphql-tools";
 import { TableStat, TTableStat, PeriodType } from "../../../../shared/tables/TableStat";
-import moment = require("moment");
+import * as moment from "moment"
 import { TableUser } from "../../../../shared/tables/TableUser";
 import { verifyEnv } from "../../../../shared/env";
 import { InsightsArtistStatsResponse, InsightsArtistStatsResponseResolvers, QueryResolvers } from "../../types";
@@ -147,10 +147,14 @@ const insightsGenreStats: QueryResolvers.InsightsGenreStatsResolver = async (_, 
   const tableUser = TableUser(context.DYNAMO_ENDPOINT, context.TABLE_USER)
   const { valid, invalid } = await tableUser.getUser(uid)
   if (invalid) { throw new Error(`user info invalid for uid ${uid}`) }
+
+  // @ts-ignore
   const { utcOffset } = valid
 
   const tableStat = TableStat(context.DYNAMO_ENDPOINT, context.TABLE_STAT)
 
+
+  // @ts-ignore
   const now = localizedMoment(utcOffset, moment())
 
   return await playtimeStats(tableStat, uid, gid, genre, now)
@@ -162,4 +166,5 @@ const resolvers = {
   }
 }
 
-export const insightsGenreStatsSchema = makeExecutableSchema({typeDefs, resolvers})
+export const insightsGenreStatsSchema = makeExecutableSchema({ typeDefs, resolvers })
+

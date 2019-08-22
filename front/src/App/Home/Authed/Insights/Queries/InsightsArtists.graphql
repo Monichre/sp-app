@@ -1,0 +1,199 @@
+
+query InsightsArtists($uid: String!) {
+	insightsArtists(uid: $uid, gid: "global") {
+		
+		today {
+			...TimescopeTopArtistsFragment
+		}
+		thisWeek {
+			...TimescopeTopArtistsFragment
+		}
+		thisMonth {
+			...TimescopeTopArtistsFragment
+		}
+		lifetime {
+			...TimescopeTopArtistsFragment
+		}
+	}
+}
+
+fragment TimescopeTopArtistsFragment on TimescopeTopArtists {
+  personal {
+    ...ArtistsFragment
+  }
+  group {
+    ...ArtistsFragment
+  }
+}
+
+fragment ArtistsFragment on TopArtistStat {
+	personal
+	group
+	artist {
+		id
+		name
+		images {
+			url
+		}
+		topListeners {
+			day {
+				first {
+					total
+					pk
+					lastUpdated
+					sk
+					user {
+						photoURL
+						email
+						uid
+						displayName
+					}
+				}
+
+				second {
+					total
+					pk
+					lastUpdated
+					sk
+					user {
+						photoURL
+						email
+						uid
+						displayName
+					}
+				}
+				third {
+					total
+					pk
+					lastUpdated
+					sk
+					user {
+						photoURL
+						email
+						uid
+						displayName
+					}
+				}
+			}
+
+			week {
+				first {
+					total
+					pk
+					lastUpdated
+					sk
+					user {
+						photoURL
+						email
+						uid
+						displayName
+					}
+				}
+
+				second {
+					total
+					pk
+					lastUpdated
+					sk
+					user {
+						photoURL
+						email
+						uid
+						displayName
+					}
+				}
+				third {
+					total
+					pk
+					lastUpdated
+					sk
+					user {
+						photoURL
+						email
+						uid
+						displayName
+					}
+				}
+			}
+			month {
+				first {
+					total
+					pk
+					lastUpdated
+					sk
+					user {
+						photoURL
+						email
+						uid
+						displayName
+					}
+				}
+
+				second {
+					total
+					pk
+					lastUpdated
+					sk
+					user {
+						photoURL
+						email
+						uid
+						displayName
+					}
+				}
+				third {
+					total
+					pk
+					lastUpdated
+					sk
+					user {
+						photoURL
+						email
+						uid
+						displayName
+					}
+				}
+			}
+
+			life {
+				first {
+					total
+					pk
+					lastUpdated
+					sk
+					user {
+						photoURL
+						email
+						uid
+						displayName
+					}
+				}
+
+				second {
+					total
+					pk
+					lastUpdated
+					sk
+					user {
+						photoURL
+						email
+						uid
+						displayName
+					}
+				}
+				third {
+					total
+					pk
+					lastUpdated
+					sk
+					user {
+						photoURL
+						email
+						uid
+						displayName
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,4 +1,4 @@
-// Generated in 2019-08-16T20:48:56-04:00
+// Generated in 2019-08-21T20:39:02-04:00
 // REGENERATE THIS BY STARTING THE LOCAL SERVER
 // AND THEN RUNNING `back % yarn generate`
 
@@ -71,7 +71,7 @@ export interface Artist {
 
   genres: string[];
 
-  topListeners?: Maybe<(Maybe<TopListener>)[]>;
+  topListeners?: Maybe<TopListenerData>;
 }
 
 export interface Image {
@@ -82,10 +82,32 @@ export interface SpotifyUrl {
   spotify: string;
 }
 
+export interface TopListenerData {
+  day?: Maybe<TopListenerDataPeriod>;
+
+  week?: Maybe<TopListenerDataPeriod>;
+
+  month?: Maybe<TopListenerDataPeriod>;
+
+  life?: Maybe<TopListenerDataPeriod>;
+}
+
+export interface TopListenerDataPeriod {
+  first?: Maybe<TopListener>;
+
+  second?: Maybe<TopListener>;
+
+  third?: Maybe<TopListener>;
+}
+
 export interface TopListener {
   sk?: Maybe<string>;
 
   pk?: Maybe<string>;
+
+  fk?: Maybe<string>;
+
+  lastUpdated?: Maybe<string>;
 
   total?: Maybe<number>;
 
@@ -684,7 +706,7 @@ export namespace ArtistResolvers {
     genres?: GenresResolver<string[], TypeParent, TContext>;
 
     topListeners?: TopListenersResolver<
-      Maybe<(Maybe<TopListener>)[]>,
+      Maybe<TopListenerData>,
       TypeParent,
       TContext
     >;
@@ -716,7 +738,7 @@ export namespace ArtistResolvers {
     TContext = Context
   > = Resolver<R, Parent, TContext>;
   export type TopListenersResolver<
-    R = Maybe<(Maybe<TopListener>)[]>,
+    R = Maybe<TopListenerData>,
     Parent = Artist,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
@@ -746,11 +768,77 @@ export namespace SpotifyUrlResolvers {
   > = Resolver<R, Parent, TContext>;
 }
 
+export namespace TopListenerDataResolvers {
+  export interface Resolvers<TContext = Context, TypeParent = TopListenerData> {
+    day?: DayResolver<Maybe<TopListenerDataPeriod>, TypeParent, TContext>;
+
+    week?: WeekResolver<Maybe<TopListenerDataPeriod>, TypeParent, TContext>;
+
+    month?: MonthResolver<Maybe<TopListenerDataPeriod>, TypeParent, TContext>;
+
+    life?: LifeResolver<Maybe<TopListenerDataPeriod>, TypeParent, TContext>;
+  }
+
+  export type DayResolver<
+    R = Maybe<TopListenerDataPeriod>,
+    Parent = TopListenerData,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type WeekResolver<
+    R = Maybe<TopListenerDataPeriod>,
+    Parent = TopListenerData,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type MonthResolver<
+    R = Maybe<TopListenerDataPeriod>,
+    Parent = TopListenerData,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type LifeResolver<
+    R = Maybe<TopListenerDataPeriod>,
+    Parent = TopListenerData,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
+export namespace TopListenerDataPeriodResolvers {
+  export interface Resolvers<
+    TContext = Context,
+    TypeParent = TopListenerDataPeriod
+  > {
+    first?: FirstResolver<Maybe<TopListener>, TypeParent, TContext>;
+
+    second?: SecondResolver<Maybe<TopListener>, TypeParent, TContext>;
+
+    third?: ThirdResolver<Maybe<TopListener>, TypeParent, TContext>;
+  }
+
+  export type FirstResolver<
+    R = Maybe<TopListener>,
+    Parent = TopListenerDataPeriod,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type SecondResolver<
+    R = Maybe<TopListener>,
+    Parent = TopListenerDataPeriod,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type ThirdResolver<
+    R = Maybe<TopListener>,
+    Parent = TopListenerDataPeriod,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
 export namespace TopListenerResolvers {
   export interface Resolvers<TContext = Context, TypeParent = TopListener> {
     sk?: SkResolver<Maybe<string>, TypeParent, TContext>;
 
     pk?: PkResolver<Maybe<string>, TypeParent, TContext>;
+
+    fk?: FkResolver<Maybe<string>, TypeParent, TContext>;
+
+    lastUpdated?: LastUpdatedResolver<Maybe<string>, TypeParent, TContext>;
 
     total?: TotalResolver<Maybe<number>, TypeParent, TContext>;
 
@@ -763,6 +851,16 @@ export namespace TopListenerResolvers {
     TContext = Context
   > = Resolver<R, Parent, TContext>;
   export type PkResolver<
+    R = Maybe<string>,
+    Parent = TopListener,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type FkResolver<
+    R = Maybe<string>,
+    Parent = TopListener,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type LastUpdatedResolver<
     R = Maybe<string>,
     Parent = TopListener,
     TContext = Context
@@ -1531,6 +1629,8 @@ export type IResolvers<TContext = Context> = {
   Artist?: ArtistResolvers.Resolvers<TContext>;
   Image?: ImageResolvers.Resolvers<TContext>;
   SpotifyUrl?: SpotifyUrlResolvers.Resolvers<TContext>;
+  TopListenerData?: TopListenerDataResolvers.Resolvers<TContext>;
+  TopListenerDataPeriod?: TopListenerDataPeriodResolvers.Resolvers<TContext>;
   TopListener?: TopListenerResolvers.Resolvers<TContext>;
   User?: UserResolvers.Resolvers<TContext>;
   BasicResponse?: BasicResponseResolvers.Resolvers<TContext>;

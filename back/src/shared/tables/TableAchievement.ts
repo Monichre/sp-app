@@ -83,20 +83,7 @@ type Timeseries = {
  *
  */
 export type TTableAchievement = {
-	makePk: (
-		artistId: string,
-		achievementType: AchievementType,
-		periodType: PeriodType,
-		periodValue: string
-	) => string
-
-	makeSk: (
-		artistId: string,
-		achievementValue: AchievementValue,
-		periodType: PeriodType,
-		periodValue: string,
-		date: string
-	) => string
+	makeKeys: Function
 
 	periodsFor: (
 		isoDateString: string
@@ -126,7 +113,7 @@ export type TTableAchievement = {
 		achievement: Achievement
 	) => Promise<PromiseResult<UpdateItemOutput, AWSError>>
 
-	getArtistTopListeners: ({
+	getArtistTopListener: ({
 		sk,
 		pk
 	}: KeyData) => Promise<PromiseResult<any, AWSError>>
@@ -199,22 +186,44 @@ export const TableAchievement = (
 		endpoint
 	})
 
-	const makeKey = (args: any[]) => [...args].join('#')
-
-	const makePk = (
-		artistId: string,
-		achievementType: AchievementType,
-		periodType: PeriodType,
+	
+	type EnrichedKeyMakerParams = {
+		relationType: 'artist'
+		periodType: PeriodType
 		periodValue: string
-	) => [artistId, achievementType, periodType, periodValue].join('#')
+		artistId: string
+		achievementType: 'topListener'
+		achievementValue: 'first' | 'second' | 'third'
+		uid?: string | null
+	}
+	const keyMaker = (args: any) => [...args].join('#')
+	const makeKeys = ({
+		periodType,
+		periodValue,
+		artistId,
+		achievementType,
+		achievementValue,
+		uid = null
+	}: EnrichedKeyMakerParams) => {
+		const pk = keyMaker([
+			achievementType,
+			achievementValue,
+			periodType,
+			periodValue
+		])
+		const sk = keyMaker([
+			artistId,
+			periodType,
+			achievementType,
+			achievementValue
+		])
 
-	const makeSk = (
-		artistId: string,
-		achievementValue: AchievementValue,
-		periodType: PeriodType,
-		periodValue: string,
-		date: string
-	) => [artistId, achievementValue, periodType, periodValue, date].join('#')
+		return {
+			sk,
+			pk
+		}
+	}
+
 
 	/**
 	 *
@@ -300,97 +309,36 @@ export const TableAchievement = (
 	 *
 	 */
 
-	const getArtistTopListeners = async ({ sk, pk }: KeyData) => {
-		console.log('pk', pk)
-		console.log('sk', sk)
-		// const status = () => {
-		// 	let place
-		// 	if(pk.split('#').includes('topListener') &&
-		// 		pk.split('#').includes('first')) {
-		// 		place = 'first'
-		// 	}
-			
-		// 	if(pk.split('#').includes('topListener') &&
-		// 		pk.split('#').includes('second')) {
-		// 		place = 'second'
-		// 	}
-			
-		// 	if(pk.split('#').includes('topListener') &&
-		// 		pk.split('#').includes('third')) {
-		// 		place = 'third'
-		// 		}
-		// }
-		// const aglStatus = {
-		// 	type: 'topListener',
-		// 	place: status()
-		// }
+	const getArtistTopListener = async ({ sk, pk }: KeyData) => {
 
-		const tops = await doc.query({
-					TableName,
-					KeyConditionExpression: 'pk = :p AND sk = :s',
-					ExpressionAttributeValues: {
-						':p': pk,
-						':s': sk
-					}
-				}).promise().then(res => {
-				console.log('res', res)
-				if (res && res.Items && res.Items.length) {
-					console.log('res.Items', res.Items)
-					let user = res.Items.pop()
-					
-					return user
-				} else {
-					return null
+		const topListener = await doc
+			.get({
+				TableName,
+				Key: {
+					pk: pk,
+					sk: sk
 				}
 			})
-			.catch(err => {
-				console.log(err)
-			})
+			.promise()
+        console.log('TCL: getArtistTopListener -> topListener', topListener)
+			
 
-			console.log('tops', tops)
-			
-			return tops
-			
+		return topListener.Item ? topListener.Item : null
 	}
-{
-	
-}
+	{
+	}
 	const getUserAchievementsByArtist = async ({
 		aglPK,
 		userFK
 	}: UserAchievementByArtistParams) => {
-		
-			return await doc
-				.query({
-					TableName,
-					IndexName: 'UserTimeIndex',
-					KeyConditionExpression: 'pk = :p AND fk = :f',
-					ExpressionAttributeValues: {
-						':p': aglPK,
-						':f': userFK
-					}
-				})
-				.promise()
-				.then((res: any) => {
-					const achievements:
-						| [GetUserAchievementItem]
-						| GetUserAchievementItem
-						| [] = res && res.Items && res.Items.length ? res.Items : []
-					console.log('getUserAchievementsByArtist: ', achievements)
-
-					return achievements
-				})
-	}
-
-	const getUserAchievements = async (pk: string, fk: string) => {
 		return await doc
 			.query({
 				TableName,
 				IndexName: 'UserTimeIndex',
 				KeyConditionExpression: 'pk = :p AND fk = :f',
 				ExpressionAttributeValues: {
-					':p': pk,
-					':f': fk
+					':p': aglPK,
+					':f': userFK
 				}
 			})
 			.promise()
@@ -399,12 +347,40 @@ export const TableAchievement = (
 					| [GetUserAchievementItem]
 					| GetUserAchievementItem
 					| [] = res && res.Items && res.Items.length ? res.Items : []
-				console.log(
-					'TCL: user achievements from db table achievements',
-					achievements
-				)
+				console.log('getUserAchievementsByArtist: ', achievements)
 
 				return achievements
+			})
+	}
+
+	const getUserAchievements = async (pk: string, fk: string) => {
+		return await doc
+			.get({
+				TableName,
+				// IndexName: 'UserTimeIndex',
+				Key: {
+					pk: pk,
+					fk: fk
+				}
+				// KeyConditionExpression: 'pk = :p AND fk = :f',
+				// ExpressionAttributeValues: {
+				// 	':p': pk,
+				// 	':f': fk
+				// }
+			})
+			.promise()
+			.then((res: any) => {
+            console.log('TCL: getUserAchievements -> res', res)
+				// const achievements:
+				// 	| [GetUserAchievementItem]
+				// 	| GetUserAchievementItem
+				// 	| [] = res && res.Items && res.Items.length ? res.Items : []
+				// // console.log(
+				// // 	'TCL: user achievements from db table achievements',
+				// // 	achievements
+				// // )
+
+				// return achievements
 			})
 	}
 
@@ -433,16 +409,14 @@ export const TableAchievement = (
 				}
 			})
 			.promise()
-			
 	}
 
 	return {
-		makePk,
-		makeSk,
+		makeKeys,
 		makeFk,
 		periodsFor,
 		getTimeseries,
-		getArtistTopListeners,
+		getArtistTopListener,
 		getUserAchievementsByArtist,
 		getUserAchievements,
 		createOrModifyAchievement

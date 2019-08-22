@@ -202,8 +202,10 @@ interface ArtistTopListenersProps {
 	topListeners: ArtistFragmentTopListeners[] | any
 }
 
-interface LifeTimeTopProps {
-	life: ArtistFragmentTopListeners
+interface TopListenerAcheivementCardProps {
+	topListenerData: ArtistFragmentTopListeners
+	title: string
+	lifetime: boolean
 }
 
 const Badge: React.SFC = ({ children }) => <BadgeWrap>{children}</BadgeWrap>
@@ -251,16 +253,16 @@ export const scopeTheListeners = (topListeners: any[]) => {
 
 
 
-export const LifeTimeTopListener: React.SFC<LifeTimeTopProps> = ({ life }) => {
+export const TopListenerAcheivementCard: React.SFC<TopListenerAcheivementCardProps> = ({ topListenerData, title, lifetime=false }) => {
 
-	const { listener: { total, user } }: any = life
+	const { total, user }: any = topListenerData
 
 	// const { hrs, mins } = hrsAndMins(total)
 
 	return (
-		<TopListenerCard lifetime={true}>
-			<TimeScopeTitle lifetime={true}>
-				All Time Top Listener
+		<TopListenerCard lifetime={lifetime}>
+			<TimeScopeTitle lifetime={lifetime}>
+				{title}
 			</TimeScopeTitle>
 			<div className='inner'>
 				<h2>
@@ -278,6 +280,9 @@ export const LifeTimeTopListener: React.SFC<LifeTimeTopProps> = ({ life }) => {
 
 }
 export const ArtistTopListeners: React.SFC<ArtistTopListenersProps> = ({ topListeners }) => {
+
+	
+	
 	return (
 
 		<TopListenerRow>

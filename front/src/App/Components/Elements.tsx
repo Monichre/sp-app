@@ -40,7 +40,38 @@ ${(props: any) => props.sideNav && css`
 
     &:before {
       left: 0;
+      height: 2rem;
+      width: 2rem;
     }
+    
+`}
+
+${(props: any) => props.tiny && css`
+
+    right: -42px;
+    top: 4px;
+    position: absolute;
+    height: 2rem;
+    width: 2rem;
+
+    &:before {
+      right: 0;
+      height: 2.3rem;
+      right: 0;
+      top: 0;
+      width: 2.3rem;
+    }
+    &:after {
+      border-radius: 50%;
+      content: '';
+      background-color: #030616;
+      height: 2.2rem;
+      width: 2.2rem;
+      position:absolute;
+      z-index:-1;
+      right: 1px;
+      top: 1px;
+}
 `}
   `
 

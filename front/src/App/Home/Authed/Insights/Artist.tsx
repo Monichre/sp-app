@@ -7,7 +7,7 @@ import { InsightsBackLink } from './shared/InsightsBackLink';
 import { useInsightsArtistStats, ArtistFragmentFragment } from '../../../../types';
 import { SpotifyLogoLink } from '../../../../shared/SpotifyLogoLink/SpotifyLogoLink';
 import { TimeseriesChart } from './shared/TimeseriesChart';
-import { ArtistTopListeners, LifeTimeTopListener, scopeTheListeners } from './ArtistTopListeners'
+import { ArtistTopListeners, scopeTheListeners, TopListenerAcheivementCard } from './ArtistTopListeners'
 import { suspensefulHook } from '../../../../lib/suspensefulHook';
 
 const ArtistBannerDiv = styled.div<{ backgroundUrl: string }>`
@@ -61,29 +61,27 @@ export const Artist: React.SFC<RouteComponentProps<{ artistId: string }> & { uid
 
     const { artist, [pathParams.timeScope]: { timeseries: timeSeries } } = stats
     const { topListeners }: any = artist
-    const tops = topListeners.length ? topListeners.filter((listener: any) => listener !== null) : null
+    const { day, week, month, life } = topListeners
 
-    const { life = false, month = false, week = false, day = false } = scopeTheListeners(tops)
+    
 
-    const scoped: any = [month, week, day].filter(Boolean)
+    // const somebodySweptAGL: any = scoped.every((listenerData: any) => {
+    //   const { listener }: any = listenerData
+    //   const { user } = listener
 
-    const somebodySweptAGL: any = scoped.every((listenerData: any) => {
-      const { listener }: any = listenerData
-      const { user } = listener
-
-      return user.uid === life.listener.user.uid && user.uid === uid
-    })
+    //   return user.uid === life.listener.user.uid && user.uid === uid
+    // })
 
     return (
       <StatPage {...{ stats, history, path, pathParams }}>
         <ArtistBanner {...{ artist }}>
-          {life ? <LifeTimeTopListener life={life} /> : null}
+          {life ? <TopListenerAcheivementCard topListenerData={life.first} title='All Time Top Listener' lifetime/> : null}
         </ArtistBanner>
         <TimeseriesChart {...{ timeSeries }} />
 
-        {scoped.length ? <ArtistTopListeners topListeners={scoped} /> : null}
+        
 
-        {somebodySweptAGL ? <h1 style={{ textAlign: 'center', fontSize: '25px', marginTop: '30px' }}>Look at you kid, you sweeping the series. Let somebody else stream would ya</h1> : null}
+        {/* {somebodySweptAGL ? <h1 style={{ textAlign: 'center', fontSize: '25px', marginTop: '30px' }}>Look at you kid, you sweeping the series. Let somebody else stream would ya</h1> : null} */}
 
       </StatPage>
     )

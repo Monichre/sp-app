@@ -1,0 +1,213 @@
+
+query InsightsDash($uid: String!) {
+	insightsDash(uid: $uid, gid: "global") {
+		today {
+			...TimescopeDash
+		}
+		thisWeek {
+			...TimescopeDash
+		}
+		thisMonth {
+			...TimescopeDash
+		}
+		lifetime {
+			...TimescopeDash
+		
+		}
+	}
+}
+
+fragment PerspectiveDash on PerspectiveTops {
+	artists {
+		personal
+		group
+		artist {
+			id
+			name
+			images {
+				url
+			}
+			topListeners {
+				day {
+					first {
+						total
+						pk
+						lastUpdated
+						sk
+						user {
+							photoURL
+							email
+							uid
+							displayName
+						}
+					}
+
+					second {
+						total
+						pk
+						lastUpdated
+						sk
+						user {
+							photoURL
+							email
+							uid
+							displayName
+						}
+					}
+					third {
+						total
+						pk
+						lastUpdated
+						sk
+						user {
+							photoURL
+							email
+							uid
+							displayName
+						}
+					}
+				}
+
+				week {
+					first {
+						total
+						pk
+						lastUpdated
+						sk
+						user {
+							photoURL
+							email
+							uid
+							displayName
+						}
+					}
+
+					second {
+						total
+						pk
+						lastUpdated
+						sk
+						user {
+							photoURL
+							email
+							uid
+							displayName
+						}
+					}
+					third {
+						total
+						pk
+						lastUpdated
+						sk
+						user {
+							photoURL
+							email
+							uid
+							displayName
+						}
+					}
+				}
+				month {
+					first {
+						total
+						pk
+						lastUpdated
+						sk
+						user {
+							photoURL
+							email
+							uid
+							displayName
+						}
+					}
+
+					second {
+						total
+						pk
+						lastUpdated
+						sk
+						user {
+							photoURL
+							email
+							uid
+							displayName
+						}
+					}
+					third {
+						total
+						pk
+						lastUpdated
+						sk
+						user {
+							photoURL
+							email
+							uid
+							displayName
+						}
+					}
+				}
+
+				life {
+					first {
+						total
+						pk
+						lastUpdated
+						sk
+						user {
+							photoURL
+							email
+							uid
+							displayName
+						}
+					}
+
+					second {
+						total
+						pk
+						lastUpdated
+						sk
+						user {
+							photoURL
+							email
+							uid
+							displayName
+						}
+					}
+					third {
+						total
+						pk
+						lastUpdated
+						sk
+						user {
+							photoURL
+							email
+							uid
+							displayName
+						}
+					}
+				}
+			}
+		}
+	}
+	genres {
+		personal
+		group
+		genre
+	}
+}
+fragment TimescopeDash on TimescopeTops {
+  timeSeries {
+    label
+    values {
+      period
+      personal
+      group
+    }
+  }
+  personal {
+    ...PerspectiveDash
+  }
+  group {
+    ...PerspectiveDash
+  }
+}

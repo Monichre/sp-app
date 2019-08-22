@@ -28,6 +28,8 @@ type Track {
 type TopListener {
   sk: String
   pk: String
+  fk: String
+  lastUpdated: String
   total: Float
   user: User
 }
@@ -47,6 +49,20 @@ type User {
   refreshToken: String
 }
 
+type TopListenerDataPeriod {
+  first: TopListener
+  second: TopListener
+  third: TopListener
+}
+
+type TopListenerData {
+  day: TopListenerDataPeriod
+  week: TopListenerDataPeriod
+  month: TopListenerDataPeriod
+  life: TopListenerDataPeriod
+}
+
+
 
 type Artist {
   id: String!
@@ -54,7 +70,7 @@ type Artist {
   images: [Image!]!
   external_urls: SpotifyUrl!
   genres: [String!]!
-  topListeners: [TopListener]
+  topListeners: TopListenerData
 }
 type Album {
   name: String!
@@ -72,14 +88,43 @@ type SpotifyUrl = {
 }
 
 
-type Artist = {
-  id: string,
-  name: string,
-  images: Image[],
-  external_urls: SpotifyUrl
-  genres: string[]
-  topListeners?: Object []
+
+type TopListenerData = {
+  day: {
+    first: any
+    second: any
+    third: any
+
+  }
+  week: {
+    first: any
+    second: any
+    third: any
+
+  }
+  month: {
+    first: any
+    second: any
+    third: any
+
+  }
+  life: {
+    first: any
+    second: any
+    third: any
+
+  }
 }
+
+type Artist = {
+	id: string
+	name: string
+	images: Image[]
+	external_urls: SpotifyUrl
+	genres: string[]
+	topListeners: TopListenerData
+}
+
 
 const recentPlays: QueryResolvers.RecentPlaysResolver = async (
 	_,

@@ -85,9 +85,26 @@ type User {
 type TopListener {
   sk: String
   pk: String
+  fk: String
+  lastUpdated: String
   total: Float
   user: User
 }
+
+type TopListenerDataPeriod {
+  first: TopListener
+  second: TopListener
+  third: TopListener
+}
+
+type TopListenerData {
+  day: TopListenerDataPeriod
+  week: TopListenerDataPeriod
+  month: TopListenerDataPeriod
+  life: TopListenerDataPeriod
+}
+
+
 
 type Artist {
   id: String!
@@ -95,7 +112,7 @@ type Artist {
   images: [Image!]!
   external_urls: SpotifyUrl!
   genres: [String!]!
-  topListeners: [TopListener]
+  topListeners: TopListenerData
 }
 
 type TopGenreStat {
@@ -218,6 +235,7 @@ const perspectiveTopArtists = async (
 	}: TPerspectiveTopKeys
 ) => {
 	const artistsPrimary = await tableStat.getTopArtists({
+		tableAchievement,
 		uid: primaryId,
 		periodType,
 		periodValue,
@@ -226,44 +244,6 @@ const perspectiveTopArtists = async (
 
 	return await Promise.all(
 		artistsPrimary.map(async ({ artist, playDurationMs }) => {
-
-			
-			
-			const firstKeys = keyMakerPlaceAndDay({
-				relationType: 'artist',
-				periodType,
-				periodValue,
-				artistId: artist.id,
-				achievementType: 'topListener',
-				achievementValue: 'first'
-			})
-			const secondKeys = keyMakerPlaceAndDay({
-				relationType: 'artist',
-				periodType,
-				periodValue,
-				artistId: artist.id,
-				achievementType: 'topListener',
-				achievementValue: 'second'
-			})
-			const thirdKeys = keyMakerPlaceAndDay({
-				relationType: 'artist',
-				periodType,
-				periodValue,
-				artistId: artist.id,
-				achievementType: 'topListener',
-				achievementValue: 'third'
-			})
-
-			const keys = [firstKeys, secondKeys, thirdKeys]
-			const topListeners = await Promise.all(
-				keys.map(async (keyData: KeyData) => {
-					const data = await tableAchievement.getArtistTopListeners(keyData)
-					
-					return data
-				})
-			)
-
-			artist.topListeners = topListeners
 
 			const secondary = await tableStat.getArtistStat({
 				uid: secondaryId,
@@ -478,6 +458,7 @@ const insightsDash: QueryResolvers.InsightsDashResolver = async (
 	}
 
 	const { utcOffset }: any = valid
+	// @ts-ignore
 	const now = localizedMoment(utcOffset, moment())
 
 	const ret = await topArtistsAndGenres(tableStat, tableAchievement, {

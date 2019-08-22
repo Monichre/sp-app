@@ -1,4 +1,4 @@
-// Generated in 2019-08-16T20:49:13-04:00
+// Generated in 2019-08-21T20:39:07-04:00
 // REGENERATE THIS BY STARTING THE LOCAL BACKEND
 // AND THEN RUNNING `front % yarn generate`
 
@@ -75,32 +75,6 @@ export type GetUserAchievementsUser = {
   photoURL: Maybe<string>;
 };
 
-export type GetUserInfoVariables = {
-  uid: string;
-};
-
-export type GetUserInfoQuery = {
-  __typename?: "Query";
-
-  getUserInfo: GetUserInfoGetUserInfo;
-};
-
-export type GetUserInfoGetUserInfo = {
-  __typename?: "UserInfoResponse";
-
-  uid: string;
-
-  email: string;
-
-  displayName: Maybe<string>;
-
-  lastUpdate: Maybe<string>;
-
-  photoURL: Maybe<string>;
-
-  initialHarvestComplete: Maybe<boolean>;
-};
-
 export type RecentPlaysVariables = {
   uid: string;
 };
@@ -175,6 +149,62 @@ export type RecentPlays_Images = {
   url: string;
 };
 
+export type GetUserInfoVariables = {
+  uid: string;
+};
+
+export type GetUserInfoQuery = {
+  __typename?: "Query";
+
+  getUserInfo: GetUserInfoGetUserInfo;
+};
+
+export type GetUserInfoGetUserInfo = {
+  __typename?: "UserInfoResponse";
+
+  uid: string;
+
+  email: string;
+
+  displayName: Maybe<string>;
+
+  lastUpdate: Maybe<string>;
+
+  photoURL: Maybe<string>;
+
+  initialHarvestComplete: Maybe<boolean>;
+};
+
+export type InsightsArtistsVariables = {
+  uid: string;
+};
+
+export type InsightsArtistsQuery = {
+  __typename?: "Query";
+
+  insightsArtists: InsightsArtistsInsightsArtists;
+};
+
+export type InsightsArtistsInsightsArtists = {
+  __typename?: "InsightsArtistsResponse";
+
+  today: InsightsArtistsToday;
+
+  thisWeek: InsightsArtistsThisWeek;
+
+  thisMonth: InsightsArtistsThisMonth;
+
+  lifetime: InsightsArtistsLifetime;
+};
+
+export type InsightsArtistsToday = TimescopeTopArtistsFragmentFragment;
+
+export type InsightsArtistsThisWeek = TimescopeTopArtistsFragmentFragment;
+
+export type InsightsArtistsThisMonth = TimescopeTopArtistsFragmentFragment;
+
+export type InsightsArtistsLifetime = TimescopeTopArtistsFragmentFragment;
+
 export type InsightsArtistStatsVariables = {
   uid: string;
   artistId: string;
@@ -239,6 +269,36 @@ export type InsightsDashThisWeek = TimescopeDashFragment;
 export type InsightsDashThisMonth = TimescopeDashFragment;
 
 export type InsightsDashLifetime = TimescopeDashFragment;
+
+export type InsightsGenresVariables = {
+  uid: string;
+};
+
+export type InsightsGenresQuery = {
+  __typename?: "Query";
+
+  insightsGenres: InsightsGenresInsightsGenres;
+};
+
+export type InsightsGenresInsightsGenres = {
+  __typename?: "InsightsGenresResponse";
+
+  today: InsightsGenresToday;
+
+  thisWeek: InsightsGenresThisWeek;
+
+  thisMonth: InsightsGenresThisMonth;
+
+  lifetime: InsightsGenresLifetime;
+};
+
+export type InsightsGenresToday = TimescopeTopGenresFragmentFragment;
+
+export type InsightsGenresThisWeek = TimescopeTopGenresFragmentFragment;
+
+export type InsightsGenresThisMonth = TimescopeTopGenresFragmentFragment;
+
+export type InsightsGenresLifetime = TimescopeTopGenresFragmentFragment;
 
 export type InsightsGenreStatsVariables = {
   uid: string;
@@ -535,65 +595,409 @@ export type InsightsStats_______Delta = {
   mins: Maybe<number>;
 };
 
-export type InsightsArtistsVariables = {
-  uid: string;
+export type TimescopeTopArtistsFragmentFragment = {
+  __typename?: "TimescopeTopArtists";
+
+  personal: TimescopeTopArtistsFragmentPersonal[];
+
+  group: TimescopeTopArtistsFragmentGroup[];
 };
 
-export type InsightsArtistsQuery = {
-  __typename?: "Query";
+export type TimescopeTopArtistsFragmentPersonal = ArtistsFragmentFragment;
 
-  insightsArtists: InsightsArtistsInsightsArtists;
+export type TimescopeTopArtistsFragmentGroup = ArtistsFragmentFragment;
+
+export type ArtistsFragmentFragment = {
+  __typename?: "TopArtistStat";
+
+  personal: number;
+
+  group: number;
+
+  artist: ArtistsFragmentArtist;
 };
 
-export type InsightsArtistsInsightsArtists = {
-  __typename?: "InsightsArtistsResponse";
+export type ArtistsFragmentArtist = {
+  __typename?: "Artist";
 
-  today: InsightsArtistsToday;
+  id: string;
 
-  thisWeek: InsightsArtistsThisWeek;
+  name: string;
 
-  thisMonth: InsightsArtistsThisMonth;
+  images: ArtistsFragmentImages[];
 
-  lifetime: InsightsArtistsLifetime;
+  topListeners: Maybe<ArtistsFragmentTopListeners>;
 };
 
-export type InsightsArtistsToday = TimescopeTopArtistsFragmentFragment;
+export type ArtistsFragmentImages = {
+  __typename?: "Image";
 
-export type InsightsArtistsThisWeek = TimescopeTopArtistsFragmentFragment;
-
-export type InsightsArtistsThisMonth = TimescopeTopArtistsFragmentFragment;
-
-export type InsightsArtistsLifetime = TimescopeTopArtistsFragmentFragment;
-
-export type InsightsGenresVariables = {
-  uid: string;
+  url: string;
 };
 
-export type InsightsGenresQuery = {
-  __typename?: "Query";
+export type ArtistsFragmentTopListeners = {
+  __typename?: "TopListenerData";
 
-  insightsGenres: InsightsGenresInsightsGenres;
+  day: Maybe<ArtistsFragmentDay>;
+
+  week: Maybe<ArtistsFragmentWeek>;
+
+  month: Maybe<ArtistsFragmentMonth>;
+
+  life: Maybe<ArtistsFragmentLife>;
 };
 
-export type InsightsGenresInsightsGenres = {
-  __typename?: "InsightsGenresResponse";
+export type ArtistsFragmentDay = {
+  __typename?: "TopListenerDataPeriod";
 
-  today: InsightsGenresToday;
+  first: Maybe<ArtistsFragmentFirst>;
 
-  thisWeek: InsightsGenresThisWeek;
+  second: Maybe<ArtistsFragmentSecond>;
 
-  thisMonth: InsightsGenresThisMonth;
-
-  lifetime: InsightsGenresLifetime;
+  third: Maybe<ArtistsFragmentThird>;
 };
 
-export type InsightsGenresToday = TimescopeTopGenresFragmentFragment;
+export type ArtistsFragmentFirst = {
+  __typename?: "TopListener";
 
-export type InsightsGenresThisWeek = TimescopeTopGenresFragmentFragment;
+  total: Maybe<number>;
 
-export type InsightsGenresThisMonth = TimescopeTopGenresFragmentFragment;
+  pk: Maybe<string>;
 
-export type InsightsGenresLifetime = TimescopeTopGenresFragmentFragment;
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<ArtistsFragmentUser>;
+};
+
+export type ArtistsFragmentUser = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type ArtistsFragmentSecond = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<ArtistsFragment_User>;
+};
+
+export type ArtistsFragment_User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type ArtistsFragmentThird = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<ArtistsFragment__User>;
+};
+
+export type ArtistsFragment__User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type ArtistsFragmentWeek = {
+  __typename?: "TopListenerDataPeriod";
+
+  first: Maybe<ArtistsFragment_First>;
+
+  second: Maybe<ArtistsFragment_Second>;
+
+  third: Maybe<ArtistsFragment_Third>;
+};
+
+export type ArtistsFragment_First = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<ArtistsFragment___User>;
+};
+
+export type ArtistsFragment___User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type ArtistsFragment_Second = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<ArtistsFragment____User>;
+};
+
+export type ArtistsFragment____User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type ArtistsFragment_Third = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<ArtistsFragment_____User>;
+};
+
+export type ArtistsFragment_____User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type ArtistsFragmentMonth = {
+  __typename?: "TopListenerDataPeriod";
+
+  first: Maybe<ArtistsFragment__First>;
+
+  second: Maybe<ArtistsFragment__Second>;
+
+  third: Maybe<ArtistsFragment__Third>;
+};
+
+export type ArtistsFragment__First = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<ArtistsFragment______User>;
+};
+
+export type ArtistsFragment______User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type ArtistsFragment__Second = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<ArtistsFragment_______User>;
+};
+
+export type ArtistsFragment_______User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type ArtistsFragment__Third = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<ArtistsFragment________User>;
+};
+
+export type ArtistsFragment________User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type ArtistsFragmentLife = {
+  __typename?: "TopListenerDataPeriod";
+
+  first: Maybe<ArtistsFragment___First>;
+
+  second: Maybe<ArtistsFragment___Second>;
+
+  third: Maybe<ArtistsFragment___Third>;
+};
+
+export type ArtistsFragment___First = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<ArtistsFragment_________User>;
+};
+
+export type ArtistsFragment_________User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type ArtistsFragment___Second = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<ArtistsFragment__________User>;
+};
+
+export type ArtistsFragment__________User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type ArtistsFragment___Third = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<ArtistsFragment___________User>;
+};
+
+export type ArtistsFragment___________User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
 
 export type ArtistFragmentFragment = {
   __typename?: "Artist";
@@ -606,7 +1010,7 @@ export type ArtistFragmentFragment = {
 
   external_urls: ArtistFragmentExternalUrls;
 
-  topListeners: Maybe<(Maybe<ArtistFragmentTopListeners>)[]>;
+  topListeners: Maybe<ArtistFragmentTopListeners>;
 };
 
 export type ArtistFragmentImages = {
@@ -622,11 +1026,35 @@ export type ArtistFragmentExternalUrls = {
 };
 
 export type ArtistFragmentTopListeners = {
+  __typename?: "TopListenerData";
+
+  day: Maybe<ArtistFragmentDay>;
+
+  week: Maybe<ArtistFragmentWeek>;
+
+  month: Maybe<ArtistFragmentMonth>;
+
+  life: Maybe<ArtistFragmentLife>;
+};
+
+export type ArtistFragmentDay = {
+  __typename?: "TopListenerDataPeriod";
+
+  first: Maybe<ArtistFragmentFirst>;
+
+  second: Maybe<ArtistFragmentSecond>;
+
+  third: Maybe<ArtistFragmentThird>;
+};
+
+export type ArtistFragmentFirst = {
   __typename?: "TopListener";
 
   total: Maybe<number>;
 
   pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
 
   sk: Maybe<string>;
 
@@ -634,6 +1062,322 @@ export type ArtistFragmentTopListeners = {
 };
 
 export type ArtistFragmentUser = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type ArtistFragmentSecond = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<ArtistFragment_User>;
+};
+
+export type ArtistFragment_User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type ArtistFragmentThird = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<ArtistFragment__User>;
+};
+
+export type ArtistFragment__User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type ArtistFragmentWeek = {
+  __typename?: "TopListenerDataPeriod";
+
+  first: Maybe<ArtistFragment_First>;
+
+  second: Maybe<ArtistFragment_Second>;
+
+  third: Maybe<ArtistFragment_Third>;
+};
+
+export type ArtistFragment_First = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<ArtistFragment___User>;
+};
+
+export type ArtistFragment___User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type ArtistFragment_Second = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<ArtistFragment____User>;
+};
+
+export type ArtistFragment____User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type ArtistFragment_Third = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<ArtistFragment_____User>;
+};
+
+export type ArtistFragment_____User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type ArtistFragmentMonth = {
+  __typename?: "TopListenerDataPeriod";
+
+  first: Maybe<ArtistFragment__First>;
+
+  second: Maybe<ArtistFragment__Second>;
+
+  third: Maybe<ArtistFragment__Third>;
+};
+
+export type ArtistFragment__First = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<ArtistFragment______User>;
+};
+
+export type ArtistFragment______User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type ArtistFragment__Second = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<ArtistFragment_______User>;
+};
+
+export type ArtistFragment_______User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type ArtistFragment__Third = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<ArtistFragment________User>;
+};
+
+export type ArtistFragment________User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type ArtistFragmentLife = {
+  __typename?: "TopListenerDataPeriod";
+
+  first: Maybe<ArtistFragment___First>;
+
+  second: Maybe<ArtistFragment___Second>;
+
+  third: Maybe<ArtistFragment___Third>;
+};
+
+export type ArtistFragment___First = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<ArtistFragment_________User>;
+};
+
+export type ArtistFragment_________User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type ArtistFragment___Second = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<ArtistFragment__________User>;
+};
+
+export type ArtistFragment__________User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type ArtistFragment___Third = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<ArtistFragment___________User>;
+};
+
+export type ArtistFragment___________User = {
   __typename?: "User";
 
   photoURL: Maybe<string>;
@@ -730,7 +1474,7 @@ export type PerspectiveDashArtist = {
 
   images: PerspectiveDashImages[];
 
-  topListeners: Maybe<(Maybe<PerspectiveDashTopListeners>)[]>;
+  topListeners: Maybe<PerspectiveDashTopListeners>;
 };
 
 export type PerspectiveDashImages = {
@@ -740,14 +1484,358 @@ export type PerspectiveDashImages = {
 };
 
 export type PerspectiveDashTopListeners = {
+  __typename?: "TopListenerData";
+
+  day: Maybe<PerspectiveDashDay>;
+
+  week: Maybe<PerspectiveDashWeek>;
+
+  month: Maybe<PerspectiveDashMonth>;
+
+  life: Maybe<PerspectiveDashLife>;
+};
+
+export type PerspectiveDashDay = {
+  __typename?: "TopListenerDataPeriod";
+
+  first: Maybe<PerspectiveDashFirst>;
+
+  second: Maybe<PerspectiveDashSecond>;
+
+  third: Maybe<PerspectiveDashThird>;
+};
+
+export type PerspectiveDashFirst = {
   __typename?: "TopListener";
 
   total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
 
   user: Maybe<PerspectiveDashUser>;
 };
 
 export type PerspectiveDashUser = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type PerspectiveDashSecond = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<PerspectiveDash_User>;
+};
+
+export type PerspectiveDash_User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type PerspectiveDashThird = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<PerspectiveDash__User>;
+};
+
+export type PerspectiveDash__User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type PerspectiveDashWeek = {
+  __typename?: "TopListenerDataPeriod";
+
+  first: Maybe<PerspectiveDash_First>;
+
+  second: Maybe<PerspectiveDash_Second>;
+
+  third: Maybe<PerspectiveDash_Third>;
+};
+
+export type PerspectiveDash_First = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<PerspectiveDash___User>;
+};
+
+export type PerspectiveDash___User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type PerspectiveDash_Second = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<PerspectiveDash____User>;
+};
+
+export type PerspectiveDash____User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type PerspectiveDash_Third = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<PerspectiveDash_____User>;
+};
+
+export type PerspectiveDash_____User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type PerspectiveDashMonth = {
+  __typename?: "TopListenerDataPeriod";
+
+  first: Maybe<PerspectiveDash__First>;
+
+  second: Maybe<PerspectiveDash__Second>;
+
+  third: Maybe<PerspectiveDash__Third>;
+};
+
+export type PerspectiveDash__First = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<PerspectiveDash______User>;
+};
+
+export type PerspectiveDash______User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type PerspectiveDash__Second = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<PerspectiveDash_______User>;
+};
+
+export type PerspectiveDash_______User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type PerspectiveDash__Third = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<PerspectiveDash________User>;
+};
+
+export type PerspectiveDash________User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type PerspectiveDashLife = {
+  __typename?: "TopListenerDataPeriod";
+
+  first: Maybe<PerspectiveDash___First>;
+
+  second: Maybe<PerspectiveDash___Second>;
+
+  third: Maybe<PerspectiveDash___Third>;
+};
+
+export type PerspectiveDash___First = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<PerspectiveDash_________User>;
+};
+
+export type PerspectiveDash_________User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type PerspectiveDash___Second = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<PerspectiveDash__________User>;
+};
+
+export type PerspectiveDash__________User = {
+  __typename?: "User";
+
+  photoURL: Maybe<string>;
+
+  email: Maybe<string>;
+
+  uid: Maybe<string>;
+
+  displayName: Maybe<string>;
+};
+
+export type PerspectiveDash___Third = {
+  __typename?: "TopListener";
+
+  total: Maybe<number>;
+
+  pk: Maybe<string>;
+
+  lastUpdated: Maybe<string>;
+
+  sk: Maybe<string>;
+
+  user: Maybe<PerspectiveDash___________User>;
+};
+
+export type PerspectiveDash___________User = {
   __typename?: "User";
 
   photoURL: Maybe<string>;
@@ -800,6 +1888,28 @@ export type TimescopeDashValues = {
 export type TimescopeDashPersonal = PerspectiveDashFragment;
 
 export type TimescopeDashGroup = PerspectiveDashFragment;
+
+export type TimescopeTopGenresFragmentFragment = {
+  __typename?: "TimescopeTopGenres";
+
+  personal: TimescopeTopGenresFragmentPersonal[];
+
+  group: TimescopeTopGenresFragmentGroup[];
+};
+
+export type TimescopeTopGenresFragmentPersonal = GenresFragmentFragment;
+
+export type TimescopeTopGenresFragmentGroup = GenresFragmentFragment;
+
+export type GenresFragmentFragment = {
+  __typename?: "TopGenreStat";
+
+  personal: number;
+
+  group: number;
+
+  genre: string;
+};
 
 export type TimescopeGenreStatsFragmentFragment = {
   __typename?: "TimescopeStats";
@@ -859,98 +1969,193 @@ export type PerspectiveGenreStatsFragmentDelta = {
   mins: Maybe<number>;
 };
 
-export type TimescopeTopArtistsFragmentFragment = {
-  __typename?: "TimescopeTopArtists";
-
-  personal: TimescopeTopArtistsFragmentPersonal[];
-
-  group: TimescopeTopArtistsFragmentGroup[];
-};
-
-export type TimescopeTopArtistsFragmentPersonal = ArtistsFragmentFragment;
-
-export type TimescopeTopArtistsFragmentGroup = ArtistsFragmentFragment;
-
-export type ArtistsFragmentFragment = {
-  __typename?: "TopArtistStat";
-
-  personal: number;
-
-  group: number;
-
-  artist: ArtistsFragmentArtist;
-};
-
-export type ArtistsFragmentArtist = {
-  __typename?: "Artist";
-
-  id: string;
-
-  name: string;
-
-  images: ArtistsFragmentImages[];
-
-  topListeners: Maybe<(Maybe<ArtistsFragmentTopListeners>)[]>;
-};
-
-export type ArtistsFragmentImages = {
-  __typename?: "Image";
-
-  url: string;
-};
-
-export type ArtistsFragmentTopListeners = {
-  __typename?: "TopListener";
-
-  total: Maybe<number>;
-
-  pk: Maybe<string>;
-
-  sk: Maybe<string>;
-
-  user: Maybe<ArtistsFragmentUser>;
-};
-
-export type ArtistsFragmentUser = {
-  __typename?: "User";
-
-  photoURL: Maybe<string>;
-
-  email: Maybe<string>;
-
-  uid: Maybe<string>;
-
-  displayName: Maybe<string>;
-};
-
-export type TimescopeTopGenresFragmentFragment = {
-  __typename?: "TimescopeTopGenres";
-
-  personal: TimescopeTopGenresFragmentPersonal[];
-
-  group: TimescopeTopGenresFragmentGroup[];
-};
-
-export type TimescopeTopGenresFragmentPersonal = GenresFragmentFragment;
-
-export type TimescopeTopGenresFragmentGroup = GenresFragmentFragment;
-
-export type GenresFragmentFragment = {
-  __typename?: "TopGenreStat";
-
-  personal: number;
-
-  group: number;
-
-  genre: string;
-};
-
 import gql from "graphql-tag";
 import * as ReactApolloHooks from "react-apollo-hooks";
 
 // ====================================================
 // Fragments
 // ====================================================
+
+export const ArtistsFragmentFragmentDoc = gql`
+  fragment ArtistsFragment on TopArtistStat {
+    personal
+    group
+    artist {
+      id
+      name
+      images {
+        url
+      }
+      topListeners {
+        day {
+          first {
+            total
+            pk
+            lastUpdated
+            sk
+            user {
+              photoURL
+              email
+              uid
+              displayName
+            }
+          }
+          second {
+            total
+            pk
+            lastUpdated
+            sk
+            user {
+              photoURL
+              email
+              uid
+              displayName
+            }
+          }
+          third {
+            total
+            pk
+            lastUpdated
+            sk
+            user {
+              photoURL
+              email
+              uid
+              displayName
+            }
+          }
+        }
+        week {
+          first {
+            total
+            pk
+            lastUpdated
+            sk
+            user {
+              photoURL
+              email
+              uid
+              displayName
+            }
+          }
+          second {
+            total
+            pk
+            lastUpdated
+            sk
+            user {
+              photoURL
+              email
+              uid
+              displayName
+            }
+          }
+          third {
+            total
+            pk
+            lastUpdated
+            sk
+            user {
+              photoURL
+              email
+              uid
+              displayName
+            }
+          }
+        }
+        month {
+          first {
+            total
+            pk
+            lastUpdated
+            sk
+            user {
+              photoURL
+              email
+              uid
+              displayName
+            }
+          }
+          second {
+            total
+            pk
+            lastUpdated
+            sk
+            user {
+              photoURL
+              email
+              uid
+              displayName
+            }
+          }
+          third {
+            total
+            pk
+            lastUpdated
+            sk
+            user {
+              photoURL
+              email
+              uid
+              displayName
+            }
+          }
+        }
+        life {
+          first {
+            total
+            pk
+            lastUpdated
+            sk
+            user {
+              photoURL
+              email
+              uid
+              displayName
+            }
+          }
+          second {
+            total
+            pk
+            lastUpdated
+            sk
+            user {
+              photoURL
+              email
+              uid
+              displayName
+            }
+          }
+          third {
+            total
+            pk
+            lastUpdated
+            sk
+            user {
+              photoURL
+              email
+              uid
+              displayName
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const TimescopeTopArtistsFragmentFragmentDoc = gql`
+  fragment TimescopeTopArtistsFragment on TimescopeTopArtists {
+    personal {
+      ...ArtistsFragment
+    }
+    group {
+      ...ArtistsFragment
+    }
+  }
+
+  ${ArtistsFragmentFragmentDoc}
+`;
 
 export const ArtistFragmentFragmentDoc = gql`
   fragment ArtistFragment on Artist {
@@ -963,14 +2168,157 @@ export const ArtistFragmentFragmentDoc = gql`
       spotify
     }
     topListeners {
-      total
-      pk
-      sk
-      user {
-        photoURL
-        email
-        uid
-        displayName
+      day {
+        first {
+          total
+          pk
+          lastUpdated
+          sk
+          user {
+            photoURL
+            email
+            uid
+            displayName
+          }
+        }
+        second {
+          total
+          pk
+          lastUpdated
+          sk
+          user {
+            photoURL
+            email
+            uid
+            displayName
+          }
+        }
+        third {
+          total
+          pk
+          lastUpdated
+          sk
+          user {
+            photoURL
+            email
+            uid
+            displayName
+          }
+        }
+      }
+      week {
+        first {
+          total
+          pk
+          lastUpdated
+          sk
+          user {
+            photoURL
+            email
+            uid
+            displayName
+          }
+        }
+        second {
+          total
+          pk
+          lastUpdated
+          sk
+          user {
+            photoURL
+            email
+            uid
+            displayName
+          }
+        }
+        third {
+          total
+          pk
+          lastUpdated
+          sk
+          user {
+            photoURL
+            email
+            uid
+            displayName
+          }
+        }
+      }
+      month {
+        first {
+          total
+          pk
+          lastUpdated
+          sk
+          user {
+            photoURL
+            email
+            uid
+            displayName
+          }
+        }
+        second {
+          total
+          pk
+          lastUpdated
+          sk
+          user {
+            photoURL
+            email
+            uid
+            displayName
+          }
+        }
+        third {
+          total
+          pk
+          lastUpdated
+          sk
+          user {
+            photoURL
+            email
+            uid
+            displayName
+          }
+        }
+      }
+      life {
+        first {
+          total
+          pk
+          lastUpdated
+          sk
+          user {
+            photoURL
+            email
+            uid
+            displayName
+          }
+        }
+        second {
+          total
+          pk
+          lastUpdated
+          sk
+          user {
+            photoURL
+            email
+            uid
+            displayName
+          }
+        }
+        third {
+          total
+          pk
+          lastUpdated
+          sk
+          user {
+            photoURL
+            email
+            uid
+            displayName
+          }
+        }
       }
     }
   }
@@ -1023,12 +2371,157 @@ export const PerspectiveDashFragmentDoc = gql`
           url
         }
         topListeners {
-          total
-          user {
-            photoURL
-            email
-            uid
-            displayName
+          day {
+            first {
+              total
+              pk
+              lastUpdated
+              sk
+              user {
+                photoURL
+                email
+                uid
+                displayName
+              }
+            }
+            second {
+              total
+              pk
+              lastUpdated
+              sk
+              user {
+                photoURL
+                email
+                uid
+                displayName
+              }
+            }
+            third {
+              total
+              pk
+              lastUpdated
+              sk
+              user {
+                photoURL
+                email
+                uid
+                displayName
+              }
+            }
+          }
+          week {
+            first {
+              total
+              pk
+              lastUpdated
+              sk
+              user {
+                photoURL
+                email
+                uid
+                displayName
+              }
+            }
+            second {
+              total
+              pk
+              lastUpdated
+              sk
+              user {
+                photoURL
+                email
+                uid
+                displayName
+              }
+            }
+            third {
+              total
+              pk
+              lastUpdated
+              sk
+              user {
+                photoURL
+                email
+                uid
+                displayName
+              }
+            }
+          }
+          month {
+            first {
+              total
+              pk
+              lastUpdated
+              sk
+              user {
+                photoURL
+                email
+                uid
+                displayName
+              }
+            }
+            second {
+              total
+              pk
+              lastUpdated
+              sk
+              user {
+                photoURL
+                email
+                uid
+                displayName
+              }
+            }
+            third {
+              total
+              pk
+              lastUpdated
+              sk
+              user {
+                photoURL
+                email
+                uid
+                displayName
+              }
+            }
+          }
+          life {
+            first {
+              total
+              pk
+              lastUpdated
+              sk
+              user {
+                photoURL
+                email
+                uid
+                displayName
+              }
+            }
+            second {
+              total
+              pk
+              lastUpdated
+              sk
+              user {
+                photoURL
+                email
+                uid
+                displayName
+              }
+            }
+            third {
+              total
+              pk
+              lastUpdated
+              sk
+              user {
+                photoURL
+                email
+                uid
+                displayName
+              }
+            }
           }
         }
       }
@@ -1060,6 +2553,27 @@ export const TimescopeDashFragmentDoc = gql`
   }
 
   ${PerspectiveDashFragmentDoc}
+`;
+
+export const GenresFragmentFragmentDoc = gql`
+  fragment GenresFragment on TopGenreStat {
+    personal
+    group
+    genre
+  }
+`;
+
+export const TimescopeTopGenresFragmentFragmentDoc = gql`
+  fragment TimescopeTopGenresFragment on TimescopeTopGenres {
+    personal {
+      ...GenresFragment
+    }
+    group {
+      ...GenresFragment
+    }
+  }
+
+  ${GenresFragmentFragmentDoc}
 `;
 
 export const PerspectiveGenreStatsFragmentFragmentDoc = gql`
@@ -1095,65 +2609,6 @@ export const TimescopeGenreStatsFragmentFragmentDoc = gql`
   }
 
   ${PerspectiveGenreStatsFragmentFragmentDoc}
-`;
-
-export const ArtistsFragmentFragmentDoc = gql`
-  fragment ArtistsFragment on TopArtistStat {
-    personal
-    group
-    artist {
-      id
-      name
-      images {
-        url
-      }
-      topListeners {
-        total
-        pk
-        sk
-        user {
-          photoURL
-          email
-          uid
-          displayName
-        }
-      }
-    }
-  }
-`;
-
-export const TimescopeTopArtistsFragmentFragmentDoc = gql`
-  fragment TimescopeTopArtistsFragment on TimescopeTopArtists {
-    personal {
-      ...ArtistsFragment
-    }
-    group {
-      ...ArtistsFragment
-    }
-  }
-
-  ${ArtistsFragmentFragmentDoc}
-`;
-
-export const GenresFragmentFragmentDoc = gql`
-  fragment GenresFragment on TopGenreStat {
-    personal
-    group
-    genre
-  }
-`;
-
-export const TimescopeTopGenresFragmentFragmentDoc = gql`
-  fragment TimescopeTopGenresFragment on TimescopeTopGenres {
-    personal {
-      ...GenresFragment
-    }
-    group {
-      ...GenresFragment
-    }
-  }
-
-  ${GenresFragmentFragmentDoc}
 `;
 
 // ====================================================
@@ -1196,26 +2651,6 @@ export function useGetUserAchievements(
     GetUserAchievementsVariables
   >(GetUserAchievementsDocument, baseOptions);
 }
-export const GetUserInfoDocument = gql`
-  query GetUserInfo($uid: String!) {
-    getUserInfo(uid: $uid) {
-      uid
-      email
-      displayName
-      lastUpdate
-      photoURL
-      initialHarvestComplete
-    }
-  }
-`;
-export function useGetUserInfo(
-  baseOptions?: ReactApolloHooks.QueryHookOptions<GetUserInfoVariables>
-) {
-  return ReactApolloHooks.useQuery<GetUserInfoQuery, GetUserInfoVariables>(
-    GetUserInfoDocument,
-    baseOptions
-  );
-}
 export const RecentPlaysDocument = gql`
   query RecentPlays($uid: String!) {
     recentPlays(uid: $uid) {
@@ -1252,6 +2687,54 @@ export function useRecentPlays(
     RecentPlaysDocument,
     baseOptions
   );
+}
+export const GetUserInfoDocument = gql`
+  query GetUserInfo($uid: String!) {
+    getUserInfo(uid: $uid) {
+      uid
+      email
+      displayName
+      lastUpdate
+      photoURL
+      initialHarvestComplete
+    }
+  }
+`;
+export function useGetUserInfo(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<GetUserInfoVariables>
+) {
+  return ReactApolloHooks.useQuery<GetUserInfoQuery, GetUserInfoVariables>(
+    GetUserInfoDocument,
+    baseOptions
+  );
+}
+export const InsightsArtistsDocument = gql`
+  query InsightsArtists($uid: String!) {
+    insightsArtists(uid: $uid, gid: "global") {
+      today {
+        ...TimescopeTopArtistsFragment
+      }
+      thisWeek {
+        ...TimescopeTopArtistsFragment
+      }
+      thisMonth {
+        ...TimescopeTopArtistsFragment
+      }
+      lifetime {
+        ...TimescopeTopArtistsFragment
+      }
+    }
+  }
+
+  ${TimescopeTopArtistsFragmentFragmentDoc}
+`;
+export function useInsightsArtists(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<InsightsArtistsVariables>
+) {
+  return ReactApolloHooks.useQuery<
+    InsightsArtistsQuery,
+    InsightsArtistsVariables
+  >(InsightsArtistsDocument, baseOptions);
 }
 export const InsightsArtistStatsDocument = gql`
   query InsightsArtistStats($uid: String!, $artistId: String!) {
@@ -1312,6 +2795,34 @@ export function useInsightsDash(
     InsightsDashDocument,
     baseOptions
   );
+}
+export const InsightsGenresDocument = gql`
+  query InsightsGenres($uid: String!) {
+    insightsGenres(uid: $uid, gid: "global") {
+      today {
+        ...TimescopeTopGenresFragment
+      }
+      thisWeek {
+        ...TimescopeTopGenresFragment
+      }
+      thisMonth {
+        ...TimescopeTopGenresFragment
+      }
+      lifetime {
+        ...TimescopeTopGenresFragment
+      }
+    }
+  }
+
+  ${TimescopeTopGenresFragmentFragmentDoc}
+`;
+export function useInsightsGenres(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<InsightsGenresVariables>
+) {
+  return ReactApolloHooks.useQuery<
+    InsightsGenresQuery,
+    InsightsGenresVariables
+  >(InsightsGenresDocument, baseOptions);
 }
 export const InsightsGenreStatsDocument = gql`
   query InsightsGenreStats($uid: String!, $genre: String!) {
@@ -1451,60 +2962,4 @@ export function useInsightsStats(
     InsightsStatsDocument,
     baseOptions
   );
-}
-export const InsightsArtistsDocument = gql`
-  query InsightsArtists($uid: String!) {
-    insightsArtists(uid: $uid, gid: "global") {
-      today {
-        ...TimescopeTopArtistsFragment
-      }
-      thisWeek {
-        ...TimescopeTopArtistsFragment
-      }
-      thisMonth {
-        ...TimescopeTopArtistsFragment
-      }
-      lifetime {
-        ...TimescopeTopArtistsFragment
-      }
-    }
-  }
-
-  ${TimescopeTopArtistsFragmentFragmentDoc}
-`;
-export function useInsightsArtists(
-  baseOptions?: ReactApolloHooks.QueryHookOptions<InsightsArtistsVariables>
-) {
-  return ReactApolloHooks.useQuery<
-    InsightsArtistsQuery,
-    InsightsArtistsVariables
-  >(InsightsArtistsDocument, baseOptions);
-}
-export const InsightsGenresDocument = gql`
-  query InsightsGenres($uid: String!) {
-    insightsGenres(uid: $uid, gid: "global") {
-      today {
-        ...TimescopeTopGenresFragment
-      }
-      thisWeek {
-        ...TimescopeTopGenresFragment
-      }
-      thisMonth {
-        ...TimescopeTopGenresFragment
-      }
-      lifetime {
-        ...TimescopeTopGenresFragment
-      }
-    }
-  }
-
-  ${TimescopeTopGenresFragmentFragmentDoc}
-`;
-export function useInsightsGenres(
-  baseOptions?: ReactApolloHooks.QueryHookOptions<InsightsGenresVariables>
-) {
-  return ReactApolloHooks.useQuery<
-    InsightsGenresQuery,
-    InsightsGenresVariables
-  >(InsightsGenresDocument, baseOptions);
 }

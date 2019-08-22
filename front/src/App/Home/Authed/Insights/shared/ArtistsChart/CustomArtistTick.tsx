@@ -30,7 +30,12 @@ export const CustomArtistTick: React.SFC<TickProps> = React.memo(({ x, y, offset
             <clipPath id='clipCircle'>
                 <circle r='32px' cx='32px' cy='32px' />
             </clipPath>
-            <Text stroke='white' width={100} font-size="14" textAnchor='end' dx={-78} dy={4} {...{ x, y }}>
+            <Text stroke='white' width={50} style={{
+                whiteSpace: 'normal',
+                overflowWrap: 'break-word',
+                wordBreak: 'break-all',
+                hyphens: 'auto'
+            }} font-size="14" textAnchor='end' dx={-78} dy={4} {...{ x, y }}>
                 {artist.name}
             </Text>
 

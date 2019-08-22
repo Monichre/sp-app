@@ -3,12 +3,13 @@ import styled from 'styled-components'
 import { NavLink } from 'react-router-dom';
 import { LineChart, History, User } from 'grommet-icons'
 import { largeQuery, notLargeQuery, BRAND_COLOR, BRAND_PERSONAL_COLOR, Large } from '../../../shared/media';
+import {useInsightsDash} from '../../../types'
 import { LogoHorizontal } from '../../../shared/Logo';
 import { UserAchievementsList } from '../../Components/UserAchievementsList'
-
+import { suspensefulHook } from '../../../lib/suspensefulHook';
 import Moment from 'react-moment';
 import { AvatarBg } from '../../Components/Elements';
-import { PhotoWrapper, CircleOne, CircleTwo } from './Profile/ProfileCardStyles';
+
 
 
 
@@ -119,9 +120,17 @@ const HarvestingNotice: React.SFC = () =>
     Watch your stats grow as we complete your initial harvest.
   </HarvestingNoticeDiv>
 
-export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: string, user: any}> = ({ initialHarvestComplete, lastUpdate, user}) => {
+export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: string, user: any, history?: any, match?: any}> = ({ initialHarvestComplete, lastUpdate, user, ...rest}) => {
+const {uid} = user
+const { history, match} = rest
+const { location: { pathname } } = history
+const { path, params } = match
+const focus = pathname.split('/').slice(5,99).join('/')
+const pathParams = { focus, ...params }
 
+  const {insightsDash: usersTopArtistByPeriodData} = suspensefulHook(useInsightsDash({ variables: { uid }, suspend: true }))
 
+  
   return (
     <NavMenuView>
       <NavPrimaryLink to='#'>
@@ -141,7 +150,7 @@ export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: s
         <NavLabel>Profile</NavLabel>
       </NavPrimaryLink>
       <Large>
-        <UserAchievementsList userId={user.uid} />
+        <UserAchievementsList userId={user.uid} usersTopArtistByPeriodData={usersTopArtistByPeriodData}/>
         <FillSpace>
           {!initialHarvestComplete ? <HarvestingNotice /> : <LastUpdate {...{ lastUpdate }} />}
           <LogoHorizontal size={8} />

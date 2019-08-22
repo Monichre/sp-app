@@ -48,18 +48,36 @@ type User {
 type TopListener {
   sk: String
   pk: String
+  fk: String
+  lastUpdated: String
   total: Float
   user: User
 }
 
-type Artist {
-  id: String
-  name: String
-  images: [Image!]
-  external_urls: SpotifyUrl
-  genres: [String!]
-  topListeners: [TopListener]
+type TopListenerDataPeriod {
+  first: TopListener
+  second: TopListener
+  third: TopListener
 }
+
+type TopListenerData {
+  day: TopListenerDataPeriod
+  week: TopListenerDataPeriod
+  month: TopListenerDataPeriod
+  life: TopListenerDataPeriod
+}
+
+
+
+type Artist {
+  id: String!
+  name: String!
+  images: [Image!]!
+  external_urls: SpotifyUrl!
+  genres: [String!]!
+  topListeners: TopListenerData
+}
+
 
 type UserAchievement {
 	artist: Artist

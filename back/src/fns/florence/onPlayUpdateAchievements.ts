@@ -14,6 +14,7 @@ import {
 } from '../agl/functions'
 import * as _ from 'lodash'
 import moment = require('moment')
+import { Artist } from '../graphql/types'
 
 type GenreImage = {
 	genre: { S: string }
@@ -43,7 +44,7 @@ type ArtistImage = {
 	}
 }
 
-const isArtistOrGlobal = NewImage => (NewImage.artist ? 'artist' : 'global')
+
 
 /**
  *
@@ -82,13 +83,11 @@ export const handler: DynamoDBStreamHandler | any = async (event, context) => {
 		} = record
 
 		const { artist } = NewImage
-		const artistInfo = artist
+		const artistInfo: any = artist
 			? await tableStat.getArtistInfo(artist.M.id.S)
 			: null
 
-	
 		const recordKeys = extractKeys(Keys)
-
 
 		if (artist && artistInfo) {
 			const {
@@ -102,62 +101,59 @@ export const handler: DynamoDBStreamHandler | any = async (event, context) => {
 				ApproximateCreationDateTime,
 				tableStat,
 				tableAchievement
-				)
-			
-			
+			)
 
-			console.log('byDay', byDay)
-			
-			console.log('byWeek.length', byWeek)
-			console.log('byMonth.length', byMonth)
-			console.log('byLifetime.length', byLifetime)
 
-			let dailyTopAchievers 
-			let weeklyTopAchievers 
-			let monthlyTopAchievers 
-			let lifetimeTopAchievers 
+			let dailyTopAchievers
+			let weeklyTopAchievers
+			let monthlyTopAchievers
+			let lifetimeTopAchievers
 
-			if(byDay){
-				dailyTopAchievers = byDay.length ? await bulkRecordUserAchievements(
-					byDay,
-					artistInfo,
-					recordKeys,
-					tableAchievement
-				) : null
-				console.log('TCL: handleRecord -> dailyTopAchievers', dailyTopAchievers)
-
+			if (byDay) {
+				dailyTopAchievers = byDay.length
+					? await bulkRecordUserAchievements(
+							byDay,
+							artistInfo,
+							recordKeys,
+							tableAchievement
+					  )
+					: null
+				
 			}
-				if(byWeek){
-					weeklyTopAchievers = byWeek.length ? await bulkRecordUserAchievements(
-						byWeek,
-						artistInfo,
-						recordKeys,
-						tableAchievement
-					) : null
-					console.log('TCL: handleRecord -> weeklyTopAchievers', weeklyTopAchievers)
-				}
+			if (byWeek) {
+				weeklyTopAchievers = byWeek.length
+					? await bulkRecordUserAchievements(
+							byWeek,
+							artistInfo,
+							recordKeys,
+							tableAchievement
+					  )
+					: null
+				
+			}
 
-				if(byMonth){
-					monthlyTopAchievers = byMonth.length ? await bulkRecordUserAchievements(
-						byMonth,
-						artistInfo,
-						recordKeys,
-						tableAchievement
-					) : null
-				}
+			if (byMonth) {
+				monthlyTopAchievers = byMonth.length
+					? await bulkRecordUserAchievements(
+							byMonth,
+							artistInfo,
+							recordKeys,
+							tableAchievement
+					  )
+					: null
+			}
 
-				if(byLifetime){
-					lifetimeTopAchievers = byLifetime.length ? await bulkRecordUserAchievements(
-						byLifetime,
-						artistInfo,
-						recordKeys,
-						tableAchievement
-					) : null
+			if (byLifetime) {
+				lifetimeTopAchievers = byLifetime.length
+					? await bulkRecordUserAchievements(
+							byLifetime,
+							artistInfo,
+							recordKeys,
+							tableAchievement
+					  )
+					: null
+			}
 
-				}
-
-
-		
 			return {
 				dailyTopAchievers,
 				weeklyTopAchievers,
@@ -174,7 +170,7 @@ export const handler: DynamoDBStreamHandler | any = async (event, context) => {
 			const {
 				dynamodb: { Keys, ApproximateCreationDateTime, NewImage }
 			} = record
-		
+
 			if (NewImage.artist && NewImage.pk.S.includes('spotify')) {
 				return record
 			}
@@ -191,7 +187,6 @@ export const handler: DynamoDBStreamHandler | any = async (event, context) => {
 		({ dynamodb: { Keys, ApproximateCreationDateTime, NewImage } }) =>
 			NewImage.genre && NewImage.pk.S.includes('spotify')
 	)
-
 
 	log.close()
 }

@@ -70,8 +70,9 @@ export const AchievementListItem: React.SFC<AchievementListItemProps> = ({ title
     return (<ListItem data-total={achievementTotal} clicked={wasClicked}>
         <Tree name={title} onClick={handleClick}>
             <FlexDiv>
-                {achievements.length ? achievements.map((achievement: any) => {
-                    const { artist, fk, pk, sk, total, user } = achievement
+                {achievements.length ? achievements.map(({artistData,achievement}: any) => {
+                    const { pk, sk, total, user } = achievement
+                    const { artist } = artistData
                     const { hrs, mins } = hrsAndMins(total)
 
                     return (
