@@ -115,6 +115,12 @@ background-color: #AAA;
 color: #030616;
 `
 
+const AvatarLink = styled(NavPrimaryLink)`
+        border-top: 1px solid rgba(255,255,255,.1);
+    border-bottom: 1px solid rgba(255,255,255,.1);
+    background-color: rgba(216,216,216,.05);
+`
+
 const HarvestingNotice: React.SFC = () =>
   <HarvestingNoticeDiv>
     Watch your stats grow as we complete your initial harvest.
@@ -133,10 +139,10 @@ const pathParams = { focus, ...params }
   
   return (
     <NavMenuView>
-      <NavPrimaryLink to='#'>
+      <AvatarLink to='#'>
         <AvatarBg sideNav={true} src={user.photoURL ? user.photoURL : '/icons/headphones.svg'} />
         <NavLabel>{user.displayName ? user.displayName : user.email}</NavLabel>
-      </NavPrimaryLink>
+      </AvatarLink>
       <NavPrimaryLink to='/insights'>
         <LineChart color='white' />
         <NavLabel>Insights</NavLabel>

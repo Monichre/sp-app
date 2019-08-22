@@ -25,7 +25,7 @@ export const Profile: React.SFC<RouteComponentProps & { user: any }> = ({ user }
   })
 
   return (
-    <Container>
+    <Container padded>
       <ProfileCard user={user} />
       <Placement><ButtonSignout /></Placement>
     </Container>

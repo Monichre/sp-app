@@ -16,17 +16,18 @@ Name,
 Job,
 UserHeadphonesAvatar,
 ButtonsWrapper,
-Button,
 RightWrapper,
 PanelWrapper,
 Description,
 } from './ProfileCardStyles'
+import { Button, GradientButtonFilled } from '../../../../shared/ui';
 
 export interface ProfileCardProps {
     user: any
 }
  
-export const ProfileCard: React.SFC<ProfileCardProps> = ({user}) => {
+export const ProfileCard: React.SFC<ProfileCardProps> = ({ user }) => {
+    const spotifyURL= `https://open.spotify.com/user/${user.uid.split(':')[1]}`
     return ( 
         <ProfileBackground>
             <CardWrapper>
@@ -37,19 +38,23 @@ export const ProfileCard: React.SFC<ProfileCardProps> = ({user}) => {
                         <Photo>{user.photoURL ? <img src={user.photoURL} /> : <UserHeadphonesAvatar />}</Photo>
                     </PhotoWrapper>
                     <SubtitleWrapper>
-                        <Name></Name>
-                        <Job></Job>
+                    
 
                     </SubtitleWrapper>
                     <ButtonsWrapper>
-                        <Button></Button>
-                        <Button></Button>
+                        <Button>{user.displayName}</Button>
+                        <Button>{user.email}</Button>
                     </ButtonsWrapper>
                 </LeftWrapper>
                 <RightWrapper>
-                    <PanelWrapper></PanelWrapper>
-                    <PanelWrapper></PanelWrapper>
-                    <PanelWrapper></PanelWrapper>
+                    <PanelWrapper>
+
+                    </PanelWrapper>
+                    <PanelWrapper>
+                    <GradientButtonFilled>
+                            <a href={spotifyURL}>SPOTIFY</a>
+                        </GradientButtonFilled>
+                    </PanelWrapper>
                 </RightWrapper>
             </CardWrapper>
 
