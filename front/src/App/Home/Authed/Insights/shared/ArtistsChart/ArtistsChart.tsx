@@ -58,7 +58,7 @@ type ChartProps = { pathParams: TPathParams, artists: PerspectiveDashArtists[], 
 
 const ArtistsChart: React.SFC<RouteComponentProps & ChartProps & UserIdProp> = ({ pathParams, artists, history, height = 70, userId }) => (
     <ResponsiveContainer width='100%' height={(height * artists.length) + 90}>
-     
+    
       <BarChart layout='vertical' data={artists} onClick={navigateToArtist(history, pathParams)}>
         
         <XAxis height={30} type='number' stroke='#fff' orientation='top' xAxisId='top' tickFormatter={decimalToHrsMins} domain={[0, domainMaxBuilder(artists)]}>
@@ -68,8 +68,8 @@ const ArtistsChart: React.SFC<RouteComponentProps & ChartProps & UserIdProp> = (
       <YAxis width={150} yAxisId="left" orientation="left" type='category' stroke={BRAND_PERSONAL_COLOR} interval={0} tick={({ payload, ...props }) =>
             <CustomArtistTick {...props} pathParams={pathParams} artist={artists[payload.value].artist} /> }
       />
-
-      <YAxis width={75} yAxisId="right" orientation="right" type='category' stroke={BRAND_PERSONAL_COLOR} interval={0} tick={({ payload, ...props }) =>
+{/* stroke={BRAND_PERSONAL_COLOR} */}
+      <YAxis width={75} yAxisId="right" orientation="right" stroke="url(/icons/headphones.svg)" type='category'  interval={0} tick={({ payload, ...props }) =>
         <TopListenerYaxis {...props} pathParams={pathParams} artist={artists[payload.value].artist} totalTimeListened={artists[payload.value].personal} userId={userId} />}
       />
       

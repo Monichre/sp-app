@@ -1,6 +1,6 @@
 
 import * as React from 'react';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components'
 
 
 export const HoverBoxWrapper = styled.div`
@@ -107,4 +107,27 @@ export const Bubble = styled.div`
 			z-index: 4;
 		}
 	}
+`
+
+
+export const AchievementAxisTitle: any = styled.div`
+	position: absolute;
+	height: 100%;
+	width: 53px;
+	top: 0;
+	right: 53px;
+	display: none;
+	justify-content: center;
+
+	h4 {
+		writing-mode: vertical-rl;
+		color: #fff;
+		text-align: center;
+		letter-spacing: 2px;
+	}
+
+	${(props: any) => props.achievementsGraph && css`
+		display: flex;
+
+	`}
 `

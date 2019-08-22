@@ -32,6 +32,8 @@ html {
     overflow-x: hidden;
     position: relative;
     z-index: 10;
+
+    
   }
   a, h1, h2, p {
     color: white!important;

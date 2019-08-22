@@ -45,13 +45,17 @@ const ArtistThumbPrev = styled.div`
     position: relative;
     padding: 5px;
     overflow: visible;
-    margin-top: 20px;
+    margin-top: 40px;
+
+    &:nth-child(1) {
+        margin-top: 20px;
+    }
 
     p {
         position: absolute;
         width: max-content;
-        top: 20px;
-        right: -20px;
+        bottom: -30px;
+        right: -49px;
         color: rgb(100, 214, 238)!important;
     }
 `
@@ -80,7 +84,7 @@ export const AchievementListItem: React.SFC<AchievementListItemProps> = ({ title
 
                             <AvatarBg src={artist.images && artist.images[0] ? artist.images[0].url : ''} />
                             <ArtistNameDiv>{artist.name}</ArtistNameDiv>
-                            <p>{hrs ? `${hrs} hrs and` : null} {mins} min</p>
+                            <p>{hrs ? `${hrs} hr` : null} {mins} min</p>
 
                         </ArtistThumbPrev>
                     )

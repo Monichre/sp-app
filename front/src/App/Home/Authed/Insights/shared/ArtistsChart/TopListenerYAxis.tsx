@@ -38,6 +38,7 @@ export const TopListenerYaxis: React.SFC<TickProps & any> = React.memo(({ x, y, 
 
     const { topListeners } = artist
     const { timeScope, perspective }: any = pathParams
+    console.log('TCL: pathParams', pathParams)
     const { day, week, month, life } = topListeners
 
     const normalizetimeScopeMap: any = {
@@ -49,14 +50,16 @@ export const TopListenerYaxis: React.SFC<TickProps & any> = React.memo(({ x, y, 
             title: 'This Month',
             data: month
         },
-        life: {
+        lifetime: {
             title: 'Life Time',
             data: life
         },
 
     }
 
-    const { title, data } = normalizetimeScopeMap[timeScope]
+    console.log('normalizetimeScopeMap[timeScope]', normalizetimeScopeMap[timeScope])
+
+    const { title=false, data } = normalizetimeScopeMap[timeScope]
     const { first, second, third } = data ? data : {
         first: null,
         second: null,

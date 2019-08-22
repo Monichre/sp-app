@@ -62,6 +62,7 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
   }
   const { timeScope, perspective }: any = pathParams
   const translatedPerspective: string = perspective === 'personal' ? 'Your' : 'Everyone'
+  const period = normalizetimeScopeMap[timeScope]
 
   const genreContentSummary = `We're currently building out new features for platform genre leaders`
   
@@ -73,11 +74,12 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
   return <>
     <TimeseriesChart {...{ timeSeries, showOnly: pathParams.perspective }} />
     <Row>
-      <AchievementHoverSummary content={artistContentSummary} userId={uid}>
+      <AchievementHoverSummary content={artistContentSummary} userId={uid} achievementsGraph period={period}>
         <ArtistsChartBlock {...{ artists, pathParams }} userId={uid}>
-          <BlockTitle to={`${insightLink(pathParams)}/artists`}>{translatedPerspective} Top Artists {normalizetimeScopeMap[timeScope]} <BlockTitleMore>see all</BlockTitleMore></BlockTitle>
+          <BlockTitle to={`${insightLink(pathParams)}/artists`}>{translatedPerspective} Top Artists {period} <BlockTitleMore>see all</BlockTitleMore></BlockTitle>
         </ArtistsChartBlock>
       </AchievementHoverSummary>
+      
 
       <AchievementHoverSummary content={genreContentSummary} userId={uid}>
         <GenresChartBlock {...{ genres, pathParams }}>

@@ -199,13 +199,13 @@ const TimeScopeTitle: any = styled.h3`
 `
 
 interface ArtistTopListenersProps {
-	topListeners: ArtistFragmentTopListeners[] | any
+	children: any
 }
 
 interface TopListenerAcheivementCardProps {
 	topListenerData: ArtistFragmentTopListeners
 	title: string
-	lifetime: boolean
+	lifetime?: boolean
 }
 
 const Badge: React.SFC = ({ children }) => <BadgeWrap>{children}</BadgeWrap>
@@ -257,6 +257,7 @@ export const TopListenerAcheivementCard: React.SFC<TopListenerAcheivementCardPro
 
 	const { total, user }: any = topListenerData
 
+
 	// const { hrs, mins } = hrsAndMins(total)
 
 	return (
@@ -279,43 +280,9 @@ export const TopListenerAcheivementCard: React.SFC<TopListenerAcheivementCardPro
 
 
 }
-export const ArtistTopListeners: React.SFC<ArtistTopListenersProps> = ({ topListeners }) => {
+export const ArtistTopListeners: React.SFC<ArtistTopListenersProps> = ({ children }) => (
+	<TopListenerRow>
+		{children}
+	</TopListenerRow>
 
-	
-	
-	return (
-
-		<TopListenerRow>
-			{topListeners.map((listenerData: any, index: number) => {
-				const { listener, title }: any = listenerData
-				const { total, user } = listener
-
-				const { hrs, mins } = hrsAndMins(total)
-
-				return index !== 3 ? (
-					<TopListenerCard key={index}>
-						<TimeScopeTitle>
-							{title}
-						</TimeScopeTitle >
-						<div className='inner'>
-							<h2>
-								<Badge>
-									<img src={achievementIconMap[1]} />
-								</Badge>
-							</h2>
-							<h3>{user.displayName ? user.displayName : user.email}</h3>
-
-							{user.photoURL ? <button><img src={user.photoURL} /></button> : null}
-						</div>
-					</TopListenerCard>
-				) : null
-			})
-			}
-
-		</TopListenerRow>
-
-
-
-	);
-}
-
+);

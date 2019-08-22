@@ -40,8 +40,7 @@ ${(props: any) => props.sideNav && css`
 
     &:before {
       left: 0;
-      height: 2rem;
-      width: 2rem;
+    
     }
     
 `}
@@ -80,7 +79,8 @@ export const ArtistInfoDiv = styled.div`
 export const ArtistNameDiv = styled.div`
   /* font-size: ${bgSize / 8}rem; */
   font-weight: 500;
-    position: absolute;
+  position: absolute;
+  min-width: max-content;
   top:0;
   left: 0;
   font-size: 12px;

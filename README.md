@@ -249,13 +249,9 @@ Any modifications to the backend GraphQL resolvers or types must be recompiled o
 
 **On the frontend** this can be accomplished by running `yarn gql-gen`
 
+## Environments
 
-	/*
-			Key Example
-		====================================================================================
+**URLS**
 
-			sk: { S: 'spotify:124053034#life#1kDGbuxWknIKx4FlgWxiSp' },
-  			pk: { S: 'spotify:124053034#artist#life#life' }
-
-		====================================================================================
-		*/
+Test
+  - [GraphQL]: `https://syxopb5w7h.execute-api.us-east-1.amazonaws.com/test/graphiql`

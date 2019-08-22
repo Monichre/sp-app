@@ -63,7 +63,7 @@ export const Artist: React.SFC<RouteComponentProps<{ artistId: string }> & { uid
     const { topListeners }: any = artist
     const { day, week, month, life } = topListeners
 
-    
+
 
     // const somebodySweptAGL: any = scoped.every((listenerData: any) => {
     //   const { listener }: any = listenerData
@@ -75,11 +75,18 @@ export const Artist: React.SFC<RouteComponentProps<{ artistId: string }> & { uid
     return (
       <StatPage {...{ stats, history, path, pathParams }}>
         <ArtistBanner {...{ artist }}>
-          {life ? <TopListenerAcheivementCard topListenerData={life.first} title='All Time Top Listener' lifetime/> : null}
+          {life && life.first ? <TopListenerAcheivementCard topListenerData={life.first} title='All Time Top Listener' lifetime /> : null}
         </ArtistBanner>
+
         <TimeseriesChart {...{ timeSeries }} />
 
-        
+        <ArtistTopListeners>
+          {month && month.first ? <TopListenerAcheivementCard topListenerData={month.first} title='Monthly Top Listener' /> : null}
+
+          {week && week.first ? <TopListenerAcheivementCard topListenerData={week.first} title='weekly Top Listener' /> : null}
+
+          {day && day.first ? <TopListenerAcheivementCard topListenerData={day.first} title='daily Top Listener' /> : null}
+        </ArtistTopListeners>
 
         {/* {somebodySweptAGL ? <h1 style={{ textAlign: 'center', fontSize: '25px', marginTop: '30px' }}>Look at you kid, you sweeping the series. Let somebody else stream would ya</h1> : null} */}
 
