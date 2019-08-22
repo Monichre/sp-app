@@ -40,7 +40,7 @@ const backUntilNewFocus = (history: History) => {
   // }
 }
 
-export const BackLinkWithoutRouter: React.SFC<RouteComponentProps> = ({history}) =>
+export const BackLinkWithoutRouter: React.SFC<RouteComponentProps & any> = ({history}) =>
   <Back onClick={() => backUntilNewFocus(history)} color='white' size='3rem'/>
 
 export const InsightsBackLink: any = withRouter(BackLinkWithoutRouter)
