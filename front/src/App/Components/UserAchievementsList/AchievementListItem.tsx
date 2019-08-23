@@ -14,12 +14,11 @@ const ListItem: any = styled.li`
     align-items: center;
     align-content: center;
     padding: 12px 0;
-    overflow-x: scroll;
     width: 100%;
     position: relative;
 
     ${(props: any) => props.clicked && css`
-        overflow: visible;
+        /* overflow: visible; */
     `}
 
 &::before {

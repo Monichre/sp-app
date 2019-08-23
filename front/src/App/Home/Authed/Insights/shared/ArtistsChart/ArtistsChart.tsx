@@ -3,7 +3,7 @@ import { TPathParams, insightLink, artistLink, navigateTo } from '../functions';
 import { Link, withRouter, BrowserRouter, RouteComponentProps } from 'react-router-dom';
 import { History } from 'history'
 import { PerspectiveDashArtists } from '../../../../../../types';
-import { ResponsiveContainer, BarChart, XAxis, YAxis, Bar, CartesianGrid, Label, Text, LineChart, Line, Tooltip } from 'recharts';
+import { ResponsiveContainer, BarChart, XAxis, YAxis, Bar, CartesianGrid, Label, Text, LineChart, Line, Tooltip, Legend } from 'recharts';
 import { BRAND_GLOBAL_COLOR, BRAND_PERSONAL_COLOR, notLargeQuery } from '../../../../../../shared/media';
 import { Comment } from '../Comment';
 import max from 'ramda/es/max';
@@ -14,6 +14,7 @@ import pipe from 'ramda/es/pipe';
 import {hrsAndMins, decimalToHrsMins} from '../../../../../../lib/durationFormats'
 import { TopListenerYaxis } from './TopListenerYAxis'
 import { CustomArtistTick } from './CustomArtistTick'
+import {normalizeTimeScope} from '../../Main/Overview'
 
 
 export type TickProps = {
@@ -57,24 +58,22 @@ const domainMaxBuilder: (values: PerspectiveDashArtists[]) => (maxValue: number)
 type ChartProps = { pathParams: TPathParams, artists: PerspectiveDashArtists[], height?: any }
 
 const ArtistsChart: React.SFC<RouteComponentProps & ChartProps & UserIdProp> = ({ pathParams, artists, history, height = 70, userId }) => (
-    <ResponsiveContainer width='100%' height={(height * artists.length) + 90}>
+    <ResponsiveContainer width='100%' height={(height * artists.length) + 100}>
     
       <BarChart layout='vertical' data={artists} onClick={navigateToArtist(history, pathParams)}>
         
         <XAxis height={30} type='number' stroke='#fff' orientation='top' xAxisId='top' tickFormatter={decimalToHrsMins} domain={[0, domainMaxBuilder(artists)]}>
-          <Label position='insideTopLeft' offset={0} stroke='#fff'>hours</Label>
+          <Label position='insideTopLeft' dy={-2} offset={0} stroke='#fff'>hours</Label>
         </XAxis>
 
       <YAxis width={150} yAxisId="left" orientation="left" type='category' stroke={BRAND_PERSONAL_COLOR} interval={0} tick={({ payload, ...props }) =>
             <CustomArtistTick {...props} pathParams={pathParams} artist={artists[payload.value].artist} /> }
       />
-{/* stroke={BRAND_PERSONAL_COLOR} */}
-      <YAxis width={75} yAxisId="right" orientation="right" stroke="url(/icons/headphones.svg)" type='category'  interval={0} tick={({ payload, ...props }) =>
-        <TopListenerYaxis {...props} pathParams={pathParams} artist={artists[payload.value].artist} totalTimeListened={artists[payload.value].personal} userId={userId} />}
-      />
-      
-      
-      {/* <Tooltip cursor={{ fill: 'rgba(216, 216, 216, .05)' }} content={<CustomTip />} /> */}
+
+      <YAxis width={75} yAxisId="right" orientation="right" stroke={BRAND_PERSONAL_COLOR} type='category'  interval={0} tick={({ payload, ...props }) =>
+        <TopListenerYaxis {...props} pathParams={pathParams} artist={artists[payload.value].artist} totalTimeListened={artists[payload.value].personal} userId={userId} />}>
+         <Label position='insideBottomRight' dy={4} offset={0} stroke='#fff'>{`Platform Leaders ${normalizeTimeScope(pathParams)}`}</Label>
+        </YAxis>
         
         <Bar dataKey='personal' fill={BRAND_PERSONAL_COLOR} xAxisId='top' yAxisId="left" barSize={5} cursor='pointer' />
       <Bar dataKey='group' fill={BRAND_GLOBAL_COLOR} xAxisId='top' yAxisId="left" barSize={5} cursor='pointer' />

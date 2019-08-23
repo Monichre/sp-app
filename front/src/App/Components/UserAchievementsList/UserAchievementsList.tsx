@@ -135,13 +135,13 @@ export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ use
     }) : []
 
 
-    const da: any = (dailyAchievements && dailyAchievements.length) ? dailyAchievements.slice(0, 3).map(({artistData, achievement}: any) => {
+    // const da: any = (dailyAchievements && dailyAchievements.length) ? dailyAchievements.slice(0, 3).map(({artistData, achievement}: any) => {
 
-        let total: any = hrsAndMins(achievement.total)
-        achievement.formattedTotal = total
+    //     let total: any = hrsAndMins(achievement.total)
+    //     achievement.formattedTotal = total
 
-        return {artistData, achievement}
-    }) : []
+    //     return {artistData, achievement}
+    // }) : []
 
 
 
@@ -150,7 +150,6 @@ export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ use
             <HeaderFlexDiv><img src='/icons/award.svg' /> <h4>Achievements</h4></HeaderFlexDiv>
             <ListStyle>
 
-
                 {la.length ? <AchievementListItem achievementTotal={lifetimeAchievements.length} achievements={la} title='LifeTime ' wasClicked={wasClicked} handleClick={handleClick} /> : null}
 
 
@@ -158,9 +157,6 @@ export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ use
 
 
                 {wa.length ? <AchievementListItem achievementTotal={weeklyAchievements.length} achievements={wa} title='This Week' wasClicked={wasClicked} handleClick={handleClick} /> : null}
-
-
-                {da.length ? <AchievementListItem achievementTotal={dailyAchievements.length} achievements={da} title='Today' wasClicked={wasClicked} handleClick={handleClick} /> : null}
 
 
             </ListStyle>

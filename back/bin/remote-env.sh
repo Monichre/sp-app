@@ -10,6 +10,7 @@ export DynamoEndpoint=https://dynamodb.us-east-1.amazonaws.com
 export TableUser=sp-app-back-$TARGET-TableUser
 export TablePlay=sp-app-back-$TARGET-TablePlay
 export TableStat=sp-app-back-$TARGET-TableStat
+export TableAchievement=sp-app-back-$TARGET-TableAchievement
 
 # streams
 # export StreamCreatePlayFromSpotify=sp-app-back-local-StreamCreatePlayFromSpotify

@@ -53,5 +53,55 @@ const BlockTitleLink = styled(Link)`
   ${BlockTitleStyles}
 `
 
+export const SeeAllLinkInner: any = styled.div`
+   position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 3;
+    -webkit-transition: .4s ease;
+    transition: .4s ease;
+    padding-bottom: 6px;
+    padding-left: 6px;
+    color: #fff;
+    height: 2.5em;
+    width: 2.5em;
+    -webkit-transform-style: preserve-3d;
+    -ms-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    border-radius: 0 0% 100% 0;
+
+        display: flex;
+    justify-content: center;
+    align-items: center;
+    
+`
+
+export const SeeAllLink: any = styled(Link)`
+
+  height: 2.5em;
+  transition: all .4s ease;
+  width: 2.5em;
+  top: 0;
+  right: 0;
+  position: absolute;
+  background-color: rgba(216,216,216,.05);
+  /* background-image: linear-gradient(to bottom,#64d6ee 0%,#ffa726 100%); */
+  border-radius: 0 0% 0% 100%;
+
+&:hover {
+  background-color: rgba(216,216,216,.08);
+}
+
+a {
+  position: absolute;
+}
+
+`
+
+export const SeeAllIcon: any = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#64d6ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="feather feather-arrow-up-right"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+)
+
+
 export const BlockTitle: React.SFC<{to?: string}> = ({children, to}) =>
   to ? <BlockTitleLink {...{to}}>{children}</BlockTitleLink> : <BlockTitleView>{children}</BlockTitleView>

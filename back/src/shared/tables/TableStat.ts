@@ -59,11 +59,17 @@ export type Stat = {
 	periodType: PeriodType
 	periodValue: string
 	playDurationMs: number
+
 }
+
 
 export type StatTotal = Stat
 export type StatArtist = Stat & {
-	artist: { name: string; genres: string[] }
+	artist: {
+		name: string
+		genres: string[]
+	}
+	
 }
 
 export type StatGenre = Stat & {
@@ -469,7 +475,9 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 		periodValue,
 		playDurationMs,
 		artist
-	}: StatArtist) => {
+	}: any) => {
+		console.log('artist', artist)
+		const artistId = artist.id
 		return await doc
 			.update({
 				TableName,
@@ -477,8 +485,8 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 					pk: makePk(uid, relationType, periodType, periodValue),
 					sk: makeSk(uid, periodType, relationKey)
 				},
-				UpdateExpression: 'ADD playDurationMs :v SET artist = :a',
-				ExpressionAttributeValues: { ':v': playDurationMs, ':a': artist }
+				UpdateExpression: 'ADD playDurationMs :v SET artist = :a, artistId = :id',
+				ExpressionAttributeValues: { ':v': playDurationMs, ':a': artist, ':id': artistId}
 			})
 			.promise()
 	}

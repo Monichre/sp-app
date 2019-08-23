@@ -1,0 +1,2 @@
+- [] Erratic changing of badges connected to artists
+    - Explain the time perspective contingent display of user achievements

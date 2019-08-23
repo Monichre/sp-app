@@ -1,5 +1,6 @@
 import * as AWS from 'aws-sdk';
 import { verifyEnv } from '../src/shared/env';
+import * as fs from 'fs'
 
 const scanAll = async (doc: AWS.DynamoDB.DocumentClient, TableName: string) => {
   let ExclusiveStartKey = null
@@ -11,6 +12,9 @@ const scanAll = async (doc: AWS.DynamoDB.DocumentClient, TableName: string) => {
     const out = JSON.stringify(result.Items, null, 2)
     const trimmed = out.slice(1, out.length-1) // get rid of the wrapping []
     console.log(trimmed)
+    const writer = fs.createWriteStream('achievements.txt')
+    writer.write(JSON.stringify(trimmed))
+    
     ExclusiveStartKey = result.LastEvaluatedKey
     if (ExclusiveStartKey) {
       console.log(',')

@@ -6,7 +6,7 @@ import { notLargeQuery, largeQuery } from '../../../../../shared/media';
 import styled from 'styled-components';
 import { VerticalSpacer } from '../../../../../shared/VerticalSpacer';
 import { ArtistsChartBlock } from '../shared/ArtistsChart';
-import { BlockTitle, BlockTitleMore } from '../shared/BlockTitle';
+import { BlockTitle, BlockTitleMore, SeeAllLink, SeeAllLinkInner, SeeAllIcon } from '../shared/BlockTitle';
 import { GenresChartBlock } from '../shared/GenresChart';
 import { TimeseriesChart } from '../shared/TimeseriesChart';
 import { suspensefulHook } from '../../../../../lib/suspensefulHook';
@@ -41,6 +41,18 @@ const Row = styled.div`
   `}
 `
 
+export const normalizeTimeScope = (pathParams: any) => {
+    const normalizetimeScopeMap: any = {
+    thisWeek: 'This Week',
+    thisMonth: 'This Month',
+    thisYear: 'This Year',
+    life: 'Life Time',
+
+  }
+  const { timeScope, perspective }: any = pathParams
+
+  return normalizetimeScopeMap[timeScope]
+}
 
 
 export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams: TPathParams }> = ({ uid, pathParams }) => {
@@ -53,16 +65,9 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
     }
   } = suspensefulHook(useInsightsDash({ variables: { uid }, suspend: true, pollInterval: 10000 }))
 
-  const normalizetimeScopeMap: any = {
-    thisWeek: 'This Week',
-    thisMonth: 'This Month',
-    thisYear: 'This Year',
-    life: 'Life Time',
-
-  }
   const { timeScope, perspective }: any = pathParams
   const translatedPerspective: string = perspective === 'personal' ? 'Your' : 'Everyone'
-  const period = normalizetimeScopeMap[timeScope]
+  const period = normalizeTimeScope(pathParams)
 
   const genreContentSummary = `We're currently building out new features for platform genre leaders`
   
@@ -75,15 +80,29 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
     <TimeseriesChart {...{ timeSeries, showOnly: pathParams.perspective }} />
     <Row>
       <AchievementHoverSummary content={artistContentSummary} userId={uid} achievementsGraph period={period}>
+       <SeeAllLink to={`${insightLink(pathParams)}/artists`}>
+                <SeeAllLinkInner>
+                <SeeAllIcon />
+      </SeeAllLinkInner>
+          </SeeAllLink>
+
         <ArtistsChartBlock {...{ artists, pathParams }} userId={uid}>
-          <BlockTitle to={`${insightLink(pathParams)}/artists`}>{translatedPerspective} Top Artists {period} <BlockTitleMore>see all</BlockTitleMore></BlockTitle>
+          <BlockTitle>
+          {translatedPerspective} Top Artists {period}
+          </BlockTitle>
         </ArtistsChartBlock>
       </AchievementHoverSummary>
       
 
       <AchievementHoverSummary content={genreContentSummary} userId={uid}>
+       <SeeAllLink to={`${insightLink(pathParams)}/genres`}>
+                <SeeAllLinkInner>
+                <SeeAllIcon />
+      </SeeAllLinkInner>
+          </SeeAllLink>
+
         <GenresChartBlock {...{ genres, pathParams }}>
-          <BlockTitle to={`${insightLink(pathParams)}/genres`}>Top Genres <BlockTitleMore>see all</BlockTitleMore></BlockTitle>
+          <BlockTitle>Top Genres</BlockTitle>
         </GenresChartBlock>
       </AchievementHoverSummary>
       
@@ -98,3 +117,6 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
     <ReactTooltip place="top" type="dark" effect="float" />
   </>
 }
+
+
+273990
