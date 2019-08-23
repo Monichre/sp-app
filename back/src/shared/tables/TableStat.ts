@@ -161,6 +161,7 @@ export type TTableStat = {
 	getArtistInfo: (artistId: string) => Promise<Artist>
 	getTopArtists: (topKeys: ArtistAglTopKeys) => Promise<TopArtistsRow[]>
 	getArtistStat: (artistStatKeys: ArtistStatKeys) => Promise<number>
+	getArtistTopListeners: (artistId: string) => Promise<any[]>
 	writeTotalStat: (
 		stat: StatTotal
 	) => Promise<PromiseResult<UpdateItemOutput, AWSError>>
@@ -293,6 +294,36 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 				d.Items.map(i => ({ genre: i.genre, playDurationMs: i.playDurationMs }))
 			)
 			.then(byTimeThenGenre)
+	}
+
+
+	const getArtistTopListeners = async (artistAchievementsId: string) => {
+		const params = {
+			TableName,
+			Limit: 5,
+			KeyConditionExpression: `artistAchievementsId = :id`,
+			IndexName: 'TopListenerGSI',
+			ScanIndexForward: false, // means descending
+			ExpressionAttributeValues: {
+				':id': artistAchievementsId
+			}
+		}
+
+		const topListeners: any = await doc
+			.query(params)
+			.promise()
+			.then(res => res.Items.map(data => data ? ({
+				sk: data.sk,
+				pk: data.pk,
+				artist: data.artist,
+				artistAchievementsId: artistAchievementsId,
+				userId: data.pk.split('#')[0],
+				total: data.playDurationMs
+			}) : null))
+
+			console.log('topListeners', topListeners)
+
+			return {topListeners}
 	}
 
 	const getGenreStat = async ({
@@ -476,8 +507,9 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 		playDurationMs,
 		artist
 	}: any) => {
-		console.log('artist', artist)
-		const artistId = artist.id
+		
+		const artistAchievementsId = uid.includes('spotify') ? `${artist.id}#${periodType}#${periodValue}#user` :  `${artist.id}#${periodType}#${periodValue}`
+		
 		return await doc
 			.update({
 				TableName,
@@ -485,8 +517,8 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 					pk: makePk(uid, relationType, periodType, periodValue),
 					sk: makeSk(uid, periodType, relationKey)
 				},
-				UpdateExpression: 'ADD playDurationMs :v SET artist = :a, artistId = :id',
-				ExpressionAttributeValues: { ':v': playDurationMs, ':a': artist, ':id': artistId}
+				UpdateExpression: 'ADD playDurationMs :v SET artist = :a, artistAchievementsId = :id',
+				ExpressionAttributeValues: { ':v': playDurationMs, ':a': artist, ':id': artistAchievementsId}
 			})
 			.promise()
 	}
@@ -518,6 +550,7 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 		makeSk,
 		periodsFor,
 		getTimeseries,
+		getArtistTopListeners,
 		getStat,
 		getTopGenres,
 		getGenreStat,

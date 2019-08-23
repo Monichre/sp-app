@@ -642,7 +642,7 @@ resources:
             AttributeType: S
           - AttributeName: playDurationMs
             AttributeType: N
-          - AttributeName: artistId
+          - AttributeName: artistAchievementsId
             AttributeType: S
         KeySchema:
           - AttributeName: pk
@@ -663,7 +663,7 @@ resources:
             ProjectionType: ALL
         - IndexName: TopListenerGSI
           KeySchema:
-            - AttributeName: artistId
+            - AttributeName: artistAchievementsId
               KeyType: HASH
             - AttributeName: playDurationMs
               KeyType: RANGE

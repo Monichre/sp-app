@@ -90,76 +90,92 @@ export const handler: DynamoDBStreamHandler | any = async (event, context) => {
 		const recordKeys = extractKeys(Keys)
 
 		if (artist && artistInfo) {
-			const {
-				byDay,
-				byWeek,
-				byMonth,
-				byLifetime
-			}: any = await organizeUserStatsByPeriod(
-				valids,
-				artistInfo,
-				ApproximateCreationDateTime,
-				tableStat,
-				tableAchievement
+			const { day, week, month, life } = tableAchievement.periodsFor(
+				ApproximateCreationDateTime
 			)
+			const artistAchievementsIdDay = `${artistInfo.id}#day#${day}#user`
+			const artistAchievementsIdWeek = `${artistInfo.id}#week#${week}#user`
+			const artistAchievementsIdMonth = `${artistInfo.id}#month#${month}#user`
+			const artistAchievementsIdLife = `${artistInfo.id}#month#${month}#user`
+
+			const dayData = await tableStat.getArtistTopListeners(artistAchievementsIdDay)
+			const weekData = await tableStat.getArtistTopListeners(artistAchievementsIdWeek)
+			const monthData = await tableStat.getArtistTopListeners(artistAchievementsIdMonth)
+			const lifeData = await tableStat.getArtistTopListeners(artistAchievementsIdLife)
+
+			console.log('dayData', dayData)
+			console.log('weekData', weekData)
+
+			// const {
+			// 	byDay,
+			// 	byWeek,
+			// 	byMonth,
+			// 	byLifetime
+			// }: any = await organizeUserStatsByPeriod(
+			// 	valids,
+			// 	artistInfo,
+			// 	ApproximateCreationDateTime,
+			// 	tableStat,
+			// 	tableAchievement
+			// )
 
 
-			let dailyTopAchievers
-			let weeklyTopAchievers
-			let monthlyTopAchievers
-			let lifetimeTopAchievers
+			// let dailyTopAchievers
+			// let weeklyTopAchievers
+			// let monthlyTopAchievers
+			// let lifetimeTopAchievers
 
-			if (byDay) {
-				dailyTopAchievers = byDay.length
-					? await bulkRecordUserAchievements(
-							byDay,
-							artistInfo,
-							recordKeys,
-							tableAchievement
-					  )
-					: null
+			// if (byDay) {
+			// 	dailyTopAchievers = byDay.length
+			// 		? await bulkRecordUserAchievements(
+			// 				byDay,
+			// 				artistInfo,
+			// 				recordKeys,
+			// 				tableAchievement
+			// 		  )
+			// 		: null
 				
-			}
-			if (byWeek) {
-				weeklyTopAchievers = byWeek.length
-					? await bulkRecordUserAchievements(
-							byWeek,
-							artistInfo,
-							recordKeys,
-							tableAchievement
-					  )
-					: null
+			// }
+			// if (byWeek) {
+			// 	weeklyTopAchievers = byWeek.length
+			// 		? await bulkRecordUserAchievements(
+			// 				byWeek,
+			// 				artistInfo,
+			// 				recordKeys,
+			// 				tableAchievement
+			// 		  )
+			// 		: null
 				
-			}
+			// }
 
-			if (byMonth) {
-				monthlyTopAchievers = byMonth.length
-					? await bulkRecordUserAchievements(
-							byMonth,
-							artistInfo,
-							recordKeys,
-							tableAchievement
-					  )
-					: null
-			}
+			// if (byMonth) {
+			// 	monthlyTopAchievers = byMonth.length
+			// 		? await bulkRecordUserAchievements(
+			// 				byMonth,
+			// 				artistInfo,
+			// 				recordKeys,
+			// 				tableAchievement
+			// 		  )
+			// 		: null
+			// }
 
-			if (byLifetime) {
-				lifetimeTopAchievers = byLifetime.length
-					? await bulkRecordUserAchievements(
-							byLifetime,
-							artistInfo,
-							recordKeys,
-							tableAchievement
-					  )
-					: null
-			}
+			// if (byLifetime) {
+			// 	lifetimeTopAchievers = byLifetime.length
+			// 		? await bulkRecordUserAchievements(
+			// 				byLifetime,
+			// 				artistInfo,
+			// 				recordKeys,
+			// 				tableAchievement
+			// 		  )
+			// 		: null
+			// }
 
-			return {
-				dailyTopAchievers,
-				weeklyTopAchievers,
-				monthlyTopAchievers,
-				lifetimeTopAchievers
-			}
+			// return {
+			// 	dailyTopAchievers,
+			// 	weeklyTopAchievers,
+			// 	monthlyTopAchievers,
+			// 	lifetimeTopAchievers
+			// }
 		}
 	}
 
