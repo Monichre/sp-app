@@ -1,175 +1,24 @@
 import * as AWS from 'aws-sdk'
 import * as moment from 'moment'
 import * as R from 'ramda'
-import { UpdateItemOutput } from 'aws-sdk/clients/dynamodb'
-import { PromiseResult } from 'aws-sdk/lib/request'
-import { AWSError, Response } from 'aws-sdk'
+import { Timeseries } from '../../fns/graphql/types';
+import { TTableAchievement, StatRecordPreAchievementMetaDataKeyParams, KeyData, GetUserAchievementItem, TopArtistsRow, TimeseriesKeys, UserAchievementByArtistParams, AchievementRetrievalKeys, AKKeyRetrievalData, ArtistAchievementRetrievalKeys } from '../SharedTypes';
+import { PeriodType } from './TableStat';
+import { KeyMaker } from '../keyMaker';
 
-export type PeriodType =
-	| 'day'
-	| 'dow'
-	| 'week'
-	| 'month'
-	| 'moy'
-	| 'year'
-	| 'life'
+/*=============================================
+	=            NOTES ON KEYS            =
 
-export type RelationType = 'total' | 'artist' | 'genre' | 'user'
+	ak: AchievementType#AchievementValue#RelationType#RelationTypeId#PeriodType#PeriodValue. Ex: topListener#first#artist#4c2Fb5kfVRzodXZvitxnWk#month#2019-08
 
-export type ArtistStatKeys = {
-	uid: string
-	artistId: string
-	periodType: PeriodType
-	periodValue: string
-}
+	pk: AchievementType#AchievementValue#RelationType#PeriodType#PeriodValue. Ex: topListener#first#artist#month#2019-08
 
-export type AchievementType = 'topListener' | 'firstToStream'
+	uk: UserId#AchievementType#AchievementValue#RelationType#PeriodType#PeriodValue. Ex: spotify:124053034#topListener#first#artist#month#2019-08
 
-export type AchievementValue = 'first' | 'second' | 'third'
+	auk: ArtistId#PeriodType#PeriodValue#RelationType(User)#RelationTypeId. Ex: 4c2Fb5kfVRzodXZvitxnWk#month#2019-08#user#spotify:124053034
+	
 
-export type Achievement = {
-	keyData: any
-	total: number
-	lastUpdated: string
-	user: any
-	artist: Artist
-}
-
-export type GetUserAchievementItem = {
-	lastUpdated: any
-	total: number
-	fk: string
-	artist: any
-	sk: string
-	pk: string
-	user: any
-}
-
-export type AchievementTotal = number
-export type AchievementArtist = Achievement & {
-	artist: { name: string; id: string }
-	playDurationMs: number
-}
-
-type UserAchievementByArtistParams = {
-	aglPK: string
-	userFK: string
-}
-
-export type KeyData = {
-	sk: string
-	pk: string
-	fk?: string
-}
-
-type TopListenerParameterType = KeyData & {}
-
-type TimeseriesKeys = {
-	uid: string
-	relationType: RelationType
-	relationId: string
-	periodType: PeriodType
-	startPeriod: string
-	endPeriod: string
-}
-type Timeseries = {
-	playDurationMs: number
-	period: string
-}
-
-/**
- *
- * cc: Type Declaration of TableAchievement class
- *
- */
-export type TTableAchievement = {
-	makeKeys: Function
-
-	periodsFor: (
-		isoDateString: string
-	) => {
-		day: string
-		dow: string
-		week: string
-		month: string
-		moy: string
-		year: string
-		life: string
-	}
-	getTimeseries: (timeseriesKeys: TimeseriesKeys) => Promise<Timeseries[]>
-
-	makeFk: (
-		artistId: string,
-		achievementType: AchievementType,
-		achievementValue: AchievementValue,
-		periodType: PeriodType,
-		periodValue: string,
-		date: string,
-		// Might need to add the lastUpdated field to this filter key?
-		uid: string
-	) => string
-
-	createOrModifyAchievement: (
-		achievement: Achievement
-	) => Promise<PromiseResult<UpdateItemOutput, AWSError>>
-
-	getArtistTopListener: ({
-		sk,
-		pk
-	}: KeyData) => Promise<PromiseResult<any, AWSError>>
-
-	getUserAchievements: (
-		pk: string,
-		fk: string
-	) => Promise<
-		PromiseResult<
-			any | [GetUserAchievementItem] | GetUserAchievementItem,
-			AWSError
-		>
-	>
-
-	getUserAchievementsByArtist: ({
-		aglPK,
-		userFK
-	}: UserAchievementByArtistParams) => Promise<PromiseResult<any, AWSError>>
-}
-
-export type Stat = {
-	uid: string
-	relationType: RelationType
-	relationKey: string
-	periodType: PeriodType
-	periodValue: string
-	playDurationMs: number
-}
-
-export type StatTotal = Stat
-export type StatArtist = Stat & {
-	artist: { name: string; genres: string[] }
-}
-
-export type StatGenre = Stat & {
-	genre: string
-}
-type Artist = {
-	id: string
-	name: string
-	images: Image[]
-	external_urls: SpotifyUrl
-	genres: string[]
-	topListeners?: Object[]
-}
-type SpotifyUrl = {
-	spotify: string
-}
-type Image = {
-	url: string
-}
-
-type TopArtistsRow = {
-	artist: Artist
-	playDurationMs: number
-}
+=============================================*/
 
 const byTimeThenArtistName = R.sortWith<TopArtistsRow>([
 	R.descend(R.prop('playDurationMs')),
@@ -186,7 +35,7 @@ export const TableAchievement = (
 		endpoint
 	})
 
-	
+
 	type EnrichedKeyMakerParams = {
 		relationType: 'artist'
 		periodType: PeriodType
@@ -196,33 +45,73 @@ export const TableAchievement = (
 		achievementValue: 'first' | 'second' | 'third'
 		uid?: string | null
 	}
-	const keyMaker = (args: any) => [...args].join('#')
-	const makeKeys = ({
+
+	const joinKeyParams = (args: any) => [...args].join('#')
+
+	const makeAchievementCreationKeys = ({ achievementType, achievementValue, pk, artistAchievementsId }: StatRecordPreAchievementMetaDataKeyParams) => {
+
+		const splitPK: string[] = pk.split('#')
+		const userId = splitPK[0]
+		let aID: any = artistAchievementsId.split('#') // length 4
+
+		aID.length = 3
+		aID = aID.join('#')
+
+		const pkFragment = splitPK.slice(1, splitPK.length).join('#')
+		const newPK = `${achievementType}#${achievementValue}#${pkFragment}#${splitPK.pop()}`
+		const ak = `${achievementType}#${achievementValue}#artist#${aID}`
+		const auk = `${artistAchievementsId}#${userId}` // cc: artistUserKey
+		const uk = `${userId}#${achievementType}#${achievementValue}#${pkFragment}#${splitPK.pop()}`
+
+
+		return {
+			pk: newPK,
+			ak,
+			auk,
+			uk
+		}
+
+	}
+
+	const makeAKRetrievalKeys = ({
 		periodType,
 		periodValue,
 		artistId,
 		achievementType,
-		achievementValue,
-		uid = null
-	}: EnrichedKeyMakerParams) => {
-		const pk = keyMaker([
-			achievementType,
-			achievementValue,
+		achievementValue
+	}: AKKeyRetrievalData) => {
+		const { makeAKRetrievalKeys } = KeyMaker()
+
+		return makeAKRetrievalKeys({
 			periodType,
-			periodValue
-		])
-		const sk = keyMaker([
+			periodValue,
 			artistId,
-			periodType,
 			achievementType,
 			achievementValue
-		])
+		})
 
-		return {
-			sk,
-			pk
-		}
 	}
+
+	const makeAchievementRetrievalKeys = ({
+		periodType,
+		periodValue,
+		artistId,
+		achievementType,
+		achievementValue
+	}: AchievementRetrievalKeys) => {
+		// const { makeAchievementRetrievalKeys } = KeyMaker()
+
+		// return makeAchievementRetrievalKeys({
+		// 	periodType,
+		// 	periodValue,
+		// 	artistId,
+		// 	achievementType,
+		// 	achievementValue
+		// })
+
+
+	}
+
 
 
 	/**
@@ -231,24 +120,6 @@ export const TableAchievement = (
 	 *
 	 */
 
-	const makeFk = (
-		artistId: string,
-		achievementType: AchievementType,
-		achievementValue: AchievementValue,
-		periodType: PeriodType,
-		periodValue: string,
-		date: string,
-		uid: string
-	) =>
-		[
-			uid,
-			achievementType,
-			achievementValue,
-			periodType,
-			periodValue,
-			date,
-			artistId
-		].join('#')
 
 	const periodsFor = (isoDateString: string) => {
 		const m = moment.parseZone(isoDateString)
@@ -263,70 +134,73 @@ export const TableAchievement = (
 		}
 	}
 
-	const getTimeseries = async ({
-		uid,
-		relationId,
-		relationType,
-		periodType,
-		startPeriod,
-		endPeriod
-	}: TimeseriesKeys): Promise<Timeseries[]> => {
-		const sk = [uid, periodType, relationId].join('#')
-		const startPk = [uid, relationType, periodType, startPeriod].join('#')
-		const endPk = [uid, relationType, periodType, endPeriod].join('#')
-		// console.log('getting stats for', { sk, startPk, endPk })
+	// const getTimeseries = async ({
+	// 	uid,
+	// 	relationId,
+	// 	relationType,
+	// 	periodType,
+	// 	startPeriod,
+	// 	endPeriod
+	// }: TimeseriesKeys): Promise<Timeseries[]> => {
+	// 	const sk = [uid, periodType, relationId].join('#')
+	// 	const startPk = [uid, relationType, periodType, startPeriod].join('#')
+	// 	const endPk = [uid, relationType, periodType, endPeriod].join('#')
+	// 	// console.log('getting stats for', { sk, startPk, endPk })
+
+	// const params = {
+	// 	TableName,
+	// 	// Limit,
+	// 	KeyConditionExpression: `sk = :sk and pk BETWEEN :s and :e`,
+	// 	IndexName: 'GSIReverse',
+	// 	// ScanIndexForward: false,
+	// 	ExpressionAttributeValues: {
+	// 		':sk': sk,
+	// 		':s': startPk,
+	// 		':e': endPk
+	// 	}
+	// }
+	// 	const result = await doc
+	// 		.query(params)
+	// 		.promise()
+	// 		.then(d =>
+	// 			d.Items.map(i => ({
+	// 				// artist: i.artist,
+	// 				period: i.pk.split('#')[3],
+	// 				playDurationMs: i.playDurationMs
+	// 			}))
+	// 		)
+	// 		.then(byPeriod)
+
+	// 	return result
+	// }
+
+
+	// cc: ArtistAchievementHoldersGSI#2; Uses the ArtistAchievementHoldersGSI. We actually don't need the pk here
+	// cc: TODO: Remove PK
+	const getArtistAchievementHolders = async ({ pk, ak }: ArtistAchievementRetrievalKeys) => {
 
 		const params = {
 			TableName,
-			// Limit,
-			KeyConditionExpression: `sk = :sk and pk BETWEEN :s and :e`,
-			IndexName: 'GSIReverse',
-			// ScanIndexForward: false,
+			Limit: 3,
+			KeyConditionExpression: `ak = :ak`,
+			IndexName: 'ArtistAchievementHoldersGSI',
+			ScanIndexForward: false, // means descending
 			ExpressionAttributeValues: {
-				':sk': sk,
-				':s': startPk,
-				':e': endPk
+				':ak': ak
 			}
 		}
-		const result = await doc
+
+		return await doc
 			.query(params)
 			.promise()
-			.then(d =>
-				d.Items.map(i => ({
-					// artist: i.artist,
-					period: i.pk.split('#')[3],
-					playDurationMs: i.playDurationMs
-				}))
-			)
-			.then(byPeriod)
+			.then((res: any) => {
+				console.log('TCL: getArtistAchievementHolders -> res', res)
+				return res.Items && res.Items.length ? res.Items : []
 
-		return result
-	}
-
-	/**
-	 *
-	 * cc:Achievements Lambda#5; Function createOrModifyAchievement;
-	 *
-	 */
-
-	const getArtistTopListener = async ({ sk, pk }: KeyData) => {
-
-		const topListener = await doc
-			.get({
-				TableName,
-				Key: {
-					pk: pk,
-					sk: sk
-				}
 			})
-			.promise()
-        console.log('TCL: getArtistTopListener -> topListener', topListener)
-			
+	}
 
-		return topListener.Item ? topListener.Item : null
-	}
-	{
-	}
+
 	const getUserAchievementsByArtist = async ({
 		aglPK,
 		userFK
@@ -353,35 +227,23 @@ export const TableAchievement = (
 			})
 	}
 
-	const getUserAchievements = async (pk: string, fk: string) => {
-		return await doc
-			.get({
-				TableName,
-				// IndexName: 'UserTimeIndex',
-				Key: {
-					pk: pk,
-					fk: fk
-				}
-				// KeyConditionExpression: 'pk = :p AND fk = :f',
-				// ExpressionAttributeValues: {
-				// 	':p': pk,
-				// 	':f': fk
-				// }
-			})
-			.promise()
-			.then((res: any) => {
-            console.log('TCL: getUserAchievements -> res', res)
-				// const achievements:
-				// 	| [GetUserAchievementItem]
-				// 	| GetUserAchievementItem
-				// 	| [] = res && res.Items && res.Items.length ? res.Items : []
-				// // console.log(
-				// // 	'TCL: user achievements from db table achievements',
-				// // 	achievements
-				// // )
+	const getUserAchievements = async (pk: string, uk: string) => {
 
-				// return achievements
-			})
+		const params = {
+			TableName,
+			KeyConditionExpression: `pk = :pk AND uk = :uk`,
+			IndexName: 'UserAchievementGSI',
+			ScanIndexForward: false, // means descending
+			ExpressionAttributeValues: {
+				':pk': pk,
+				':uk': uk
+			}
+		}
+
+		return await doc.query(params).promise().then((res: any) => {
+			console.log('TCL: getUserAchievements -> res', res)
+			return res.Items && res.Items.length ? res.Items : []
+		})
 	}
 
 	/**
@@ -390,35 +252,42 @@ export const TableAchievement = (
 	 *
 	 */
 
-	const createOrModifyAchievement = async ({
+	const createOrModifyAchievement: any = async (
 		keyData,
-		total,
-		lastUpdated,
-		user,
-		artist
-	}: Achievement) => {
-		return await doc
+		achievementData
+	) => {
+
+		// Super hacky bullshit to get Typescript to fuck off while also
+		// providing type safety 
+
+		const Item: Achievement = {
+			...keyData,
+			...achievementData
+		}
+
+		const achievement: Achievement = await doc
 			.put({
 				TableName,
 				Item: {
 					...keyData,
-					total,
-					lastUpdated,
-					user,
-					artist
+					...achievementData
 				}
 			})
 			.promise()
+			.then((res: any) => Item)
+
+		return achievement
 	}
 
 	return {
-		makeKeys,
-		makeFk,
+		makeAchievementCreationKeys,
+		makeAKRetrievalKeys,
 		periodsFor,
-		getTimeseries,
-		getArtistTopListener,
+		// makeAchievementRetrievalKeys,
+		getArtistAchievementHolders,
 		getUserAchievementsByArtist,
 		getUserAchievements,
 		createOrModifyAchievement
 	}
 }
+// getTimeseries,

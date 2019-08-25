@@ -8,12 +8,9 @@ import {
 import * as moment from 'moment'
 import { TableUser } from '../../../../shared/tables/TableUser'
 import { verifyEnv } from '../../../../shared/env'
-import { KeyData } from '../../../../shared/tables/TableAchievement'
+
 import {
-	InsightsDashResponseResolvers,
-	InsightsDashResponse,
-	TimescopeTops,
-	PerspectiveTops,
+
 	InsightsArtistsResponse,
 	TimescopeTopArtists,
 	TopArtistStat,
@@ -21,9 +18,9 @@ import {
 } from '../../types'
 
 import {
-	TableAchievement,
-	TTableAchievement
+	TableAchievement
 } from '../../../../shared/tables/TableAchievement'
+import { TTableAchievement } from '../../../../shared/SharedTypes';
 
 const typeDefs = `
 type Query {

@@ -8,8 +8,7 @@ import {
 } from '../types'
 import { TableUser } from '../../../shared/tables/TableUser'
 import {
-	TableAchievement,
-	Achievement
+	TableAchievement
 } from '../../../shared/tables/TableAchievement'
 import * as moment from 'moment'
 import { QueueStartHarvestUser } from '../../../shared/queues'

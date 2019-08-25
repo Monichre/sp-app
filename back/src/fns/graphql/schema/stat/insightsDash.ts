@@ -8,9 +8,7 @@ import {
 import * as moment from 'moment'
 import { TableUser } from '../../../../shared/tables/TableUser'
 import {
-	TableAchievement,
-	TTableAchievement,
-	KeyData
+	TableAchievement
 } from '../../../../shared/tables/TableAchievement'
 import { verifyEnv } from '../../../../shared/env'
 import {
@@ -19,6 +17,7 @@ import {
 	QueryResolvers
 } from '../../types'
 import { timeSeries } from './shared/timeSeries'
+import { TTableAchievement } from '../../../../shared/SharedTypes';
 
 const typeDefs = `
 type Query {

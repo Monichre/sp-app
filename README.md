@@ -253,6 +253,27 @@ Any modifications to the backend GraphQL resolvers or types must be recompiled o
 
 **URLS**
 
+
+## Notes on Keys
+
+**TableAchievement**
+
+
+```
+/*=============================================
+	=            NOTES ON KEYS            =
+
+	ak: AchievementType#AchievementValue#RelationType#RelationTypeId#PeriodType#PeriodValue. Ex: topListener#first#artist#4c2Fb5kfVRzodXZvitxnWk#month#2019-08
+	pk: AchievementType#AchievementValue#RelationType#PeriodType#PeriodValue. Ex: topListener#first#artist#month#2019-08
+	uk: UserId#AchievementType#AchievementValue#RelationType#PeriodType#PeriodValue. Ex: spotify:124053034#topListener#first#artist#month#2019-08
+	auk: ArtistId#PeriodType#PeriodValue#RelationType(User)#RelationTypeId. Ex: 4c2Fb5kfVRzodXZvitxnWk#month#2019-08#user#spotify:124053034
+	
+
+=============================================*/
+
+```
+
 Test
   - [GraphQL]: `https://syxopb5w7h.execute-api.us-east-1.amazonaws.com/test/graphiql`
 http://sp-app-front-test-frontend.s3-website-us-east-1.amazonaws.com/insights/thisWeek/global/personal/artists
+

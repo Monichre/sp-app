@@ -686,42 +686,42 @@ resources:
             AttributeDefinitions:
               - AttributeName: pk # Will be Artist's pk/spotify uid
                 AttributeType: S
-              - AttributeName: sk 
+              - AttributeName: ak 
                 AttributeType: S
-              - AttributeName: fk 
+              - AttributeName: uk 
+                AttributeType: S
+              - AttributeName: auk 
                 AttributeType: S
               - AttributeName: total
                 AttributeType: N
             KeySchema:
               - AttributeName: pk
                 KeyType: HASH
-              - AttributeName: sk
+              - AttributeName: auk
                 KeyType: RANGE
             BillingMode: PAY_PER_REQUEST
             StreamSpecification:
               StreamViewType: NEW_AND_OLD_IMAGES
             GlobalSecondaryIndexes:
-            - IndexName: ArtistUserIndex
+            - IndexName: ArtistUserAchievementGSI
               KeySchema:
-                - AttributeName: sk
+                - AttributeName: auk
                   KeyType: HASH
-                - AttributeName: fk
-                  KeyType: RANGE
               Projection:
                 ProjectionType: ALL
-            - IndexName: ArtistTopListenersIndex
+            - IndexName: ArtistAchievementHoldersGSI # //: cc ArtistAchievementHoldersIndex#1
               KeySchema:
-                - AttributeName: sk
+                - AttributeName: ak
                   KeyType: HASH
                 - AttributeName: total
                   KeyType: RANGE
               Projection:
                 ProjectionType: ALL
-            - IndexName: UserTimeIndex
+            - IndexName: UserAchievementGSI
               KeySchema:
                 - AttributeName: pk
                   KeyType: HASH
-                - AttributeName: fk
+                - AttributeName: uk
                   KeyType: RANGE
               Projection:
                 ProjectionType: ALL

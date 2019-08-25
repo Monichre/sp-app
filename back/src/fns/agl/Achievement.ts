@@ -1,0 +1,5 @@
+class Achievement {
+    constructor(args) {
+        
+    }
+}

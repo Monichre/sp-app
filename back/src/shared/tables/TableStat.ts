@@ -4,7 +4,7 @@ import * as R from 'ramda'
 import { UpdateItemOutput } from 'aws-sdk/clients/dynamodb'
 import { PromiseResult } from 'aws-sdk/lib/request'
 import { AWSError } from 'aws-sdk'
-import { TTableAchievement } from './TableAchievement'
+import { StatRecordTopListenerDataWithUserId, TTableAchievement } from '../SharedTypes';
 
 export type PeriodType =
 	| 'day'
@@ -161,7 +161,7 @@ export type TTableStat = {
 	getArtistInfo: (artistId: string) => Promise<Artist>
 	getTopArtists: (topKeys: ArtistAglTopKeys) => Promise<TopArtistsRow[]>
 	getArtistStat: (artistStatKeys: ArtistStatKeys) => Promise<number>
-	getArtistTopListeners: (artistId: string) => Promise<any[]>
+	getArtistTopListeners: (artistAchievementsId: string) => Promise<StatRecordTopListenerDataWithUserId[]>
 	writeTotalStat: (
 		stat: StatTotal
 	) => Promise<PromiseResult<UpdateItemOutput, AWSError>>
@@ -300,7 +300,7 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 	const getArtistTopListeners = async (artistAchievementsId: string) => {
 		const params = {
 			TableName,
-			Limit: 5,
+			Limit: 3,
 			KeyConditionExpression: `artistAchievementsId = :id`,
 			IndexName: 'TopListenerGSI',
 			ScanIndexForward: false, // means descending
@@ -323,7 +323,7 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 
 			console.log('topListeners', topListeners)
 
-			return {topListeners}
+			return topListeners
 	}
 
 	const getGenreStat = async ({
@@ -400,14 +400,14 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 				}
 
 				const topsParamsMap = {
-					first: tableAchievement.makeKeys({
+					first: tableAchievement.makeAKRetrievalKeys({
 						periodType,
 						periodValue,
 						artistId,
 						achievementType,
 						achievementValue: 'first'
 					}),
-					second: tableAchievement.makeKeys({
+					second: tableAchievement.makeAKRetrievalKeys({
 						periodType,
 						periodValue,
 						artistId,
@@ -415,7 +415,7 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 						achievementValue: 'second'
 					}),
 					
-					third: tableAchievement.makeKeys({
+					third: tableAchievement.makeAKRetrievalKeys({
 						periodType,
 						periodValue,
 						artistId,
@@ -426,19 +426,19 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 
 				topListeners[
 					periodType
-				].first = await tableAchievement.getArtistTopListener({
+				].first = await tableAchievement.getArtistAchievementHolders({
 					...topsParamsMap.first
 				})
 
 				topListeners[
 					periodType
-				].second = await tableAchievement.getArtistTopListener({
+				].second = await tableAchievement.getArtistAchievementHolders({
 					...topsParamsMap.second
 				})
 
 				topListeners[
 					periodType
-				].third = await tableAchievement.getArtistTopListener({
+				].third = await tableAchievement.getArtistAchievementHolders({
 					...topsParamsMap.third
 				})
 
