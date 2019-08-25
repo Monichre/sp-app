@@ -113,7 +113,6 @@ export const handler: DynamoDBStreamHandler | any = async (event, context) => {
 									index,
 									tableAchievement
 								)
-								console.log('TCL: handleRecord -> d ', d)
 								return d
 							})
 						)
@@ -131,7 +130,6 @@ export const handler: DynamoDBStreamHandler | any = async (event, context) => {
 									index,
 									tableAchievement
 								)
-								console.log('TCL: handleRecord -> d ', d)
 								return d
 							})
 						)
@@ -149,7 +147,6 @@ export const handler: DynamoDBStreamHandler | any = async (event, context) => {
 									index,
 									tableAchievement
 								)
-								console.log('TCL: handleRecord -> d ', d)
 								return d
 							})
 						)
@@ -167,7 +164,6 @@ export const handler: DynamoDBStreamHandler | any = async (event, context) => {
 									index,
 									tableAchievement
 								)
-								console.log('TCL: handleRecord -> d ', d)
 								return d
 							})
 						)

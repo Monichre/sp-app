@@ -71,7 +71,7 @@ const ArtistsChart: React.SFC<RouteComponentProps & ChartProps & UserIdProp> = (
       />
 
       <YAxis width={75} yAxisId="right" orientation="right" stroke={BRAND_PERSONAL_COLOR} type='category'  interval={0} tick={({ payload, ...props }) =>
-        <TopListenerYaxis {...props} pathParams={pathParams} artist={artists[payload.value].artist} totalTimeListened={artists[payload.value].personal} userId={userId} />}>
+        <TopListenerYaxis {...props} pathParams={pathParams} artist={artists[payload.value].artist} totalTimeListened={artists[payload.value].personal} groupScore={artists[payload.value].group} userId={userId} />}>
          <Label position='insideBottomRight' dy={4} offset={0} stroke='#fff'>{`Platform Leaders ${normalizeTimeScope(pathParams)}`}</Label>
         </YAxis>
         

@@ -1,7 +1,27 @@
 import { useGetUserAchievements } from '../../../types'
 import { suspensefulHook } from '../../../lib/suspensefulHook'
-import * as moment from 'moment'
+import moment from 'moment';
 import * as _ from 'lodash'
+import { TopArtistStat } from '../../../../../back/src/fns/graphql/types';
+import { AchievementValue } from '../../../../../back/src/shared/SharedTypes';
+
+
+export type AchievementPeriodType = 'week' | 'month' | 'life'
+export type TopArtistsByPeriodType = {
+	week: TopArtistStat[]
+	month: TopArtistStat[]
+	life: TopArtistStat[]
+}
+export type AchievementMetaData = {
+	artistData: TopArtistStat
+	achievement: object
+}
+
+export type UserAchievementPeriodMap = {
+	week?: AchievementMetaData[] | null
+	month?: AchievementMetaData[] | null
+	life?: AchievementMetaData[] | null
+}
 
 // @ts-ignore
 const day = moment().format('YYYY-MM-DD')
@@ -69,113 +89,123 @@ export const getAchievementTypes = (userId: any) => ({
 	}
 })
 
-const comparePersonalAndGroupScore = (personal: number, group: number) => ({
-	status: personal >= group,
-	total: personal
-})
 
 
 export const handleDiff = (periodOne: any, periodTwo: any) =>
 	_.differenceWith(periodOne, periodTwo, _.isEqual).length
 		? {
-				status: true,
-				items: _.differenceWith(periodOne, periodTwo, _.isEqual),
-				original: {
-					periodOne,
-					periodTwo
-				}
-		  }
+			status: true,
+			items: _.differenceWith(periodOne, periodTwo, _.isEqual),
+			original: {
+				periodOne,
+				periodTwo
+			}
+		}
 		: {
-				status: false,
-				items: null,
-				original: null
-		  }
+			status: false,
+			items: null,
+			original: null
+		}
 
-export const parseAchievementsByPeriod = (usersTopArtistByPeriodData: any, userId: any) => {
-	const { lifetime, thisMonth, thisWeek, today} = usersTopArtistByPeriodData
-	const topArtistsByPeriod = {
-		day: today.personal.artists,
-		week: thisWeek.personal.artists,
+
+
+export const comparePersonalAndGroupScore = (personal: number, group: number) => ({
+	status: personal >= group,
+	total: personal
+})
+
+const discoveredAndFormatAchievements = (topArtistsByPeriod: TopArtistsByPeriodType, userId: string, period: AchievementPeriodType) => {
+
+	return topArtistsByPeriod[period].filter((artistData: any) => {
+		const { personal, group, artist } = artistData
+		const { status } = comparePersonalAndGroupScore(personal, group)
+		const isTopListener = !artist.topListeners[period].first && status
+        
+
+		return isTopListener
+	}).map((artistData: any) => {
+		const { personal, group, artist } = artistData
+		const { total } = comparePersonalAndGroupScore(personal, group)
+
+		const achievement = {
+			userId: userId,
+			total,
+			pk: `topListener#first#artist#${period}#${period === 'month' ? moment().month() : period === 'week' ? moment().week() : 'life'}`,
+			lastUpdated: moment().format('MMMM Do YYYY, h:mm:ss a')
+		}
+		return {
+			artistData,
+			achievement
+
+		}
+	})
+}
+
+
+
+const determinePossibleAchievements = (achievements: any = {}, topArtistsByPeriod: TopArtistsByPeriodType, userId: string) => {
+	const existingAchievements: any = Object.assign({}, achievements)
+
+	for (let period in existingAchievements) {
+		const existing = existingAchievements[period]
+        console.log('TCL: determinePossibleAchievements -> existing', existing)
+		const derived: any = discoveredAndFormatAchievements(topArtistsByPeriod, userId, period as AchievementPeriodType)
+		console.log('TCL: determinePossibleAchievements -> derived', derived)
+		const merged = (existing && derived) ? _.union(derived, existing) : !existing ? derived : null
+		existingAchievements[period] = merged
+
+		return {existingAchievements}
+	}
+}
+
+export const parseAchievementsByPeriod = (usersTopArtistByPeriodData: any, userId: string) => {
+	const { lifetime, thisMonth, thisWeek, today } = usersTopArtistByPeriodData
+	// @ts-ignore
+	const weeklyArtists = [...new Set([...today.personal.artists, ...thisWeek.personal.artists])]
+	const topArtistsByPeriod: any = {
+		week: weeklyArtists,
 		month: thisMonth.personal.artists,
 		life: lifetime.personal.artists
 	}
 
+	const achievements: any = {
+		week: null,
+		month: null,
+		life: null
+	}
 
-	const dailyAchievements = topArtistsByPeriod.day
-		.filter((artistData: any) => {
+	for (let period in topArtistsByPeriod) {
+		const p = period === 'day' ? 'week' : period
+
+		achievements[p] = topArtistsByPeriod[p].filter((artistData: any) => {
+
 			if (
-				artistData.artist.topListeners.day &&
-				artistData.artist.topListeners.day.first
+				artistData.artist.topListeners[p] &&
+				artistData.artist.topListeners[p].first
 			) {
-				if (artistData.artist.topListeners.day.first.user.uid === userId) {
+				if (artistData.artist.topListeners[p].first.user.uid === userId) {
 					return true
 				}
 			}
 		})
-		.map((artistData: any) => ({
-			artistData,
-			achievement: artistData.artist.topListeners.day.first
-		}))
-    console.log('TCL: parseAchievementsByPeriod -> dailyAchievements', dailyAchievements)
-
-
-	const weeklyAchievements = topArtistsByPeriod.week
-		.filter((artistData: any) => {
-			if (
-				artistData.artist.topListeners.week &&
-				artistData.artist.topListeners.week.first
-			) {
-				if (artistData.artist.topListeners.week.first.user.uid === userId) {
-					return true
-				}
-			}
-		})
-		.map((artistData: any) => ({
-			artistData,
-			achievement: artistData.artist.topListeners.week.first
-		}))
-    console.log('TCL: parseAchievementsByPeriod -> weeklyAchievements', weeklyAchievements)
-	
-	const monthlyAchievements = topArtistsByPeriod.month
-		.filter((artistData: any) => {
-			if (
-				artistData.artist.topListeners.month &&
-				artistData.artist.topListeners.month.first
-			) {
-				if (artistData.artist.topListeners.month.first.user.uid === userId) {
-					return true
-				}
-			}
-		})
-		.map((artistData: any) => ({
-			artistData,
-			achievement: artistData.artist.topListeners.month.first
-		}))
-	
-    console.log('TCL: parseAchievementsByPeriod -> monthlyAchievements', monthlyAchievements)
-
-	const lifetimeAchievements = topArtistsByPeriod.life.filter((artistData: any) => {
-		if (
-			artistData.artist.topListeners.life &&
-			artistData.artist.topListeners.life.first
-		) {
-			if (artistData.artist.topListeners.life.first.user.uid === userId) {
-				return true
-			}
-		} 
-	}).map((artistData: any) => ({
-					artistData,
-					achievement: artistData.artist.topListeners.life.first
-				}))
-	
-    console.log('TCL: parseAchievementsByPeriod -> lifetimeAchievements', lifetimeAchievements)
+			.map((artistData: any) => ({
+				artistData,
+				achievement: artistData.artist.topListeners[p].first
+			}))
 		
+		if (!achievements[p].length) {
+			achievements[p] = null
+		}
+	}
+
+	console.log('TCL: parseAchievementsByPeriod -> achievements', achievements)
+
+	const { existingAchievements }: any = determinePossibleAchievements(achievements, topArtistsByPeriod, userId)
+    console.log('TCL: parseAchievementsByPeriod -> existingAchievements', existingAchievements)
+
+
 	return {
-		dailyAchievements,
-		weeklyAchievements,
-		monthlyAchievements,
-		lifetimeAchievements,
-	
+		achievements: existingAchievements
 	}
 }
 
@@ -183,7 +213,7 @@ export const parseAchievementsByPeriod = (usersTopArtistByPeriodData: any, userI
 
 export const getAchievementHistory = (userId: any) => {
 	const { day, week, month, life } = getAchievementTypes(userId)
-  
+
 	const lifeTimeAchievementData: any = suspensefulHook(
 		useGetUserAchievements({
 			variables: { pk: life.first.pk, fk: life.first.fk },

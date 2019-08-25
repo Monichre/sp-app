@@ -1,7 +1,9 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from 'react-router-dom';
-import {  Text } from 'recharts';
+import { Text } from 'recharts';
+import { UserAchievementContext } from '../../../../Authed/Authed'
 import { hrsAndMins, decimalToHrsMins } from '../../../../../../lib/durationFormats'
+import {comparePersonalAndGroupScore} from '../../../../../Components/UserAchievementsList/achievements-utils'
 import { Popover, List, Avatar } from 'antd';
 import 'antd/es/popover/style/css'
 import 'antd/es/list/style/css'
@@ -30,7 +32,7 @@ const TopListenerLink: any = ({ className, handleClick, children }: any) => (
 
 
 
-export const TopListenerYaxis: React.SFC<TickProps & any> = React.memo(({ x, y, offset, artist, pathParams, userId, totalTimeListened }) => {
+export const TopListenerYaxis: React.SFC<TickProps & any> = React.memo(({ x, y, offset, artist, pathParams, userId, totalTimeListened, groupScore }) => {
 
     let [visible, setVisible] = useState(false)
 
@@ -40,6 +42,8 @@ export const TopListenerYaxis: React.SFC<TickProps & any> = React.memo(({ x, y, 
     const { timeScope, perspective }: any = pathParams
     console.log('TCL: pathParams', pathParams)
     const { day, week, month, life } = topListeners
+    const { achievements, currentUser } = useContext(UserAchievementContext)
+    const {total, status} = comparePersonalAndGroupScore(totalTimeListened, groupScore)
 
     const normalizetimeScopeMap: any = {
         thisWeek: {
@@ -57,9 +61,9 @@ export const TopListenerYaxis: React.SFC<TickProps & any> = React.memo(({ x, y, 
 
     }
 
-    console.log('normalizetimeScopeMap[timeScope]', normalizetimeScopeMap[timeScope])
+    
 
-    const { title=false, data } = normalizetimeScopeMap[timeScope]
+    const { title=false, data=null } = normalizetimeScopeMap[timeScope]
     const { first, second, third } = data ? data : {
         first: null,
         second: null,
@@ -67,7 +71,7 @@ export const TopListenerYaxis: React.SFC<TickProps & any> = React.memo(({ x, y, 
     }
     const listeners = [first, second, third].filter(Boolean)
     
-    const currentUserIsTopListener: any = first && first.user ? first.user.uid === userId : false
+    const currentUserIsTopListener: any = status
     const currentUserIsSecond: any = second && second.user ? second.user.uid === userId : false
     const secondPlaceExists: any = second && second.user 
 

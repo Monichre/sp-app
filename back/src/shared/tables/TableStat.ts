@@ -69,7 +69,7 @@ export type StatArtist = Stat & {
 		name: string
 		genres: string[]
 	}
-	
+
 }
 
 export type StatGenre = Stat & {
@@ -79,30 +79,30 @@ export type StatGenre = Stat & {
 
 
 type TopListenerData = {
-  day: {
-    first: any
-    second: any
-    third: any
+	day: {
+		first: any
+		second: any
+		third: any
 
-  }
-  week: {
-    first: any
-    second: any
-    third: any
+	}
+	week: {
+		first: any
+		second: any
+		third: any
 
-  }
-  month: {
-    first: any
-    second: any
-    third: any
+	}
+	month: {
+		first: any
+		second: any
+		third: any
 
-  }
-  life: {
-    first: any
-    second: any
-    third: any
+	}
+	life: {
+		first: any
+		second: any
+		third: any
 
-  }
+	}
 }
 
 type Artist = {
@@ -321,9 +321,9 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 				total: data.playDurationMs
 			}) : null))
 
-			console.log('topListeners', topListeners)
+		console.log('topListeners', topListeners)
 
-			return topListeners
+		return topListeners
 	}
 
 	const getGenreStat = async ({
@@ -391,12 +391,33 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 				const { artist } = artistDataItem
 				const artistId = artist.id
 				const achievementType = 'topListener'
-				const topListeners: any = {}
+				const achievementHolders: any = {
+					day: {
+						dataPresent: false,
+						first: null,
+						second: null,
+						third: null
+					},
 
-				topListeners[periodType] = {
-					first: null,
-					second: null,
-					third: null
+					week: {
+						dataPresent: false,
+						first: null,
+						second: null,
+						third: null
+					},
+
+					month: {
+						dataPresent: false,
+						first: null,
+						second: null,
+						third: null
+					},
+					life: {
+						dataPresent: false,
+						first: null,
+						second: null,
+						third: null
+					}
 				}
 
 				const topsParamsMap = {
@@ -414,7 +435,7 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 						achievementType,
 						achievementValue: 'second'
 					}),
-					
+
 					third: tableAchievement.makeAKRetrievalKeys({
 						periodType,
 						periodValue,
@@ -424,28 +445,47 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 					})
 				}
 
-				topListeners[
+				achievementHolders[
 					periodType
 				].first = await tableAchievement.getArtistAchievementHolders({
 					...topsParamsMap.first
+				}).then((res: any) => {
+					if(res.length) {
+						achievementHolders[periodType].dataPresent = true
+						return res[0]
+					} else return null
 				})
 
-				topListeners[
+				achievementHolders[
 					periodType
 				].second = await tableAchievement.getArtistAchievementHolders({
 					...topsParamsMap.second
+				}).then((res: any) => {
+					if(res.length) {
+						achievementHolders[periodType].dataPresent = true
+						return res[0]
+					} else return null
 				})
 
-				topListeners[
+				achievementHolders[
 					periodType
 				].third = await tableAchievement.getArtistAchievementHolders({
 					...topsParamsMap.third
+				}).then((res: any) => {
+					if(res.length) {
+						achievementHolders[periodType].dataPresent = true
+						return res[0]
+					} else return null
 				})
 
-				
-				console.log('TCL: topListeners', topListeners)
 
-				artist.topListeners = topListeners
+				
+				console.log('TCL: achievementHolders for the month', achievementHolders.month)
+
+				console.log('TCL: lifetime achievementHolders ', achievementHolders.life)
+
+				artist.topListeners = achievementHolders
+
 				return artistDataItem
 			})
 		)
@@ -507,9 +547,9 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 		playDurationMs,
 		artist
 	}: any) => {
-		
-		const artistAchievementsId = uid.includes('spotify') ? `${artist.id}#${periodType}#${periodValue}#user` :  `${artist.id}#${periodType}#${periodValue}`
-		
+
+		const artistAchievementsId = uid.includes('spotify') ? `${artist.id}#${periodType}#${periodValue}#user` : `${artist.id}#${periodType}#${periodValue}`
+
 		return await doc
 			.update({
 				TableName,
@@ -518,7 +558,7 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 					sk: makeSk(uid, periodType, relationKey)
 				},
 				UpdateExpression: 'ADD playDurationMs :v SET artist = :a, artistAchievementsId = :id',
-				ExpressionAttributeValues: { ':v': playDurationMs, ':a': artist, ':id': artistAchievementsId}
+				ExpressionAttributeValues: { ':v': playDurationMs, ':a': artist, ':id': artistAchievementsId }
 			})
 			.promise()
 	}

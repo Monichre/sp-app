@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useState } from 'react';
 import styled from 'styled-components';
-import { AchievementData } from '../../Home/Authed/Authed';
+import { AchievementData, UserAchievementContext } from '../../Home/Authed/Authed';
 import { hrsAndMins } from '../../../lib/durationFormats';
 import { AchievementListItem } from './AchievementListItem'
 import { HeaderFlexDiv } from '../Elements'
@@ -14,11 +14,6 @@ const ListStyle = styled.ul`
     padding: 0;
     counter-reset: index;  
     overflow: visible;
-
-
-li + li {
-    /* border-top: 1px solid rgba(255,255,255,0.2); */
-    }
 
 `
 
@@ -91,59 +86,60 @@ export interface AchievementItemProps {
 
 
 export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ userId, usersTopArtistByPeriodData }) => {
-
     const {
-        dailyAchievements,
-        weeklyAchievements,
-        monthlyAchievements,
-        lifetimeAchievements,
+        achievements
     } = parseAchievementsByPeriod(usersTopArtistByPeriodData, userId)
 
 
-    // const { dayAndWeekDiff,
-    //     weekAndMonthDiff,
-    //     monthAndLifeDiff } = diffAchievementsByPeriod
-
+ 
     const [wasClicked, setClicked] = useState(false)
     const handleClick = () => setClicked(wasClicked => !wasClicked)
+    
+
+    const {
+        week: weeklyAchievements,
+        month: monthlyAchievements,
+        life: lifetimeAchievements,
+    } = achievements
 
 
-    const la: any = (lifetimeAchievements && lifetimeAchievements.length) ? lifetimeAchievements.slice(0, 3).map(({artistData, achievement}: any) => {
-
-        let total: any = hrsAndMins(achievement.total)
-        achievement.formattedTotal = total
-
-        return {artistData, achievement}
-    }) : []
-
-
-    const ma: any = (monthlyAchievements && monthlyAchievements.length) ? monthlyAchievements.slice(0, 3).map(({artistData, achievement}: any) => {
+    const la: any = (lifetimeAchievements) ? lifetimeAchievements.slice(0, 3).map(({ artistData, achievement }: any) => {
 
         let total: any = hrsAndMins(achievement.total)
         achievement.formattedTotal = total
 
-        return {artistData, achievement}
+        return { artistData, achievement }
     }) : []
 
-    const wa: any = (weeklyAchievements && weeklyAchievements.length) ? weeklyAchievements.slice(0, 3).map(({artistData, achievement}: any) => {
-    console.log('TCL: wa:any -> achievement', achievement)
+
+    const ma: any = (monthlyAchievements ) ? monthlyAchievements.slice(0, 3).map(({ artistData, achievement }: any) => {
 
         let total: any = hrsAndMins(achievement.total)
         achievement.formattedTotal = total
 
-        return {artistData, achievement}
+        return { artistData, achievement }
     }) : []
 
+    const wa: any = (weeklyAchievements) ? weeklyAchievements.slice(0, 3).map(({ artistData, achievement }: any) => {
+        console.log('TCL: wa:any -> achievement', achievement)
 
-    // const da: any = (dailyAchievements && dailyAchievements.length) ? dailyAchievements.slice(0, 3).map(({artistData, achievement}: any) => {
+        let total: any = hrsAndMins(achievement.total)
+        achievement.formattedTotal = total
 
-    //     let total: any = hrsAndMins(achievement.total)
-    //     achievement.formattedTotal = total
+        return { artistData, achievement }
+    }) : []
 
-    //     return {artistData, achievement}
-    // }) : []
+    const {setAchievements}: any = React.useContext(UserAchievementContext)
+ 
 
+    React.useEffect(() => {
 
+        
+        setAchievements(achievements)
+
+    }, [])
+
+    
 
     return (
         <ListWrap>
@@ -157,7 +153,6 @@ export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ use
 
 
                 {wa.length ? <AchievementListItem achievementTotal={weeklyAchievements.length} achievements={wa} title='This Week' wasClicked={wasClicked} handleClick={handleClick} /> : null}
-
 
             </ListStyle>
         </ListWrap>

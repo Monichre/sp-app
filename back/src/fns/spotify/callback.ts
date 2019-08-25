@@ -27,6 +27,8 @@ export const handleError = async (log: TLogger, QueueUrl: string, error: Error, 
 }
 
 export const handler: APIGatewayProxyHandler = async (event) => {
+
+  
   const log = makeLogger({handler: 'spotify/callback', awsEvent: 'http'})
   let uid = 'n/a'
   let context = { event }
@@ -41,8 +43,10 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     SPOTIFY_REDIRECT_URI: process.env.SPOTIFY_REDIRECT_URI,
     QUEUE_VALIDATION_ERRORS: process.env.QUEUE_VALIDATION_ERRORS,
   })
+  
   try {
     const spotify = SpotifyApi(env) // we should really be passing spotify creds here imo
+    console.log('TCL: handler:APIGatewayProxyHandler -> spotify', spotify)
   
     const utcOffset = parseInt(event.queryStringParameters['state'])
     log.info('qs params', { utcOffset })
@@ -50,13 +54,20 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   
     // the use code from spotify grant to get acccess and refresh tokens from api
     const code = event.queryStringParameters['code']
+    
     const { body: { access_token, refresh_token }} = await spotify.authorizationCodeGrant(code)
+    console.log('This needs to print to the console')
+
+    console.log('TCL: handler:APIGatewayProxyHandler -> access_token', access_token)
+    
     spotify.setAccessToken(access_token)
     spotify.setRefreshToken(refresh_token)
     context['tokens'] = { access_token, refresh_token }
   
+    console.log('TCL: handler:APIGatewayProxyHandler -> context tokens', context['tokens'])
     // get the user info from spotify
     const { body: me } = await spotify.getMe()
+    console.log('TCL: handler:APIGatewayProxyHandler -> me', me)
     uid = `spotify:${me.id}`
 
     // get or create a user based on the result of that
