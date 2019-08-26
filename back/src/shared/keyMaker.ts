@@ -1,5 +1,5 @@
 import { AKKeyRetrievalData, AchievementRetrievalKeys, StatRecordPreAchievementMetaDataKeyParams } from './SharedTypes';
-
+import * as moment from 'moment'
 /*=============================================
 	=            NOTES ON KEYS            =
 
@@ -84,11 +84,85 @@ export const KeyMaker = () => {
 
 	}
 
+	const makeAKTimeSeriesRetrievalKeys = (artistId: any) => {
+
+		// @ts-ignore
+		const day = moment().format('YYYY-MM-DD')
+		// @ts-ignore
+		const week = `${moment().year()}-${moment().week()}`
+		// @ts-ignore
+		const month = `${moment().year()}-${moment().month()}`
+
+	
+		return {
+			day: {
+				first: {
+					
+					pk: `topListener#first#artist#day#${day}`,
+					ak: `topListener#first#artist#${artistId}#day#${day}`
+				},
+				second: {
+					pk: `topListener#second#artist#day#${day}`,
+					ak: `topListener#second#artist#${artistId}#day#${day}`
+				},
+				third: {
+					pk: `topListener#third#artist#day#${day}`,
+					ak: `topListener#third#artist#${artistId}#day#${day}`
+				}
+			},
+			week: {
+				first: {
+					pk: `topListener#first#artist#week#${week}`,
+					ak: `topListener#first#artist#${artistId}#week#${week}`,
+				},
+				second: {
+					pk: `topListener#second#artist#week#${week}`,
+					ak: `topListener#second#artist#${artistId}#week#${week}`,
+				},
+				third: {
+					pk: `topListener#third#artist#week#${week}`,
+					ak: `topListener#third#artist#${artistId}#week#${week}`,
+				}
+			},
+			month: {
+				first: {
+					pk: `topListener#first#artist#month#${month}`,
+					ak: `topListener#first#artist#${artistId}#month#${month}`,
+				},
+				second: {
+					pk: `topListener#second#artist#month#${month}`,
+					ak: `topListener#second#artist#${artistId}#month#${month}`,
+				},
+				third: {
+					pk: `topListener#third#artist#month#${month}`,
+					ak: `topListener#third#artist#${artistId}#month#${month}`,
+				}
+			},
+			life: {
+				first: {
+					pk: `topListener#first#artist#life#life`,
+					ak: `topListener#first#artist#${artistId}#life#life`,
+				},
+				second: {
+					pk: `topListener#second#artist#life#life`,
+					ak: `topListener#second#artist#${artistId}#life#life`,
+				},
+				third: {
+					pk: `topListener#third#artist#life#life`,
+					ak: `topListener#third#artist#${artistId}#life#life`,
+				}
+			}
+		}
+	}
+	
+	
+
 
     return {
         joinKeyParams,
         makeAKRetrievalKeys,
-        makeAchievementCreationKeys,
+		makeAchievementCreationKeys,
+		makeAKTimeSeriesRetrievalKeys,
         makeAchievementRetrievalKeys
     }
 

@@ -41,7 +41,9 @@ fragment ArtistsFragment on TopArtistStat {
 					total
 					pk
 					lastUpdated
-					sk
+					uk
+					auk
+					ak
 					user {
 						photoURL
 						email
@@ -54,7 +56,9 @@ fragment ArtistsFragment on TopArtistStat {
 					total
 					pk
 					lastUpdated
-					sk
+					uk
+					auk
+					ak
 					user {
 						photoURL
 						email
@@ -66,7 +70,9 @@ fragment ArtistsFragment on TopArtistStat {
 					total
 					pk
 					lastUpdated
-					sk
+					uk
+					auk
+					ak
 					user {
 						photoURL
 						email
@@ -81,7 +87,9 @@ fragment ArtistsFragment on TopArtistStat {
 					total
 					pk
 					lastUpdated
-					sk
+					uk
+					auk
+					ak
 					user {
 						photoURL
 						email
@@ -94,7 +102,9 @@ fragment ArtistsFragment on TopArtistStat {
 					total
 					pk
 					lastUpdated
-					sk
+					uk
+					auk
+					ak
 					user {
 						photoURL
 						email
@@ -106,7 +116,9 @@ fragment ArtistsFragment on TopArtistStat {
 					total
 					pk
 					lastUpdated
-					sk
+					uk
+					auk
+					ak
 					user {
 						photoURL
 						email
@@ -120,7 +132,9 @@ fragment ArtistsFragment on TopArtistStat {
 					total
 					pk
 					lastUpdated
-					sk
+					uk
+					auk
+					ak
 					user {
 						photoURL
 						email
@@ -133,7 +147,9 @@ fragment ArtistsFragment on TopArtistStat {
 					total
 					pk
 					lastUpdated
-					sk
+					uk
+					auk
+					ak
 					user {
 						photoURL
 						email
@@ -145,7 +161,9 @@ fragment ArtistsFragment on TopArtistStat {
 					total
 					pk
 					lastUpdated
-					sk
+					uk
+					auk
+					ak
 					user {
 						photoURL
 						email
@@ -160,7 +178,9 @@ fragment ArtistsFragment on TopArtistStat {
 					total
 					pk
 					lastUpdated
-					sk
+					uk
+					auk
+					ak
 					user {
 						photoURL
 						email
@@ -173,7 +193,9 @@ fragment ArtistsFragment on TopArtistStat {
 					total
 					pk
 					lastUpdated
-					sk
+					uk
+					auk
+					ak
 					user {
 						photoURL
 						email
@@ -185,7 +207,9 @@ fragment ArtistsFragment on TopArtistStat {
 					total
 					pk
 					lastUpdated
-					sk
+					uk
+					auk
+					ak
 					user {
 						photoURL
 						email

@@ -275,7 +275,7 @@ export type TTableAchievement = {
 
 	// makeAchievementRetrievalKeys
 
-	getArtistAchievementHoldersTimeSeries: = (args: any) => any
+	getArtistAchievementHoldersTimeSeries: (args: Artist['id']) => Promise<PromiseResult<any, AWSError>>
 
 	makeAKRetrievalKeys: (args: AKKeyRetrievalData) => ArtistAchievementRetrievalKeys
 

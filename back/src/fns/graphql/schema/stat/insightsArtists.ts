@@ -169,35 +169,6 @@ type EnrichedKeyMakerParams = {
 	uid?: string | null
 }
 const keyMaker = (args: any) => [...args].join('#')
-const keyMakerPlaceAndDay = ({
-	relationType,
-	periodType,
-	periodValue,
-	artistId,
-	achievementType,
-	achievementValue,
-	uid=null
-}: EnrichedKeyMakerParams) => {
-
-	
-	const pk = keyMaker([
-		achievementType,
-		achievementValue,
-		periodType,
-		periodValue
-	])
-	const sk = keyMaker([
-		artistId,
-		periodType,
-		achievementType,
-		achievementValue
-	])
-	
-	return {
-		sk,
-		pk
-	}
-}
 
 const perspectiveTopArtists = async (
 	tableStat: TTableStat,
@@ -333,13 +304,7 @@ const topArtists = async (
 		thisWeek,
 		lastWeek,
 	).then(async res => {
-		const { personal, group } = res
-
-	
-		return {
-			personal,
-			group
-		}
+		
 		const { personal, group } = res
 
 		return {
@@ -366,13 +331,7 @@ const topArtists = async (
 		thisMonth,
 		lastMonth,
 	).then(async res => {
-		const { personal, group } = res
-
-	
-		return {
-			personal,
-			group
-		}
+		
 		const { personal, group } = res
 
 		return {

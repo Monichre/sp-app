@@ -11,165 +11,189 @@ fragment ArtistFragment on Artist {
 	}
 
 	topListeners {
-		day {
-			first {
-				total
-				pk
-				lastUpdated
-				sk
-				user {
-					photoURL
-					email
-					uid
-					displayName
+			day {
+				first {
+					total
+					pk
+					lastUpdated
+					uk
+					auk
+					ak
+					user {
+						photoURL
+						email
+						uid
+						displayName
+					}
+				}
+
+				second {
+					total
+					pk
+					lastUpdated
+					uk
+					auk
+					ak
+					user {
+						photoURL
+						email
+						uid
+						displayName
+					}
+				}
+				third {
+					total
+					pk
+					lastUpdated
+					uk
+					auk
+					ak
+					user {
+						photoURL
+						email
+						uid
+						displayName
+					}
 				}
 			}
 
-			second {
-				total
-				pk
-				lastUpdated
-				sk
-				user {
-					photoURL
-					email
-					uid
-					displayName
+			week {
+				first {
+					total
+					pk
+					lastUpdated
+					uk
+					auk
+					ak
+					user {
+						photoURL
+						email
+						uid
+						displayName
+					}
+				}
+
+				second {
+					total
+					pk
+					lastUpdated
+					uk
+					auk
+					ak
+					user {
+						photoURL
+						email
+						uid
+						displayName
+					}
+				}
+				third {
+					total
+					pk
+					lastUpdated
+					uk
+					auk
+					ak
+					user {
+						photoURL
+						email
+						uid
+						displayName
+					}
 				}
 			}
-			third {
-				total
-				pk
-				lastUpdated
-				sk
-				user {
-					photoURL
-					email
-					uid
-					displayName
+			month {
+				first {
+					total
+					pk
+					lastUpdated
+					uk
+					auk
+					ak
+					user {
+						photoURL
+						email
+						uid
+						displayName
+					}
+				}
+
+				second {
+					total
+					pk
+					lastUpdated
+					uk
+					auk
+					ak
+					user {
+						photoURL
+						email
+						uid
+						displayName
+					}
+				}
+				third {
+					total
+					pk
+					lastUpdated
+					uk
+					auk
+					ak
+					user {
+						photoURL
+						email
+						uid
+						displayName
+					}
+				}
+			}
+
+			life {
+				first {
+					total
+					pk
+					lastUpdated
+					uk
+					auk
+					ak
+					user {
+						photoURL
+						email
+						uid
+						displayName
+					}
+				}
+
+				second {
+					total
+					pk
+					lastUpdated
+					uk
+					auk
+					ak
+					user {
+						photoURL
+						email
+						uid
+						displayName
+					}
+				}
+				third {
+					total
+					pk
+					lastUpdated
+					uk
+					auk
+					ak
+					user {
+						photoURL
+						email
+						uid
+						displayName
+					}
 				}
 			}
 		}
-
-		week {
-			first {
-				total
-				pk
-				lastUpdated
-				sk
-				user {
-					photoURL
-					email
-					uid
-					displayName
-				}
-			}
-
-			second {
-				total
-				pk
-				lastUpdated
-				sk
-				user {
-					photoURL
-					email
-					uid
-					displayName
-				}
-			}
-			third {
-				total
-				pk
-				lastUpdated
-				sk
-				user {
-					photoURL
-					email
-					uid
-					displayName
-				}
-			}
-		}
-		month {
-			first {
-				total
-				pk
-				lastUpdated
-				sk
-				user {
-					photoURL
-					email
-					uid
-					displayName
-				}
-			}
-
-			second {
-				total
-				pk
-				lastUpdated
-				sk
-				user {
-					photoURL
-					email
-					uid
-					displayName
-				}
-			}
-			third {
-				total
-				pk
-				lastUpdated
-				sk
-				user {
-					photoURL
-					email
-					uid
-					displayName
-				}
-			}
-		}
-
-		life {
-			first {
-				total
-				pk
-				lastUpdated
-				sk
-				user {
-					photoURL
-					email
-					uid
-					displayName
-				}
-			}
-
-			second {
-				total
-				pk
-				lastUpdated
-				sk
-				user {
-					photoURL
-					email
-					uid
-					displayName
-				}
-			}
-			third {
-				total
-				pk
-				lastUpdated
-				sk
-				user {
-					photoURL
-					email
-					uid
-					displayName
-				}
-			}
-		}
-	}
 }
 
 fragment TimescopeStatsFragment on TimescopeStats {

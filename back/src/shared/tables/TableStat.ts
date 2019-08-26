@@ -162,7 +162,7 @@ export type TTableStat = {
 	getTopArtists: (topKeys: ArtistAglTopKeys) => Promise<TopArtistsRow[]>
 	getArtistStat: (artistStatKeys: ArtistStatKeys) => Promise<number>
 	getArtistTopListeners: (artistAchievementsId: string) => Promise<StatRecordTopListenerDataWithUserId[]>
-	getArtistAchievementHolders: (args: any) => any
+	// getArtistAchievementHolders: (args: any) => any
 	writeTotalStat: (
 		stat: StatTotal
 	) => Promise<PromiseResult<UpdateItemOutput, AWSError>>
@@ -360,83 +360,83 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 
 
 	// TODO: Should absolutely refactor this out of TableStat
-	const getArtistAchievementHolders = async (artist, tableAchievement, periodType, periodValue, achievementType = 'topListener') => {
-		const achievementHolders: any = {
-			day: {},
-			week: {},
-			month: {},
-			life: {}
-		}
-		const artistId = artist.id
+	// const getArtistAchievementHolders = async (artist, tableAchievement, periodType, periodValue, achievementType = 'topListener') => {
+	// 	const achievementHolders: any = {
+	// 		day: {},
+	// 		week: {},
+	// 		month: {},
+	// 		life: {}
+	// 	}
+	// 	const artistId = artist.id
 
-		const topsParamsMap = {
-			first: tableAchievement.makeAKRetrievalKeys({
-				periodType,
-				periodValue,
-				artistId,
-				achievementType,
-				achievementValue: 'first'
-			}),
-			second: tableAchievement.makeAKRetrievalKeys({
-				periodType,
-				periodValue,
-				artistId,
-				achievementType,
-				achievementValue: 'second'
-			}),
+	// 	const topsParamsMap = {
+	// 		first: tableAchievement.makeAKRetrievalKeys({
+	// 			periodType,
+	// 			periodValue,
+	// 			artistId,
+	// 			achievementType,
+	// 			achievementValue: 'first'
+	// 		}),
+	// 		second: tableAchievement.makeAKRetrievalKeys({
+	// 			periodType,
+	// 			periodValue,
+	// 			artistId,
+	// 			achievementType,
+	// 			achievementValue: 'second'
+	// 		}),
 
-			third: tableAchievement.makeAKRetrievalKeys({
-				periodType,
-				periodValue,
-				artistId,
-				achievementType,
-				achievementValue: 'third'
-			})
-		}
+	// 		third: tableAchievement.makeAKRetrievalKeys({
+	// 			periodType,
+	// 			periodValue,
+	// 			artistId,
+	// 			achievementType,
+	// 			achievementValue: 'third'
+	// 		})
+	// 	}
 
-		achievementHolders[periodType] = {
-			first: {},
-			second: {},
-			third: {}
-		}
+	// 	achievementHolders[periodType] = {
+	// 		first: {},
+	// 		second: {},
+	// 		third: {}
+	// 	}
 
-		achievementHolders[
-			periodType
-		].first = await tableAchievement.getArtistAchievementHolders({
-			...topsParamsMap.first
-		}).then((res: any) => {
-			if(res.length) {
-				achievementHolders[periodType].dataPresent = true
-				return res[0]
-			} else return null
-		})
+	// 	achievementHolders[
+	// 		periodType
+	// 	].first = await tableAchievement.getArtistAchievementHolders({
+	// 		...topsParamsMap.first
+	// 	}).then((res: any) => {
+	// 		if(res.length) {
+	// 			achievementHolders[periodType].dataPresent = true
+	// 			return res[0]
+	// 		} else return null
+	// 	})
 
-		achievementHolders[
-			periodType
-		].second = await tableAchievement.getArtistAchievementHolders({
-			...topsParamsMap.second
-		}).then((res: any) => {
-			if(res.length) {
-				achievementHolders[periodType].dataPresent = true
-				return res[0]
-			} else return null
-		})
+	// 	achievementHolders[
+	// 		periodType
+	// 	].second = await tableAchievement.getArtistAchievementHolders({
+	// 		...topsParamsMap.second
+	// 	}).then((res: any) => {
+	// 		if(res.length) {
+	// 			achievementHolders[periodType].dataPresent = true
+	// 			return res[0]
+	// 		} else return null
+	// 	})
 
-		achievementHolders[
-			periodType
-		].third = await tableAchievement.getArtistAchievementHolders({
-			...topsParamsMap.third
-		}).then((res: any) => {
-			if(res.length) {
-				achievementHolders[periodType].dataPresent = true
-				return res[0]
-			} else return null
-		})
+	// 	achievementHolders[
+	// 		periodType
+	// 	].third = await tableAchievement.getArtistAchievementHolders({
+	// 		...topsParamsMap.third
+	// 	}).then((res: any) => {
+	// 		if(res.length) {
+	// 			achievementHolders[periodType].dataPresent = true
+	// 			return res[0]
+	// 		} else return null
+	// 	})
 
-		return achievementHolders
+	// 	return achievementHolders
 
 
-	}
+	// }
 
 	const getTopArtists = async ({
 		tableAchievement,
@@ -604,7 +604,7 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 		periodsFor,
 		getTimeseries,
 		getArtistTopListeners,
-		getArtistAchievementHolders,
+		// getArtistAchievementHolders,
 		getStat,
 		getTopGenres,
 		getGenreStat,

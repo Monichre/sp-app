@@ -1,4 +1,4 @@
-// Generated in 2019-08-25T20:03:20-04:00
+// Generated in 2019-08-26T01:03:05-04:00
 // REGENERATE THIS BY STARTING THE LOCAL BACKEND
 // AND THEN RUNNING `front % yarn generate`
 
@@ -7,73 +7,6 @@ export type Maybe<T> = T | null;
 // ====================================================
 // Documents
 // ====================================================
-
-export type GetUserAchievementsVariables = {
-  pk: string;
-  uk: string;
-};
-
-export type GetUserAchievementsQuery = {
-  __typename?: "Query";
-
-  getUserAchievements: Maybe<(Maybe<GetUserAchievementsGetUserAchievements>)[]>;
-};
-
-export type GetUserAchievementsGetUserAchievements = {
-  __typename?: "UserAchievement";
-
-  total: Maybe<number>;
-
-  uk: Maybe<string>;
-
-  auk: Maybe<string>;
-
-  pk: Maybe<string>;
-
-  ak: Maybe<string>;
-
-  artist: Maybe<GetUserAchievementsArtist>;
-
-  user: Maybe<GetUserAchievementsUser>;
-};
-
-export type GetUserAchievementsArtist = {
-  __typename?: "Artist";
-
-  name: string;
-
-  genres: string[];
-
-  images: GetUserAchievementsImages[];
-
-  external_urls: GetUserAchievementsExternalUrls;
-};
-
-export type GetUserAchievementsImages = {
-  __typename?: "Image";
-
-  url: string;
-};
-
-export type GetUserAchievementsExternalUrls = {
-  __typename?: "SpotifyUrl";
-
-  spotify: string;
-};
-
-export type GetUserAchievementsUser = {
-  __typename?: "User";
-
-  uid: Maybe<string>;
-
-  email: Maybe<string>;
-
-  displayName: Maybe<string>;
-
-  lastUpdate: Maybe<string>;
-
-  photoURL: Maybe<string>;
-};
 
 export type RecentPlaysVariables = {
   uid: string;
@@ -147,6 +80,73 @@ export type RecentPlays_Images = {
   __typename?: "Image";
 
   url: string;
+};
+
+export type GetUserAchievementsVariables = {
+  pk: string;
+  uk: string;
+};
+
+export type GetUserAchievementsQuery = {
+  __typename?: "Query";
+
+  getUserAchievements: Maybe<(Maybe<GetUserAchievementsGetUserAchievements>)[]>;
+};
+
+export type GetUserAchievementsGetUserAchievements = {
+  __typename?: "UserAchievement";
+
+  total: Maybe<number>;
+
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  pk: Maybe<string>;
+
+  ak: Maybe<string>;
+
+  artist: Maybe<GetUserAchievementsArtist>;
+
+  user: Maybe<GetUserAchievementsUser>;
+};
+
+export type GetUserAchievementsArtist = {
+  __typename?: "Artist";
+
+  name: string;
+
+  genres: string[];
+
+  images: GetUserAchievementsImages[];
+
+  external_urls: GetUserAchievementsExternalUrls;
+};
+
+export type GetUserAchievementsImages = {
+  __typename?: "Image";
+
+  url: string;
+};
+
+export type GetUserAchievementsExternalUrls = {
+  __typename?: "SpotifyUrl";
+
+  spotify: string;
+};
+
+export type GetUserAchievementsUser = {
+  __typename?: "User";
+
+  uid: Maybe<string>;
+
+  email: Maybe<string>;
+
+  displayName: Maybe<string>;
+
+  lastUpdate: Maybe<string>;
+
+  photoURL: Maybe<string>;
 };
 
 export type GetUserInfoVariables = {
@@ -658,7 +658,7 @@ export type ArtistsFragmentDay = {
 };
 
 export type ArtistsFragmentFirst = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -666,7 +666,11 @@ export type ArtistsFragmentFirst = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<ArtistsFragmentUser>;
 };
@@ -684,7 +688,7 @@ export type ArtistsFragmentUser = {
 };
 
 export type ArtistsFragmentSecond = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -692,7 +696,11 @@ export type ArtistsFragmentSecond = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<ArtistsFragment_User>;
 };
@@ -710,7 +718,7 @@ export type ArtistsFragment_User = {
 };
 
 export type ArtistsFragmentThird = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -718,7 +726,11 @@ export type ArtistsFragmentThird = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<ArtistsFragment__User>;
 };
@@ -746,7 +758,7 @@ export type ArtistsFragmentWeek = {
 };
 
 export type ArtistsFragment_First = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -754,7 +766,11 @@ export type ArtistsFragment_First = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<ArtistsFragment___User>;
 };
@@ -772,7 +788,7 @@ export type ArtistsFragment___User = {
 };
 
 export type ArtistsFragment_Second = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -780,7 +796,11 @@ export type ArtistsFragment_Second = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<ArtistsFragment____User>;
 };
@@ -798,7 +818,7 @@ export type ArtistsFragment____User = {
 };
 
 export type ArtistsFragment_Third = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -806,7 +826,11 @@ export type ArtistsFragment_Third = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<ArtistsFragment_____User>;
 };
@@ -834,7 +858,7 @@ export type ArtistsFragmentMonth = {
 };
 
 export type ArtistsFragment__First = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -842,7 +866,11 @@ export type ArtistsFragment__First = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<ArtistsFragment______User>;
 };
@@ -860,7 +888,7 @@ export type ArtistsFragment______User = {
 };
 
 export type ArtistsFragment__Second = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -868,7 +896,11 @@ export type ArtistsFragment__Second = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<ArtistsFragment_______User>;
 };
@@ -886,7 +918,7 @@ export type ArtistsFragment_______User = {
 };
 
 export type ArtistsFragment__Third = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -894,7 +926,11 @@ export type ArtistsFragment__Third = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<ArtistsFragment________User>;
 };
@@ -922,7 +958,7 @@ export type ArtistsFragmentLife = {
 };
 
 export type ArtistsFragment___First = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -930,7 +966,11 @@ export type ArtistsFragment___First = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<ArtistsFragment_________User>;
 };
@@ -948,7 +988,7 @@ export type ArtistsFragment_________User = {
 };
 
 export type ArtistsFragment___Second = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -956,7 +996,11 @@ export type ArtistsFragment___Second = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<ArtistsFragment__________User>;
 };
@@ -974,7 +1018,7 @@ export type ArtistsFragment__________User = {
 };
 
 export type ArtistsFragment___Third = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -982,7 +1026,11 @@ export type ArtistsFragment___Third = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<ArtistsFragment___________User>;
 };
@@ -1048,7 +1096,7 @@ export type ArtistFragmentDay = {
 };
 
 export type ArtistFragmentFirst = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -1056,7 +1104,11 @@ export type ArtistFragmentFirst = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<ArtistFragmentUser>;
 };
@@ -1074,7 +1126,7 @@ export type ArtistFragmentUser = {
 };
 
 export type ArtistFragmentSecond = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -1082,7 +1134,11 @@ export type ArtistFragmentSecond = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<ArtistFragment_User>;
 };
@@ -1100,7 +1156,7 @@ export type ArtistFragment_User = {
 };
 
 export type ArtistFragmentThird = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -1108,7 +1164,11 @@ export type ArtistFragmentThird = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<ArtistFragment__User>;
 };
@@ -1136,7 +1196,7 @@ export type ArtistFragmentWeek = {
 };
 
 export type ArtistFragment_First = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -1144,7 +1204,11 @@ export type ArtistFragment_First = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<ArtistFragment___User>;
 };
@@ -1162,7 +1226,7 @@ export type ArtistFragment___User = {
 };
 
 export type ArtistFragment_Second = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -1170,7 +1234,11 @@ export type ArtistFragment_Second = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<ArtistFragment____User>;
 };
@@ -1188,7 +1256,7 @@ export type ArtistFragment____User = {
 };
 
 export type ArtistFragment_Third = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -1196,7 +1264,11 @@ export type ArtistFragment_Third = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<ArtistFragment_____User>;
 };
@@ -1224,7 +1296,7 @@ export type ArtistFragmentMonth = {
 };
 
 export type ArtistFragment__First = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -1232,7 +1304,11 @@ export type ArtistFragment__First = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<ArtistFragment______User>;
 };
@@ -1250,7 +1326,7 @@ export type ArtistFragment______User = {
 };
 
 export type ArtistFragment__Second = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -1258,7 +1334,11 @@ export type ArtistFragment__Second = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<ArtistFragment_______User>;
 };
@@ -1276,7 +1356,7 @@ export type ArtistFragment_______User = {
 };
 
 export type ArtistFragment__Third = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -1284,7 +1364,11 @@ export type ArtistFragment__Third = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<ArtistFragment________User>;
 };
@@ -1312,7 +1396,7 @@ export type ArtistFragmentLife = {
 };
 
 export type ArtistFragment___First = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -1320,7 +1404,11 @@ export type ArtistFragment___First = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<ArtistFragment_________User>;
 };
@@ -1338,7 +1426,7 @@ export type ArtistFragment_________User = {
 };
 
 export type ArtistFragment___Second = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -1346,7 +1434,11 @@ export type ArtistFragment___Second = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<ArtistFragment__________User>;
 };
@@ -1364,7 +1456,7 @@ export type ArtistFragment__________User = {
 };
 
 export type ArtistFragment___Third = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -1372,7 +1464,11 @@ export type ArtistFragment___Third = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<ArtistFragment___________User>;
 };
@@ -1506,7 +1602,7 @@ export type PerspectiveDashDay = {
 };
 
 export type PerspectiveDashFirst = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -1514,7 +1610,11 @@ export type PerspectiveDashFirst = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<PerspectiveDashUser>;
 };
@@ -1532,7 +1632,7 @@ export type PerspectiveDashUser = {
 };
 
 export type PerspectiveDashSecond = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -1540,7 +1640,11 @@ export type PerspectiveDashSecond = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<PerspectiveDash_User>;
 };
@@ -1558,7 +1662,7 @@ export type PerspectiveDash_User = {
 };
 
 export type PerspectiveDashThird = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -1566,7 +1670,11 @@ export type PerspectiveDashThird = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<PerspectiveDash__User>;
 };
@@ -1594,7 +1702,7 @@ export type PerspectiveDashWeek = {
 };
 
 export type PerspectiveDash_First = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -1602,7 +1710,11 @@ export type PerspectiveDash_First = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<PerspectiveDash___User>;
 };
@@ -1620,7 +1732,7 @@ export type PerspectiveDash___User = {
 };
 
 export type PerspectiveDash_Second = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -1628,7 +1740,11 @@ export type PerspectiveDash_Second = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<PerspectiveDash____User>;
 };
@@ -1646,7 +1762,7 @@ export type PerspectiveDash____User = {
 };
 
 export type PerspectiveDash_Third = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -1654,7 +1770,11 @@ export type PerspectiveDash_Third = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<PerspectiveDash_____User>;
 };
@@ -1682,7 +1802,7 @@ export type PerspectiveDashMonth = {
 };
 
 export type PerspectiveDash__First = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -1690,7 +1810,11 @@ export type PerspectiveDash__First = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<PerspectiveDash______User>;
 };
@@ -1708,7 +1832,7 @@ export type PerspectiveDash______User = {
 };
 
 export type PerspectiveDash__Second = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -1716,7 +1840,11 @@ export type PerspectiveDash__Second = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<PerspectiveDash_______User>;
 };
@@ -1734,7 +1862,7 @@ export type PerspectiveDash_______User = {
 };
 
 export type PerspectiveDash__Third = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -1742,7 +1870,11 @@ export type PerspectiveDash__Third = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<PerspectiveDash________User>;
 };
@@ -1770,7 +1902,7 @@ export type PerspectiveDashLife = {
 };
 
 export type PerspectiveDash___First = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -1778,7 +1910,11 @@ export type PerspectiveDash___First = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<PerspectiveDash_________User>;
 };
@@ -1796,7 +1932,7 @@ export type PerspectiveDash_________User = {
 };
 
 export type PerspectiveDash___Second = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -1804,7 +1940,11 @@ export type PerspectiveDash___Second = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<PerspectiveDash__________User>;
 };
@@ -1822,7 +1962,7 @@ export type PerspectiveDash__________User = {
 };
 
 export type PerspectiveDash___Third = {
-  __typename?: "TopListener";
+  __typename?: "UserAchievement";
 
   total: Maybe<number>;
 
@@ -1830,7 +1970,11 @@ export type PerspectiveDash___Third = {
 
   lastUpdated: Maybe<string>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  ak: Maybe<string>;
 
   user: Maybe<PerspectiveDash___________User>;
 };
@@ -1992,7 +2136,9 @@ export const ArtistsFragmentFragmentDoc = gql`
             total
             pk
             lastUpdated
-            sk
+            uk
+            auk
+            ak
             user {
               photoURL
               email
@@ -2004,7 +2150,9 @@ export const ArtistsFragmentFragmentDoc = gql`
             total
             pk
             lastUpdated
-            sk
+            uk
+            auk
+            ak
             user {
               photoURL
               email
@@ -2016,7 +2164,9 @@ export const ArtistsFragmentFragmentDoc = gql`
             total
             pk
             lastUpdated
-            sk
+            uk
+            auk
+            ak
             user {
               photoURL
               email
@@ -2030,7 +2180,9 @@ export const ArtistsFragmentFragmentDoc = gql`
             total
             pk
             lastUpdated
-            sk
+            uk
+            auk
+            ak
             user {
               photoURL
               email
@@ -2042,7 +2194,9 @@ export const ArtistsFragmentFragmentDoc = gql`
             total
             pk
             lastUpdated
-            sk
+            uk
+            auk
+            ak
             user {
               photoURL
               email
@@ -2054,7 +2208,9 @@ export const ArtistsFragmentFragmentDoc = gql`
             total
             pk
             lastUpdated
-            sk
+            uk
+            auk
+            ak
             user {
               photoURL
               email
@@ -2068,7 +2224,9 @@ export const ArtistsFragmentFragmentDoc = gql`
             total
             pk
             lastUpdated
-            sk
+            uk
+            auk
+            ak
             user {
               photoURL
               email
@@ -2080,7 +2238,9 @@ export const ArtistsFragmentFragmentDoc = gql`
             total
             pk
             lastUpdated
-            sk
+            uk
+            auk
+            ak
             user {
               photoURL
               email
@@ -2092,7 +2252,9 @@ export const ArtistsFragmentFragmentDoc = gql`
             total
             pk
             lastUpdated
-            sk
+            uk
+            auk
+            ak
             user {
               photoURL
               email
@@ -2106,7 +2268,9 @@ export const ArtistsFragmentFragmentDoc = gql`
             total
             pk
             lastUpdated
-            sk
+            uk
+            auk
+            ak
             user {
               photoURL
               email
@@ -2118,7 +2282,9 @@ export const ArtistsFragmentFragmentDoc = gql`
             total
             pk
             lastUpdated
-            sk
+            uk
+            auk
+            ak
             user {
               photoURL
               email
@@ -2130,7 +2296,9 @@ export const ArtistsFragmentFragmentDoc = gql`
             total
             pk
             lastUpdated
-            sk
+            uk
+            auk
+            ak
             user {
               photoURL
               email
@@ -2173,7 +2341,9 @@ export const ArtistFragmentFragmentDoc = gql`
           total
           pk
           lastUpdated
-          sk
+          uk
+          auk
+          ak
           user {
             photoURL
             email
@@ -2185,7 +2355,9 @@ export const ArtistFragmentFragmentDoc = gql`
           total
           pk
           lastUpdated
-          sk
+          uk
+          auk
+          ak
           user {
             photoURL
             email
@@ -2197,7 +2369,9 @@ export const ArtistFragmentFragmentDoc = gql`
           total
           pk
           lastUpdated
-          sk
+          uk
+          auk
+          ak
           user {
             photoURL
             email
@@ -2211,7 +2385,9 @@ export const ArtistFragmentFragmentDoc = gql`
           total
           pk
           lastUpdated
-          sk
+          uk
+          auk
+          ak
           user {
             photoURL
             email
@@ -2223,7 +2399,9 @@ export const ArtistFragmentFragmentDoc = gql`
           total
           pk
           lastUpdated
-          sk
+          uk
+          auk
+          ak
           user {
             photoURL
             email
@@ -2235,7 +2413,9 @@ export const ArtistFragmentFragmentDoc = gql`
           total
           pk
           lastUpdated
-          sk
+          uk
+          auk
+          ak
           user {
             photoURL
             email
@@ -2249,7 +2429,9 @@ export const ArtistFragmentFragmentDoc = gql`
           total
           pk
           lastUpdated
-          sk
+          uk
+          auk
+          ak
           user {
             photoURL
             email
@@ -2261,7 +2443,9 @@ export const ArtistFragmentFragmentDoc = gql`
           total
           pk
           lastUpdated
-          sk
+          uk
+          auk
+          ak
           user {
             photoURL
             email
@@ -2273,7 +2457,9 @@ export const ArtistFragmentFragmentDoc = gql`
           total
           pk
           lastUpdated
-          sk
+          uk
+          auk
+          ak
           user {
             photoURL
             email
@@ -2287,7 +2473,9 @@ export const ArtistFragmentFragmentDoc = gql`
           total
           pk
           lastUpdated
-          sk
+          uk
+          auk
+          ak
           user {
             photoURL
             email
@@ -2299,7 +2487,9 @@ export const ArtistFragmentFragmentDoc = gql`
           total
           pk
           lastUpdated
-          sk
+          uk
+          auk
+          ak
           user {
             photoURL
             email
@@ -2311,7 +2501,9 @@ export const ArtistFragmentFragmentDoc = gql`
           total
           pk
           lastUpdated
-          sk
+          uk
+          auk
+          ak
           user {
             photoURL
             email
@@ -2376,7 +2568,9 @@ export const PerspectiveDashFragmentDoc = gql`
               total
               pk
               lastUpdated
-              sk
+              uk
+              auk
+              ak
               user {
                 photoURL
                 email
@@ -2388,7 +2582,9 @@ export const PerspectiveDashFragmentDoc = gql`
               total
               pk
               lastUpdated
-              sk
+              uk
+              auk
+              ak
               user {
                 photoURL
                 email
@@ -2400,7 +2596,9 @@ export const PerspectiveDashFragmentDoc = gql`
               total
               pk
               lastUpdated
-              sk
+              uk
+              auk
+              ak
               user {
                 photoURL
                 email
@@ -2414,7 +2612,9 @@ export const PerspectiveDashFragmentDoc = gql`
               total
               pk
               lastUpdated
-              sk
+              uk
+              auk
+              ak
               user {
                 photoURL
                 email
@@ -2426,7 +2626,9 @@ export const PerspectiveDashFragmentDoc = gql`
               total
               pk
               lastUpdated
-              sk
+              uk
+              auk
+              ak
               user {
                 photoURL
                 email
@@ -2438,7 +2640,9 @@ export const PerspectiveDashFragmentDoc = gql`
               total
               pk
               lastUpdated
-              sk
+              uk
+              auk
+              ak
               user {
                 photoURL
                 email
@@ -2452,7 +2656,9 @@ export const PerspectiveDashFragmentDoc = gql`
               total
               pk
               lastUpdated
-              sk
+              uk
+              auk
+              ak
               user {
                 photoURL
                 email
@@ -2464,7 +2670,9 @@ export const PerspectiveDashFragmentDoc = gql`
               total
               pk
               lastUpdated
-              sk
+              uk
+              auk
+              ak
               user {
                 photoURL
                 email
@@ -2476,7 +2684,9 @@ export const PerspectiveDashFragmentDoc = gql`
               total
               pk
               lastUpdated
-              sk
+              uk
+              auk
+              ak
               user {
                 photoURL
                 email
@@ -2490,7 +2700,9 @@ export const PerspectiveDashFragmentDoc = gql`
               total
               pk
               lastUpdated
-              sk
+              uk
+              auk
+              ak
               user {
                 photoURL
                 email
@@ -2502,7 +2714,9 @@ export const PerspectiveDashFragmentDoc = gql`
               total
               pk
               lastUpdated
-              sk
+              uk
+              auk
+              ak
               user {
                 photoURL
                 email
@@ -2514,7 +2728,9 @@ export const PerspectiveDashFragmentDoc = gql`
               total
               pk
               lastUpdated
-              sk
+              uk
+              auk
+              ak
               user {
                 photoURL
                 email
@@ -2615,42 +2831,6 @@ export const TimescopeGenreStatsFragmentFragmentDoc = gql`
 // Components
 // ====================================================
 
-export const GetUserAchievementsDocument = gql`
-  query GetUserAchievements($pk: String!, $uk: String!) {
-    getUserAchievements(pk: $pk, uk: $uk) {
-      total
-      uk
-      auk
-      pk
-      ak
-      artist {
-        name
-        genres
-        images {
-          url
-        }
-        external_urls {
-          spotify
-        }
-      }
-      user {
-        uid
-        email
-        displayName
-        lastUpdate
-        photoURL
-      }
-    }
-  }
-`;
-export function useGetUserAchievements(
-  baseOptions?: ReactApolloHooks.QueryHookOptions<GetUserAchievementsVariables>
-) {
-  return ReactApolloHooks.useQuery<
-    GetUserAchievementsQuery,
-    GetUserAchievementsVariables
-  >(GetUserAchievementsDocument, baseOptions);
-}
 export const RecentPlaysDocument = gql`
   query RecentPlays($uid: String!) {
     recentPlays(uid: $uid) {
@@ -2687,6 +2867,42 @@ export function useRecentPlays(
     RecentPlaysDocument,
     baseOptions
   );
+}
+export const GetUserAchievementsDocument = gql`
+  query GetUserAchievements($pk: String!, $uk: String!) {
+    getUserAchievements(pk: $pk, uk: $uk) {
+      total
+      uk
+      auk
+      pk
+      ak
+      artist {
+        name
+        genres
+        images {
+          url
+        }
+        external_urls {
+          spotify
+        }
+      }
+      user {
+        uid
+        email
+        displayName
+        lastUpdate
+        photoURL
+      }
+    }
+  }
+`;
+export function useGetUserAchievements(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<GetUserAchievementsVariables>
+) {
+  return ReactApolloHooks.useQuery<
+    GetUserAchievementsQuery,
+    GetUserAchievementsVariables
+  >(GetUserAchievementsDocument, baseOptions);
 }
 export const GetUserInfoDocument = gql`
   query GetUserInfo($uid: String!) {

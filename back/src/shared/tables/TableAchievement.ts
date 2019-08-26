@@ -73,79 +73,6 @@ export const TableAchievement = (
 
 	}
 
-	const makeAKTimeSeriesRetrievalKeys = (artistId: any) => {
-
-		// @ts-ignore
-		const day = moment().format('YYYY-MM-DD')
-		// @ts-ignore
-		const week = `${moment().year()}-${moment().week()}`
-		// @ts-ignore
-		const month = `${moment().year()}-${moment().month()}`
-
-	
-		return {
-			day: {
-				first: {
-					
-					pk: `topListener#first#artist#day#${day}`,
-					uk: `topListener#first#artist#${artistId}#day#${day}`
-				},
-				second: {
-					pk: `topListener#second#artist#day#${day}`,
-					uk: `topListener#second#artist#${artistId}#day#${day}`
-				},
-				third: {
-					pk: `topListener#third#artist#day#${day}`,
-					uk: `topListener#third#artist#${artistId}#day#${day}`
-				}
-			},
-			week: {
-				first: {
-					pk: `topListener#first#artist#week#${week}`,
-					uk: `topListener#first#artist#${artistId}#week#${week}`,
-				},
-				second: {
-					pk: `topListener#second#artist#week#${week}`,
-					uk: `topListener#second#artist#${artistId}#week#${week}`,
-				},
-				third: {
-					pk: `topListener#third#artist#week#${week}`,
-					uk: `topListener#third#artist#${artistId}#week#${week}`,
-				}
-			},
-			month: {
-				first: {
-					pk: `topListener#first#artist#month#${month}`,
-					uk: `topListener#first#artist#${artistId}#month#${month}`,
-				},
-				second: {
-					pk: `topListener#second#artist#month#${month}`,
-					uk: `topListener#second#artist#${artistId}#month#${month}`,
-				},
-				third: {
-					pk: `topListener#third#artist#month#${month}`,
-					uk: `topListener#third#artist#${artistId}#month#${month}`,
-				}
-			},
-			life: {
-				first: {
-					pk: `topListener#first#artist#life#life`,
-					uk: `topListener#first#artist#${artistId}#life#life`,
-				},
-				second: {
-					pk: `topListener#second#artist#life#life`,
-					uk: `topListener#second#artist#${artistId}#life#life`,
-				},
-				third: {
-					pk: `topListener#third#artist#life#life`,
-					uk: `topListener#third#artist#${artistId}#life#life`,
-				}
-			}
-		}
-	}
-	
-	
-
 	const makeAKRetrievalKeys = ({
 		periodType,
 		periodValue,
@@ -213,29 +140,43 @@ export const TableAchievement = (
 	}
 
 
-	const getArtistAchievementHoldersTimeSeries = async ({ artistId }: string) => {
+	const getArtistAchievementHoldersTimeSeries = async (artistId) => {
+		const { makeAKTimeSeriesRetrievalKeys } = KeyMaker()
 		const timeSeriesKeys = makeAKTimeSeriesRetrievalKeys(artistId)
-		const dayParams = {
-			TableName,
-			Limit: 3,
-			KeyConditionExpression: `ak = :ak`,
-			IndexName: 'ArtistAchievementHoldersGSI',
-			ScanIndexForward: false, // means descending
-			ExpressionAttributeValues: {
-				':ak': timeSeriesKeys.day.first
+		const data = {}
+
+		// HOPE YOU LIKE NESTED FOR LOOPS MUTHA FUCKA
+		for (let period in timeSeriesKeys) {
+			data[period] = {}
+			for (let place in timeSeriesKeys[period]) {
+				data[period][place] = {}
+				const params = {
+					TableName,
+					Limit: 3,
+					KeyConditionExpression: `ak = :ak`,
+					IndexName: 'ArtistAchievementHoldersGSI',
+					ScanIndexForward: false, // means descending
+					ExpressionAttributeValues: {
+						':ak': timeSeriesKeys[period][place].ak
+					}
+				}
+
+				data[period][place] = await doc
+					.query(params)
+					.promise()
+					.then((res: any) => {
+						console.log('TCL: getArtistAchievementHolders -> res', res)
+						return res.Items && res.Items.length ? res.Items.pop() : []
+
+					})
 			}
+
+
 		}
 
-		const dayData =  await doc
-			.query(params)
-			.promise()
-			.then((res: any) => {
-				console.log('TCL: getArtistAchievementHolders -> res', res)
-				return res.Items && res.Items.length ? res.Items : []
+        console.log('TCL: getArtistAchievementHoldersTimeSeries -> data', data)
+		return data
 
-			})
-
-			return dayData
 	}
 
 
