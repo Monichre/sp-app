@@ -335,6 +335,13 @@ const topArtists = async (
 	).then(async res => {
 		const { personal, group } = res
 
+	
+		return {
+			personal,
+			group
+		}
+		const { personal, group } = res
+
 		return {
 			personal,
 			group
@@ -359,6 +366,13 @@ const topArtists = async (
 		thisMonth,
 		lastMonth,
 	).then(async res => {
+		const { personal, group } = res
+
+	
+		return {
+			personal,
+			group
+		}
 		const { personal, group } = res
 
 		return {

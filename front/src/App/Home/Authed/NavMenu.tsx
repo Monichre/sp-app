@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { NavLink } from 'react-router-dom';
 import { LineChart, History, User } from 'grommet-icons'
 import { largeQuery, notLargeQuery, BRAND_COLOR, BRAND_PERSONAL_COLOR, Large } from '../../../shared/media';
-import {useInsightsDash} from '../../../types'
+import {useInsightsDash, useInsightsArtists} from '../../../types'
 import { LogoHorizontal } from '../../../shared/Logo';
 import { UserAchievementsList } from '../../Components/UserAchievementsList'
 import { suspensefulHook } from '../../../lib/suspensefulHook';
@@ -132,9 +132,19 @@ const { history, match} = rest
 const { location: { pathname } } = history
 const { path, params } = match
 const focus = pathname.split('/').slice(5,99).join('/')
+console.log('TCL: focus', focus)
 const pathParams = { focus, ...params }
 
-  const {insightsDash: usersTopArtistByPeriodData} = suspensefulHook(useInsightsDash({ variables: { uid }, suspend: true }))
+
+  // const {insightsDash: usersTopArtistByPeriodData} = suspensefulHook(useInsightsDash({ variables: { uid }, suspend: true }))
+  
+  const { insightsArtists: usersTopArtistByPeriodData } = suspensefulHook(useInsightsArtists({ variables: { uid }, suspend: true }))
+  console.log('TCL: usersTopArtistByPeriodData', usersTopArtistByPeriodData)
+  // [pathParams.timeScope]: {
+  //   timeSeries,
+  //   [pathParams.perspective]: { artists, genres }
+  // }
+  // const { [pathParams.timeScope]: { [pathParams.perspective]: artists } }: any = userTopArtistsFull
 
   
   return (

@@ -181,7 +181,7 @@ console.log('TCL: rest', rest)
     <AuthedView>
 
       <UserAchievementDataProvider user={user}>
-        <NavMenu {...{ initialHarvestComplete: initialHarvestComplete || false, lastUpdate: lastUpdate || '', user: user }} {...rest}  />
+        <NavMenu {...{ initialHarvestComplete: initialHarvestComplete || false, lastUpdate: lastUpdate || '', user: user, ...rest}}  />
   
           <React.Suspense fallback={<Loading/>}>
             <Switch>

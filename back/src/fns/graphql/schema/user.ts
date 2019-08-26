@@ -16,7 +16,7 @@ import { QueueStartHarvestUser } from '../../../shared/queues'
 const typeDefs = `
 type Query {
   getUserInfo(uid: String!): UserInfoResponse!
-  getUserAchievements(pk: String!, fk: String!): [UserAchievement]
+  getUserAchievements(pk: String!, uk: String!): [UserAchievement]
 }
 
 
@@ -81,9 +81,11 @@ type Artist {
 type UserAchievement {
 	artist: Artist
 	total: Int
+	lastUpdated: String
 	pk: String
-	fk: String
-	sk: String
+	uk: String
+	auk: String
+	ak: String
 	user: User
 }
 
@@ -177,14 +179,14 @@ const initialHarvestComplete: UserInfoResponseResolvers.InitialHarvestCompleteRe
 const getUserAchievements: any = async (
 	_: any,
 	{
-	pk, fk
+	pk, uk
 	}: any,
 	{ log, DYNAMO_ENDPOINT, TABLE_ACHIEVEMENT }: any
 ) => {
 	const tableAchievement = TableAchievement(DYNAMO_ENDPOINT, TABLE_ACHIEVEMENT)
-	console.log('TCL: fk', fk)
+	console.log('TCL: fk', uk)
 	console.log('TCL: pk', pk)
-	const data = await tableAchievement.getUserAchievements(pk, fk)
+	const data = await tableAchievement.getUserAchievements(pk, uk)
     console.log('TCL: getUserAchievements Query data', data)
 	
 	return data

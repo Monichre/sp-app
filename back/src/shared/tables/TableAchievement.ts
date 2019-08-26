@@ -2,7 +2,7 @@ import * as AWS from 'aws-sdk'
 import * as moment from 'moment'
 import * as R from 'ramda'
 import { Timeseries } from '../../fns/graphql/types';
-import { TTableAchievement, StatRecordPreAchievementMetaDataKeyParams, KeyData, GetUserAchievementItem, TopArtistsRow, TimeseriesKeys, UserAchievementByArtistParams, AchievementRetrievalKeys, AKKeyRetrievalData, ArtistAchievementRetrievalKeys } from '../SharedTypes';
+import { TTableAchievement, StatRecordPreAchievementMetaDataKeyParams, KeyData, GetUserAchievementItem, TopArtistsRow, TimeseriesKeys, UserAchievementByArtistParams, AchievementRetrievalKeys, AKKeyRetrievalData, ArtistAchievementRetrievalKeys, AchievementRecord } from '../SharedTypes';
 import { PeriodType } from './TableStat';
 import { KeyMaker } from '../keyMaker';
 
@@ -73,6 +73,79 @@ export const TableAchievement = (
 
 	}
 
+	const makeAKTimeSeriesRetrievalKeys = (artistId: any) => {
+
+		// @ts-ignore
+		const day = moment().format('YYYY-MM-DD')
+		// @ts-ignore
+		const week = `${moment().year()}-${moment().week()}`
+		// @ts-ignore
+		const month = `${moment().year()}-${moment().month()}`
+
+	
+		return {
+			day: {
+				first: {
+					
+					pk: `topListener#first#artist#day#${day}`,
+					uk: `topListener#first#artist#${artistId}#day#${day}`
+				},
+				second: {
+					pk: `topListener#second#artist#day#${day}`,
+					uk: `topListener#second#artist#${artistId}#day#${day}`
+				},
+				third: {
+					pk: `topListener#third#artist#day#${day}`,
+					uk: `topListener#third#artist#${artistId}#day#${day}`
+				}
+			},
+			week: {
+				first: {
+					pk: `topListener#first#artist#week#${week}`,
+					uk: `topListener#first#artist#${artistId}#week#${week}`,
+				},
+				second: {
+					pk: `topListener#second#artist#week#${week}`,
+					uk: `topListener#second#artist#${artistId}#week#${week}`,
+				},
+				third: {
+					pk: `topListener#third#artist#week#${week}`,
+					uk: `topListener#third#artist#${artistId}#week#${week}`,
+				}
+			},
+			month: {
+				first: {
+					pk: `topListener#first#artist#month#${month}`,
+					uk: `topListener#first#artist#${artistId}#month#${month}`,
+				},
+				second: {
+					pk: `topListener#second#artist#month#${month}`,
+					uk: `topListener#second#artist#${artistId}#month#${month}`,
+				},
+				third: {
+					pk: `topListener#third#artist#month#${month}`,
+					uk: `topListener#third#artist#${artistId}#month#${month}`,
+				}
+			},
+			life: {
+				first: {
+					pk: `topListener#first#artist#life#life`,
+					uk: `topListener#first#artist#${artistId}#life#life`,
+				},
+				second: {
+					pk: `topListener#second#artist#life#life`,
+					uk: `topListener#second#artist#${artistId}#life#life`,
+				},
+				third: {
+					pk: `topListener#third#artist#life#life`,
+					uk: `topListener#third#artist#${artistId}#life#life`,
+				}
+			}
+		}
+	}
+	
+	
+
 	const makeAKRetrievalKeys = ({
 		periodType,
 		periodValue,
@@ -89,26 +162,6 @@ export const TableAchievement = (
 			achievementType,
 			achievementValue
 		})
-
-	}
-
-	const makeAchievementRetrievalKeys = ({
-		periodType,
-		periodValue,
-		artistId,
-		achievementType,
-		achievementValue
-	}: AchievementRetrievalKeys) => {
-		// const { makeAchievementRetrievalKeys } = KeyMaker()
-
-		// return makeAchievementRetrievalKeys({
-		// 	periodType,
-		// 	periodValue,
-		// 	artistId,
-		// 	achievementType,
-		// 	achievementValue
-		// })
-
 
 	}
 
@@ -134,47 +187,6 @@ export const TableAchievement = (
 		}
 	}
 
-	// const getTimeseries = async ({
-	// 	uid,
-	// 	relationId,
-	// 	relationType,
-	// 	periodType,
-	// 	startPeriod,
-	// 	endPeriod
-	// }: TimeseriesKeys): Promise<Timeseries[]> => {
-	// 	const sk = [uid, periodType, relationId].join('#')
-	// 	const startPk = [uid, relationType, periodType, startPeriod].join('#')
-	// 	const endPk = [uid, relationType, periodType, endPeriod].join('#')
-	// 	// console.log('getting stats for', { sk, startPk, endPk })
-
-	// const params = {
-	// 	TableName,
-	// 	// Limit,
-	// 	KeyConditionExpression: `sk = :sk and pk BETWEEN :s and :e`,
-	// 	IndexName: 'GSIReverse',
-	// 	// ScanIndexForward: false,
-	// 	ExpressionAttributeValues: {
-	// 		':sk': sk,
-	// 		':s': startPk,
-	// 		':e': endPk
-	// 	}
-	// }
-	// 	const result = await doc
-	// 		.query(params)
-	// 		.promise()
-	// 		.then(d =>
-	// 			d.Items.map(i => ({
-	// 				// artist: i.artist,
-	// 				period: i.pk.split('#')[3],
-	// 				playDurationMs: i.playDurationMs
-	// 			}))
-	// 		)
-	// 		.then(byPeriod)
-
-	// 	return result
-	// }
-
-
 	// cc: ArtistAchievementHoldersGSI#2; Uses the ArtistAchievementHoldersGSI. We actually don't need the pk here
 	// cc: TODO: Remove PK
 	const getArtistAchievementHolders = async ({ pk, ak }: ArtistAchievementRetrievalKeys) => {
@@ -198,6 +210,32 @@ export const TableAchievement = (
 				return res.Items && res.Items.length ? res.Items : []
 
 			})
+	}
+
+
+	const getArtistAchievementHoldersTimeSeries = async ({ artistId }: string) => {
+		const timeSeriesKeys = makeAKTimeSeriesRetrievalKeys(artistId)
+		const dayParams = {
+			TableName,
+			Limit: 3,
+			KeyConditionExpression: `ak = :ak`,
+			IndexName: 'ArtistAchievementHoldersGSI',
+			ScanIndexForward: false, // means descending
+			ExpressionAttributeValues: {
+				':ak': timeSeriesKeys.day.first
+			}
+		}
+
+		const dayData =  await doc
+			.query(params)
+			.promise()
+			.then((res: any) => {
+				console.log('TCL: getArtistAchievementHolders -> res', res)
+				return res.Items && res.Items.length ? res.Items : []
+
+			})
+
+			return dayData
 	}
 
 
@@ -260,12 +298,12 @@ export const TableAchievement = (
 		// Super hacky bullshit to get Typescript to fuck off while also
 		// providing type safety 
 
-		const Item: Achievement = {
+		const Item: AchievementRecord = {
 			...keyData,
 			...achievementData
 		}
 
-		const achievement: Achievement = await doc
+		const achievement: AchievementRecord = await doc
 			.put({
 				TableName,
 				Item: {
@@ -283,7 +321,7 @@ export const TableAchievement = (
 		makeAchievementCreationKeys,
 		makeAKRetrievalKeys,
 		periodsFor,
-		// makeAchievementRetrievalKeys,
+		getArtistAchievementHoldersTimeSeries,
 		getArtistAchievementHolders,
 		getUserAchievementsByArtist,
 		getUserAchievements,

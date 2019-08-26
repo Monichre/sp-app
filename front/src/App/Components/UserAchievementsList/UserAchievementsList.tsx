@@ -2,7 +2,7 @@ import * as React from 'react'
 import { useState } from 'react';
 import styled from 'styled-components';
 import { AchievementData, UserAchievementContext } from '../../Home/Authed/Authed';
-import { hrsAndMins } from '../../../lib/durationFormats';
+import { decimalToHrsMins, DecimalHoursToMinutes } from '../../../lib/durationFormats';
 import { AchievementListItem } from './AchievementListItem'
 import { HeaderFlexDiv } from '../Elements'
 import * as _ from 'lodash'
@@ -105,7 +105,7 @@ export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ use
 
     const la: any = (lifetimeAchievements) ? lifetimeAchievements.slice(0, 3).map(({ artistData, achievement }: any) => {
 
-        let total: any = hrsAndMins(achievement.total)
+        let total: DecimalHoursToMinutes = decimalToHrsMins(achievement.total)
         achievement.formattedTotal = total
 
         return { artistData, achievement }
@@ -114,7 +114,7 @@ export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ use
 
     const ma: any = (monthlyAchievements ) ? monthlyAchievements.slice(0, 3).map(({ artistData, achievement }: any) => {
 
-        let total: any = hrsAndMins(achievement.total)
+        let total: DecimalHoursToMinutes = decimalToHrsMins(achievement.total)
         achievement.formattedTotal = total
 
         return { artistData, achievement }
@@ -123,7 +123,7 @@ export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ use
     const wa: any = (weeklyAchievements) ? weeklyAchievements.slice(0, 3).map(({ artistData, achievement }: any) => {
         console.log('TCL: wa:any -> achievement', achievement)
 
-        let total: any = hrsAndMins(achievement.total)
+        let total: DecimalHoursToMinutes = decimalToHrsMins(achievement.total)
         achievement.formattedTotal = total
 
         return { artistData, achievement }

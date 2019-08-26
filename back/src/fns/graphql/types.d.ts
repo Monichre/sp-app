@@ -1,4 +1,4 @@
-// Generated in 2019-08-21T20:39:02-04:00
+// Generated in 2019-08-25T20:03:15-04:00
 // REGENERATE THIS BY STARTING THE LOCAL SERVER
 // AND THEN RUNNING `back % yarn generate`
 
@@ -51,11 +51,15 @@ export interface UserAchievement {
 
   total?: Maybe<number>;
 
+  lastUpdated?: Maybe<string>;
+
   pk?: Maybe<string>;
 
-  fk?: Maybe<string>;
+  uk?: Maybe<string>;
 
-  sk?: Maybe<string>;
+  auk?: Maybe<string>;
+
+  ak?: Maybe<string>;
 
   user?: Maybe<User>;
 }
@@ -332,7 +336,7 @@ export interface GetUserInfoQueryArgs {
 export interface GetUserAchievementsQueryArgs {
   pk: string;
 
-  fk: string;
+  uk: string;
 }
 export interface RecentPlaysQueryArgs {
   uid: string;
@@ -499,7 +503,7 @@ export namespace QueryResolvers {
   export interface GetUserAchievementsArgs {
     pk: string;
 
-    fk: string;
+    uk: string;
   }
 
   export type _Resolver<
@@ -652,11 +656,15 @@ export namespace UserAchievementResolvers {
 
     total?: TotalResolver<Maybe<number>, TypeParent, TContext>;
 
+    lastUpdated?: LastUpdatedResolver<Maybe<string>, TypeParent, TContext>;
+
     pk?: PkResolver<Maybe<string>, TypeParent, TContext>;
 
-    fk?: FkResolver<Maybe<string>, TypeParent, TContext>;
+    uk?: UkResolver<Maybe<string>, TypeParent, TContext>;
 
-    sk?: SkResolver<Maybe<string>, TypeParent, TContext>;
+    auk?: AukResolver<Maybe<string>, TypeParent, TContext>;
+
+    ak?: AkResolver<Maybe<string>, TypeParent, TContext>;
 
     user?: UserResolver<Maybe<User>, TypeParent, TContext>;
   }
@@ -671,17 +679,27 @@ export namespace UserAchievementResolvers {
     Parent = UserAchievement,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
+  export type LastUpdatedResolver<
+    R = Maybe<string>,
+    Parent = UserAchievement,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
   export type PkResolver<
     R = Maybe<string>,
     Parent = UserAchievement,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
-  export type FkResolver<
+  export type UkResolver<
     R = Maybe<string>,
     Parent = UserAchievement,
     TContext = Context
   > = Resolver<R, Parent, TContext>;
-  export type SkResolver<
+  export type AukResolver<
+    R = Maybe<string>,
+    Parent = UserAchievement,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type AkResolver<
     R = Maybe<string>,
     Parent = UserAchievement,
     TContext = Context

@@ -46,7 +46,8 @@ export const normalizeTimeScope = (pathParams: any) => {
     thisWeek: 'This Week',
     thisMonth: 'This Month',
     thisYear: 'This Year',
-    life: 'Life Time',
+      life: 'Life Time',
+      lifetime: 'Life Time',
 
   }
   const { timeScope, perspective }: any = pathParams
@@ -76,6 +77,8 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
 
   console.count('Overview Render: ')
 
+  const artistCount = artists.length === 3 ? 3 : null
+
   return <>
     <TimeseriesChart {...{ timeSeries, showOnly: pathParams.perspective }} />
     <Row>
@@ -88,7 +91,7 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
 
         <ArtistsChartBlock {...{ artists, pathParams }} userId={uid}>
           <BlockTitle>
-          {translatedPerspective} Top Artists {period}
+          {translatedPerspective} Top {artistCount} Artists {period}
           </BlockTitle>
         </ArtistsChartBlock>
       </AchievementHoverSummary>
@@ -117,6 +120,3 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
     <ReactTooltip place="top" type="dark" effect="float" />
   </>
 }
-
-
-273990

@@ -275,6 +275,8 @@ export type TTableAchievement = {
 
 	// makeAchievementRetrievalKeys
 
+	getArtistAchievementHoldersTimeSeries: = (args: any) => any
+
 	makeAKRetrievalKeys: (args: AKKeyRetrievalData) => ArtistAchievementRetrievalKeys
 
 	periodsFor: (

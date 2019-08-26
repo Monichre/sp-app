@@ -1,4 +1,4 @@
-// Generated in 2019-08-21T20:39:07-04:00
+// Generated in 2019-08-25T20:03:20-04:00
 // REGENERATE THIS BY STARTING THE LOCAL BACKEND
 // AND THEN RUNNING `front % yarn generate`
 
@@ -10,7 +10,7 @@ export type Maybe<T> = T | null;
 
 export type GetUserAchievementsVariables = {
   pk: string;
-  fk: string;
+  uk: string;
 };
 
 export type GetUserAchievementsQuery = {
@@ -24,11 +24,13 @@ export type GetUserAchievementsGetUserAchievements = {
 
   total: Maybe<number>;
 
-  sk: Maybe<string>;
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
 
   pk: Maybe<string>;
 
-  fk: Maybe<string>;
+  ak: Maybe<string>;
 
   artist: Maybe<GetUserAchievementsArtist>;
 
@@ -61,8 +63,6 @@ export type GetUserAchievementsExternalUrls = {
 
 export type GetUserAchievementsUser = {
   __typename?: "User";
-
-  achievements: Maybe<(Maybe<string>)[]>;
 
   uid: Maybe<string>;
 
@@ -2616,12 +2616,13 @@ export const TimescopeGenreStatsFragmentFragmentDoc = gql`
 // ====================================================
 
 export const GetUserAchievementsDocument = gql`
-  query GetUserAchievements($pk: String!, $fk: String!) {
-    getUserAchievements(pk: $pk, fk: $fk) {
+  query GetUserAchievements($pk: String!, $uk: String!) {
+    getUserAchievements(pk: $pk, uk: $uk) {
       total
-      sk
+      uk
+      auk
       pk
-      fk
+      ak
       artist {
         name
         genres
@@ -2633,7 +2634,6 @@ export const GetUserAchievementsDocument = gql`
         }
       }
       user {
-        achievements
         uid
         email
         displayName

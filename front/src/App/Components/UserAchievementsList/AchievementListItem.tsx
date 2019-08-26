@@ -74,16 +74,16 @@ export const AchievementListItem: React.SFC<AchievementListItemProps> = ({ title
         <Tree name={title} onClick={handleClick}>
             <FlexDiv>
                 {achievements.length ? achievements.map(({artistData,achievement}: any) => {
-                    const { pk, sk, total, user } = achievement
+                    const {  total, formattedTotal } = achievement
                     const { artist } = artistData
-                    const { hrs, mins } = hrsAndMins(total)
+                    
 
                     return (
                         <ArtistThumbPrev>
 
                             <AvatarBg src={artist.images && artist.images[0] ? artist.images[0].url : ''} />
                             <ArtistNameDiv>{artist.name}</ArtistNameDiv>
-                            <p>{hrs ? `${hrs} hr` : null} {mins} min</p>
+                            <p>{formattedTotal} min</p>
 
                         </ArtistThumbPrev>
                     )
