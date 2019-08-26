@@ -33,15 +33,19 @@ const TopListenerLink: any = ({ className, handleClick, children }: any) => (
 
 export const TopListenerYaxis: React.SFC<TickProps & any> = React.memo(({ x, y, offset, artist, pathParams, userId, totalTimeListened, groupScore }) => {
 
-    const GoodieGood: any = suspensefulHook(useGetArtistAchievementHolders({ variables: { artistId: artist.id }}))
-    console.log('TCL: GoodieGood', GoodieGood)
+    const { getArtistAchievementHolders }: any = suspensefulHook(useGetArtistAchievementHolders({ variables: { artistId: artist.id }})) 
+    console.log('TCL: getArtistAchievementHolders', getArtistAchievementHolders)
+    
 
-    const {getArtistAchievementHolders } = GoodieGood
+    // const {getArtistAchievementHolders = null } = data ? data : null
 
     const {day, week, month, life}: any = getArtistAchievementHolders
 
     const [visible, setVisible] = useState(false)
     const handleClick = () => setVisible(visible => !visible)
+    const theyAllNull = Object.keys(getArtistAchievementHolders).every((key: any) => getArtistAchievementHolders[key] === null)
+    console.log('TCL: theyAllNull', theyAllNull)
+    
     // const { topListeners } = artist
     // const { timeScope }: any = pathParams
     // const { achievements, currentUser } = useContext(UserAchievementContext)
@@ -116,7 +120,7 @@ export const TopListenerYaxis: React.SFC<TickProps & any> = React.memo(({ x, y, 
 
 
 
-    return (
+    return theyAllNull ? null : (
         <PopOverStyle>
             <Popover placement="topLeft" content={ToolTipListeners} title="Top Listeners" trigger="click"
                 visible={visible}>
