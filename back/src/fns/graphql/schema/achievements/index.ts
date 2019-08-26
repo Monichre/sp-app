@@ -1,11 +1,6 @@
 // @ts-nocheck
 // @ts-ignore
 import { makeExecutableSchema } from 'graphql-tools'
-import {
-    QueryResolvers,
-    UserInfoResponseResolvers,
-    UserInfoResponse
-} from '../../types'
 import { TableUser } from '../../../../shared/tables/TableUser'
 import {
     TableAchievement

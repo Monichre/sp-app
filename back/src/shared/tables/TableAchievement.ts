@@ -20,13 +20,6 @@ import { KeyMaker } from '../keyMaker';
 
 =============================================*/
 
-const byTimeThenArtistName = R.sortWith<TopArtistsRow>([
-	R.descend(R.prop('playDurationMs')),
-	R.ascend(R.path(['artist', 'name']))
-])
-
-const byPeriod = R.sortWith<Timeseries>([R.ascend(R.path(['period']))])
-
 export const TableAchievement = (
 	endpoint: string,
 	TableName: string
@@ -45,8 +38,6 @@ export const TableAchievement = (
 		achievementValue: 'first' | 'second' | 'third'
 		uid?: string | null
 	}
-
-	const joinKeyParams = (args: any) => [...args].join('#')
 
 	const makeAchievementCreationKeys = ({ achievementType, achievementValue, pk, artistAchievementsId }: StatRecordPreAchievementMetaDataKeyParams) => {
 

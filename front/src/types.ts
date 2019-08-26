@@ -1,4 +1,4 @@
-// Generated in 2019-08-26T01:03:05-04:00
+// Generated in 2019-08-26T01:51:28-04:00
 // REGENERATE THIS BY STARTING THE LOCAL BACKEND
 // AND THEN RUNNING `front % yarn generate`
 
@@ -136,6 +136,742 @@ export type GetUserAchievementsExternalUrls = {
 };
 
 export type GetUserAchievementsUser = {
+  __typename?: "User";
+
+  uid: Maybe<string>;
+
+  email: Maybe<string>;
+
+  displayName: Maybe<string>;
+
+  lastUpdate: Maybe<string>;
+
+  photoURL: Maybe<string>;
+};
+
+export type GetArtistAchievementHoldersVariables = {
+  artistId: string;
+};
+
+export type GetArtistAchievementHoldersQuery = {
+  __typename?: "Query";
+
+  getArtistAchievementHolders: Maybe<
+    GetArtistAchievementHoldersGetArtistAchievementHolders
+  >;
+};
+
+export type GetArtistAchievementHoldersGetArtistAchievementHolders = {
+  __typename?: "TopListenerData";
+
+  day: Maybe<GetArtistAchievementHoldersDay>;
+
+  week: Maybe<GetArtistAchievementHoldersWeek>;
+
+  month: Maybe<GetArtistAchievementHoldersMonth>;
+
+  life: Maybe<GetArtistAchievementHoldersLife>;
+};
+
+export type GetArtistAchievementHoldersDay = {
+  __typename?: "TopListenerDataPeriod";
+
+  first: Maybe<GetArtistAchievementHoldersFirst>;
+
+  second: Maybe<GetArtistAchievementHoldersSecond>;
+
+  third: Maybe<GetArtistAchievementHoldersThird>;
+};
+
+export type GetArtistAchievementHoldersFirst = {
+  __typename?: "UserAchievement";
+
+  total: Maybe<number>;
+
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  pk: Maybe<string>;
+
+  ak: Maybe<string>;
+
+  artist: Maybe<GetArtistAchievementHoldersArtist>;
+
+  user: Maybe<GetArtistAchievementHoldersUser>;
+};
+
+export type GetArtistAchievementHoldersArtist = {
+  __typename?: "Artist";
+
+  name: string;
+
+  genres: string[];
+
+  images: GetArtistAchievementHoldersImages[];
+
+  external_urls: GetArtistAchievementHoldersExternalUrls;
+};
+
+export type GetArtistAchievementHoldersImages = {
+  __typename?: "Image";
+
+  url: string;
+};
+
+export type GetArtistAchievementHoldersExternalUrls = {
+  __typename?: "SpotifyUrl";
+
+  spotify: string;
+};
+
+export type GetArtistAchievementHoldersUser = {
+  __typename?: "User";
+
+  uid: Maybe<string>;
+
+  email: Maybe<string>;
+
+  displayName: Maybe<string>;
+
+  lastUpdate: Maybe<string>;
+
+  photoURL: Maybe<string>;
+};
+
+export type GetArtistAchievementHoldersSecond = {
+  __typename?: "UserAchievement";
+
+  total: Maybe<number>;
+
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  pk: Maybe<string>;
+
+  ak: Maybe<string>;
+
+  artist: Maybe<GetArtistAchievementHolders_Artist>;
+
+  user: Maybe<GetArtistAchievementHolders_User>;
+};
+
+export type GetArtistAchievementHolders_Artist = {
+  __typename?: "Artist";
+
+  name: string;
+
+  genres: string[];
+
+  images: GetArtistAchievementHolders_Images[];
+
+  external_urls: GetArtistAchievementHolders_ExternalUrls;
+};
+
+export type GetArtistAchievementHolders_Images = {
+  __typename?: "Image";
+
+  url: string;
+};
+
+export type GetArtistAchievementHolders_ExternalUrls = {
+  __typename?: "SpotifyUrl";
+
+  spotify: string;
+};
+
+export type GetArtistAchievementHolders_User = {
+  __typename?: "User";
+
+  uid: Maybe<string>;
+
+  email: Maybe<string>;
+
+  displayName: Maybe<string>;
+
+  lastUpdate: Maybe<string>;
+
+  photoURL: Maybe<string>;
+};
+
+export type GetArtistAchievementHoldersThird = {
+  __typename?: "UserAchievement";
+
+  total: Maybe<number>;
+
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  pk: Maybe<string>;
+
+  ak: Maybe<string>;
+
+  artist: Maybe<GetArtistAchievementHolders__Artist>;
+
+  user: Maybe<GetArtistAchievementHolders__User>;
+};
+
+export type GetArtistAchievementHolders__Artist = {
+  __typename?: "Artist";
+
+  name: string;
+
+  genres: string[];
+
+  images: GetArtistAchievementHolders__Images[];
+
+  external_urls: GetArtistAchievementHolders__ExternalUrls;
+};
+
+export type GetArtistAchievementHolders__Images = {
+  __typename?: "Image";
+
+  url: string;
+};
+
+export type GetArtistAchievementHolders__ExternalUrls = {
+  __typename?: "SpotifyUrl";
+
+  spotify: string;
+};
+
+export type GetArtistAchievementHolders__User = {
+  __typename?: "User";
+
+  uid: Maybe<string>;
+
+  email: Maybe<string>;
+
+  displayName: Maybe<string>;
+
+  lastUpdate: Maybe<string>;
+
+  photoURL: Maybe<string>;
+};
+
+export type GetArtistAchievementHoldersWeek = {
+  __typename?: "TopListenerDataPeriod";
+
+  first: Maybe<GetArtistAchievementHolders_First>;
+
+  second: Maybe<GetArtistAchievementHolders_Second>;
+
+  third: Maybe<GetArtistAchievementHolders_Third>;
+};
+
+export type GetArtistAchievementHolders_First = {
+  __typename?: "UserAchievement";
+
+  total: Maybe<number>;
+
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  pk: Maybe<string>;
+
+  ak: Maybe<string>;
+
+  artist: Maybe<GetArtistAchievementHolders___Artist>;
+
+  user: Maybe<GetArtistAchievementHolders___User>;
+};
+
+export type GetArtistAchievementHolders___Artist = {
+  __typename?: "Artist";
+
+  name: string;
+
+  genres: string[];
+
+  images: GetArtistAchievementHolders___Images[];
+
+  external_urls: GetArtistAchievementHolders___ExternalUrls;
+};
+
+export type GetArtistAchievementHolders___Images = {
+  __typename?: "Image";
+
+  url: string;
+};
+
+export type GetArtistAchievementHolders___ExternalUrls = {
+  __typename?: "SpotifyUrl";
+
+  spotify: string;
+};
+
+export type GetArtistAchievementHolders___User = {
+  __typename?: "User";
+
+  uid: Maybe<string>;
+
+  email: Maybe<string>;
+
+  displayName: Maybe<string>;
+
+  lastUpdate: Maybe<string>;
+
+  photoURL: Maybe<string>;
+};
+
+export type GetArtistAchievementHolders_Second = {
+  __typename?: "UserAchievement";
+
+  total: Maybe<number>;
+
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  pk: Maybe<string>;
+
+  ak: Maybe<string>;
+
+  artist: Maybe<GetArtistAchievementHolders____Artist>;
+
+  user: Maybe<GetArtistAchievementHolders____User>;
+};
+
+export type GetArtistAchievementHolders____Artist = {
+  __typename?: "Artist";
+
+  name: string;
+
+  genres: string[];
+
+  images: GetArtistAchievementHolders____Images[];
+
+  external_urls: GetArtistAchievementHolders____ExternalUrls;
+};
+
+export type GetArtistAchievementHolders____Images = {
+  __typename?: "Image";
+
+  url: string;
+};
+
+export type GetArtistAchievementHolders____ExternalUrls = {
+  __typename?: "SpotifyUrl";
+
+  spotify: string;
+};
+
+export type GetArtistAchievementHolders____User = {
+  __typename?: "User";
+
+  uid: Maybe<string>;
+
+  email: Maybe<string>;
+
+  displayName: Maybe<string>;
+
+  lastUpdate: Maybe<string>;
+
+  photoURL: Maybe<string>;
+};
+
+export type GetArtistAchievementHolders_Third = {
+  __typename?: "UserAchievement";
+
+  total: Maybe<number>;
+
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  pk: Maybe<string>;
+
+  ak: Maybe<string>;
+
+  artist: Maybe<GetArtistAchievementHolders_____Artist>;
+
+  user: Maybe<GetArtistAchievementHolders_____User>;
+};
+
+export type GetArtistAchievementHolders_____Artist = {
+  __typename?: "Artist";
+
+  name: string;
+
+  genres: string[];
+
+  images: GetArtistAchievementHolders_____Images[];
+
+  external_urls: GetArtistAchievementHolders_____ExternalUrls;
+};
+
+export type GetArtistAchievementHolders_____Images = {
+  __typename?: "Image";
+
+  url: string;
+};
+
+export type GetArtistAchievementHolders_____ExternalUrls = {
+  __typename?: "SpotifyUrl";
+
+  spotify: string;
+};
+
+export type GetArtistAchievementHolders_____User = {
+  __typename?: "User";
+
+  uid: Maybe<string>;
+
+  email: Maybe<string>;
+
+  displayName: Maybe<string>;
+
+  lastUpdate: Maybe<string>;
+
+  photoURL: Maybe<string>;
+};
+
+export type GetArtistAchievementHoldersMonth = {
+  __typename?: "TopListenerDataPeriod";
+
+  first: Maybe<GetArtistAchievementHolders__First>;
+
+  second: Maybe<GetArtistAchievementHolders__Second>;
+
+  third: Maybe<GetArtistAchievementHolders__Third>;
+};
+
+export type GetArtistAchievementHolders__First = {
+  __typename?: "UserAchievement";
+
+  total: Maybe<number>;
+
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  pk: Maybe<string>;
+
+  ak: Maybe<string>;
+
+  artist: Maybe<GetArtistAchievementHolders______Artist>;
+
+  user: Maybe<GetArtistAchievementHolders______User>;
+};
+
+export type GetArtistAchievementHolders______Artist = {
+  __typename?: "Artist";
+
+  name: string;
+
+  genres: string[];
+
+  images: GetArtistAchievementHolders______Images[];
+
+  external_urls: GetArtistAchievementHolders______ExternalUrls;
+};
+
+export type GetArtistAchievementHolders______Images = {
+  __typename?: "Image";
+
+  url: string;
+};
+
+export type GetArtistAchievementHolders______ExternalUrls = {
+  __typename?: "SpotifyUrl";
+
+  spotify: string;
+};
+
+export type GetArtistAchievementHolders______User = {
+  __typename?: "User";
+
+  uid: Maybe<string>;
+
+  email: Maybe<string>;
+
+  displayName: Maybe<string>;
+
+  lastUpdate: Maybe<string>;
+
+  photoURL: Maybe<string>;
+};
+
+export type GetArtistAchievementHolders__Second = {
+  __typename?: "UserAchievement";
+
+  total: Maybe<number>;
+
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  pk: Maybe<string>;
+
+  ak: Maybe<string>;
+
+  artist: Maybe<GetArtistAchievementHolders_______Artist>;
+
+  user: Maybe<GetArtistAchievementHolders_______User>;
+};
+
+export type GetArtistAchievementHolders_______Artist = {
+  __typename?: "Artist";
+
+  name: string;
+
+  genres: string[];
+
+  images: GetArtistAchievementHolders_______Images[];
+
+  external_urls: GetArtistAchievementHolders_______ExternalUrls;
+};
+
+export type GetArtistAchievementHolders_______Images = {
+  __typename?: "Image";
+
+  url: string;
+};
+
+export type GetArtistAchievementHolders_______ExternalUrls = {
+  __typename?: "SpotifyUrl";
+
+  spotify: string;
+};
+
+export type GetArtistAchievementHolders_______User = {
+  __typename?: "User";
+
+  uid: Maybe<string>;
+
+  email: Maybe<string>;
+
+  displayName: Maybe<string>;
+
+  lastUpdate: Maybe<string>;
+
+  photoURL: Maybe<string>;
+};
+
+export type GetArtistAchievementHolders__Third = {
+  __typename?: "UserAchievement";
+
+  total: Maybe<number>;
+
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  pk: Maybe<string>;
+
+  ak: Maybe<string>;
+
+  artist: Maybe<GetArtistAchievementHolders________Artist>;
+
+  user: Maybe<GetArtistAchievementHolders________User>;
+};
+
+export type GetArtistAchievementHolders________Artist = {
+  __typename?: "Artist";
+
+  name: string;
+
+  genres: string[];
+
+  images: GetArtistAchievementHolders________Images[];
+
+  external_urls: GetArtistAchievementHolders________ExternalUrls;
+};
+
+export type GetArtistAchievementHolders________Images = {
+  __typename?: "Image";
+
+  url: string;
+};
+
+export type GetArtistAchievementHolders________ExternalUrls = {
+  __typename?: "SpotifyUrl";
+
+  spotify: string;
+};
+
+export type GetArtistAchievementHolders________User = {
+  __typename?: "User";
+
+  uid: Maybe<string>;
+
+  email: Maybe<string>;
+
+  displayName: Maybe<string>;
+
+  lastUpdate: Maybe<string>;
+
+  photoURL: Maybe<string>;
+};
+
+export type GetArtistAchievementHoldersLife = {
+  __typename?: "TopListenerDataPeriod";
+
+  first: Maybe<GetArtistAchievementHolders___First>;
+
+  second: Maybe<GetArtistAchievementHolders___Second>;
+
+  third: Maybe<GetArtistAchievementHolders___Third>;
+};
+
+export type GetArtistAchievementHolders___First = {
+  __typename?: "UserAchievement";
+
+  total: Maybe<number>;
+
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  pk: Maybe<string>;
+
+  ak: Maybe<string>;
+
+  artist: Maybe<GetArtistAchievementHolders_________Artist>;
+
+  user: Maybe<GetArtistAchievementHolders_________User>;
+};
+
+export type GetArtistAchievementHolders_________Artist = {
+  __typename?: "Artist";
+
+  name: string;
+
+  genres: string[];
+
+  images: GetArtistAchievementHolders_________Images[];
+
+  external_urls: GetArtistAchievementHolders_________ExternalUrls;
+};
+
+export type GetArtistAchievementHolders_________Images = {
+  __typename?: "Image";
+
+  url: string;
+};
+
+export type GetArtistAchievementHolders_________ExternalUrls = {
+  __typename?: "SpotifyUrl";
+
+  spotify: string;
+};
+
+export type GetArtistAchievementHolders_________User = {
+  __typename?: "User";
+
+  uid: Maybe<string>;
+
+  email: Maybe<string>;
+
+  displayName: Maybe<string>;
+
+  lastUpdate: Maybe<string>;
+
+  photoURL: Maybe<string>;
+};
+
+export type GetArtistAchievementHolders___Second = {
+  __typename?: "UserAchievement";
+
+  total: Maybe<number>;
+
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  pk: Maybe<string>;
+
+  ak: Maybe<string>;
+
+  artist: Maybe<GetArtistAchievementHolders__________Artist>;
+
+  user: Maybe<GetArtistAchievementHolders__________User>;
+};
+
+export type GetArtistAchievementHolders__________Artist = {
+  __typename?: "Artist";
+
+  name: string;
+
+  genres: string[];
+
+  images: GetArtistAchievementHolders__________Images[];
+
+  external_urls: GetArtistAchievementHolders__________ExternalUrls;
+};
+
+export type GetArtistAchievementHolders__________Images = {
+  __typename?: "Image";
+
+  url: string;
+};
+
+export type GetArtistAchievementHolders__________ExternalUrls = {
+  __typename?: "SpotifyUrl";
+
+  spotify: string;
+};
+
+export type GetArtistAchievementHolders__________User = {
+  __typename?: "User";
+
+  uid: Maybe<string>;
+
+  email: Maybe<string>;
+
+  displayName: Maybe<string>;
+
+  lastUpdate: Maybe<string>;
+
+  photoURL: Maybe<string>;
+};
+
+export type GetArtistAchievementHolders___Third = {
+  __typename?: "UserAchievement";
+
+  total: Maybe<number>;
+
+  uk: Maybe<string>;
+
+  auk: Maybe<string>;
+
+  pk: Maybe<string>;
+
+  ak: Maybe<string>;
+
+  artist: Maybe<GetArtistAchievementHolders___________Artist>;
+
+  user: Maybe<GetArtistAchievementHolders___________User>;
+};
+
+export type GetArtistAchievementHolders___________Artist = {
+  __typename?: "Artist";
+
+  name: string;
+
+  genres: string[];
+
+  images: GetArtistAchievementHolders___________Images[];
+
+  external_urls: GetArtistAchievementHolders___________ExternalUrls;
+};
+
+export type GetArtistAchievementHolders___________Images = {
+  __typename?: "Image";
+
+  url: string;
+};
+
+export type GetArtistAchievementHolders___________ExternalUrls = {
+  __typename?: "SpotifyUrl";
+
+  spotify: string;
+};
+
+export type GetArtistAchievementHolders___________User = {
   __typename?: "User";
 
   uid: Maybe<string>;
@@ -2903,6 +3639,318 @@ export function useGetUserAchievements(
     GetUserAchievementsQuery,
     GetUserAchievementsVariables
   >(GetUserAchievementsDocument, baseOptions);
+}
+export const GetArtistAchievementHoldersDocument = gql`
+  query GetArtistAchievementHolders($artistId: String!) {
+    getArtistAchievementHolders(artistId: $artistId) {
+      day {
+        first {
+          total
+          uk
+          auk
+          pk
+          ak
+          artist {
+            name
+            genres
+            images {
+              url
+            }
+            external_urls {
+              spotify
+            }
+          }
+          user {
+            uid
+            email
+            displayName
+            lastUpdate
+            photoURL
+          }
+        }
+        second {
+          total
+          uk
+          auk
+          pk
+          ak
+          artist {
+            name
+            genres
+            images {
+              url
+            }
+            external_urls {
+              spotify
+            }
+          }
+          user {
+            uid
+            email
+            displayName
+            lastUpdate
+            photoURL
+          }
+        }
+        third {
+          total
+          uk
+          auk
+          pk
+          ak
+          artist {
+            name
+            genres
+            images {
+              url
+            }
+            external_urls {
+              spotify
+            }
+          }
+          user {
+            uid
+            email
+            displayName
+            lastUpdate
+            photoURL
+          }
+        }
+      }
+      week {
+        first {
+          total
+          uk
+          auk
+          pk
+          ak
+          artist {
+            name
+            genres
+            images {
+              url
+            }
+            external_urls {
+              spotify
+            }
+          }
+          user {
+            uid
+            email
+            displayName
+            lastUpdate
+            photoURL
+          }
+        }
+        second {
+          total
+          uk
+          auk
+          pk
+          ak
+          artist {
+            name
+            genres
+            images {
+              url
+            }
+            external_urls {
+              spotify
+            }
+          }
+          user {
+            uid
+            email
+            displayName
+            lastUpdate
+            photoURL
+          }
+        }
+        third {
+          total
+          uk
+          auk
+          pk
+          ak
+          artist {
+            name
+            genres
+            images {
+              url
+            }
+            external_urls {
+              spotify
+            }
+          }
+          user {
+            uid
+            email
+            displayName
+            lastUpdate
+            photoURL
+          }
+        }
+      }
+      month {
+        first {
+          total
+          uk
+          auk
+          pk
+          ak
+          artist {
+            name
+            genres
+            images {
+              url
+            }
+            external_urls {
+              spotify
+            }
+          }
+          user {
+            uid
+            email
+            displayName
+            lastUpdate
+            photoURL
+          }
+        }
+        second {
+          total
+          uk
+          auk
+          pk
+          ak
+          artist {
+            name
+            genres
+            images {
+              url
+            }
+            external_urls {
+              spotify
+            }
+          }
+          user {
+            uid
+            email
+            displayName
+            lastUpdate
+            photoURL
+          }
+        }
+        third {
+          total
+          uk
+          auk
+          pk
+          ak
+          artist {
+            name
+            genres
+            images {
+              url
+            }
+            external_urls {
+              spotify
+            }
+          }
+          user {
+            uid
+            email
+            displayName
+            lastUpdate
+            photoURL
+          }
+        }
+      }
+      life {
+        first {
+          total
+          uk
+          auk
+          pk
+          ak
+          artist {
+            name
+            genres
+            images {
+              url
+            }
+            external_urls {
+              spotify
+            }
+          }
+          user {
+            uid
+            email
+            displayName
+            lastUpdate
+            photoURL
+          }
+        }
+        second {
+          total
+          uk
+          auk
+          pk
+          ak
+          artist {
+            name
+            genres
+            images {
+              url
+            }
+            external_urls {
+              spotify
+            }
+          }
+          user {
+            uid
+            email
+            displayName
+            lastUpdate
+            photoURL
+          }
+        }
+        third {
+          total
+          uk
+          auk
+          pk
+          ak
+          artist {
+            name
+            genres
+            images {
+              url
+            }
+            external_urls {
+              spotify
+            }
+          }
+          user {
+            uid
+            email
+            displayName
+            lastUpdate
+            photoURL
+          }
+        }
+      }
+    }
+  }
+`;
+export function useGetArtistAchievementHolders(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<
+    GetArtistAchievementHoldersVariables
+  >
+) {
+  return ReactApolloHooks.useQuery<
+    GetArtistAchievementHoldersQuery,
+    GetArtistAchievementHoldersVariables
+  >(GetArtistAchievementHoldersDocument, baseOptions);
 }
 export const GetUserInfoDocument = gql`
   query GetUserInfo($uid: String!) {

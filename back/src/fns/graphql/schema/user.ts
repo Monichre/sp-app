@@ -7,15 +7,13 @@ import {
 	UserInfoResponse
 } from '../types'
 import { TableUser } from '../../../shared/tables/TableUser'
-import {
-	TableAchievement
-} from '../../../shared/tables/TableAchievement'
 import * as moment from 'moment'
 import { QueueStartHarvestUser } from '../../../shared/queues'
 
 const typeDefs = `
 type Query {
   getUserInfo(uid: String!): UserInfoResponse!
+  getUserAchievements(pk: String!, uk: String!): [UserAchievement]
 }
 
 
@@ -175,34 +173,6 @@ const initialHarvestComplete: UserInfoResponseResolvers.InitialHarvestCompleteRe
 	return isInitialHarvestComplete(userInfo)
 }
 
-/**
- *
- * cc: GetUserAchievementsByArtist;  
- *
- */
-
- 
- /*=============================================
- =            FUNCTION PARAMS: KEYS            =
-
-
- aglPK
- =============================================*/
- 
- 
-
-
-// const getUserAchievementsByArtist: any = async (
-// 	_: any,
-// 	{ aglPK, userFK }: any,
-// 	{ log, DYNAMO_ENDPOINT, TABLE_ACHIEVEMENT }: any
-// ) => {
-	
-// 	const data = await tableAchievement.getUserAchievementsByArtist(aglPK, fk)
-// 	console.log('TCL: getUserAchievements Query data', data)
-
-// 	return data
-// }
 
 const UserInfoResponse = {
 	initialHarvestComplete
