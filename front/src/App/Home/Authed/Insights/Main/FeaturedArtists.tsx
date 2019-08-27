@@ -71,24 +71,24 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: 'Ready',
-    hover: '170 monthly streamers on Spotify',
-    name: 'Ryan Traster',
-    href: 'https://open.spotify.com/artist/7teZWy6PojgN4JRIXQVqhk?si=WnCeVlbCRC-SCpLPKUNA8g',
-    src: 'http://stmedia.stimg.co/Ryan_Traster_by_Gab_Stueve.jpg?w=800'
+    hover: '253 monthly streamers on Spotify',
+    name: 'KayelaJ',
+    href: 'https://open.spotify.com/artist/0dYsGdodqIEZxY4PYR9yMQ?si=5faqz-DwQLKumrxhZWeE2w',
+    src: 'https://www.wweek.com/resizer/HvBCEdQ7jORV81pFDyYQQqaKCqI=/1200x0/filters:quality(100)/s3.amazonaws.com/arc-wordpress-client-uploads/wweek/wp-content/uploads/2018/07/17182515/Kay-67-of-77-e1531877215776.jpg'
   },
   {
     title: 'Set',
-    hover: '90,364 monthly streamers on Spotify',
-    name: 'Squid',
-    href: 'https://open.spotify.com/artist/685XjGzGztyivfR3fAjoxo?si=KQ5pelCgSleMoTbSVQ8aYg',
-    src: 'http://www.newsoundwales.com/wp-content/uploads/2019/04/SQUID+1.jpg'
+    hover: '75,879 monthly streamers on Spotify',
+    name: 'Bodega',
+    href: 'https://open.spotify.com/artist/3lnWfdMG9U0oVMC15SEbB5?si=R7R0DwXkRBSqZ7qgmRDjVQ',
+    src: 'https://ksassets.timeincuk.net/wp/uploads/sites/55/2018/07/BODEGA-EVL-4-920x584.jpg'
   },
   {
     title: 'Liftoff',
-    hover: '1,013,641 monthly streamers on Spotify',
-    name: 'Raveena',
-    href: 'https://open.spotify.com/artist/2kQnsbKnIiMahOetwlfcaS?si=rclsdyRCRrKJ7crwEpFGQQ',
-    src: 'https://galoremag.com/wp-content/uploads/2018/09/raveena-feature-image-galore-legal-1024x576.jpg'
+    hover: '744, 959 monthly streamers on Spotify',
+    name: 'Bilderbuch',
+    href: 'https://open.spotify.com/artist/2ErWLckuGFl84nGmg5fwyG?si=6iO1s3dNRiSg-b1JFQkvlw',
+    src: 'https://tubestatic.orf.at/static/images/site/tube/20170520/x_l1005793.5607155.jpg'
   },
 ]
 
