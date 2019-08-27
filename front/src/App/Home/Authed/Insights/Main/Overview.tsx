@@ -42,12 +42,12 @@ const Row = styled.div`
 `
 
 export const normalizeTimeScope = (pathParams: any) => {
-    const normalizetimeScopeMap: any = {
+  const normalizetimeScopeMap: any = {
     thisWeek: 'This Week',
     thisMonth: 'This Month',
     thisYear: 'This Year',
-      life: 'Life Time',
-      lifetime: 'Life Time',
+    life: 'Life Time',
+    lifetime: 'Life Time',
 
   }
   const { timeScope, perspective }: any = pathParams
@@ -71,7 +71,7 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
   const period = normalizeTimeScope(pathParams)
 
   const genreContentSummary = `We're currently building out new features for platform genre leaders`
-  
+
   const artistContentSummary = `Introducing our new platform artist leaders. These achievements are for those Soundpruf users who have streamed the most of any given artist. View Your Achievements based on the current time perspective to the left.`
 
 
@@ -83,32 +83,32 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
     <TimeseriesChart {...{ timeSeries, showOnly: pathParams.perspective }} />
     <Row>
       <AchievementHoverSummary content={artistContentSummary} userId={uid} achievementsGraph period={period}>
-       <SeeAllLink to={`${insightLink(pathParams)}/artists`}>
-                <SeeAllLinkInner>
-                <SeeAllIcon />
-      </SeeAllLinkInner>
-          </SeeAllLink>
+        <SeeAllLink to={`${insightLink(pathParams)}/artists`}>
+          <SeeAllLinkInner>
+            <SeeAllIcon />
+          </SeeAllLinkInner>
+        </SeeAllLink>
 
         <ArtistsChartBlock {...{ artists, pathParams }} userId={uid}>
           <BlockTitle>
-          {translatedPerspective} Top {artistCount} Artists {period}
+            {translatedPerspective} Top {artistCount} Artists {period}
           </BlockTitle>
         </ArtistsChartBlock>
       </AchievementHoverSummary>
-      
+
 
       <AchievementHoverSummary content={genreContentSummary} userId={uid}>
-       <SeeAllLink to={`${insightLink(pathParams)}/genres`}>
-                <SeeAllLinkInner>
-                <SeeAllIcon />
-      </SeeAllLinkInner>
-          </SeeAllLink>
+        <SeeAllLink to={`${insightLink(pathParams)}/genres`}>
+          <SeeAllLinkInner>
+            <SeeAllIcon />
+          </SeeAllLinkInner>
+        </SeeAllLink>
 
         <GenresChartBlock {...{ genres, pathParams }}>
           <BlockTitle>Top Genres</BlockTitle>
         </GenresChartBlock>
       </AchievementHoverSummary>
-      
+
     </Row>
     <Row>
       <BlockTitle>Emerging Artists: Staff Picks</BlockTitle>

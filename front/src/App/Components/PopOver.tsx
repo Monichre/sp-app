@@ -89,6 +89,7 @@ export const PopOverStyle = styled(Popover)`
 .ant-popover-inner-content {
   padding: 12px 16px;
   color: rgba(0, 0, 0, 0.65);
+
 }
 .ant-popover-message {
   position: relative;
@@ -108,6 +109,22 @@ export const PopOverStyle = styled(Popover)`
 .ant-popover-buttons {
   margin-bottom: 4px;
   text-align: right;
+}
+
+.ant-popover-content {
+  background-color: #030616!important;
+  background: #030616!important;
+  position: relative;
+
+  &::before {
+        position: absolute;
+        top: 0;
+        content: '';
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(216,216,216,.05);
+    }
 }
 .ant-popover-buttons button {
   margin-left: 8px;

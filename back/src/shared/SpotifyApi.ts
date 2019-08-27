@@ -85,19 +85,14 @@ const envToOptions = (env: SpotifyClientEnv) => ({
 })
 
 export const SpotifyApi = (env: SpotifyClientEnv, accessToken?: string, refreshToken?: string) => {
-  console.log('TCL: SpotifyApi -> refreshToken', refreshToken)
-  console.log('TCL: SpotifyApi -> accessToken', accessToken)
   const _api = new SpotifyWebApi(envToOptions(env))
-  console.log('TCL: SpotifyApi -> _api', _api)
-  
   if (accessToken && refreshToken) {
     _api.setAccessToken(accessToken)
     _api.setRefreshToken(refreshToken)
   }
 
-  const rethrow = async <T>(fn: () => Promise<T>): Promise<T> => {
-    return await fn().catch(err => {
-      console.log('TCL: SpotifyApi -> err', err)
+  const rethrow = <T>(fn: () => Promise<T>): Promise<T> => {
+    return fn().catch(err => {
       const e = new Error()
       e.message = err.message
       e.name = err.name
@@ -106,7 +101,6 @@ export const SpotifyApi = (env: SpotifyClientEnv, accessToken?: string, refreshT
   }
 
   const authorizationCodeGrant = _api.authorizationCodeGrant.bind(_api)
-  console.log('TCL: SpotifyApi -> authorizationCodeGrant', authorizationCodeGrant)
   const setAccessToken = _api.setAccessToken.bind(_api)
   const setRefreshToken = _api.setRefreshToken.bind(_api)
   const createAuthorizeURL = _api.createAuthorizeURL.bind(_api)
@@ -117,16 +111,9 @@ export const SpotifyApi = (env: SpotifyClientEnv, accessToken?: string, refreshT
     id: string
     images: {url: string}[]
   }
-  const getMe = async () => await _api.getMe() as BodyResponse<MeResult>
-  // {
-  //   console.log('Hey im inside get me')
-  //   return await rethrow(async () => {
-  //     const meData = await _api.getMe() as BodyResponse<MeResult>
-  //     console.log('TCL: getMe -> meData', meData)
-  //     return meData
-      
-  //   })
-  // }
+  const getMe = () => {
+    return rethrow(() => _api.getMe() as BodyResponse<MeResult>)
+  }
 
   type RefreshAccessTokenResult = { access_token: string }
   const refreshAccessToken = () => {

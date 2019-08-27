@@ -86,14 +86,16 @@ export interface AchievementItemProps {
 
 
 export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ userId, usersTopArtistByPeriodData }) => {
+console.log('TCL: usersTopArtistByPeriodData', usersTopArtistByPeriodData)
     const {
         achievements
     } = parseAchievementsByPeriod(usersTopArtistByPeriodData, userId)
 
-
+    const {setAchievements, isOpen, setSideBarOpen}: any = React.useContext(UserAchievementContext)
  
     const [wasClicked, setClicked] = useState(false)
-    const handleClick = () => setClicked(wasClicked => !wasClicked)
+    const handleClick = () => setSideBarOpen((isOpen: boolean) => !isOpen)
+    // const handleClick = () => setClicked(wasClicked => !wasClicked)
     
 
     const {
@@ -121,7 +123,6 @@ export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ use
     }) : []
 
     const wa: any = (weeklyAchievements) ? weeklyAchievements.slice(0, 3).map(({ artistData, achievement }: any) => {
-        console.log('TCL: wa:any -> achievement', achievement)
 
         let total: DecimalHoursToMinutes = decimalToHrsMins(achievement.total)
         achievement.formattedTotal = total
@@ -129,7 +130,7 @@ export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ use
         return { artistData, achievement }
     }) : []
 
-    const {setAchievements}: any = React.useContext(UserAchievementContext)
+    
  
 
     React.useEffect(() => {
@@ -146,13 +147,13 @@ export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ use
             <HeaderFlexDiv><img src='/icons/award.svg' /> <h4>Achievements</h4></HeaderFlexDiv>
             <ListStyle>
 
-                {la.length ? <AchievementListItem achievementTotal={lifetimeAchievements.length} achievements={la} title='LifeTime ' wasClicked={wasClicked} handleClick={handleClick} /> : null}
+                {la.length ? <AchievementListItem achievementTotal={lifetimeAchievements.length} achievements={la} title='LifeTime' handleClick={handleClick} /> : null}
 
 
-                {ma.length ? <AchievementListItem achievementTotal={monthlyAchievements.length} achievements={ma} title='This Month' wasClicked={wasClicked} handleClick={handleClick} /> : null}
+                {ma.length ? <AchievementListItem achievementTotal={monthlyAchievements.length} achievements={ma} title='This Month' handleClick={handleClick} /> : null}
 
 
-                {wa.length ? <AchievementListItem achievementTotal={weeklyAchievements.length} achievements={wa} title='This Week' wasClicked={wasClicked} handleClick={handleClick} /> : null}
+                {wa.length ? <AchievementListItem achievementTotal={weeklyAchievements.length} achievements={wa} title='This Week' handleClick={handleClick} /> : null}
 
             </ListStyle>
         </ListWrap>

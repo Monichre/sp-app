@@ -4,8 +4,8 @@ import styled, { css } from 'styled-components';
 import { User } from '../../../../../back/src/fns/graphql/types';
 import { ArtistsFragmentArtist } from '../../../types';
 import { hrsAndMins } from '../../../lib/durationFormats';
-import { AvatarBg, ArtistNameDiv, FlexDiv } from '../Elements';
-import { Tree } from '../Tree';
+import { AvatarBg, ArtistNameDiv, FlexDiv, firstPlaceBadge } from '../Elements';
+import { Tree, Title } from '../Tree';
 
 
 const ListItem: any = styled.li`
@@ -16,6 +16,7 @@ const ListItem: any = styled.li`
     padding: 12px 0;
     width: 100%;
     position: relative;
+    color: #fff;
 
     ${(props: any) => props.clicked && css`
         /* overflow: visible; */
@@ -40,7 +41,7 @@ const ListItem: any = styled.li`
 `
 
 
-const ArtistThumbPrev = styled.div`
+export const ArtistThumbPrev = styled.div`
     position: relative;
     padding: 5px;
     overflow: visible;
@@ -62,37 +63,23 @@ const ArtistThumbPrev = styled.div`
 export interface AchievementListItemProps {
     title: string
     achievements: any[]
-    wasClicked: boolean
+    // wasClicked: boolean
     handleClick: Function
     achievementTotal: number
 }
 
 
 
-export const AchievementListItem: React.SFC<AchievementListItemProps> = ({ title, achievements, achievementTotal, wasClicked, handleClick }) => {
-    return (<ListItem data-total={achievementTotal} clicked={wasClicked}>
-        <Tree name={title} onClick={handleClick}>
-            <FlexDiv>
-                {achievements.length ? achievements.map(({artistData,achievement}: any) => {
-                    const {  total, formattedTotal } = achievement
-                    const { artist } = artistData
-                    
-
-                    return (
-                        <ArtistThumbPrev>
-
-                            <AvatarBg src={artist.images && artist.images[0] ? artist.images[0].url : ''} />
-                            <ArtistNameDiv>{artist.name}</ArtistNameDiv>
-                            <p>{formattedTotal} min</p>
-
-                        </ArtistThumbPrev>
-                    )
-                }) : null}
-
-            </FlexDiv>
-        </Tree>
-
+export const AchievementListItem: React.SFC<AchievementListItemProps> = ({ title, achievements, achievementTotal, handleClick }) => {
+    return (
+        <ListItem data-total={achievementTotal} onClick={handleClick}>
+            <Title>
+                {title}
+            </Title>
+            <AvatarBg tiny={true} src={firstPlaceBadge} />
     </ListItem>
     );
 }
+
+
 

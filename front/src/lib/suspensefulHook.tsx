@@ -5,3 +5,5 @@ export const suspensefulHook = <TQuery, TVariables>(result: QueryHookResult<TQue
   console.log('TCL: result', result)
   return result.data
 }
+
+

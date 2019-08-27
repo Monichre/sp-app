@@ -1,11 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import { Text } from 'recharts';
 import { UserAchievementContext } from '../../../../Authed/Authed'
 import { hrsAndMins, decimalToHrsMins } from '../../../../../../lib/durationFormats'
-import {comparePersonalAndGroupScore} from '../../../../../Components/UserAchievementsList/achievements-utils'
-import { Popover, List, Avatar } from 'antd';
-import {normalizeTimeScope} from '../../../../Authed/Insights/Main/Overview'
+import { comparePersonalAndGroupScore } from '../../../../../Components/UserAchievementsList/achievements-utils'
+import { normalizeTimeScope } from '../../../../Authed/Insights/Main/Overview'
 import 'antd/es/popover/style/css'
 import 'antd/es/list/style/css'
 import 'antd/es/avatar/style/css'
@@ -15,6 +14,18 @@ import { AvatarStyle } from '../../../../../Components/Avatar';
 import { TickProps } from './ArtistsChart';
 import { suspensefulHook } from '../../../../../../lib/suspensefulHook';
 import { useGetArtistAchievementHolders } from '../../../../../../types';
+import { useFetchAchievementHolders } from '../../Hooks/hooks';
+import { AchievementHoldersList } from '../../../../../Components/ArtistAchievementHolders/AchievementHoldersList';
+
+const firstPlaceBadge: any = '/icons/first-currentUser.png'
+const secondPlaceBadge = '/icons/second-currentUser.png'
+const thirdPlaceBadge = '/icons/third.svg'
+
+export const badgeMap: any = {
+    0: firstPlaceBadge,
+    1: secondPlaceBadge,
+    2: thirdPlaceBadge
+}
 
 
 const TopListenerLink: any = ({ className, handleClick, children }: any) => (
@@ -31,75 +42,50 @@ const TopListenerLink: any = ({ className, handleClick, children }: any) => (
 
 )
 
-export const TopListenerYaxis: React.SFC<TickProps & any> = React.memo(({ x, y, offset, artist, pathParams, userId, totalTimeListened, groupScore }) => {
 
-    const { getArtistAchievementHolders }: any = suspensefulHook(useGetArtistAchievementHolders({ variables: { artistId: artist.id }})) 
-    console.log('TCL: getArtistAchievementHolders', getArtistAchievementHolders)
-    
 
-    // const {getArtistAchievementHolders = null } = data ? data : null
+const AchievementHoldersPopUp: React.SFC<any> = ({ x, y, artist, pathParams, totalTimeListened,
+    groupScore, visible, handleClick }) => {
+    const [achievementHolders, setAchievementHolders] = useState([])
 
-    const {day, week, month, life}: any = getArtistAchievementHolders
+    const { getArtistAchievementHolders = null }: any = suspensefulHook(useGetArtistAchievementHolders({ variables: { artistId: artist.id }, suspend: true }))
+    const { day = null, week = null, month = null, life = null } = getArtistAchievementHolders
 
-    const [visible, setVisible] = useState(false)
-    const handleClick = () => setVisible(visible => !visible)
-    const theyAllNull = Object.keys(getArtistAchievementHolders).every((key: any) => getArtistAchievementHolders[key] === null)
-    console.log('TCL: theyAllNull', theyAllNull)
-    
-    // const { topListeners } = artist
-    // const { timeScope }: any = pathParams
-    // const { achievements, currentUser } = useContext(UserAchievementContext)
-    // const {total, status} = comparePersonalAndGroupScore(totalTimeListened, groupScore)
+    const { timeScope }: any = pathParams
 
- 
-    
+    const achievementHolderTimeScopeMap: any = {
+        today: day ? day : null,
+        thisWeek: week ? week : null,
+        thisMonth: month ? month : null,
+        lifetime: life ? life : null
+    }
 
-    // // const { title=false, data=null } = normalizetimeScopeMap[timeScope]
-    // // data ? data : 
-    // const { first, second, third } = {
-    //     first: null,
-    //     second: null,
-    //     third: null
-    // }
-    // const listeners = [first, second, third].filter(Boolean)
-    
+    const perspectiveAchievementHolders = Object.assign({}, achievementHolderTimeScopeMap[timeScope])
+
+    for (let place in perspectiveAchievementHolders) {
+        if (!perspectiveAchievementHolders[place].user) {
+            perspectiveAchievementHolders[place] = null
+        }
+    }
+
+
+
+
+    const { currentUser } = useContext(UserAchievementContext)
+    const { total, status } = comparePersonalAndGroupScore(totalTimeListened, groupScore)
+
     const currentUserIsTopListener: any = status
     // const currentUserIsSecond: any = second && second.user ? second.user.uid === userId : false
     // const secondPlaceExists: any = second && second.user 
 
     // const topListenerHandle: any = first && first.user.displayName ? first.user.displayName : first && first.user.email ? first.user.email : null
     // const secondListenerHandle: any = second && second.user.displayName ? second.user.displayName : second && second.user.email ? second.user.email : null
-    const firstPlaceBadge: any = '/icons/first-currentUser.png'
-    const secondPlaceBadge = '/icons/second-currentUser.png'
-    const thirdPlaceBadge = '/icons/third.svg'
+    // const currentUserIsSecond: any = second && second.user ? second.user.uid === userId : false
+    // const secondPlaceExists: any = second && second.user 
 
-    const badgeMap: any = {
-        0: firstPlaceBadge,
-        1: secondPlaceBadge,
-        2: thirdPlaceBadge
-    }
+    // const topListenerHandle: any = first && first.user.displayName ? first.user.displayName : first && first.user.email ? first.user.email : null
+    // const secondListenerHandle: any = second && second.user.displayName ? second.user.displayName : second && second.user.email ? second.user.email : null
 
-
-
-    const ToolTipListeners = <ListStyle>
-        {/* <List itemLayout="horizontal">
-            {listeners.length ? listeners.map((listener: any, index: number) => {
-                return (
-                    <List.Item>
-                        <List.Item.Meta
-                            avatar={<AvatarStyle><Avatar size='large' src={listener && listener.user.photoURL ? listener.user.photoURL : badgeMap[index]} /> </AvatarStyle>}
-                            title={listener ? listener.user.displayName : ''}
-                            description={listener && listener.user.uid === userId ? `${decimalToHrsMins(totalTimeListened)}` : ''}
-                        />
-                    </List.Item>
-                )
-            }) : null}
-        </List> */}
-    </ListStyle>
-
-    const topSpot: any = currentUserIsTopListener ? <image href={firstPlaceBadge} transform={`translate(${(x || 0) + 15}, ${(y || 0) - 20})`} width='30px' height='30px'
-    /> : null
-    
     /*
 
     first && first.user.photoURL ? <image href={first.user.photoURL} width='32px' height='32px' clipPath='url(#clipCircle2)' transform={`translate(${(x || 0) + 15}, ${(y || 0) - 20})`} /> : first ? <Text stroke='#64d6ee' width={100} font-size="10" height={20} textAnchor='end' dx={-78} dy={24} {...{ x, y }}>
@@ -111,24 +97,48 @@ export const TopListenerYaxis: React.SFC<TickProps & any> = React.memo(({ x, y, 
     */
 
 
-// const secondSpot: any = secondPlaceExists && !currentUserIsSecond ? <image href={secondPlaceBadge} transform={`translate(${(x || 0) + 45}, ${(y || 0) - 20})`} width='30px' height='30px'
-//             /> : second && second.user.photoURL ? <image href={second.user.photoURL} width='32px' height='32px' clipPath='url(#clipCircle2)' transform={`translate(${(x || 0) + 45}, ${(y || 0) - 20})`} /> : second && second.user ? <Text stroke='#64d6ee' width={100} font-size="10" height={20} textAnchor='end' dx={-78} dy={24} {...{ x, y }}>
-//                 {secondListenerHandle}
-//             </Text> : null
-
-// const badgePlacement = topSpot ? topSpot : secondSpot
+    // const secondSpot: any = secondPlaceExists && !currentUserIsSecond ? <image href={secondPlaceBadge} transform={`translate(${(x || 0) + 45}, ${(y || 0) - 20})`} width='30px' height='30px'
+    //             /> : second && second.user.photoURL ? <image href={second.user.photoURL} width='32px' height='32px' clipPath='url(#clipCircle2)' transform={`translate(${(x || 0) + 45}, ${(y || 0) - 20})`} /> : second && second.user ? <Text stroke='#64d6ee' width={100} font-size="10" height={20} textAnchor='end' dx={-78} dy={24} {...{ x, y }}>
+    //                 {secondListenerHandle}
+    //             </Text> : null
 
 
+    const title: any = normalizeTimeScope(pathParams)
 
-    return theyAllNull ? null : (
-        <PopOverStyle>
-            <Popover placement="topLeft" content={ToolTipListeners} title="Top Listeners" trigger="click"
-                visible={visible}>
-                <TopListenerLink handleClick={handleClick}>
-                    {/* {badgePlacement} */}
-                </TopListenerLink>
-            </Popover>
+    const topSpot: any = currentUserIsTopListener ? <image href={firstPlaceBadge} transform={`translate(${(x || 0) + 15}, ${(y || 0) - 20})`} width='30px' height='30px'
+    /> : null
+    const badgePlacement = topSpot ? topSpot : null
+
+    const content = <AchievementHoldersList {...{ currentUser, artist }} achievementHolders={perspectiveAchievementHolders} style={{
+        background: '#030616!important'
+    }} />
+
+
+    useEffect(() => {
+
+        setAchievementHolders(perspectiveAchievementHolders)
+    }, [])
+
+    return (
+
+        <PopOverStyle placement="topLeft" content={content} title={title} trigger="click"
+            visible={visible} style={{
+                background: '#030616!important'
+            }}>
+            <TopListenerLink handleClick={handleClick}>
+                {badgePlacement}
+            </TopListenerLink>
         </PopOverStyle>
-    )
-})
 
+    );
+}
+
+
+export const TopListenerYaxis: React.SFC<TickProps & any> = React.memo(({ x, y, offset, artist, pathParams, userId, totalTimeListened, groupScore }) => {
+
+    const [visible, setVisible] = useState(false)
+    const handleClick = () => setVisible(visible => !visible)
+
+    return <AchievementHoldersPopUp {...{ x, y, offset, artist, pathParams, userId, totalTimeListened, groupScore, visible, handleClick }} />
+
+})

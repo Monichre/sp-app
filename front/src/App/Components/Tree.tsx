@@ -27,8 +27,10 @@ export function useMeasure () {
 
 
 
-const Title = styled('span')`
+export const Title = styled('h4')`
   vertical-align: middle;
+  margin: 0;
+  margin-left: 20px!important;
 
   img {
     height: 25px;

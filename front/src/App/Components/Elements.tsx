@@ -47,25 +47,27 @@ ${(props: any) => props.sideNav && css`
 
 ${(props: any) => props.tiny && css`
 
-    right: -42px;
-    top: 4px;
+    right: 0;
+    top: 10px;
     position: absolute;
-    height: 2rem;
-    width: 2rem;
+    right: 15px;
+    top: 15px;
+    height: 1.75rem;
+    width: 1.75rem;
 
     &:before {
       right: 0;
-      height: 2.3rem;
+      height: 2rem;
       right: 0;
       top: 0;
-      width: 2.3rem;
+      width: 2rem;
     }
     &:after {
       border-radius: 50%;
       content: '';
       background-color: #030616;
-      height: 2.2rem;
-      width: 2.2rem;
+      height: 2rem;
+    width: 2rem;
       position:absolute;
       z-index:-1;
       right: 1px;
@@ -166,3 +168,7 @@ export const FlexDiv = styled.div`
         /* background-color: rgba(216,216,216,.05); */
     }
 `
+
+export const firstPlaceBadge: any = '/icons/first-currentUser.png'
+export const secondPlaceBadge = '/icons/second-currentUser.png'
+export const thirdPlaceBadge = '/icons/third-currentUser.png'

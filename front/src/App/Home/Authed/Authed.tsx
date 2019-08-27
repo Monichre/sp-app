@@ -1,4 +1,4 @@
-import React, { useContext, createContext, useReducer, useState, Reducer, SetStateAction, useCallback, useEffect} from 'react';
+import React, { useContext, createContext, useReducer, useState, Reducer, SetStateAction, useCallback, useEffect } from 'react';
 import styled from 'styled-components'
 import { Route, Switch, Redirect } from 'react-router';
 import { Loading } from '../../../shared/Loading';
@@ -10,11 +10,35 @@ import { NavMenu, NavMenuView } from './NavMenu';
 import { Profile } from './Profile/Profile';
 import { History } from './History/History';
 import { IntercomHandler } from '../../../lib/intercom'
-import { Comment } from './Insights/shared/Comment';
-import { BreadCrumbs } from '../../Components/BreadCrumbs';
-import { FirstPlaceBadge, SecondPlaceBadge, ThirdPlaceBadge } from '../../Components/Badge'
-import { Action } from 'history';
+import { Drawer, List, Avatar, Divider, Col, Row } from 'antd';
+import 'antd/es/drawer/style/css'
 import { UserAchievementPeriodMap } from '../../Components/UserAchievementsList/achievements-utils';
+import { Card, Box } from 'rebass';
+import { SideBar } from '../../Components/SideBar/SideBar';
+
+
+const DescriptionItem = ({ title, content }: any) => (
+  <div
+    style={{
+      fontSize: 14,
+      lineHeight: '22px',
+      marginBottom: 7,
+      color: 'rgba(0,0,0,0.65)',
+    }}
+  >
+    <p
+      style={{
+        marginRight: 8,
+        display: 'inline-block',
+        color: 'rgba(0,0,0,0.85)',
+      }}
+    >
+      {title}:
+    </p>
+    {content}
+  </div>
+);
+
 
 const SIDEBAR_WIDTH = 200
 
@@ -47,7 +71,9 @@ const SideBarBottom = styled.div`grid-area: SideBarBottom;`
 const AuthedView = styled.div`
   height: 100%;
   width: 100%;
-background-color: #030616;
+  background-color: #030616;
+  position: relative;
+
   ${largeQuery`
     padding-left: ${SIDEBAR_WIDTH}px;
   `}
@@ -122,8 +148,10 @@ export type AchievementsState = {
  */
 
 type UserAchievementContextProps = {
-  achievements: UserAchievementPeriodMap,
+  achievements: UserAchievementPeriodMap
   setAchievements: (a: UserAchievementPeriodMap) => void
+  isOpen: Boolean
+  setSideBarOpen: (o: Boolean) => Boolean
 }
 
 const initialState: UserAchievementPeriodMap = { week: null, month: null, life: null }
@@ -131,31 +159,33 @@ const initialState: UserAchievementPeriodMap = { week: null, month: null, life: 
 export const UserAchievementContext = createContext({
   currentUser: {},
   achievements: initialState,
-  setAchievements: () => initialState
-
+  setAchievements: () => initialState,
+  isOpen: false,
+  setSideBarOpen: () => true
 })
 
 
-const UserAchievementDataProvider = ({user, initialState, children}: any) => {
-  const [achievements, setParentAchievements]: [UserAchievementPeriodMap, any] = useState(initialState)
 
-  const [currentUser, setCurrentUser ] = useState(user)
+
+const UserAchievementDataProvider = ({ user, initialState, children, isOpen, setSideBarOpen }: any) => {
+  const [achievements, setParentAchievements]: [UserAchievementPeriodMap, any] = useState(initialState)
+  const [currentUser, setCurrentUser] = useState(user)
   const setAchievements: any = (newAchievements: any) => setParentAchievements(newAchievements)
 
 
   return (
-    <UserAchievementContext.Provider value={{ achievements, setAchievements, currentUser }}>
+    <UserAchievementContext.Provider value={{ achievements, setAchievements, currentUser, setSideBarOpen, isOpen }}>
       {children}
     </UserAchievementContext.Provider>
   )
-  
+
 }
 
 
 export const Authed: React.SFC<{ user: { uid: string } }> = ({ user: firebaseUser, ...rest }) => {
-console.log('TCL: rest', rest)
+  console.log('TCL: rest', rest)
 
-  const result = useGetUserInfo({ variables: { uid: firebaseUser.uid }, pollInterval: 4000, suspend: true})
+  const result = useGetUserInfo({ variables: { uid: firebaseUser.uid }, pollInterval: 4000, suspend: true })
   const user = result.data && result.data.getUserInfo
 
   if (!user) { return <ErrorFallback /> }
@@ -168,7 +198,7 @@ console.log('TCL: rest', rest)
   if (process.env.NODE_ENV === 'production') {
     IntercomHandler.boot(user, 'boot')
   }
-  
+
   if (!intercomUser && intercomUser !== user.displayName) {
     if (process.env.NODE_ENV === 'production') {
       IntercomHandler.trackEvent(user, 'user-login')
@@ -177,29 +207,36 @@ console.log('TCL: rest', rest)
   }
 
 
-  return (
-    <AuthedView>
-
-      <UserAchievementDataProvider user={user}>
-        <NavMenu {...{ initialHarvestComplete: initialHarvestComplete || false, lastUpdate: lastUpdate || '', user: user, ...rest}}  />
+  const [isOpen, openSideBar] = useState(false)
+  const setSideBarOpen: any = () => openSideBar(isOpen => !isOpen)
+  const onClose = () => openSideBar(false)
   
-          <React.Suspense fallback={<Loading/>}>
+  
+
+
+  return (
+    <>
+      <AuthedView>
+
+        <UserAchievementDataProvider {...{ setSideBarOpen, user, isOpen }}>
+          <NavMenu {...{ initialHarvestComplete: initialHarvestComplete || false, lastUpdate: lastUpdate || '', user: user, ...rest }} />
+          <SideBar />
+          <React.Suspense fallback={<Loading />}>
             <Switch>
               <Route path='/insights/:timeScope/:groupId/:perspective' render={(props) => <Insights user={user} {...props} uid={uid} />} />
-              <Route path='/history' render={(props) => <History user={user} {...props} uid={uid}/>}/>
-              <Route path='/profile' render={(props) => <Profile user={user} {...props}/>}/>
-              <Redirect from='/' to='/insights/thisWeek/global/personal'/>
+              <Route path='/history' render={(props) => <History user={user} {...props} uid={uid} />} />
+              <Route path='/profile' render={(props) => <Profile user={user} {...props} />} />
+              <Redirect from='/' to='/insights/thisWeek/global/personal' />
             </Switch>
-            </React.Suspense>
-          </UserAchievementDataProvider>
-    </AuthedView>
-    
+          </React.Suspense>
+        </UserAchievementDataProvider>
+      </AuthedView>
+ 
+    </>
+
+
   )
 }
-
-
-
-
 
 
 
