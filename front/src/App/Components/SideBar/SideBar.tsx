@@ -114,14 +114,10 @@ export interface SideBarProps {
 
 }
 
-
-const heights = [356, 428, 320, 256, 196, 96, 192, 128, 160]
-
 export const SideBar: React.SFC<SideBarProps> = () => {
     const context: any = React.useContext(UserAchievementContext)
     const [localAchievements, setLocalAchievements]: any = useState(null)
     const { achievements, isOpen, setSideBarOpen } = context
-
     const onClose = () => setSideBarOpen((isOpen: any) => !isOpen)
 
     useEffect(() => {
@@ -136,45 +132,13 @@ export const SideBar: React.SFC<SideBarProps> = () => {
             placement="right"
             onClose={onClose}
             bodyStyle={{
-                // backgroundImage: 'linear-gradient(to bottom, #e64a19 0%, #ffa726 100%)'
                 background: '#030616',
                 height: '100%'
             }}
             visible={isOpen}
         >
             <Container padded>
-            {localAchievements && localAchievements.life ? <Deck cards={localAchievements.life} /> : null}
-                {/* <Carousel> */}
-                    
-                    {/* {localAchievements && localAchievements.life ? localAchievements.life.map((achievementData: any, index: number) => {
-                        const { achievement, artistData } = achievementData
-                        const { formattedTotal } = achievement
-                        const { artist } = artistData
-
-                        return (
-                            <Box>
-                                <HoverCard sx={{ minHeight: heights[index] }}>
-                                    <FlexDiv>
-                                        <ArtistThumbPrev>
-
-                                            <AvatarBg src={artist.images && artist.images[0] ? artist.images[0].url : ''} />
-                                            <ArtistNameDiv>{artist.name}</ArtistNameDiv>
-                                            <p>{formattedTotal} min</p>
-
-                                        </ArtistThumbPrev>
-
-                                    </FlexDiv>
-                                </HoverCard>
-                            </Box>
-                        )
-                    })
-
-                        : null} */}
-                {/* </Carousel> */}
-
-
-
-
+                {localAchievements && localAchievements.life && isOpen ? <Deck cards={localAchievements.life} /> : null}
             </Container>
 
         </Drawer>

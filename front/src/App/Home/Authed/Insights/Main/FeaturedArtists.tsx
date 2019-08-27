@@ -16,7 +16,7 @@ const ThreeColumns = styled.div`
   align-items: center;
 `
 
-const ArtistLinkBlock = styled.a<{ src: string }>`
+export const ArtistLinkBlock = styled.a<{ src: string }>`
 display: flex;
 align-items: center;
 text-align: center;
@@ -35,14 +35,14 @@ background-position: center center;
 background-size: cover;
 `
 
-const ArtistName = styled.div`
+export const ArtistName = styled.div`
   font-size: ${bgSize / 6}rem;
   // font-weight: 500;
   font-weight: bold;
   font-family: Righteous;
 `
 
-const PaddedRight = styled.div`
+export const PaddedRight = styled.div`
 width: 100%;
   padding: 2rem;
   display: flex;
@@ -50,9 +50,8 @@ width: 100%;
   justify-content: flex-end;
 `
 
-const ArtistPromoItem: React.SFC<FeaturedArtist> = ({ title, hover, src, href, name }) =>
+export const ArtistPromoItem: React.SFC<FeaturedArtist> = ({ title, hover, src, href, name }) =>
   <div data-tip={hover}>
-    {/* <BlockTitle>{title}</BlockTitle> */}
     <ArtistLinkBlock data-test='artist-row' target='new' {...{ href, src }}>
       <PaddedRight><SpotifyLogoLink href={href} size='3rem' /></PaddedRight>
       <ArtistName data-test='artist-row-name'>{name}</ArtistName>

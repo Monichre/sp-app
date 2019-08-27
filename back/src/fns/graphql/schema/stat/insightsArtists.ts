@@ -346,8 +346,7 @@ const topArtists = async (
 	 * LifeTime Top Artists w/Listeners
 	 *
 	 */
-	
-	
+		
 
 	const lifetimeArtists = await timescopeTopArtists(
 		tableStat,

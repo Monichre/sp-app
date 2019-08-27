@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom';
 import { LineChart, History, User } from 'grommet-icons'
@@ -130,23 +130,15 @@ export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: s
 const {uid} = user
 const { history, match} = rest
 const { location: { pathname } } = history
-const { path, params } = match
-const focus = pathname.split('/').slice(5,99).join('/')
-console.log('TCL: focus', focus)
-const pathParams = { focus, ...params }
-
-
-  // const {insightsDash: usersTopArtistByPeriodData} = suspensefulHook(useInsightsDash({ variables: { uid }, suspend: true }))
   
-  const { insightsArtists: usersTopArtistByPeriodData } = suspensefulHook(useInsightsArtists({ variables: { uid }, suspend: true }))
+  const [topArtistByPeriodData, setTopArtistByPeriodData] = useState(false)
+  const { insightsArtists: usersTopArtistByPeriodData }: any = suspensefulHook(useInsightsArtists({ variables: { uid }, suspend: true }))
   console.log('TCL: usersTopArtistByPeriodData', usersTopArtistByPeriodData)
-  // [pathParams.timeScope]: {
-  //   timeSeries,
-  //   [pathParams.perspective]: { artists, genres }
-  // }
-  // const { [pathParams.timeScope]: { [pathParams.perspective]: artists } }: any = userTopArtistsFull
 
-  
+  useEffect(() => {
+    setTopArtistByPeriodData(usersTopArtistByPeriodData)
+  }, [])
+
   return (
     <NavMenuView>
       <AvatarLink to='#'>
@@ -166,7 +158,7 @@ const pathParams = { focus, ...params }
         <NavLabel>Profile</NavLabel>
       </NavPrimaryLink>
       <Large>
-        <UserAchievementsList userId={user.uid} usersTopArtistByPeriodData={usersTopArtistByPeriodData}/>
+        {topArtistByPeriodData ? <UserAchievementsList userId={user.uid} usersTopArtistByPeriodData={topArtistByPeriodData}/> : null}
         <FillSpace>
           {!initialHarvestComplete ? <HarvestingNotice /> : <LastUpdate {...{ lastUpdate }} />}
           <LogoHorizontal size={8} />
