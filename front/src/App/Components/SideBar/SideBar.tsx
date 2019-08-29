@@ -1,19 +1,12 @@
 import React, { useContext, createContext, useReducer, useState, Reducer, SetStateAction, useCallback, useEffect } from 'react';
 import styled from 'styled-components'
 import { ButtonSignout, Container } from '../../../shared/ui';
-import { Drawer, List, Avatar, Divider, Col, Row, Carousel } from 'antd';
-import 'antd/es/drawer/style/css'
-import 'antd/es/carousel/style/css'
-import { useSprings, animated, interpolate } from 'react-spring'
-import { useGesture } from 'react-use-gesture'
+import { Drawer } from 'antd';
 import { Deck } from './Deck'
-import { Card, Box, Flex } from 'rebass';
+import { Card, Box, Flex, Image, Heading } from 'rebass';
 import { UserAchievementContext } from '../../Home/Authed/Authed';
-import { FlexDiv, AvatarBg, ArtistNameDiv } from '../Elements';
-import { ArtistThumbPrev } from '../UserAchievementsList/AchievementListItem';
-
-
-
+import 'antd/es/drawer/style/css'
+import { ArtistLinkBlock } from '../../Home/Authed/Insights/Main/FeaturedArtists';
 
 const HoverIcon: any = styled.div`
    margin: 0 auto;
@@ -110,21 +103,69 @@ const HoverCard: any = styled.div`
 // }
 
 // export default AchievementHoverCard;
+
+
+interface SideBarSectionProps {
+    achievements: any[]
+    title: any
+}
+
+const SideBarSection: React.SFC<SideBarSectionProps> = ({ achievements, title }) => {
+
+    return (
+        <Flex sx={{ flexWrap: 'wrap' }}>
+            <Box
+                sx={{
+                    p: 3,
+                    flexGrow: 1,
+                    flexBasis: 256
+                }}>
+                {title}
+            </Box>
+            <Box
+                sx={{
+                    p: 3,
+                    flexGrow: 99999,
+                    flexBasis: 0,
+                    minWidth: 320
+                }}>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        minHeight: '100vh'
+                    }}>
+                    <Box sx={{ p: 3 }}>Header</Box>
+                    <Box
+                        sx={{
+                            flex: '1 1 auto',
+                            p: 3
+                        }}>
+                        {achievements ? <Deck cards={achievements} /> : null}
+                    </Box>
+                    <Box sx={{ p: 3 }}> Footer</Box>
+                </Box>
+            </Box>
+        </Flex>
+    );
+}
+
+
+
+
 export interface SideBarProps {
 
 }
 
 export const SideBar: React.SFC<SideBarProps> = () => {
     const context: any = React.useContext(UserAchievementContext)
-    const [localAchievements, setLocalAchievements]: any = useState(null)
     const { achievements, isOpen, setSideBarOpen } = context
     const onClose = () => setSideBarOpen((isOpen: any) => !isOpen)
 
-    useEffect(() => {
-        if (achievements) {
-            setLocalAchievements(achievements)
-        }
-    }, [achievements])
+    const { month, week, life } = achievements
+
+    console.count('SideBar Render Count:')
+
     return (
 
         <Drawer
@@ -138,7 +179,52 @@ export const SideBar: React.SFC<SideBarProps> = () => {
             visible={isOpen}
         >
             <Container padded>
-                {localAchievements && localAchievements.life && isOpen ? <Deck cards={localAchievements.life} /> : null}
+
+                {achievements ? Object.keys(achievements).map((period: any, i: any) => {
+                    const periodAchievements = achievements[period]
+                    return (
+                        <Box>
+                            <Box sx={{
+                                display: 'inline-block',
+                                color: 'white',
+                                bg: 'primary',
+                                px: 2,
+                                py: 1,
+                                borderRadius: 9999,
+                            }}>
+                                <h4 style={{
+                                        color:'#fff',
+                                        padding:' 0!important',
+                                        textAlign:'center',
+                                        margin: '0!important',
+                                        fontSize: '1.25rem'
+                                }}>
+                                    {period}
+                                </h4>
+
+                            </Box>
+                            <Flex flexWrap='wrap' justifyContent='center' mx={-2}>
+                                {periodAchievements && periodAchievements.length ? periodAchievements.map((achievementData: any) => {
+                                    const { artistData, achievement }: any = achievementData
+                                    const { artist } = artistData
+                                    return (
+                                        <Box>
+                                            <Card width={150} height={150}>
+                                                <ArtistLinkBlock src={artist.images[0].url} />
+                                                
+                                                <Heading style={{position: 'relative'}}>{artist.name}</Heading>
+                                            </Card >
+                                        </Box>
+                                    )
+                                }) : null}
+                            </Flex>
+
+                        </Box>
+
+                    )
+                }) : null
+                }
+
             </Container>
 
         </Drawer>
@@ -146,57 +232,3 @@ export const SideBar: React.SFC<SideBarProps> = () => {
     );
 }
 
-
-
-
-
-// {localAchievements && localAchievements.month ?
-
-//     localAchievements.month.map((achievementData: any, index: number) => {
-//         const { achievement, artistData } = achievementData
-//         const { formattedTotal } = achievement
-//         const { artist } = artistData
-
-//         return (
-//             <Card sx={{ minHeight: heights[index] }}>
-//                 <FlexDiv>
-//                     <ArtistThumbPrev>
-
-//                         <AvatarBg src={artist.images && artist.images[0] ? artist.images[0].url : ''} />
-//                         <ArtistNameDiv>{artist.name}</ArtistNameDiv>
-//                         <p>{formattedTotal} min</p>
-
-//                     </ArtistThumbPrev>
-
-//                 </FlexDiv>
-//             </Card>
-//         )
-//     })
-
-//     : null}
-
-// {
-//     localAchievements && localAchievements.week ?
-
-//     localAchievements.week.map((achievementData: any, index: number) => {
-//         const { achievement, artistData } = achievementData
-//         const { formattedTotal } = achievement
-//         const { artist } = artistData
-
-//         return (
-//             <Card sx={{ minHeight: heights[index] }}>
-//                 <FlexDiv>
-//                     <ArtistThumbPrev>
-
-//                         <AvatarBg src={artist.images && artist.images[0] ? artist.images[0].url : ''} />
-//                         <ArtistNameDiv>{artist.name}</ArtistNameDiv>
-//                         <p>{formattedTotal} min</p>
-
-//                     </ArtistThumbPrev>
-
-//                 </FlexDiv>
-//             </Card>
-//         )
-//     })
-//     : null
-// }

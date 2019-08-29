@@ -183,7 +183,11 @@ const UserAchievementDataProvider = ({ user, children, isOpen, setSideBarOpen }:
 
 
   const setAchievements: any = (newAchievements: any) => setParentAchievements(newAchievements)
-  const setTopArtistsWithAchievementHolders: any = (newArtistsWithAchievements: any) => setParentComponentWithArtistsWithAchievementHolders((topArtistsWithAchievementHolders: any) => ([topArtistsWithAchievementHolders, ...newArtistsWithAchievements]))
+  const setTopArtistsWithAchievementHolders: any = (newArtistsWithAchievements: any) => setParentComponentWithArtistsWithAchievementHolders((topArtistsWithAchievementHolders: any) => {
+    if (topArtistsWithAchievementHolders) {
+      return [topArtistsWithAchievementHolders, ...newArtistsWithAchievements]
+    }
+  })
 
   return (
     <UserAchievementContext.Provider value={{ achievements, setAchievements, currentUser, setSideBarOpen, isOpen, setTopArtistsWithAchievementHolders,  topArtistsWithAchievementHolders}}>

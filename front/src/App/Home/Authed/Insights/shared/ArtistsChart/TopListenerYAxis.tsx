@@ -50,19 +50,22 @@ const AchievementHoldersPopUp: React.SFC<any> = ({ x, y, artist, pathParams, tot
 
     // Context Props
     const { topArtistsWithAchievementHolders } = useContext(UserAchievementContext)
-    console.log('TCL: topArtistsWithAchievementHolders', topArtistsWithAchievementHolders)
     const { currentUser } = useContext(UserAchievementContext)
 
     console.count('AchievementHoldersPopUp render')
 
-    // {artist: currentArtist=false, achievementHolders=false}
-    const { artist:currentArtist=false, achievementHolders=false } = topArtistsWithAchievementHolders.find((awa: any) => {
+    const { artist:currentArtist=null, achievementHolders=null } = topArtistsWithAchievementHolders ? topArtistsWithAchievementHolders.find((awa: any) => {
         return awa && awa.artist && artist ? awa.artist.id === artist.id : false
-    })
+    }) : {
+            artist: null,
+            achievementHolders: null
+    }
 
     console.log('TCL: currentArtist', currentArtist)
 
-    const { day = null, week = null, month = null, life = null } = achievementHolders
+    const { day = null, week = null, month = null, life = null } = achievementHolders ? achievementHolders : {
+        day : null, week : null, month : null, life : null 
+    }
 
     const { timeScope }: any = pathParams
 

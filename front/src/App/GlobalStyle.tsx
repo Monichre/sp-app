@@ -42,12 +42,18 @@ html {
   h1, h2 {
     margin: 0;
   }
+
+  .ant-drawer-body {
+    height: 100vh;
+    overflow: scroll;
+    padding: 0px!important;
+
+  }
 .ant-list {
   /* background-color: #030616!important; */
   background: transparent!important
   
 }
-
 
 .ant-popover-arrow {
   border-right-color: #64d6ee!important;
