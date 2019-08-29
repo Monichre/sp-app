@@ -7,7 +7,7 @@ import { TableAchievement } from '../../shared/tables/TableAchievement'
 import {ArtistAndGenreLeaders} from '../agl/AGL'
 import * as _ from 'lodash'
 import moment = require('moment')
-import { AchievementRecord, ArtistImage } from '../../shared/SharedTypes';
+import {  ArtistImage } from '../../shared/SharedTypes';
 
 export const handler: DynamoDBStreamHandler | any = async (event, context) => {
 	const log = makeLogger({
@@ -108,7 +108,7 @@ export const handler: DynamoDBStreamHandler | any = async (event, context) => {
 					async (res: any) => {
 						return await Promise.all(
 							res.map(async (topListenerData: any, index: number) => {
-								const d: AchievementRecord = await AGL.enrichAndRecordAchievement(
+								const d: any = await AGL.enrichAndRecordAchievement(
 									topListenerData,
 									index,
 									tableAchievement
@@ -125,7 +125,7 @@ export const handler: DynamoDBStreamHandler | any = async (event, context) => {
 					async (res: any) => {
 						return await Promise.all(
 							res.map(async (topListenerData: any, index: number) => {
-								const d: AchievementRecord = await AGL.enrichAndRecordAchievement(
+								const d: any = await AGL.enrichAndRecordAchievement(
 									topListenerData,
 									index,
 									tableAchievement
@@ -142,7 +142,7 @@ export const handler: DynamoDBStreamHandler | any = async (event, context) => {
 					async (res: any) => {
 						return await Promise.all(
 							res.map(async (topListenerData: any, index: number) => {
-								const d: AchievementRecord = await AGL.enrichAndRecordAchievement(
+								const d: any = await AGL.enrichAndRecordAchievement(
 									topListenerData,
 									index,
 									tableAchievement
@@ -159,7 +159,7 @@ export const handler: DynamoDBStreamHandler | any = async (event, context) => {
 					async (res: any) => {
 						return await Promise.all(
 							res.map(async (topListenerData: any, index: number) => {
-								const d: AchievementRecord = await AGL.enrichAndRecordAchievement(
+								const d: any = await AGL.enrichAndRecordAchievement(
 									topListenerData,
 									index,
 									tableAchievement

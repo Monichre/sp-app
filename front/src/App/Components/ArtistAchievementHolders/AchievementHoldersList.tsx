@@ -18,12 +18,34 @@ import { badgeMap } from '../../Home/Authed/Insights/shared/ArtistsChart/TopList
 export interface AchievementHoldersListProps {
     artist: ArtistsFragmentArtist
     currentUser: User
-    achievementHolders: any
+    pathParams: any
     style: any
 }
  
-export const AchievementHoldersList: React.SFC<AchievementHoldersListProps> = ({ achievementHolders, artist, style, currentUser }) => {
-    const ah = Object.assign({}, achievementHolders)
+export const AchievementHoldersList: React.SFC<AchievementHoldersListProps> = ({ artist, style, currentUser, pathParams }) => {
+    const { getArtistAchievementHolders = null }: any = suspensefulHook(useGetArtistAchievementHolders({ variables: { perspectiveUID: 'global', artistId: artist.id }, suspend: true }))
+    
+    const { day = null, week = null, month = null, life = null } = getArtistAchievementHolders
+    const { timeScope }: any = pathParams
+
+    const achievementHolderTimeScopeMap: any = {
+        today: day ? day : null,
+        thisWeek: week ? week : null,
+        thisMonth: month ? month : null,
+        lifetime: life ? life : null
+    }
+
+    const perspectiveAchievementHolders = Object.assign({}, achievementHolderTimeScopeMap[timeScope])
+    console.log('TCL: perspectiveAchievementHolders', perspectiveAchievementHolders)
+
+    for (let place in perspectiveAchievementHolders) {
+        if (!perspectiveAchievementHolders[place].user) {
+            perspectiveAchievementHolders[place] = null
+        }
+    }
+    
+
+    const ah = Object.assign({}, perspectiveAchievementHolders)
     for(let holder in ah) {
         if(!ah[holder]) {
             delete ah[holder]

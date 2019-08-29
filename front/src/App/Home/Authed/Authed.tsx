@@ -1,4 +1,4 @@
-import React, { useContext, createContext, useReducer, useState, Reducer, SetStateAction, useCallback, useEffect } from 'react';
+import React, { useContext, createContext, useReducer, useState, Reducer, SetStateAction, useCallback, useEffect, useMemo } from 'react';
 import styled from 'styled-components'
 import { Route, Switch, Redirect } from 'react-router';
 import { Loading } from '../../../shared/Loading';
@@ -148,33 +148,45 @@ export type AchievementsState = {
  */
 
 type UserAchievementContextProps = {
-  achievements: UserAchievementPeriodMap
+  achievements: {}
   setAchievements: (a: UserAchievementPeriodMap) => void
   isOpen: Boolean
   setSideBarOpen: (o: Boolean) => Boolean
 }
 
-const initialState: UserAchievementPeriodMap = { week: null, month: null, life: null }
+const initialState: any = {
+  currentUser: {},
+  achievements: { week: null, month: null, life: null },
+  topArtistsWithAchievementHolders: null,
+  isOpen: false
+
+}
 
 export const UserAchievementContext = createContext({
-  currentUser: {},
-  achievements: initialState,
-  setAchievements: () => initialState,
-  isOpen: false,
-  setSideBarOpen: () => true
+  ...initialState.currentUser,
+  ...initialState.achievements,
+  setAchievements: () => initialState.achievements,
+  ...initialState.achievements.isOpen,
+  setSideBarOpen: () => initialState.achievements.isOpen,
+  ...initialState.topArtistsWithAchievementHolders,
+  setTopArtistsWithAchievementHolders: () => initialState.topArtistsWithAchievementHolders
 })
 
 
 
 
-const UserAchievementDataProvider = ({ user, initialState, children, isOpen, setSideBarOpen }: any) => {
-  const [achievements, setParentAchievements]: [UserAchievementPeriodMap, any] = useState(initialState)
+const UserAchievementDataProvider = ({ user, children, isOpen, setSideBarOpen }: any) => {
+  
+  const [achievements, setParentAchievements]: [UserAchievementPeriodMap, any] = useState(initialState.achievements)
+  const [topArtistsWithAchievementHolders, setParentComponentWithArtistsWithAchievementHolders]: [UserAchievementPeriodMap, any] = useState(initialState.topArtistsWithAchievementHolders)
   const [currentUser, setCurrentUser] = useState(user)
-  const setAchievements: any = (newAchievements: any) => setParentAchievements(newAchievements)
 
+
+  const setAchievements: any = (newAchievements: any) => setParentAchievements(newAchievements)
+  const setTopArtistsWithAchievementHolders: any = (newArtistsWithAchievements: any) => setParentComponentWithArtistsWithAchievementHolders((topArtistsWithAchievementHolders: any) => ([topArtistsWithAchievementHolders, ...newArtistsWithAchievements]))
 
   return (
-    <UserAchievementContext.Provider value={{ achievements, setAchievements, currentUser, setSideBarOpen, isOpen }}>
+    <UserAchievementContext.Provider value={{ achievements, setAchievements, currentUser, setSideBarOpen, isOpen, setTopArtistsWithAchievementHolders,  topArtistsWithAchievementHolders}}>
       {children}
     </UserAchievementContext.Provider>
   )
@@ -183,7 +195,6 @@ const UserAchievementDataProvider = ({ user, initialState, children, isOpen, set
 
 
 export const Authed: React.SFC<{ user: { uid: string } }> = ({ user: firebaseUser, ...rest }) => {
-  console.log('TCL: rest', rest)
 
   const result = useGetUserInfo({ variables: { uid: firebaseUser.uid }, pollInterval: 4000, suspend: true })
   const user = result.data && result.data.getUserInfo
@@ -209,11 +220,8 @@ export const Authed: React.SFC<{ user: { uid: string } }> = ({ user: firebaseUse
 
   const [isOpen, openSideBar] = useState(false)
   const setSideBarOpen: any = () => openSideBar(isOpen => !isOpen)
-  const onClose = () => openSideBar(false)
-  
-  
 
-
+  
   return (
     <>
       <AuthedView>
@@ -233,8 +241,6 @@ export const Authed: React.SFC<{ user: { uid: string } }> = ({ user: firebaseUse
       </AuthedView>
  
     </>
-
-
   )
 }
 

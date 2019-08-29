@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useMemo } from "react";
 import { Link } from 'react-router-dom';
 import { Text } from 'recharts';
 import { UserAchievementContext } from '../../../../Authed/Authed'
@@ -46,10 +46,23 @@ const TopListenerLink: any = ({ className, handleClick, children }: any) => (
 
 const AchievementHoldersPopUp: React.SFC<any> = ({ x, y, artist, pathParams, totalTimeListened,
     groupScore, visible, handleClick }) => {
-    const [achievementHolders, setAchievementHolders] = useState([])
+    
 
-    const { getArtistAchievementHolders = null }: any = suspensefulHook(useGetArtistAchievementHolders({ variables: { artistId: artist.id }, suspend: true }))
-    const { day = null, week = null, month = null, life = null } = getArtistAchievementHolders
+    // Context Props
+    const { topArtistsWithAchievementHolders } = useContext(UserAchievementContext)
+    console.log('TCL: topArtistsWithAchievementHolders', topArtistsWithAchievementHolders)
+    const { currentUser } = useContext(UserAchievementContext)
+
+    console.count('AchievementHoldersPopUp render')
+
+    // {artist: currentArtist=false, achievementHolders=false}
+    const { artist:currentArtist=false, achievementHolders=false } = topArtistsWithAchievementHolders.find((awa: any) => {
+        return awa && awa.artist && artist ? awa.artist.id === artist.id : false
+    })
+
+    console.log('TCL: currentArtist', currentArtist)
+
+    const { day = null, week = null, month = null, life = null } = achievementHolders
 
     const { timeScope }: any = pathParams
 
@@ -61,6 +74,7 @@ const AchievementHoldersPopUp: React.SFC<any> = ({ x, y, artist, pathParams, tot
     }
 
     const perspectiveAchievementHolders = Object.assign({}, achievementHolderTimeScopeMap[timeScope])
+    console.log('TCL: perspectiveAchievementHolders', perspectiveAchievementHolders)
 
     for (let place in perspectiveAchievementHolders) {
         if (!perspectiveAchievementHolders[place].user) {
@@ -69,9 +83,16 @@ const AchievementHoldersPopUp: React.SFC<any> = ({ x, y, artist, pathParams, tot
     }
 
 
+    const ah = Object.assign({}, perspectiveAchievementHolders)
+    console.log('TCL: ah', ah)
+    
+    for(let holder in ah) {
+        if(!ah[holder]) {
+            delete ah[holder]
+        }
+    }
 
 
-    const { currentUser } = useContext(UserAchievementContext)
     const { total, status } = comparePersonalAndGroupScore(totalTimeListened, groupScore)
 
     const currentUserIsTopListener: any = status
@@ -109,15 +130,12 @@ const AchievementHoldersPopUp: React.SFC<any> = ({ x, y, artist, pathParams, tot
     /> : null
     const badgePlacement = topSpot ? topSpot : null
 
-    const content = <AchievementHoldersList {...{ currentUser, artist }} achievementHolders={perspectiveAchievementHolders} style={{
+    const content = <AchievementHoldersList {...{ currentUser, artist, pathParams }} style={{
         background: '#030616!important'
     }} />
 
+    console.count('AchievementHolder PopUp Rendered:')
 
-    useEffect(() => {
-
-        setAchievementHolders(perspectiveAchievementHolders)
-    }, [])
 
     return (
 
@@ -133,12 +151,14 @@ const AchievementHoldersPopUp: React.SFC<any> = ({ x, y, artist, pathParams, tot
     );
 }
 
-
-export const TopListenerYaxis: React.SFC<TickProps & any> = React.memo(({ x, y, offset, artist, pathParams, userId, totalTimeListened, groupScore }) => {
+export const TopListenerYaxis: React.SFC<TickProps & any> = ({ x, y, offset, artist, pathParams, userId, totalTimeListened, groupScore }) => {
 
     const [visible, setVisible] = useState(false)
     const handleClick = () => setVisible(visible => !visible)
+    console.count('TopListenerYaxis render')
+
+
 
     return <AchievementHoldersPopUp {...{ x, y, offset, artist, pathParams, userId, totalTimeListened, groupScore, visible, handleClick }} />
 
-})
+}

@@ -5,7 +5,7 @@ import * as moment from 'moment'
 
 	ak: AchievementType#AchievementValue#RelationType#RelationTypeId#PeriodType#PeriodValue. Ex: topListener#first#artist#4c2Fb5kfVRzodXZvitxnWk#month#2019-08
 
-	pk: AchievementType#AchievementValue#RelationType#PeriodType#PeriodValue. Ex: topListener#first#artist#month#2019-08
+	pk: AchievementType#AchievementValue#RelationType#RelationId#PeriodType#PeriodValue. Ex: topListener#first#artist#month#2019-08
 
 	uk: UserId#AchievementType#AchievementValue#RelationType#PeriodType#PeriodValue. Ex: spotify:124053034#topListener#first#artist#month#2019-08
 	
@@ -16,41 +16,48 @@ import * as moment from 'moment'
 
 export const KeyMaker = () => {
 
-    const joinKeyParams = args => [...args].join('#')
+	const joinKeyParams = args => [...args].join('#')
 
 	const makeAKRetrievalKeys = ({
+		perspectiveUID,
 		periodType,
-        periodValue,
-        artistId,
-        achievementType,
+		periodValue,
+		artistId,
+		achievementType,
 		achievementValue
 	}: AKKeyRetrievalData) => {
-        
-        const ak = [achievementType, achievementValue, 'artist', artistId, periodType, periodValue].join('#')
-        const pk = [achievementType, achievementValue, 'artist', periodType, periodValue].join('#')
 
-        return {
-            pk,
-            ak
-        }
-    }
+		const ak = [achievementType, achievementValue, 'artist', artistId, periodType, periodValue].join('#')
+		const pk = [perspectiveUID, achievementType, achievementValue, 'artist', periodType, periodValue].join('#')
 
-    const makeAchievementCreationKeys = ({ achievementType, achievementValue, pk, artistAchievementsId }: StatRecordPreAchievementMetaDataKeyParams) => {
+		return {
+			pk,
+			ak
+		}
+	}
+
+	const makeAchievementCreationKeys = ({
+		perspectiveUID,
+		achievementType,
+		achievementValue,
+		pk,
+		artistAchievementsId
+	}: StatRecordPreAchievementMetaDataKeyParams) => {
 
 		const splitPK: string[] = pk.split('#')
 		const userId = splitPK[0]
 		let aID: any = artistAchievementsId.split('#') // length 4
-	
+
 		aID.length = 3
 		aID = aID.join('#')
-	
+
 		const pkFragment = splitPK.slice(1, splitPK.length).join('#')
-		const newPK = `${achievementType}#${achievementValue}#${pkFragment}`
+		const newPK = `${perspectiveUID}#${achievementType}#${achievementValue}#${pkFragment}`
 		const ak = `${achievementType}#${achievementValue}#artist#${aID}`
 		const auk = `${artistAchievementsId}#${userId}` // cc: artistUserKey
 		const uk = `${userId}#${achievementType}#${achievementValue}#${pkFragment}`
-	
-	
+
+
 		return {
 			pk: newPK,
 			ak,
@@ -61,7 +68,7 @@ export const KeyMaker = () => {
 	}
 
 
-    const makeAchievementRetrievalKeys = ({
+	const makeAchievementRetrievalKeys = ({
 		periodType,
 		periodValue,
 		artistId,
@@ -73,8 +80,8 @@ export const KeyMaker = () => {
 		const auk = ``
 		const uk = ``
 		const pk = ``
-	
-	
+
+
 		return {
 			pk,
 			ak,
@@ -84,7 +91,7 @@ export const KeyMaker = () => {
 
 	}
 
-	const makeAKTimeSeriesRetrievalKeys = (artistId: any) => {
+	const makeAKTimeSeriesRetrievalKeys = (perspectiveUID='global', artistId: any) => {
 
 		// @ts-ignore
 		const day = moment().format('YYYY-MM-DD')
@@ -93,78 +100,78 @@ export const KeyMaker = () => {
 		// @ts-ignore
 		const month = `${moment().year()}-${moment().month()}`
 
-	
+
 		return {
 			day: {
 				first: {
-					
-					pk: `topListener#first#artist#day#${day}`,
+
+					pk: `${perspectiveUID}#topListener#first#artist#day#${day}`,
 					ak: `topListener#first#artist#${artistId}#day#${day}`
 				},
 				second: {
-					pk: `topListener#second#artist#day#${day}`,
+					pk: `${perspectiveUID}#topListener#second#artist#day#${day}`,
 					ak: `topListener#second#artist#${artistId}#day#${day}`
 				},
 				third: {
-					pk: `topListener#third#artist#day#${day}`,
+					pk: `${perspectiveUID}#topListener#third#artist#day#${day}`,
 					ak: `topListener#third#artist#${artistId}#day#${day}`
 				}
 			},
 			week: {
 				first: {
-					pk: `topListener#first#artist#week#${week}`,
+					pk: `${perspectiveUID}#topListener#first#artist#week#${week}`,
 					ak: `topListener#first#artist#${artistId}#week#${week}`,
 				},
 				second: {
-					pk: `topListener#second#artist#week#${week}`,
+					pk: `${perspectiveUID}#topListener#second#artist#week#${week}`,
 					ak: `topListener#second#artist#${artistId}#week#${week}`,
 				},
 				third: {
-					pk: `topListener#third#artist#week#${week}`,
+					pk: `${perspectiveUID}#topListener#third#artist#week#${week}`,
 					ak: `topListener#third#artist#${artistId}#week#${week}`,
 				}
 			},
 			month: {
 				first: {
-					pk: `topListener#first#artist#month#${month}`,
+					pk: `${perspectiveUID}#topListener#first#artist#month#${month}`,
 					ak: `topListener#first#artist#${artistId}#month#${month}`,
 				},
 				second: {
-					pk: `topListener#second#artist#month#${month}`,
+					pk: `${perspectiveUID}#topListener#second#artist#month#${month}`,
 					ak: `topListener#second#artist#${artistId}#month#${month}`,
 				},
 				third: {
-					pk: `topListener#third#artist#month#${month}`,
+					pk: `${perspectiveUID}#topListener#third#artist#month#${month}`,
 					ak: `topListener#third#artist#${artistId}#month#${month}`,
 				}
 			},
 			life: {
 				first: {
-					pk: `topListener#first#artist#life#life`,
+					pk: `${perspectiveUID}#topListener#first#artist#life#life`,
 					ak: `topListener#first#artist#${artistId}#life#life`,
 				},
 				second: {
-					pk: `topListener#second#artist#life#life`,
+					pk: `${perspectiveUID}#topListener#second#artist#life#life`,
 					ak: `topListener#second#artist#${artistId}#life#life`,
 				},
 				third: {
-					pk: `topListener#third#artist#life#life`,
+					pk: `${perspectiveUID}#topListener#third#artist#life#life`,
 					ak: `topListener#third#artist#${artistId}#life#life`,
 				}
 			}
 		}
 	}
-	
-	
 
 
-    return {
-        joinKeyParams,
-        makeAKRetrievalKeys,
+
+
+	return {
+		joinKeyParams,
+		makeAKRetrievalKeys,
 		makeAchievementCreationKeys,
 		makeAKTimeSeriesRetrievalKeys,
-        makeAchievementRetrievalKeys
-    }
+		makeAchievementRetrievalKeys
+	}
 
 
 }

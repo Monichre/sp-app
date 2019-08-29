@@ -256,7 +256,6 @@ const playtimeTimescopeStats = async (
 
 const playtimeStats = async (
 	tableStat: TTableStat,
-	tableAchievement: TTableAchievement,
 	uid: string,
 	gid: string,
 	artistId: string,
@@ -279,195 +278,8 @@ const playtimeStats = async (
 	)
 
 	const artist = await tableStat.getArtistInfo(artistId)
-	const {makeAKRetrievalKeys} = KeyMaker()
 
-	let topListeners: any = []
 
-	const firstKeysDaily: ArtistAchievementRetrievalKeys = makeAKRetrievalKeys({
-		
-		periodType: 'day',
-		periodValue: today,
-		artistId: artistId,
-		achievementType: 'topListener',
-		achievementValue: 'first'
-	})
-	const secondKeysDaily: ArtistAchievementRetrievalKeys = makeAKRetrievalKeys({
-		
-		periodType: 'day',
-		periodValue: today,
-		artistId: artistId,
-		achievementType: 'topListener',
-		achievementValue: 'second'
-	})
-	const thirdKeysDaily: ArtistAchievementRetrievalKeys = makeAKRetrievalKeys({
-		
-		periodType: 'day',
-		periodValue: today,
-		artistId: artistId,
-		achievementType: 'topListener',
-		achievementValue: 'third'
-	})
-
-	const keys = [firstKeysDaily, secondKeysDaily, thirdKeysDaily]
-	const dailyTopListeners = await Promise.all(
-		keys.map(async (keyData: ArtistAchievementRetrievalKeys) => {
-			const data = await tableAchievement.getArtistAchievementHolders(keyData)
-
-			return data
-		})
-	)
-
-	if (dailyTopListeners.length) {
-		topListeners = topListeners.length
-			? [...topListeners, ...dailyTopListeners]
-			: [...dailyTopListeners]
-	}
-
-	/**
-	 *
-	 * cc: Weekly Enriched Top Artists w/Top Listeners
-	 *
-	 */
-
-	const firstKeysWeekly = makeAKRetrievalKeys({
-		
-		periodType: 'week',
-		periodValue: thisWeek,
-		artistId: artistId,
-		achievementType: 'topListener',
-		achievementValue: 'first'
-	})
-	const secondKeysWeekly = makeAKRetrievalKeys({
-		
-		periodType: 'week',
-		periodValue: thisWeek,
-		artistId: artistId,
-		achievementType: 'topListener',
-		achievementValue: 'second'
-	})
-	const thirdKeysWeekly = makeAKRetrievalKeys({
-		
-		periodType: 'week',
-		periodValue: thisWeek,
-		artistId: artistId,
-		achievementType: 'topListener',
-		achievementValue: 'third'
-	})
-
-	const keysWeekly = [firstKeysWeekly, secondKeysWeekly, thirdKeysWeekly]
-	const weeklyTopListeners = await Promise.all(
-		keysWeekly.map(async (keyData: ArtistAchievementRetrievalKeys) => {
-			const data = await tableAchievement.getArtistAchievementHolders(keyData)
-
-			return data
-		})
-	)
-
-	if (weeklyTopListeners.length) {
-		topListeners = topListeners.length
-			? [...topListeners, ...weeklyTopListeners]
-			: [...weeklyTopListeners]
-	}
-
-	/**
-	 *
-	 * cc: Monthly Top Artists Enriched w/TopListeners
-	 *
-	 */
-
-	const firstKeysMonthly = makeAKRetrievalKeys({
-		
-		periodType: 'month',
-		periodValue: thisMonth,
-		artistId: artistId,
-		achievementType: 'topListener',
-		achievementValue: 'first'
-	})
-	const secondKeysMonthly = makeAKRetrievalKeys({
-		
-		periodType: 'month',
-		periodValue: thisMonth,
-		artistId: artistId,
-		achievementType: 'topListener',
-		achievementValue: 'second'
-	})
-	const thirdKeysMonthly = makeAKRetrievalKeys({
-		
-		periodType: 'month',
-		periodValue: thisMonth,
-		artistId: artistId,
-		achievementType: 'topListener',
-		achievementValue: 'third'
-	})
-
-	const keysMonthly = [firstKeysMonthly, secondKeysMonthly, thirdKeysMonthly]
-	const monthlyTopListeners = await Promise.all(
-		keysMonthly.map(async (keyData: ArtistAchievementRetrievalKeys) => {
-			const data = await tableAchievement.getArtistAchievementHolders(keyData)
-
-			return data
-		})
-	)
-
-	if (monthlyTopListeners.length) {
-		topListeners = topListeners.length
-			? [...topListeners, ...monthlyTopListeners]
-			: [...monthlyTopListeners]
-	}
-
-	/**
-	 *
-	 * cc: LifeTime Top Artists w/Listeners
-	 *
-	 */
-
-	const firstKeysLifetime = makeAKRetrievalKeys({
-		
-		periodType: 'life',
-		periodValue: 'life',
-		artistId: artistId,
-		achievementType: 'topListener',
-		achievementValue: 'first'
-	})
-	const secondKeysLifetime = makeAKRetrievalKeys({
-		
-		periodType: 'life',
-		periodValue: 'life',
-		artistId: artistId,
-		achievementType: 'topListener',
-		achievementValue: 'second'
-	})
-	const thirdKeysLifetime = makeAKRetrievalKeys({
-		
-		periodType: 'life',
-		periodValue: 'life',
-		artistId: artistId,
-		achievementType: 'topListener',
-		achievementValue: 'third'
-	})
-
-	const keysLifetime = [
-		firstKeysLifetime,
-		secondKeysLifetime,
-		thirdKeysLifetime
-	]
-	const lifetimeTopListeners = await Promise.all(
-		keysLifetime.map(async (keyData: ArtistAchievementRetrievalKeys) => {
-			const data = await tableAchievement.getArtistAchievementHolders(keyData)
-
-			return data
-		})
-	)
-
-	if (lifetimeTopListeners.length) {
-		topListeners = topListeners.length
-			? [...topListeners, ...lifetimeTopListeners]
-			: [...lifetimeTopListeners]
-	}
-
-	
-
-	artist.topListeners = topListeners.length ? topListeners.filter((listener: any) => listener != null) : []
 
 	return {
 		artist,
@@ -544,10 +356,7 @@ const insightsArtistStats: QueryResolvers.InsightsArtistStatsResolver = async (
 
 	const tableStat = TableStat(context.DYNAMO_ENDPOINT, context.TABLE_STAT)
 	const tableUser = TableUser(context.DYNAMO_ENDPOINT, context.TABLE_USER)
-	const tableAchievement = TableAchievement(
-		context.DYNAMO_ENDPOINT,
-		context.TABLE_ACHIEVEMENT
-	)
+
 	const { valid, invalid }: any = await tableUser.getUser(uid)
 	if (invalid) {
 		throw new Error(`user info invalid for uid ${uid}`)
@@ -559,7 +368,6 @@ const insightsArtistStats: QueryResolvers.InsightsArtistStatsResolver = async (
 
 	const playTimeStats: any = await playtimeStats(
 		tableStat,
-		tableAchievement,
 		uid,
 		gid,
 		artistId,

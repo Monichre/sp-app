@@ -7,6 +7,8 @@ import { AchievementListItem } from './AchievementListItem'
 import { HeaderFlexDiv } from '../Elements'
 import * as _ from 'lodash'
 import { parseAchievementsByPeriod } from './achievements-utils';
+import { suspensefulHook } from '../../../lib/suspensefulHook';
+import { useGetArtistAchievementHolders } from '../../../types';
 
 
 
@@ -86,7 +88,7 @@ export interface AchievementItemProps {
 
 
 export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ userId, usersTopArtistByPeriodData }) => {
-console.log('TCL: usersTopArtistByPeriodData', usersTopArtistByPeriodData)
+
     const {
         achievements
     } = parseAchievementsByPeriod(usersTopArtistByPeriodData, userId)
@@ -105,6 +107,7 @@ console.log('TCL: usersTopArtistByPeriodData', usersTopArtistByPeriodData)
     } = achievements
 
 
+  
     const la: any = (lifetimeAchievements) ? lifetimeAchievements.slice(0, 3).map(({ artistData, achievement }: any) => {
 
         let total: DecimalHoursToMinutes = decimalToHrsMins(achievement.total)

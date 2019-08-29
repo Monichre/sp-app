@@ -211,6 +211,7 @@ export type Timeseries = {
 }
 
 export type StatRecordPreAchievementMetaDataKeyParams = {
+	perspectiveUID: 'global' | 'personal'
 	sk: string
 	pk: string
 	artist: Artist
@@ -221,6 +222,7 @@ export type StatRecordPreAchievementMetaDataKeyParams = {
 
 
 export type AchievementRetrievalKeys = {
+	perspectiveUID: 'global' | 'personal'
 	periodType: PeriodType
 	periodValue: string
 	artistId: Artist["id"]
@@ -243,6 +245,7 @@ export type AchievementCreationKeys = {
 }
 
 export type AKKeyRetrievalData = {
+	perspectiveUID: 'global' | 'personal'
 	periodType: PeriodType
 	periodValue: string
 	artistId: Artist["id"]
@@ -275,7 +278,7 @@ export type TTableAchievement = {
 
 	// makeAchievementRetrievalKeys
 
-	getArtistAchievementHoldersTimeSeries: (args: Artist['id']) => Promise<PromiseResult<any, AWSError>>
+	getArtistAchievementHoldersTimeSeries: (perspectiveUID: string, artistId: Artist['id']) => Promise<PromiseResult<any, AWSError>>
 
 	makeAKRetrievalKeys: (args: AKKeyRetrievalData) => ArtistAchievementRetrievalKeys
 

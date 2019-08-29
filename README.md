@@ -277,3 +277,5 @@ Test
   - [GraphQL]: `https://syxopb5w7h.execute-api.us-east-1.amazonaws.com/test/graphiql`
 http://sp-app-front-test-frontend.s3-website-us-east-1.amazonaws.com/insights/thisWeek/global/personal/artists
 
+adnordenson@gmail.com
+Lentilcape92mena

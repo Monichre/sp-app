@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom';
 import { LineChart, History, User } from 'grommet-icons'
 import { largeQuery, notLargeQuery, BRAND_COLOR, BRAND_PERSONAL_COLOR, Large } from '../../../shared/media';
-import {useInsightsDash, useInsightsArtists} from '../../../types'
+import { useInsightsDash, useInsightsArtists, useGetTopArtistAchievementHolders } from '../../../types'
 import { LogoHorizontal } from '../../../shared/Logo';
 import { UserAchievementsList } from '../../Components/UserAchievementsList'
 import { suspensefulHook } from '../../../lib/suspensefulHook';
 import Moment from 'react-moment';
 import { AvatarBg } from '../../Components/Elements';
+import { UserAchievementContext } from './Authed';
 
 
 
@@ -102,7 +103,7 @@ const LastUpdateDiv = styled.div`
   text-align: center;
   font-size: 0.8rem;
 `
-const LastUpdate: React.SFC<{lastUpdate: string}> = ({lastUpdate}) =>
+const LastUpdate: React.SFC<{ lastUpdate: string }> = ({ lastUpdate }) =>
   <LastUpdateDiv>
     <div>last updated</div>
     <div><Moment fromNow>{lastUpdate}</Moment></div>
@@ -126,14 +127,42 @@ const HarvestingNotice: React.SFC = () =>
     Watch your stats grow as we complete your initial harvest.
   </HarvestingNoticeDiv>
 
-export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: string, user: any, history?: any, match?: any}> = ({ initialHarvestComplete, lastUpdate, user, ...rest}) => {
-const {uid} = user
-const { history, match} = rest
-const { location: { pathname } } = history
-  
+export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: string, user: any, history?: any, match?: any }> = ({ initialHarvestComplete, lastUpdate, user, ...rest }) => {
+
+  // Context Props 
+  const { setTopArtistsWithAchievementHolders } = useContext(UserAchievementContext)
+
+  // Vars 
+  const { uid } = user
+  const { history, match } = rest
+  const { location: { pathname } } = history
+
+
+  // State 
   const [topArtistByPeriodData, setTopArtistByPeriodData] = useState(false)
+
+
+  // Hooks 
   const { insightsArtists: usersTopArtistByPeriodData }: any = suspensefulHook(useInsightsArtists({ variables: { uid }, suspend: true }))
-  console.log('TCL: usersTopArtistByPeriodData', usersTopArtistByPeriodData)
+
+
+  const topByPeriod = Object.assign({}, usersTopArtistByPeriodData)
+  const artists: any = []
+
+  for (let period in topByPeriod) {
+    if (topByPeriod[period].personal) {
+      topByPeriod[period].personal.forEach(({ artist }: any) => artists.push(artist))
+    }
+  }
+
+
+  const { getTopArtistAchievementHolders = null }: any = artists.length ? suspensefulHook(useGetTopArtistAchievementHolders({ variables: { perspectiveUID: 'global', artistIds: artists.map((artist: any) => artist.id) }, suspend: true, })) : null
+
+  const ahWithArtist = getTopArtistAchievementHolders ? getTopArtistAchievementHolders.map(({ artistId, achievementHolders }: any) => ({ achievementHolders, artist: artists.find((artist: any) => artist.id === artistId) })) : null
+
+  useEffect(() => {
+    setTopArtistsWithAchievementHolders(ahWithArtist)
+  }, [])
 
   useEffect(() => {
     setTopArtistByPeriodData(usersTopArtistByPeriodData)
@@ -158,7 +187,7 @@ const { location: { pathname } } = history
         <NavLabel>Profile</NavLabel>
       </NavPrimaryLink>
       <Large>
-        {topArtistByPeriodData ? <UserAchievementsList userId={user.uid} usersTopArtistByPeriodData={topArtistByPeriodData}/> : null}
+        {topArtistByPeriodData ? <UserAchievementsList userId={user.uid} usersTopArtistByPeriodData={topArtistByPeriodData} /> : null}
         <FillSpace>
           {!initialHarvestComplete ? <HarvestingNotice /> : <LastUpdate {...{ lastUpdate }} />}
           <LogoHorizontal size={8} />

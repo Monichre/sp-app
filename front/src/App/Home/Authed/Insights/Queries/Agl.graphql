@@ -25,8 +25,8 @@ query GetUserAchievements($pk: String!, $uk: String!) {
 	}
 }
 
-query GetArtistAchievementHolders($artistId: String!) {
-	getArtistAchievementHolders(artistId: $artistId) {
+query GetArtistAchievementHolders($perspectiveUID: String, $artistId: String!) {
+	getArtistAchievementHolders(perspectiveUID: $perspectiveUID, artistId: $artistId) {
 		day {
 			first {
 				total
@@ -320,6 +320,310 @@ query GetArtistAchievementHolders($artistId: String!) {
 					displayName
 					lastUpdate
 					photoURL
+				}
+			}
+		}
+	}
+}
+
+query GetTopArtistAchievementHolders($perspectiveUID: String, $artistIds: [String]) {
+	getTopArtistAchievementHolders(perspectiveUID: $perspectiveUID, artistIds: $artistIds) {
+		artistId
+		achievementHolders {
+			day {
+				first {
+					total
+					uk
+					auk
+					pk
+					ak
+					artist {
+						name
+						genres
+						images {
+							url
+						}
+						external_urls {
+							spotify
+						}
+					}
+					user {
+						uid
+						email
+						displayName
+						lastUpdate
+						photoURL
+					}
+				}
+				second {
+					total
+					uk
+					auk
+					pk
+					ak
+					artist {
+						name
+						genres
+						images {
+							url
+						}
+						external_urls {
+							spotify
+						}
+					}
+					user {
+						uid
+						email
+						displayName
+						lastUpdate
+						photoURL
+					}
+				}
+				third {
+					total
+					uk
+					auk
+					pk
+					ak
+					artist {
+						name
+						genres
+						images {
+							url
+						}
+						external_urls {
+							spotify
+						}
+					}
+					user {
+						uid
+						email
+						displayName
+						lastUpdate
+						photoURL
+					}
+				}
+			}
+			week {
+				first {
+					total
+					uk
+					auk
+					pk
+					ak
+					artist {
+						name
+						genres
+						images {
+							url
+						}
+						external_urls {
+							spotify
+						}
+					}
+					user {
+						uid
+						email
+						displayName
+						lastUpdate
+						photoURL
+					}
+				}
+				second {
+					total
+					uk
+					auk
+					pk
+					ak
+					artist {
+						name
+						genres
+						images {
+							url
+						}
+						external_urls {
+							spotify
+						}
+					}
+					user {
+						uid
+						email
+						displayName
+						lastUpdate
+						photoURL
+					}
+				}
+				third {
+					total
+					uk
+					auk
+					pk
+					ak
+					artist {
+						name
+						genres
+						images {
+							url
+						}
+						external_urls {
+							spotify
+						}
+					}
+					user {
+						uid
+						email
+						displayName
+						lastUpdate
+						photoURL
+					}
+				}
+			}
+			month {
+				first {
+					total
+					uk
+					auk
+					pk
+					ak
+					artist {
+						name
+						genres
+						images {
+							url
+						}
+						external_urls {
+							spotify
+						}
+					}
+					user {
+						uid
+						email
+						displayName
+						lastUpdate
+						photoURL
+					}
+				}
+				second {
+					total
+					uk
+					auk
+					pk
+					ak
+					artist {
+						name
+						genres
+						images {
+							url
+						}
+						external_urls {
+							spotify
+						}
+					}
+					user {
+						uid
+						email
+						displayName
+						lastUpdate
+						photoURL
+					}
+				}
+				third {
+					total
+					uk
+					auk
+					pk
+					ak
+					artist {
+						name
+						genres
+						images {
+							url
+						}
+						external_urls {
+							spotify
+						}
+					}
+					user {
+						uid
+						email
+						displayName
+						lastUpdate
+						photoURL
+					}
+				}
+			}
+			life {
+				first {
+					total
+					uk
+					auk
+					pk
+					ak
+					artist {
+						name
+						genres
+						images {
+							url
+						}
+						external_urls {
+							spotify
+						}
+					}
+					user {
+						uid
+						email
+						displayName
+						lastUpdate
+						photoURL
+					}
+				}
+				second {
+					total
+					uk
+					auk
+					pk
+					ak
+					artist {
+						name
+						genres
+						images {
+							url
+						}
+						external_urls {
+							spotify
+						}
+					}
+					user {
+						uid
+						email
+						displayName
+						lastUpdate
+						photoURL
+					}
+				}
+				third {
+					total
+					uk
+					auk
+					pk
+					ak
+					artist {
+						name
+						genres
+						images {
+							url
+						}
+						external_urls {
+							spotify
+						}
+					}
+					user {
+						uid
+						email
+						displayName
+						lastUpdate
+						photoURL
+					}
 				}
 			}
 		}

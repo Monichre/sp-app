@@ -24,20 +24,31 @@ export class ArtistAndGenreLeaders {
     ) {
         const achievementType = 'topListener'
         const achievementValue = this.indexToAchievementMap[index]
-        const keyData = KeyMaker().makeAchievementCreationKeys({
+        const keyDataGlobal = KeyMaker().makeAchievementCreationKeys({
+            perspectiveUID: 'global',
             achievementType,
             achievementValue,
             ...topListenerData
         })
+        console.log('TCL: ArtistAndGenreLeaders -> keyDataGlobal', keyDataGlobal)
+        const keyDataPersonal = KeyMaker().makeAchievementCreationKeys({
+            perspectiveUID: 'personal',
+            achievementType,
+            achievementValue,
+            ...topListenerData
+        })
+        console.log('TCL: ArtistAndGenreLeaders -> keyDataPersonal', keyDataPersonal)
         const { artist, user, total, lastUpdated } = topListenerData
         const achievementData: CreateAchievementRecordDataParams = {
             artist, user, total, lastUpdated
         }
     
-        const newAchievement: AchievementRecord = await tableAchievement.createOrModifyAchievement(keyData, achievementData)
-        console.log('TCL: newAchievement', newAchievement)
+        await tableAchievement.createOrModifyAchievement(keyDataPersonal, achievementData)
+
+        await tableAchievement.createOrModifyAchievement(keyDataGlobal, achievementData)
+        
     
-        return newAchievement
+        
     
     }
     

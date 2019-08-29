@@ -7,7 +7,7 @@ export const useFetchAchievementHolders = (artistId: any, pathParams: any) => {
     const [achievementHolders, setAchievementHolders] = useState([])
 
     const fetchAchievementHolders = () => {
-        const { getArtistAchievementHolders = null }: any = suspensefulHook(useGetArtistAchievementHolders({ variables: { artistId: artistId }, suspend: true })) 
+        const { getArtistAchievementHolders = null }: any = suspensefulHook(useGetArtistAchievementHolders({ variables: { perspectiveUID: 'global', artistId: artistId }, suspend: true })) 
         const { day = null, week = null, month = null, life = null } = getArtistAchievementHolders
         const { achievements, currentUser } = useContext(UserAchievementContext)
         const { timeScope }: any = pathParams

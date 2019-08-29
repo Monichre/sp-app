@@ -5,6 +5,8 @@ import { Timeseries } from '../../fns/graphql/types';
 import { TTableAchievement, StatRecordPreAchievementMetaDataKeyParams, KeyData, GetUserAchievementItem, TopArtistsRow, TimeseriesKeys, UserAchievementByArtistParams, AchievementRetrievalKeys, AKKeyRetrievalData, ArtistAchievementRetrievalKeys, AchievementRecord } from '../SharedTypes';
 import { PeriodType } from './TableStat';
 import { KeyMaker } from '../keyMaker';
+import { obj } from 'duplexify';
+import { renameKeysWith } from 'ramda-adjunct';
 
 /*=============================================
 	=            NOTES ON KEYS            =
@@ -65,6 +67,7 @@ export const TableAchievement = (
 	}
 
 	const makeAKRetrievalKeys = ({
+		perspectiveUID,
 		periodType,
 		periodValue,
 		artistId,
@@ -74,6 +77,7 @@ export const TableAchievement = (
 		const { makeAKRetrievalKeys } = KeyMaker()
 
 		return makeAKRetrievalKeys({
+			perspectiveUID,
 			periodType,
 			periodValue,
 			artistId,
@@ -131,9 +135,9 @@ export const TableAchievement = (
 	}
 
 
-	const getArtistAchievementHoldersTimeSeries = async (artistId) => {
+	const getArtistAchievementHoldersTimeSeries = async (perspectiveUID, artistId) => {
 		const { makeAKTimeSeriesRetrievalKeys } = KeyMaker()
-		const timeSeriesKeys = makeAKTimeSeriesRetrievalKeys(artistId)
+		const timeSeriesKeys = makeAKTimeSeriesRetrievalKeys(perspectiveUID, artistId)
 		const data = {}
 
 		// HOPE YOU LIKE NESTED FOR LOOPS MUTHA FUCKA
@@ -144,10 +148,11 @@ export const TableAchievement = (
 				const params = {
 					TableName,
 					Limit: 3,
-					KeyConditionExpression: `ak = :ak`,
+					KeyConditionExpression: `pk = :pk AND ak = :ak`,
 					IndexName: 'ArtistAchievementHoldersGSI',
 					ScanIndexForward: false, // means descending
 					ExpressionAttributeValues: {
+						':pk': timeSeriesKeys[period][place].pk,
 						':ak': timeSeriesKeys[period][place].ak
 					}
 				}
@@ -165,7 +170,7 @@ export const TableAchievement = (
 
 		}
 
-        console.log('TCL: getArtistAchievementHoldersTimeSeries -> data', data)
+		console.log('TCL: getArtistAchievementHoldersTimeSeries -> data', data)
 		return data
 
 	}
@@ -227,26 +232,42 @@ export const TableAchievement = (
 		achievementData
 	) => {
 
-		// Super hacky bullshit to get Typescript to fuck off while also
-		// providing type safety 
-
-		const Item: AchievementRecord = {
-			...keyData,
+		const enriched = {
+			uk: keyData.uk,
+			auk: keyData.auk,
 			...achievementData
 		}
 
-		const achievement: AchievementRecord = await doc
-			.put({
-				TableName,
-				Item: {
-					...keyData,
-					...achievementData
-				}
-			})
-			.promise()
-			.then((res: any) => Item)
+		const nonNullKeys = Object.keys(enriched).filter(k => enriched[k])
+		const UpdateExpression = 'SET ' + nonNullKeys.map(k => (k === 'user' || k === 'total') ? `#${k} = :${k}` : `${k} = :${k}`).join(', ')
+		const nonNullObj: object = R.pickAll(nonNullKeys, enriched)
+		const ExpressionAttributeValues = renameKeysWith(k => `:${k}`, nonNullObj)
 
-		return achievement
+		console.log('TCL: keyData', keyData)
+		console.log('TCL: nonNullKeys', nonNullKeys)
+		console.log('TCL: UpdateExpression', UpdateExpression)
+		console.log('TCL: nonNullObj', nonNullObj)
+		console.log('TCL: ExpressionAttributeValues', ExpressionAttributeValues)
+
+
+		const achievement: any = await doc.update({
+			TableName,
+			Key: {
+				pk: keyData.pk,
+				ak: keyData.ak
+			},
+			UpdateExpression,
+			ExpressionAttributeValues,
+			ExpressionAttributeNames: {
+				"#user": "user",
+				"#total": "total"
+			},
+			ReturnValues: 'UPDATED_NEW',
+		})
+			.promise()
+		console.log('TCL: achievement', achievement)
+
+		return achievement ? achievement.Attributes : null
 	}
 
 	return {

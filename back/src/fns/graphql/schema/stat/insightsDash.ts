@@ -223,7 +223,6 @@ const perspectiveTopGenres = async (
 
 const perspectiveTopArtists = async (
 	tableStat: TTableStat,
-	tableAchievement: TTableAchievement,
 	endDate: moment.Moment,
 	{
 		perspectiveType,
@@ -234,7 +233,6 @@ const perspectiveTopArtists = async (
 	}: TPerspectiveTopKeys
 ) => {
 	const artistsPrimary = await tableStat.getTopArtists({
-		tableAchievement,
 		uid: primaryId,
 		periodType,
 		periodValue,
@@ -269,16 +267,10 @@ const perspectiveTopArtists = async (
 
 const perspectiveTopArtistAndGenres = async (
 	tableStat: TTableStat,
-	tableAchievement: TTableAchievement,
 	endDate: moment.Moment,
 	perspectiveTopKeys: TPerspectiveTopKeys
 ): Promise<PerspectiveTops> => {
-	const artists: any = await perspectiveTopArtists(
-		tableStat,
-		tableAchievement,
-		endDate,
-		perspectiveTopKeys
-	)
+	const artists: any = await perspectiveTopArtists(tableStat, endDate, perspectiveTopKeys)
 	
 	return {
 		artists: artists,
@@ -301,7 +293,6 @@ type TTimescopeKeys = {
 
 const timescopeTopArtistAndGenres = async (
 	tableStat: TTableStat,
-	tableAchievement: TTableAchievement,
 	{
 		timeseriesLabel,
 		timeseriesPeriodType,
@@ -329,7 +320,6 @@ const timescopeTopArtistAndGenres = async (
 		}),
 		personal: await perspectiveTopArtistAndGenres(
 			tableStat,
-			tableAchievement,
 			endDate,
 			{
 				perspectiveType: 'personal',
@@ -341,7 +331,6 @@ const timescopeTopArtistAndGenres = async (
 		),
 		group: await perspectiveTopArtistAndGenres(
 			tableStat,
-			tableAchievement,
 			endDate,
 			{
 				perspectiveType: 'group',
@@ -381,7 +370,6 @@ const PERIOD_KEYS: SpecificPeriodKeys = {
 }
 const topArtistsAndGenres = async (
 	tableStat: TTableStat,
-	tableAchievement: TTableAchievement,
 	{ uid, gid, now }: TTopKeys
 ) => {
 	const mainKeys = { uid, gid, endDate: now }
@@ -389,10 +377,10 @@ const topArtistsAndGenres = async (
 	return {
 		today: await timescopeTopArtistAndGenres(
 			tableStat,
-			tableAchievement,
+	
 			Object.assign({ periodType: 'day' }, mainKeys, PERIOD_KEYS.today)
 		),
-		thisWeek: await timescopeTopArtistAndGenres(tableStat, tableAchievement, {
+		thisWeek: await timescopeTopArtistAndGenres(tableStat, {
 			timeseriesLabel: 'past 7 days',
 			timeseriesPeriodType: 'day',
 			endDate: now,
@@ -402,7 +390,7 @@ const topArtistsAndGenres = async (
 			gid,
 			periodType: 'week'
 		}),
-		thisMonth: await timescopeTopArtistAndGenres(tableStat, tableAchievement, {
+		thisMonth: await timescopeTopArtistAndGenres(tableStat, {
 			timeseriesLabel: 'past 30 days',
 			timeseriesPeriodType: 'day',
 			endDate: now,
@@ -412,7 +400,7 @@ const topArtistsAndGenres = async (
 			gid,
 			periodType: 'month'
 		}),
-		lifetime: await timescopeTopArtistAndGenres(tableStat, tableAchievement, {
+		lifetime: await timescopeTopArtistAndGenres(tableStat, {
 			timeseriesLabel: 'past 12 weeks',
 			timeseriesPeriodType: 'week',
 			endDate: now,
@@ -460,7 +448,7 @@ const insightsDash: QueryResolvers.InsightsDashResolver = async (
 	// @ts-ignore
 	const now = localizedMoment(utcOffset, moment())
 
-	const ret = await topArtistsAndGenres(tableStat, tableAchievement, {
+	const ret = await topArtistsAndGenres(tableStat, {
 		uid,
 		gid,
 		now

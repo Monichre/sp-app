@@ -697,7 +697,7 @@ resources:
             KeySchema:
               - AttributeName: pk
                 KeyType: HASH
-              - AttributeName: auk
+              - AttributeName: ak
                 KeyType: RANGE
             BillingMode: PAY_PER_REQUEST
             StreamSpecification:

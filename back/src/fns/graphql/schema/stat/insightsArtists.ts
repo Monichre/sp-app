@@ -168,11 +168,10 @@ type EnrichedKeyMakerParams = {
 	achievementValue: 'first' | 'second' | 'third'
 	uid?: string | null
 }
-const keyMaker = (args: any) => [...args].join('#')
+
 
 const perspectiveTopArtists = async (
 	tableStat: TTableStat,
-	tableAchievement: TTableAchievement,
 	primaryUid: string,
 	primaryType: PerspectiveTypes,
 	secondaryUid: string,
@@ -182,7 +181,6 @@ const perspectiveTopArtists = async (
 	periodPrev?: string
 ): Promise<TopArtistStat[]> => {
 	const artistsPrimary = await tableStat.getTopArtists({
-		tableAchievement,
 		uid: primaryUid,
 		periodType,
 		periodValue: periodCurrent,
@@ -215,7 +213,6 @@ const perspectiveTopArtists = async (
 
 const timescopeTopArtists = async (
 	tableStat: TTableStat,
-	tableAchievement: TTableAchievement,
 	uid: string,
 	gid: string,
 	periodType: PeriodType,
@@ -224,7 +221,6 @@ const timescopeTopArtists = async (
 ): Promise<TimescopeTopArtists> => ({
 	personal: await perspectiveTopArtists(
 		tableStat,
-		tableAchievement,
 		uid,
 		'personal',
 		'global',
@@ -235,7 +231,6 @@ const timescopeTopArtists = async (
 	),
 	group: await perspectiveTopArtists(
 		tableStat,
-		tableAchievement,
 		'global',
 		'group',
 		uid,
@@ -248,7 +243,6 @@ const timescopeTopArtists = async (
 
 const topArtists = async (
 	tableStat: TTableStat,
-	tableAchievement: TTableAchievement,
 	uid: string,
 	gid: string,
 	now: moment.Moment
@@ -268,7 +262,6 @@ const topArtists = async (
 
 	const dailyArtists: any = await timescopeTopArtists(
 		tableStat,
-		tableAchievement,
 		uid,
 		gid,
 		'day',
@@ -297,7 +290,6 @@ const topArtists = async (
 	
 	const weeklyArtists = await timescopeTopArtists(
 		tableStat,
-		tableAchievement,
 		uid,
 		gid,
 		'week',
@@ -324,7 +316,6 @@ const topArtists = async (
 
 	const monthlyArtists = await timescopeTopArtists(
 		tableStat,
-		tableAchievement,
 		uid,
 		gid,
 		'month',
@@ -350,7 +341,6 @@ const topArtists = async (
 
 	const lifetimeArtists = await timescopeTopArtists(
 		tableStat,
-		tableAchievement,
 		uid,
 		gid,
 		'life',
@@ -400,7 +390,7 @@ const insightsArtists = async (_, { uid, gid }, context): Promise<InsightsArtist
 	const tableStat = TableStat(context.DYNAMO_ENDPOINT, context.TABLE_STAT)
 	// @ts-ignore
 	const now = localizedMoment(utcOffset, moment())
-	const ret = await topArtists(tableStat, tableAchievement, uid, gid, now)
+	const ret = await topArtists(tableStat, uid, gid, now)
 
 	
 	return ret

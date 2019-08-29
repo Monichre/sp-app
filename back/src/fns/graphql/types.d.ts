@@ -1,4 +1,4 @@
-// Generated in 2019-08-26T01:23:36-04:00
+// Generated in 2019-08-28T22:57:15-04:00
 // REGENERATE THIS BY STARTING THE LOCAL SERVER
 // AND THEN RUNNING `back % yarn generate`
 
@@ -32,6 +32,10 @@ export interface Query {
   insightsGenreStats: InsightsGenreStatsResponse;
 
   getArtistAchievementHolders?: Maybe<TopListenerData>;
+
+  getTopArtistAchievementHolders?: Maybe<
+    (Maybe<TopArtistAchievementHoldersResponse>)[]
+  >;
 }
 
 export interface UserInfoResponse {
@@ -310,6 +314,12 @@ export interface InsightsGenreStatsResponse {
   lifetime: TimescopeStats;
 }
 
+export interface TopArtistAchievementHoldersResponse {
+  artistId?: Maybe<string>;
+
+  achievementHolders?: Maybe<TopListenerData>;
+}
+
 export interface Mutation {
   _?: Maybe<string>;
 }
@@ -380,7 +390,14 @@ export interface InsightsGenreStatsQueryArgs {
   genre: string;
 }
 export interface GetArtistAchievementHoldersQueryArgs {
+  perspectiveUID?: Maybe<string>;
+
   artistId: string;
+}
+export interface GetTopArtistAchievementHoldersQueryArgs {
+  perspectiveUID?: Maybe<string>;
+
+  artistIds?: Maybe<(Maybe<string>)[]>;
 }
 
 import { GraphQLResolveInfo } from "graphql";
@@ -494,6 +511,12 @@ export namespace QueryResolvers {
 
     getArtistAchievementHolders?: GetArtistAchievementHoldersResolver<
       Maybe<TopListenerData>,
+      TypeParent,
+      TContext
+    >;
+
+    getTopArtistAchievementHolders?: GetTopArtistAchievementHoldersResolver<
+      Maybe<(Maybe<TopArtistAchievementHoldersResponse>)[]>,
       TypeParent,
       TContext
     >;
@@ -614,7 +637,20 @@ export namespace QueryResolvers {
     TContext = Context
   > = Resolver<R, Parent, TContext, GetArtistAchievementHoldersArgs>;
   export interface GetArtistAchievementHoldersArgs {
+    perspectiveUID?: Maybe<string>;
+
     artistId: string;
+  }
+
+  export type GetTopArtistAchievementHoldersResolver<
+    R = Maybe<(Maybe<TopArtistAchievementHoldersResponse>)[]>,
+    Parent = {},
+    TContext = Context
+  > = Resolver<R, Parent, TContext, GetTopArtistAchievementHoldersArgs>;
+  export interface GetTopArtistAchievementHoldersArgs {
+    perspectiveUID?: Maybe<string>;
+
+    artistIds?: Maybe<(Maybe<string>)[]>;
   }
 }
 
@@ -1570,6 +1606,32 @@ export namespace InsightsGenreStatsResponseResolvers {
   > = Resolver<R, Parent, TContext>;
 }
 
+export namespace TopArtistAchievementHoldersResponseResolvers {
+  export interface Resolvers<
+    TContext = Context,
+    TypeParent = TopArtistAchievementHoldersResponse
+  > {
+    artistId?: ArtistIdResolver<Maybe<string>, TypeParent, TContext>;
+
+    achievementHolders?: AchievementHoldersResolver<
+      Maybe<TopListenerData>,
+      TypeParent,
+      TContext
+    >;
+  }
+
+  export type ArtistIdResolver<
+    R = Maybe<string>,
+    Parent = TopArtistAchievementHoldersResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type AchievementHoldersResolver<
+    R = Maybe<TopListenerData>,
+    Parent = TopArtistAchievementHoldersResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+}
+
 export namespace MutationResolvers {
   export interface Resolvers<TContext = Context, TypeParent = {}> {
     _?: _Resolver<Maybe<string>, TypeParent, TContext>;
@@ -1706,6 +1768,9 @@ export type IResolvers<TContext = Context> = {
     TContext
   >;
   InsightsGenreStatsResponse?: InsightsGenreStatsResponseResolvers.Resolvers<
+    TContext
+  >;
+  TopArtistAchievementHoldersResponse?: TopArtistAchievementHoldersResponseResolvers.Resolvers<
     TContext
   >;
   Mutation?: MutationResolvers.Resolvers<TContext>;

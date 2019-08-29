@@ -1,15 +1,16 @@
 // @ts-nocheck
 // @ts-ignore
 import { makeExecutableSchema } from 'graphql-tools'
-import { TableUser } from '../../../../shared/tables/TableUser'
+
 import {
-    TableAchievement
+  TableAchievement
 } from '../../../../shared/tables/TableAchievement'
 
 const typeDefs = `
 type Query {
   getUserAchievements(pk: String!, uk: String!): [UserAchievement]
-  getArtistAchievementHolders(artistId: String!): TopListenerData
+  getArtistAchievementHolders(perspectiveUID: String, artistId: String!): TopListenerData
+  getTopArtistAchievementHolders(perspectiveUID: String, artistIds: [String]): [TopArtistAchievementHoldersResponse]
 }
 
 
@@ -20,6 +21,11 @@ type SpotifyUrl {
   spotify: String!
 }
 
+
+type TopArtistAchievementHoldersResponse {
+  artistId: String
+  achievementHolders: TopListenerData
+}
 
 type User {
   photoURL: String
@@ -85,46 +91,70 @@ type UserAchievement {
 
 `
 const getUserAchievements: any = async (
-    _: any,
-    {
-        pk, uk
-    }: any,
-    { log, DYNAMO_ENDPOINT, TABLE_ACHIEVEMENT }: any
+  _: any,
+  {
+    pk, uk
+  }: any,
+  { log, DYNAMO_ENDPOINT, TABLE_ACHIEVEMENT }: any
 ) => {
-    const tableAchievement = TableAchievement(DYNAMO_ENDPOINT, TABLE_ACHIEVEMENT)
-    const data = await tableAchievement.getUserAchievements(pk, uk)
+  const tableAchievement = TableAchievement(DYNAMO_ENDPOINT, TABLE_ACHIEVEMENT)
+  const data = await tableAchievement.getUserAchievements(pk, uk)
 
-    return data
+  return data
 }
 
 
 const getArtistAchievementHolders = async (
-    _: any,
-    {
-        artistId
-    },
-    { log, DYNAMO_ENDPOINT, TABLE_ACHIEVEMENT }: any) => {
-    console.log('TCL: artistId', artistId)
-    const tableAchievement = TableAchievement(DYNAMO_ENDPOINT, TABLE_ACHIEVEMENT)
-    const data: any = await tableAchievement.getArtistAchievementHoldersTimeSeries(artistId)
-    console.log('TCL: data', data)
+  _: any,
+  {
+    perspectiveUID,
+    artistId
+  }: any,
+  { log, DYNAMO_ENDPOINT, TABLE_ACHIEVEMENT }: any) => {
+  console.log('TCL: artistId', artistId)
+  const tableAchievement = TableAchievement(DYNAMO_ENDPOINT, TABLE_ACHIEVEMENT)
+  const data: any = await tableAchievement.getArtistAchievementHoldersTimeSeries(perspectiveUID, artistId)
+  console.log('TCL: data', data)
 
-    return data
+  return data
 
 }
 
 
+
+const getTopArtistAchievementHolders = async (
+  _: any,
+  { perspectiveUID, artistIds }: any,
+  { log, DYNAMO_ENDPOINT, TABLE_ACHIEVEMENT }: any) => {
+
+  console.log('TCL: artistIds', artistIds)
+
+
+  const tableAchievement = TableAchievement(DYNAMO_ENDPOINT, TABLE_ACHIEVEMENT)
+
+  const data: any = await Promise.all(artistIds.map(async (artistId: string) => ({ artistId, achievementHolders: await tableAchievement.getArtistAchievementHoldersTimeSeries(perspectiveUID, artistId) || [] })))
+
+  console.log('TCL: getTopArtistAchievementHolders query resolver response: ', data)
+
+  return data
+
+}
+
+
+
+getTopArtistAchievementHolders
 
 
 
 const resolvers = {
-    Query: {
-        getUserAchievements,
-        getArtistAchievementHolders
-    }
+  Query: {
+    getUserAchievements,
+    getArtistAchievementHolders,
+    getTopArtistAchievementHolders
+  }
 }
 
 export const achievementSchema = makeExecutableSchema({
-    typeDefs,
-    resolvers
+  typeDefs,
+  resolvers
 })

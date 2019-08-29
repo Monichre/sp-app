@@ -1,7 +1,7 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useCallback } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { TPathParams, insightLink } from '../shared/functions';
-import { useInsightsDash } from '../../../../../types';
+import { useInsightsDash, useGetTopArtistAchievementHolders } from '../../../../../types';
 import { notLargeQuery, largeQuery } from '../../../../../shared/media';
 import styled from 'styled-components';
 import { VerticalSpacer } from '../../../../../shared/VerticalSpacer';
@@ -13,6 +13,8 @@ import { suspensefulHook } from '../../../../../lib/suspensefulHook';
 import { FeaturedArtists } from './FeaturedArtists';
 import ReactTooltip from 'react-tooltip'
 import { AchievementHoverSummary } from '../../../../Components/AchievementHoverSummary.tsx';
+import { UserAchievementContext } from '../../Authed';
+
 
 
 const Row = styled.div`
@@ -66,6 +68,7 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
     }
   } = suspensefulHook(useInsightsDash({ variables: { uid }, suspend: true, pollInterval: 10000 }))
 
+
   const { timeScope, perspective }: any = pathParams
   const translatedPerspective: string = perspective === 'personal' ? 'Your' : 'Everyone'
   const period = normalizeTimeScope(pathParams)
@@ -78,6 +81,8 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
   console.count('Overview Render: ')
 
   const artistCount = artists.length === 3 ? 3 : null
+
+  
 
   return <>
     <TimeseriesChart {...{ timeSeries, showOnly: pathParams.perspective }} />

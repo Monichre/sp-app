@@ -57,7 +57,10 @@ const domainMaxBuilder: (values: PerspectiveDashArtists[]) => (maxValue: number)
 
 type ChartProps = { pathParams: TPathParams, artists: PerspectiveDashArtists[], height?: any }
 
-const ArtistsChart: React.SFC<RouteComponentProps & ChartProps & UserIdProp> = ({ pathParams, artists, history, height = 70, userId }) => (
+const ArtistsChart: React.SFC<RouteComponentProps & ChartProps & UserIdProp> = ({ pathParams, artists, history, height = 70, userId }) => {
+  
+  console.count('Artist Chart Render')
+  return (
     <ResponsiveContainer width='100%' height={(height * artists.length) + 100}>
     
       <BarChart layout='vertical' data={artists} onClick={navigateToArtist(history, pathParams)}>
@@ -82,15 +85,21 @@ const ArtistsChart: React.SFC<RouteComponentProps & ChartProps & UserIdProp> = (
       </BarChart>
     </ResponsiveContainer>
 
-)
+)}
  
 const ArtistsChartWithRouter = withRouter(ArtistsChart)
 
-export const ArtistsChartBlock: React.SFC<{ pathParams: TPathParams, artists: PerspectiveDashArtists[], height?: any } & UserIdProp> = ({ children, ...params }) =>
-  <div>
+export const ArtistsChartBlock: React.SFC<{ pathParams: TPathParams, artists: PerspectiveDashArtists[], height?: any } & UserIdProp> = ({ children, ...params }) => {
+  // const { getArtistAchievementHolders = null }: any = suspensefulHook(useGetArtistAchievementHolders({ variables: { artistId: artist.id }, suspend: true }))
+  // console.log('TCL: getArtistAchievementHolders', getArtistAchievementHolders)
+  return (
+    <div>
     {children}
     {params.artists.length > 0 ?
       <ArtistsChartWithRouter {...params} /> :
       <Comment>I don't see any artists for you here.  Have you <a target='new' href='http://open.spotify.com'>listened to Spotify lately?</a></Comment>
     }
   </div>
+  )
+
+}
