@@ -378,10 +378,7 @@ const insightsArtists = async (_, { uid, gid }, context): Promise<InsightsArtist
 	)
 
 	const tableUser = TableUser(context.DYNAMO_ENDPOINT, context.TABLE_USER)
-	const tableAchievement = TableAchievement(
-		context.DYNAMO_ENDPOINT,
-		context.TABLE_ACHIEVEMENT
-	)
+
 	const { valid, invalid } = await tableUser.getUser(uid)
 	if (invalid) {
 		throw new Error(`user info invalid for uid ${uid}`)

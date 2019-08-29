@@ -156,7 +156,7 @@ export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: s
   }
 
 
-  const { getTopArtistAchievementHolders = null }: any = artists.length ? suspensefulHook(useGetTopArtistAchievementHolders({ variables: { perspectiveUID: 'global', artistIds: artists.map((artist: any) => artist.id) }, suspend: true, })) : null
+  const { getTopArtistAchievementHolders = null }: any = (artists && artists.length) ? suspensefulHook(useGetTopArtistAchievementHolders({ variables: { perspectiveUID: 'global', artistIds: artists.map((artist: any) => artist.id) }, suspend: true, })) : {getTopArtistAchievementHolders: null}
 
   const ahWithArtist = getTopArtistAchievementHolders ? getTopArtistAchievementHolders.map(({ artistId, achievementHolders }: any) => ({ achievementHolders, artist: artists.find((artist: any) => artist.id === artistId) })) : null
 

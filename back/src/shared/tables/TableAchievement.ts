@@ -116,11 +116,12 @@ export const TableAchievement = (
 		const params = {
 			TableName,
 			Limit: 3,
-			KeyConditionExpression: `ak = :ak`,
+			KeyConditionExpression: `pk =:pk AND ak = :ak`,
 			IndexName: 'ArtistAchievementHoldersGSI',
 			ScanIndexForward: false, // means descending
 			ExpressionAttributeValues: {
-				':ak': ak
+				':ak': ak,
+				':pk': pk
 			}
 		}
 
@@ -148,11 +149,10 @@ export const TableAchievement = (
 				const params = {
 					TableName,
 					Limit: 3,
-					KeyConditionExpression: `pk = :pk AND ak = :ak`,
+					KeyConditionExpression: `ak = :ak`,
 					IndexName: 'ArtistAchievementHoldersGSI',
 					ScanIndexForward: false, // means descending
 					ExpressionAttributeValues: {
-						':pk': timeSeriesKeys[period][place].pk,
 						':ak': timeSeriesKeys[period][place].ak
 					}
 				}
