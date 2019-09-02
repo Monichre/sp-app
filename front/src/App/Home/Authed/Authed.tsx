@@ -157,7 +157,7 @@ type UserAchievementContextProps = {
 const initialState: any = {
   currentUser: {},
   achievements: { week: null, month: null, life: null },
-  topArtistsWithAchievementHolders: null,
+  topArtistsWithAchievementHolders: [],
   isOpen: false
 
 }
@@ -181,13 +181,8 @@ const UserAchievementDataProvider = ({ user, children, isOpen, setSideBarOpen }:
   const [topArtistsWithAchievementHolders, setParentComponentWithArtistsWithAchievementHolders]: [UserAchievementPeriodMap, any] = useState(initialState.topArtistsWithAchievementHolders)
   const [currentUser, setCurrentUser] = useState(user)
 
-
   const setAchievements: any = (newAchievements: any) => setParentAchievements(newAchievements)
-  const setTopArtistsWithAchievementHolders: any = (newArtistsWithAchievements: any) => setParentComponentWithArtistsWithAchievementHolders((topArtistsWithAchievementHolders: any) => {
-    if (topArtistsWithAchievementHolders) {
-      return [topArtistsWithAchievementHolders, ...newArtistsWithAchievements]
-    }
-  })
+  const setTopArtistsWithAchievementHolders: any = (newArtistsWithAchievements: any) => setParentComponentWithArtistsWithAchievementHolders((topArtistsWithAchievementHolders: any) => (topArtistsWithAchievementHolders && topArtistsWithAchievementHolders.length ? [...topArtistsWithAchievementHolders, ...newArtistsWithAchievements] :  [...newArtistsWithAchievements]))
 
   return (
     <UserAchievementContext.Provider value={{ achievements, setAchievements, currentUser, setSideBarOpen, isOpen, setTopArtistsWithAchievementHolders,  topArtistsWithAchievementHolders}}>

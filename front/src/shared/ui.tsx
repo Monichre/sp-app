@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, {css} from 'styled-components'
 import { useUser, useAuthHandlers, BasicUser, impersonate } from '../App/FirebaseContext';
+import { Redirect } from 'react-router';
 const Color = require('color')
 
 const Blue = Color('#00bcdd')
@@ -130,7 +131,11 @@ export const GradientButtonFilled = styled(Button)`
 
 export const ButtonSignout: React.SFC = () => {
   const { signOut } = useAuthHandlers()
-  return <GradientButtonFilled onClick={() => signOut()}>Sign Out</GradientButtonFilled>
+  return <GradientButtonFilled onClick={() => {
+
+    signOut()
+    return <Redirect to='/' />
+  }}>Sign Out</GradientButtonFilled>
 }
 
 export const Container: any = styled.div`

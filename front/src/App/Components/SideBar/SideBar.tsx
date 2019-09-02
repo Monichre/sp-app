@@ -1,12 +1,17 @@
 import React, { useContext, createContext, useReducer, useState, Reducer, SetStateAction, useCallback, useEffect } from 'react';
 import styled from 'styled-components'
-import { ButtonSignout, Container } from '../../../shared/ui';
-import { Drawer } from 'antd';
-import { Deck } from './Deck'
-import { Card, Box, Flex, Image, Heading } from 'rebass';
+import { Container } from '../../../shared/ui';
+import { List, Avatar, Icon, Drawer, Carousel } from 'antd';
+import { Box } from 'rebass';
 import { UserAchievementContext } from '../../Home/Authed/Authed';
+import { firstPlaceBadge, IconText } from '../Elements';
+import { determineAchievementValueFromPK, AchievementMetaData } from '../UserAchievementsList/achievements-utils';
+import { User } from '../../../../../back/src/fns/graphql/types';
+import { DecimalHoursToMinutes, decimalToHrsMins } from '../../../lib/durationFormats';
+import { SpotifyLogoLink } from '../../../shared/SpotifyLogoLink/SpotifyLogoLink';
 import 'antd/es/drawer/style/css'
-import { ArtistLinkBlock } from '../../Home/Authed/Insights/Main/FeaturedArtists';
+import 'antd/es/carousel/style/css'
+import 'antd/es/list/style/css'
 
 const HoverIcon: any = styled.div`
    margin: 0 auto;
@@ -92,61 +97,82 @@ const HoverCard: any = styled.div`
    }
 `
 
-
-
-// export interface AchievementHoverCardProps {
-
-// }
-
-// const AchievementHoverCard: React.SFC<AchievementHoverCardProps> = () => {
-//     return (  );
-// }
-
-// export default AchievementHoverCard;
-
-
 interface SideBarSectionProps {
-    achievements: any[]
-    title: any
+    achievements: AchievementMetaData[]
+    title: string
+    description: string
+    currentUser: User
 }
 
-const SideBarSection: React.SFC<SideBarSectionProps> = ({ achievements, title }) => {
+const SideBarSection: React.SFC<SideBarSectionProps> = ({ achievements, title, description, currentUser }) => {
+
+    const achievementContext = [
+        { title, description, currentUser }
+    ]
+    const [currentArtist, setCurrentArtist] = useState(achievements[0])
+    const handleCarouselChange = (current: any) => setCurrentArtist(achievements[current])
+
+    const { artistData: { artist: { id, images, name, topListeners }, personal }, achievement } = currentArtist
+    const formattedTotal = decimalToHrsMins(personal)
+
 
     return (
-        <Flex sx={{ flexWrap: 'wrap' }}>
-            <Box
-                sx={{
-                    p: 3,
-                    flexGrow: 1,
-                    flexBasis: 256
-                }}>
-                {title}
-            </Box>
-            <Box
-                sx={{
-                    p: 3,
-                    flexGrow: 99999,
-                    flexBasis: 0,
-                    minWidth: 320
-                }}>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        minHeight: '100vh'
-                    }}>
-                    <Box sx={{ p: 3 }}>Header</Box>
-                    <Box
-                        sx={{
-                            flex: '1 1 auto',
-                            p: 3
-                        }}>
-                        {achievements ? <Deck cards={achievements} /> : null}
-                    </Box>
-                    <Box sx={{ p: 3 }}> Footer</Box>
-                </Box>
-            </Box>
-        </Flex>
+        <List
+            itemLayout="vertical"
+            size="large"
+            pagination={false}
+            dataSource={achievementContext}
+            footer={
+                <div>
+                    <b>{title}</b>
+                </div>
+            }
+            renderItem={item => {
+
+                return (
+                    <List.Item
+                        key={title}
+                        actions={[
+                            <IconText key={1}>
+                                {formattedTotal} minutes of {name}
+                            </IconText>,
+
+                            <IconText key={2}>
+                                <SpotifyLogoLink href={`https://open.spotify.com/artist/${id}`} />
+                            </IconText>
+                        ]}
+                        extra={
+                            <Carousel autoplay afterChange={handleCarouselChange}>
+                                {achievements.map((achievementData: AchievementMetaData) => {
+                                    const { artistData, achievement }: any = achievementData
+                                    const { artist: { name, images } } = artistData
+                                    const artistIMG = images[0].url
+                                    return (
+                                        <div>
+                                            <img
+                                                width={250}
+
+                                                alt={`${name} featured image`}
+                                                src={artistIMG}
+                                            />
+                                        </div>
+                                    )
+                                })}
+
+                            </Carousel>
+
+                        }
+                    >
+                        <List.Item.Meta
+                            avatar={<Avatar src={firstPlaceBadge} />}
+                            title={title}
+                            description={description}
+                        />
+
+                    </List.Item>
+                )
+            }}
+        />
     );
 }
 
@@ -158,11 +184,14 @@ export interface SideBarProps {
 }
 
 export const SideBar: React.SFC<SideBarProps> = () => {
-    const context: any = React.useContext(UserAchievementContext)
-    const { achievements, isOpen, setSideBarOpen } = context
+    const context: {
+        achievements: AchievementMetaData[],
+        isOpen: any,
+        setSideBarOpen: any,
+        currentUser: User
+    } = React.useContext(UserAchievementContext)
+    const { achievements, isOpen, setSideBarOpen, currentUser } = context
     const onClose = () => setSideBarOpen((isOpen: any) => !isOpen)
-
-    const { month, week, life } = achievements
 
     console.count('SideBar Render Count:')
 
@@ -181,52 +210,28 @@ export const SideBar: React.SFC<SideBarProps> = () => {
             <Container padded>
 
                 {achievements ? Object.keys(achievements).map((period: any, i: any) => {
-                    const periodAchievements = achievements[period]
-                    return (
-                        <Box>
-                            <Box sx={{
-                                display: 'inline-block',
-                                color: 'white',
-                                bg: 'primary',
-                                px: 2,
-                                py: 1,
-                                borderRadius: 9999,
-                            }}>
-                                <h4 style={{
-                                        color:'#fff',
-                                        padding:' 0!important',
-                                        textAlign:'center',
-                                        margin: '0!important',
-                                        fontSize: '1.25rem'
-                                }}>
-                                    {period}
-                                </h4>
+                    const periodAchievements: any = achievements[period]
 
+                    if (periodAchievements && periodAchievements.length) {
+
+                        const aInstance: AchievementMetaData = periodAchievements ? periodAchievements[0].achievement : null
+                        const achievementContext = period === 'life' ? 'lifetime achievements' : `achievements this ${period}`
+                        const title = `Your ${achievementContext}`
+                        const description = periodAchievements && periodAchievements.length ? `Congratulations ${currentUser.displayName}! You have been awarded ${determineAchievementValueFromPK(aInstance)} place top listener for the artists below. We will soon be introducing our rewards program so that you can turn these achievements into discounts on merchandise and additional exclusive offer.` : ''
+
+                        return (
+                            <Box>
+                                <SideBarSection achievements={periodAchievements} title={title} description={description} currentUser={currentUser} />
                             </Box>
-                            <Flex flexWrap='wrap' justifyContent='center' mx={-2}>
-                                {periodAchievements && periodAchievements.length ? periodAchievements.map((achievementData: any) => {
-                                    const { artistData, achievement }: any = achievementData
-                                    const { artist } = artistData
-                                    return (
-                                        <Box>
-                                            <Card width={150} height={150}>
-                                                <ArtistLinkBlock src={artist.images[0].url} />
-                                                
-                                                <Heading style={{position: 'relative'}}>{artist.name}</Heading>
-                                            </Card >
-                                        </Box>
-                                    )
-                                }) : null}
-                            </Flex>
+                        )
 
-                        </Box>
+                    }
 
-                    )
+                    return null
                 }) : null
                 }
 
             </Container>
-
         </Drawer>
 
     );

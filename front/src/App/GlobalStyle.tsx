@@ -49,9 +49,78 @@ html {
     padding: 0px!important;
 
   }
+  .ant-card-head-title {
+    color: #fff;
+  }
+  .ant-card-body {
+    background-color: rgba(216,216,216,.025);
+        border-radius: 12px;
+        border-bottom: none;
+        padding: 10px;
+  }
+
 .ant-list {
   /* background-color: #030616!important; */
-  background: transparent!important
+  background: transparent!important;
+
+
+  &#achievementHoldersList {
+    .ant-list-item {
+      .ant-list-item {
+        /* background-color: rgba(216,216,216,.025);
+        border-radius: 12px;
+        border-bottom: none;
+        padding: 10px; */
+      }
+
+    }
+
+  }
+
+
+  .ant-list-footer {
+    display: none;
+  }
+
+  .ant-list-items {
+    .ant-list-item {
+      position: relative;
+      display: flex;
+      flex-direction: row!important;
+      .ant-list-item-main, .ant-list-item-extra {
+          margin-left: 0!important;
+          width: 48%!important;
+      }
+      .ant-list-item-action {
+        margin-left: 48px;
+      }
+
+      .ant-list-item-extra {
+        .slick-dots.slick-dots-bottom {
+          li {
+            button {
+              width: 5px;
+              height: 5px;
+              background-image: linear-gradient(to bottom,#e64a19 0%,#ffa726 100%);
+              border-radius: 50%;
+            }
+
+            &.slick-active {
+              button {
+              width: 16px;
+              height: 3px;
+              background-image: linear-gradient(to bottom,#e64a19 0%,#ffa726 100%);
+              opacity: 1;
+              border-radius: 5px;
+            }
+            }
+          }
+        }
+      }
+
+
+    }
+  }
   
 }
 

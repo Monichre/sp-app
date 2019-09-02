@@ -60,8 +60,8 @@ export const Artist: React.SFC<RouteComponentProps<{ artistId: string }> & { uid
 
 
     const { artist, [pathParams.timeScope]: { timeseries: timeSeries } } = stats
-    const { topListeners }: any = artist
-    const { day, week, month, life } = topListeners
+    
+    
 
 
 
@@ -75,18 +75,18 @@ export const Artist: React.SFC<RouteComponentProps<{ artistId: string }> & { uid
     return (
       <StatPage {...{ stats, history, path, pathParams }}>
         <ArtistBanner {...{ artist }}>
-          {life && life.first ? <TopListenerAcheivementCard topListenerData={life.first} title='All Time Top Listener' lifetime /> : null}
+          {/* {life && life.first ? <TopListenerAcheivementCard topListenerData={life.first} title='All Time Top Listener' lifetime /> : null} */}
         </ArtistBanner>
 
         <TimeseriesChart {...{ timeSeries }} />
 
-        <ArtistTopListeners>
+        {/* <ArtistTopListeners>
           {month && month.first ? <TopListenerAcheivementCard topListenerData={month.first} title='Monthly Top Listener' /> : null}
 
           {week && week.first ? <TopListenerAcheivementCard topListenerData={week.first} title='weekly Top Listener' /> : null}
 
           {day && day.first ? <TopListenerAcheivementCard topListenerData={day.first} title='daily Top Listener' /> : null}
-        </ArtistTopListeners>
+        </ArtistTopListeners> */}
 
         {/* {somebodySweptAGL ? <h1 style={{ textAlign: 'center', fontSize: '25px', marginTop: '30px' }}>Look at you kid, you sweeping the series. Let somebody else stream would ya</h1> : null} */}
 

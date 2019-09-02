@@ -130,20 +130,20 @@ const HarvestingNotice: React.SFC = () =>
 export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: string, user: any, history?: any, match?: any }> = ({ initialHarvestComplete, lastUpdate, user, ...rest }) => {
 
   // Context Props 
-  const { setTopArtistsWithAchievementHolders } = useContext(UserAchievementContext)
+  const { setTopArtistsWithAchievementHolders, topArtistsWithAchievementHolders } = useContext(UserAchievementContext)
 
+  // State
+  const [topArtistByPeriodData, setTopArtistByPeriodData] = useState(false)
+
+  
   // Vars 
   const { uid } = user
   const { history, match } = rest
   const { location: { pathname } } = history
 
-
-  // State 
-  const [topArtistByPeriodData, setTopArtistByPeriodData] = useState(false)
-
-
   // Hooks 
   const { insightsArtists: usersTopArtistByPeriodData }: any = suspensefulHook(useInsightsArtists({ variables: { uid }, suspend: true }))
+  console.log('TCL: usersTopArtistByPeriodData', usersTopArtistByPeriodData)
 
 
   const topByPeriod = Object.assign({}, usersTopArtistByPeriodData)
@@ -159,13 +159,14 @@ export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: s
   const { getTopArtistAchievementHolders = null }: any = (artists && artists.length) ? suspensefulHook(useGetTopArtistAchievementHolders({ variables: { perspectiveUID: 'global', artistIds: artists.map((artist: any) => artist.id) }, suspend: true, })) : {getTopArtistAchievementHolders: null}
 
   const ahWithArtist = getTopArtistAchievementHolders ? getTopArtistAchievementHolders.map(({ artistId, achievementHolders }: any) => ({ achievementHolders, artist: artists.find((artist: any) => artist.id === artistId) })) : null
+  console.log('TCL: ahWithArtist', ahWithArtist)
 
   useEffect(() => {
-    setTopArtistsWithAchievementHolders(ahWithArtist)
+    setTopArtistsWithAchievementHolders(ahWithArtist) // Sets the App's Larger Data Context with Top Artists and their respective Top Listeners or Achievement Holders
   }, [])
 
   useEffect(() => {
-    setTopArtistByPeriodData(usersTopArtistByPeriodData)
+    setTopArtistByPeriodData(usersTopArtistByPeriodData) // Sets the current users achievements based on the data from line #159 - useGetTopArtistAchievementHolders
   }, [])
 
   return (

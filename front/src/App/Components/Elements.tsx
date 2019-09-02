@@ -16,9 +16,20 @@ export const AlbumBackgroundDiv = styled.div<{ src: string }>`
   background-size: cover;
 `
 
+export const IconText = styled.span`
+opacity: 1;
+color: #fff;
+svg {
+    opacity: 1;
+}
+
+`
+
+
 export const AvatarBg: any = styled.div<{ src: string }>`
-  height: ${bgSize / 2}rem;
-  width: ${bgSize / 2}rem;
+  position: relative;
+  height: 2.5rem;
+  width: 2.5rem;
   border-radius: ${bgSize / 2 / 2}rem;
   background: linear-gradient( rgba(192, 54, 208, .15), rgba(192, 54, 208, .15) ), url("${({ src }) => src}");
   background-size: cover;
@@ -28,19 +39,39 @@ export const AvatarBg: any = styled.div<{ src: string }>`
     border-radius: 50%;
     content: '';
     background-image: linear-gradient(to bottom, #e64a19 0%, #ffa726 100%);
-     height: 3.2rem;
-    width: 3.2rem;
+     height: 2.6rem;
+    width: 2.6rem;
     position:absolute;
     z-index:-1;
 }
 
+
+${(props: any) => props.achievementHoldersList && css`
+  height: auto;
+  width: auto;
+
+    &:before {
+    border-radius: 50%;
+    content: '';
+    background-image: linear-gradient(to bottom, #e64a19 0%, #ffa726 100%);
+     height: 2.2rem;
+    width: 2.2rem;
+    position:absolute;
+    top: -1px;
+    left: -1px;
+}
+    
+`}
+  
+
 ${(props: any) => props.sideNav && css`
-    left: 25px;
+    left: 0;
+    /* z-index: -1; */
     position: absolute;
 
     &:before {
       left: 0;
-    
+      z-index: -2;
     }
     
 `}

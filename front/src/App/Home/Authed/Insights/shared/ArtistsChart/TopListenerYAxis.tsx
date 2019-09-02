@@ -46,28 +46,33 @@ const TopListenerLink: any = ({ className, handleClick, children }: any) => (
 
 const AchievementHoldersPopUp: React.SFC<any> = ({ x, y, artist, pathParams, totalTimeListened,
     groupScore, visible, handleClick }) => {
-    
+
 
     // Context Props
-    const { topArtistsWithAchievementHolders } = useContext(UserAchievementContext)
-    const { currentUser } = useContext(UserAchievementContext)
+    const context = useContext(UserAchievementContext)
+    const { topArtistsWithAchievementHolders, currentUser } = context
+    const [currentPeriodAchievementHolders, setCurrentPeriodAchievementHolders]: any = useState(null)
 
-    console.count('AchievementHoldersPopUp render')
 
-    const { artist:currentArtist=null, achievementHolders=null } = topArtistsWithAchievementHolders ? topArtistsWithAchievementHolders.find((awa: any) => {
+    const { artist: currentArtist = null, achievementHolders } = topArtistsWithAchievementHolders ? topArtistsWithAchievementHolders.find((awa: any) => {
         return awa && awa.artist && artist ? awa.artist.id === artist.id : false
     }) : {
             artist: null,
             achievementHolders: null
-    }
+        }
 
-    console.log('TCL: currentArtist', currentArtist)
+
+    
+    console.count('AchievementHoldersPopUp render')
+    console.log(`TCL: achievementHolders for ${currentArtist.name}`, achievementHolders)
+
 
     const { day = null, week = null, month = null, life = null } = achievementHolders ? achievementHolders : {
-        day : null, week : null, month : null, life : null 
+        day: null, week: null, month: null, life: null
     }
 
     const { timeScope }: any = pathParams
+    let useDayData = false
 
     const achievementHolderTimeScopeMap: any = {
         today: day ? day : null,
@@ -76,64 +81,55 @@ const AchievementHoldersPopUp: React.SFC<any> = ({ x, y, artist, pathParams, tot
         lifetime: life ? life : null
     }
 
-    const perspectiveAchievementHolders = Object.assign({}, achievementHolderTimeScopeMap[timeScope])
-    console.log('TCL: perspectiveAchievementHolders', perspectiveAchievementHolders)
+    const ahCurrentPeriod = Object.assign({}, achievementHolderTimeScopeMap[timeScope])
+    console.log('TCL: ahCurrentPeriod', ahCurrentPeriod)
 
-    for (let place in perspectiveAchievementHolders) {
-        if (!perspectiveAchievementHolders[place].user) {
-            perspectiveAchievementHolders[place] = null
-        }
+    function isBelowThreshold(element: any, index: any, array: any) {
+        return !ahCurrentPeriod[element].user || ahCurrentPeriod[element].user === null
     }
-
-
-    const ah = Object.assign({}, perspectiveAchievementHolders)
-    console.log('TCL: ah', ah)
     
-    for(let holder in ah) {
-        if(!ah[holder]) {
-            delete ah[holder]
-        }
+    const allAchievementValuesForPeriodNull = Object.keys(ahCurrentPeriod).every(isBelowThreshold)
+    console.log('TCL: allAchievementValuesForPeriodNull', allAchievementValuesForPeriodNull)
+
+    if (allAchievementValuesForPeriodNull && timeScope === 'thisWeek') {
+        useDayData = true
+        
+        console.log('all Achievement Values For Period are in fact Null')
+        console.log('TCL: useDayData', useDayData)
     }
+
+  
+
+    useEffect(() => {
+        let currentPeriod = useDayData ? Object.assign({}, achievementHolderTimeScopeMap.today) : Object.assign({}, ahCurrentPeriod)
+        for (let place in currentPeriod) {
+            if (!currentPeriod[place].user) {
+                delete currentPeriod[place]
+            }
+        }
+
+        return setCurrentPeriodAchievementHolders(currentPeriod)
+ 
+    }, [])
 
 
     const { total, status } = comparePersonalAndGroupScore(totalTimeListened, groupScore)
-
     const currentUserIsTopListener: any = status
-    // const currentUserIsSecond: any = second && second.user ? second.user.uid === userId : false
-    // const secondPlaceExists: any = second && second.user 
+ 
 
-    // const topListenerHandle: any = first && first.user.displayName ? first.user.displayName : first && first.user.email ? first.user.email : null
-    // const secondListenerHandle: any = second && second.user.displayName ? second.user.displayName : second && second.user.email ? second.user.email : null
-    // const currentUserIsSecond: any = second && second.user ? second.user.uid === userId : false
-    // const secondPlaceExists: any = second && second.user 
-
-    // const topListenerHandle: any = first && first.user.displayName ? first.user.displayName : first && first.user.email ? first.user.email : null
-    // const secondListenerHandle: any = second && second.user.displayName ? second.user.displayName : second && second.user.email ? second.user.email : null
-
-    /*
-
-    first && first.user.photoURL ? <image href={first.user.photoURL} width='32px' height='32px' clipPath='url(#clipCircle2)' transform={`translate(${(x || 0) + 15}, ${(y || 0) - 20})`} /> : first ? <Text stroke='#64d6ee' width={100} font-size="10" height={20} textAnchor='end' dx={-78} dy={24} {...{ x, y }}>
-        {topListenerHandle}
-
-        first && first.user.photoURL ? <image href={first.user.photoURL} width='32px' height='32px' clipPath='url(#clipCircle2)' transform={`translate(${(x || 0) + 15}, ${(y || 0) - 20})`} /> : first ? <Text stroke='#64d6ee' width={100} font-size="10" height={20} textAnchor='end' dx={-78} dy={24} {...{ x, y }}>
-        {topListenerHandle}
-
-    */
-
-
-    // const secondSpot: any = secondPlaceExists && !currentUserIsSecond ? <image href={secondPlaceBadge} transform={`translate(${(x || 0) + 45}, ${(y || 0) - 20})`} width='30px' height='30px'
-    //             /> : second && second.user.photoURL ? <image href={second.user.photoURL} width='32px' height='32px' clipPath='url(#clipCircle2)' transform={`translate(${(x || 0) + 45}, ${(y || 0) - 20})`} /> : second && second.user ? <Text stroke='#64d6ee' width={100} font-size="10" height={20} textAnchor='end' dx={-78} dy={24} {...{ x, y }}>
-    //                 {secondListenerHandle}
-    //             </Text> : null
-
-
+    const { first = null, second = null } = currentPeriodAchievementHolders ? currentPeriodAchievementHolders : {
+        first: null,
+        second: null
+    }
     const title: any = normalizeTimeScope(pathParams)
+    const topBadge = currentUserIsTopListener ? firstPlaceBadge : first && first.user.photoURL ? first.user.photoURL : '/icons/headphones.svg'
+    achievementHolders
+    
+    const topSpot: any = currentUserIsTopListener ? <image href={topBadge} transform={`translate(${(x || 0) + 15}, ${(y || 0) - 20})`} width='30px' height='30px'
+    /> : achievementHolders
+    
 
-    const topSpot: any = currentUserIsTopListener ? <image href={firstPlaceBadge} transform={`translate(${(x || 0) + 15}, ${(y || 0) - 20})`} width='30px' height='30px'
-    /> : null
-    const badgePlacement = topSpot ? topSpot : null
-
-    const content = <AchievementHoldersList {...{ currentUser, artist, pathParams }} style={{
+    const content = <AchievementHoldersList {...{ currentUser, artist, pathParams, achievementHolders }} style={{
         background: '#030616!important'
     }} />
 
@@ -142,12 +138,12 @@ const AchievementHoldersPopUp: React.SFC<any> = ({ x, y, artist, pathParams, tot
 
     return (
 
-        <PopOverStyle placement="topLeft" content={content} title={title} trigger="click"
+        <PopOverStyle placement="topLeft" content={content} title={`${artist.name}'s Top Listeners`} trigger="click"
             visible={visible} style={{
                 background: '#030616!important'
             }}>
             <TopListenerLink handleClick={handleClick}>
-                {badgePlacement}
+                {topSpot}
             </TopListenerLink>
         </PopOverStyle>
 
