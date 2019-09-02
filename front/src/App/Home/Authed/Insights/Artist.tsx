@@ -4,11 +4,24 @@ import { RouteComponentProps } from 'react-router';
 import { TPathParams } from './shared';
 import { StatPage } from './shared';
 import { InsightsBackLink } from './shared/InsightsBackLink';
-import { useInsightsArtistStats, ArtistFragmentFragment } from '../../../../types';
+import { useInsightsArtistStats, ArtistFragmentFragment, useGetArtistAchievementHolders } from '../../../../types';
 import { SpotifyLogoLink } from '../../../../shared/SpotifyLogoLink/SpotifyLogoLink';
 import { TimeseriesChart } from './shared/TimeseriesChart';
 import { ArtistTopListeners, scopeTheListeners, TopListenerAcheivementCard } from './ArtistTopListeners'
 import { suspensefulHook } from '../../../../lib/suspensefulHook';
+import { AvatarBg, firstPlaceBadge, IconText } from '../../../Components/Elements';
+import { List, Card, Avatar, Badge, Tag, Progress } from 'antd';
+import { Box, Flex} from 'rebass';
+import { AchievementHoldersList } from '../../../Components/ArtistAchievementHolders/AchievementHoldersList';
+import { ListStyle } from '../../../Components/ListStyle';
+import { hrsAndMins } from '../../../../lib/durationFormats';
+import 'antd/es/badge/style/css'
+import 'antd/es/tag/style/css'
+import 'antd/es/list/style/css'
+import 'antd/es/avatar/style/css'
+import 'antd/es/progress/style/css'
+import { badgeMap } from './shared/ArtistsChart/TopListenerYAxis';
+
 
 const ArtistBannerDiv = styled.div<{ backgroundUrl: string }>`
   display: flex;
@@ -45,7 +58,7 @@ const ArtistBanner: React.SFC<{ artist: ArtistFragmentFragment, children: any }>
     <ArtistBannerDiv {...{ backgroundUrl }}>
       <InsightsBackLink />
       <ArtistTitle>{name}</ArtistTitle>
-      <SpotifyLogoLink href={spotify} size='48px' />
+      <SpotifyLogoLink href={spotify} size='35px' />
 
       {children}
 
@@ -57,38 +70,137 @@ export const Artist: React.SFC<RouteComponentProps<{ artistId: string }> & { uid
   ({ uid, history, match: { path, params: { artistId } }, pathParams }) => {
 
     const { insightsArtistStats: stats } = suspensefulHook(useInsightsArtistStats({ variables: { uid, artistId }, suspend: true }))
-
+    // const 
 
     const { artist, [pathParams.timeScope]: { timeseries: timeSeries } } = stats
-    
-    
 
+    const { getArtistAchievementHolders }: any = suspensefulHook(useGetArtistAchievementHolders({ variables: { perspectiveUID: 'global', artistId }, suspend: true }))
+    const { day, week, month, life } = getArtistAchievementHolders
+    console.log('TCL: life', life)
+    const data = [{ title: 'Top Listeners Today', ...day }, { title: 'Top Listeners This Week', ...week }, { title: 'Top Listeners This Month', ...month }].filter((timePeriod: any) => {
+      const { first, second, third } = timePeriod
+      return (first.user !== null)
+    })
 
-
-    // const somebodySweptAGL: any = scoped.every((listenerData: any) => {
-    //   const { listener }: any = listenerData
-    //   const { user } = listener
-
-    //   return user.uid === life.listener.user.uid && user.uid === uid
-    // })
 
     return (
       <StatPage {...{ stats, history, path, pathParams }}>
         <ArtistBanner {...{ artist }}>
-          {/* {life && life.first ? <TopListenerAcheivementCard topListenerData={life.first} title='All Time Top Listener' lifetime /> : null} */}
+
+          {Object.keys(life).map((place: any) => {
+            const listener = life[place]
+
+            if(listener.user) {
+              const { user } = listener
+              const { hrs, mins } = hrsAndMins(listener.total)
+              const hours = hrs ? `${hrs} hours & ` : ''
+              const minutes = mins ? `${mins} mins` : ''
+              const ttl = `${hours}${minutes}`
+
+              return (
+                <Box mt={45}>
+                  
+                <Badge count={<img src={badgeMap[place]}  style={{
+                    height: '30px',
+                    width: '30px',
+                    zIndex: 2,
+                    left: '40%'
+                  }} />}>
+                    <AvatarBg artistPage style={{
+                      marginTop: '0.5rem'
+                    }}>
+                      <img src={user.photoURL} />
+                    </AvatarBg>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <h4 style={{ color: '#fff', position: 'relative', zIndex: 2, textTransform: 'capitalize' }}>{place} place all time top listener <br /> {user.displayName}</h4>
+                    <p style={{ position: 'relative', zIndex: 2 }}><b>{ttl}</b></p>
+                  </Badge>
+                </Box>
+              )
+            } else {
+              return null
+            }
+
+          })}
         </ArtistBanner>
 
         <TimeseriesChart {...{ timeSeries }} />
 
-        {/* <ArtistTopListeners>
-          {month && month.first ? <TopListenerAcheivementCard topListenerData={month.first} title='Monthly Top Listener' /> : null}
+        <Box my={40}>
+          <ListStyle>
+            <List id='artistTopListeners' dataSource={data} renderItem={item => {
+              console.log('TCL: item', item)
 
-          {week && week.first ? <TopListenerAcheivementCard topListenerData={week.first} title='weekly Top Listener' /> : null}
+              return (
+                <List.Item>
+                  <Box style={{ width: '100%', backgroundColor: 'rgba(216,216,216,.025)', padding: '20px', borderRadius: '12px' }}>
+                    <h4 style={{ color: '#fff' }}>{item.title}</h4>
+                    <List
+                      itemLayout="vertical"
+                      size="large"
+                      dataSource={[item.first, item.second, item.third].filter((item: any) => item.user !== null)}
+                      renderItem={(topListener, index) => {
+                        const { user } = topListener
+                        const { hrs, mins } = hrsAndMins(topListener.total)
+                        const hours = hrs ? `${hrs} hours & ` : ''
+                        const minutes = mins ? `${mins} mins` : ''
+                        const ttl = `${hours}${minutes}`
 
-          {day && day.first ? <TopListenerAcheivementCard topListenerData={day.first} title='daily Top Listener' /> : null}
+                        console.log('TCL: topListener', topListener)
+                        return (
+                          <List.Item
+                            key={`${item.title}_${index}`}
+
+                          >
+                            <List.Item.Meta
+                              avatar={
+                                <Badge count={<img src={badgeMap[index]} style={{
+                                  height: '25px',
+                                  width: '25px',
+                                  zIndex: 2,
+                                  // left: '100%'
+                                }} />}>
+                                  <AvatarBg><Avatar src={user.photoURL} /></AvatarBg>
+                                  {/* <AvatarBg  style={{
+                                    marginTop: '0.5rem'
+                                  }}>
+                                    <img src={user.photoURL} />
+                                  </AvatarBg> */}
+                                </Badge>
+                              }
+                              title={user.displayName}
+                              description={ttl}
+                            />
+
+                            <Progress percent={mins * 10} strokeColor={{
+                              '0%': '#108ee9',
+                              '100%': '#87d068',
+                            }} />
+
+                          </List.Item>
+                        )
+                      }}
+                    />
+                  </Box>
+                </List.Item>
+              )
+            }} />
+          </ListStyle>
+
+
+          {/* <ArtistTopListeners>
+          {month && month.first && month.first.user ? <TopListenerAcheivementCard topListenerData={month.first} title='Monthly Top Listener' /> : null}
+
+          {week && week.first && week.first.user ? <TopListenerAcheivementCard topListenerData={week.first} title='weekly Top Listener' /> : null}
+
+          {day && day.first && day.first.user ? <TopListenerAcheivementCard topListenerData={day.first} title='daily Top Listener' /> : null}
         </ArtistTopListeners> */}
 
-        {/* {somebodySweptAGL ? <h1 style={{ textAlign: 'center', fontSize: '25px', marginTop: '30px' }}>Look at you kid, you sweeping the series. Let somebody else stream would ya</h1> : null} */}
+        </Box>
 
       </StatPage>
     )

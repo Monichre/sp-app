@@ -54,8 +54,13 @@ html {
   .ant-card-head-title {
     color: #fff;
   }
+  .ant-card, .ant-card.ant-card-bordered {
+    /* background-color: rgba(216,216,216,.025); */
+    width: 100%;
+  }
   .ant-card-body {
     background-color: rgba(216,216,216,.025);
+    width: 100%;
         border-radius: 12px;
         border-bottom: none;
         padding: 10px;
@@ -65,6 +70,21 @@ html {
   /* background-color: #030616!important; */
   background: transparent!important;
 
+  &#artistTopListeners {
+    .ant-list-item {
+      flex-direction: column!important;
+      align-content: flex-start;
+      border-bottom: none;
+      .ant-list-item {
+        border-bottom: none;
+        /* background-color: rgba(216,216,216,.025);
+        border-radius: 12px;
+        border-bottom: none;
+        padding: 10px; */
+      }
+    }
+
+  }
 
   &#achievementHoldersList {
     .ant-list-item {

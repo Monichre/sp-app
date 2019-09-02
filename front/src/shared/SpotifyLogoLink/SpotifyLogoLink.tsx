@@ -9,7 +9,6 @@ const SmallIconLink = styled.div<{size: string}>`
   height: ${({size}) => size};
   width: ${({size}) => size};
   display: block;
-  opacity: 0.5;
   z-index: 5;
 `
 

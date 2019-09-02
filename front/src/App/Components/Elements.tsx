@@ -32,6 +32,7 @@ export const AvatarBg: any = styled.div<{ src: string }>`
   width: 2.5rem;
   border-radius: ${bgSize / 2 / 2}rem;
   background: linear-gradient( rgba(192, 54, 208, .15), rgba(192, 54, 208, .15) ), url("${({ src }) => src}");
+  /* background-image: linear-gradient(to bottom, #e64a19 0%, #ffa726 100%); */
   background-size: cover;
   
 
@@ -44,6 +45,33 @@ export const AvatarBg: any = styled.div<{ src: string }>`
     position:absolute;
     z-index:-1;
 }
+
+${(props: any) => props.artistPage && css`
+    height: 2.5rem;
+    width: 2.5rem;
+
+    img {
+      height: 5.5rem;
+      width: 5.5rem;
+      border-radius: 12px;
+      position: absolute;
+      left: 0;
+      z-index: 1;
+    }
+
+    &:before {
+    border-radius: 12px
+    content: '';
+    background-image: linear-gradient(to bottom, #e64a19 0%, #ffa726 100%);
+    height: 5.7rem;
+    width: 5.7rem;
+    position:absolute;
+    top: -1px;
+    left: -1px;
+    z-index: 0;
+}
+    
+`}
 
 
 ${(props: any) => props.achievementHoldersList && css`
@@ -59,6 +87,7 @@ ${(props: any) => props.achievementHoldersList && css`
     position:absolute;
     top: -1px;
     left: -1px;
+    z-index: 0;
 }
     
 `}

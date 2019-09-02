@@ -17,7 +17,10 @@ const thirdPlaceBadge = '/icons/third.svg'
 export const badgeMap: any = {
     0: firstPlaceBadge,
     1: secondPlaceBadge,
-    2: thirdPlaceBadge
+    2: thirdPlaceBadge,
+    first: firstPlaceBadge,
+    second: secondPlaceBadge,
+    third: thirdPlaceBadge
 }
 
 
@@ -117,7 +120,7 @@ const AchievementHoldersPopUp: React.SFC<any> = ({ x, y, artist=null, pathParams
     /> : achievementHolders
     
 
-    const content = <AchievementHoldersList {...{ currentUser, artist, pathParams, achievementHolders }} style={{
+    const content = <AchievementHoldersList {...{ artist, achievementHolders }} style={{
         background: '#030616!important'
     }} />
 
@@ -139,6 +142,7 @@ const AchievementHoldersPopUp: React.SFC<any> = ({ x, y, artist=null, pathParams
 }
 
 export const TopListenerYaxis: React.SFC<TickProps & any> = ({ x, y, offset, artist, pathParams, userId, totalTimeListened, groupScore }) => {
+console.log('TCL: artist', artist)
 
     const [visible, setVisible] = useState(false)
     const handleClick = () => setVisible(visible => !visible)

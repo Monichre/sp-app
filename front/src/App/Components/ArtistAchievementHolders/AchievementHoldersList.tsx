@@ -12,40 +12,11 @@ import 'antd/es/avatar/style/css'
 
 export interface AchievementHoldersListProps {
     artist: ArtistsFragmentArtist
-    currentUser: User
-    pathParams: any
-    style: any,
+    style?: any,
     achievementHolders: any
 }
 
-export const AchievementHoldersList: React.SFC<AchievementHoldersListProps> = ({ artist, style, currentUser, achievementHolders, pathParams }) => {
-    // const currentUserIsSecond: any = second && second.user ? second.user.uid === userId : false
-    // const secondPlaceExists: any = second && second.user 
-
-    // const topListenerHandle: any = first && first.user.displayName ? first.user.displayName : first && first.user.email ? first.user.email : null
-    // const secondListenerHandle: any = second && second.user.displayName ? second.user.displayName : second && second.user.email ? second.user.email : null
-    // const currentUserIsSecond: any = second && second.user ? second.user.uid === userId : false
-    // const secondPlaceExists: any = second && second.user 
-
-    // const topListenerHandle: any = first && first.user.displayName ? first.user.displayName : first && first.user.email ? first.user.email : null
-    // const secondListenerHandle: any = second && second.user.displayName ? second.user.displayName : second && second.user.email ? second.user.email : null
-
-    /*
-
-    first && first.user.photoURL ? <image href={first.user.photoURL} width='32px' height='32px' clipPath='url(#clipCircle2)' transform={`translate(${(x || 0) + 15}, ${(y || 0) - 20})`} /> : first ? <Text stroke='#64d6ee' width={100} font-size="10" height={20} textAnchor='end' dx={-78} dy={24} {...{ x, y }}>
-        {topListenerHandle}
-
-        first && first.user.photoURL ? <image href={first.user.photoURL} width='32px' height='32px' clipPath='url(#clipCircle2)' transform={`translate(${(x || 0) + 15}, ${(y || 0) - 20})`} /> : first ? <Text stroke='#64d6ee' width={100} font-size="10" height={20} textAnchor='end' dx={-78} dy={24} {...{ x, y }}>
-        {topListenerHandle}
-
-    */
-
-
-    // const secondSpot: any = secondPlaceExists && !currentUserIsSecond ? <image href={secondPlaceBadge} transform={`translate(${(x || 0) + 45}, ${(y || 0) - 20})`} width='30px' height='30px'
-    //             /> : second && second.user.photoURL ? <image href={second.user.photoURL} width='32px' height='32px' clipPath='url(#clipCircle2)' transform={`translate(${(x || 0) + 45}, ${(y || 0) - 20})`} /> : second && second.user ? <Text stroke='#64d6ee' width={100} font-size="10" height={20} textAnchor='end' dx={-78} dy={24} {...{ x, y }}>
-    //                 {secondListenerHandle}
-    //             </Text> : null
-
+export const AchievementHoldersList: React.SFC<AchievementHoldersListProps> = ({ artist, style, achievementHolders }) => {
 
     if(achievementHolders) {
         const { day, week, month, life } = achievementHolders
@@ -69,12 +40,7 @@ export const AchievementHoldersList: React.SFC<AchievementHoldersListProps> = ({
                                     itemLayout="vertical"
                                     size="large"
                                     dataSource={[item.first, item.second, item.third].filter((item: any) => item.user !== null)}
-    
                                     renderItem={(topListener, index) => {
-                                        //     <List.Item.Meta
-                                        //     avatar={<AvatarStyle><Avatar size='large' src={user.photoURL ? user.photoURL : '/icons/headphones.svg'} /> </AvatarStyle>}
-                                        //     title={user.displayName}
-                                        // />
                                         const { user } = topListener
                                         const { hrs, mins } = hrsAndMins(topListener.total)
                                         const hours = hrs ? `${hrs} hours & ` : ''
@@ -104,9 +70,6 @@ export const AchievementHoldersList: React.SFC<AchievementHoldersListProps> = ({
                     )
                 }} />
             </ListStyle>
-    
-    
-    
     
         );
 
