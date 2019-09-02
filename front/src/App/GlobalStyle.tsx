@@ -48,6 +48,8 @@ html {
     overflow: scroll;
     padding: 0px!important;
 
+    border-left: 1px solid rgba(255,255,255,.1);
+
   }
   .ant-card-head-title {
     color: #fff;
@@ -91,6 +93,9 @@ html {
           margin-left: 0!important;
           width: 48%!important;
       }
+      .ant-list-item-main {
+        padding: 10px;
+      }
       .ant-list-item-action {
         margin-left: 48px;
       }
@@ -106,6 +111,8 @@ html {
             }
 
             &.slick-active {
+              position: relative;
+              top: 1px;
               button {
               width: 16px;
               height: 3px;

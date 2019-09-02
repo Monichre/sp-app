@@ -28,6 +28,23 @@ const HoverIcon: any = styled.div`
    background-position: 0px;
    background-size: 200px;
 `
+const ArtistCarouselImage: any = styled.div<{ src: string }>`
+display: flex;
+align-items: center;
+text-align: center;
+flex-direction: column;
+padding-bottom: 2rem;
+margin-bottom: 1rem;
+text-decoration: none;
+min-height: 250px;
+height: 100%;
+width: 100%;
+border-radius: 0.5rem;
+background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("${({ src }) => src}");
+background-position: center center;
+background-size: cover;
+`
+
 const HoverTitle: any = styled.div`
 width: 100%;
    margin: 0;
@@ -134,7 +151,7 @@ const SideBarSection: React.SFC<SideBarSectionProps> = ({ achievements, title, d
                         key={title}
                         actions={[
                             <IconText key={1}>
-                                {formattedTotal} minutes of {name}
+                                {`${formattedTotal} mins of  ${name}`}
                             </IconText>,
 
                             <IconText key={2}>
@@ -148,10 +165,16 @@ const SideBarSection: React.SFC<SideBarSectionProps> = ({ achievements, title, d
                                     const { artist: { name, images } } = artistData
                                     const artistIMG = images[0].url
                                     return (
-                                        <div>
-                                            <img
-                                                width={250}
-
+                                        <div style={{
+                                           height: '30vh'
+                                        }}>
+                                            <ArtistCarouselImage
+                                            style={{
+                                                margin: 'auto',
+                                                display: 'block'
+                                            }}
+                                                width={150}
+                                                height='100%'
                                                 alt={`${name} featured image`}
                                                 src={artistIMG}
                                             />
@@ -217,7 +240,7 @@ export const SideBar: React.SFC<SideBarProps> = () => {
                         const aInstance: AchievementMetaData = periodAchievements ? periodAchievements[0].achievement : null
                         const achievementContext = period === 'life' ? 'lifetime achievements' : `achievements this ${period}`
                         const title = `Your ${achievementContext}`
-                        const description = periodAchievements && periodAchievements.length ? `Congratulations ${currentUser.displayName}! You have been awarded ${determineAchievementValueFromPK(aInstance)} place top listener for the artists below. We will soon be introducing our rewards program so that you can turn these achievements into discounts on merchandise and additional exclusive offer.` : ''
+                        const description = periodAchievements && periodAchievements.length ? `Congratulations ${currentUser.displayName}! You have been awarded ${determineAchievementValueFromPK(aInstance)} place top listener for these artists. We will soon be introducing our rewards program so that you can turn these achievements into discounts on merchandise and additional exclusive offer.` : ''
 
                         return (
                             <Box>
