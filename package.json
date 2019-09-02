@@ -9,6 +9,8 @@
     "check:config": "./bin/check-config.sh",
     "deploy:all:test": "TARGET=test CONFIG=test yarn deploy:all",
     "deploy:front:test": "TARGET=test CONFIG=test yarn deploy:_front",
+    "deploy:back:test": "TARGET=test CONFIG=test yarn deploy:_back",
+    "deploy:back_layer:test": "TARGET=test CONFIG=test yarn deploy:_back-layer",
     "deploy:all": "yarn check:target && yarn check:config && yarn deploy:_back-layer && yarn deploy:_back && yarn deploy:_front",
     "deploy:_back-layer": "cd back-layer && sls deploy && cd ..",
     "deploy:_back": "cd back && yarn deploy && cd ..",

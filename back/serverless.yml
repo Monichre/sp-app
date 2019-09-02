@@ -679,6 +679,12 @@ resources:
           Projection:
             ProjectionType: ALL
 
+
+################################################################################
+# resources: TableAchievement
+################################################################################
+
+
     TableAchievement:
           Type: AWS::DynamoDB::Table
           Properties:
