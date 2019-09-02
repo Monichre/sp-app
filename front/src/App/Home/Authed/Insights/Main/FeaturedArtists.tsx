@@ -68,27 +68,28 @@ type FeaturedArtist = {
 }
 
 
+
 const featuredArtists: FeaturedArtist[] = [
   {
     title: 'Ready',
-    hover: '253 monthly streamers on Spotify',
-    name: 'KayelaJ',
-    href: 'https://open.spotify.com/artist/0dYsGdodqIEZxY4PYR9yMQ?si=5faqz-DwQLKumrxhZWeE2w',
+    hover: '4,182 monthly streamers on Spotify',
+    name: 'Junaco',
+    href: 'https://open.spotify.com/artist/6Q3I3yOdG7MhwX6BCWiu0e?si=vxABANyDRR-OQTmyAGV0vQ',
     src: 'https://www.wweek.com/resizer/HvBCEdQ7jORV81pFDyYQQqaKCqI=/1200x0/filters:quality(100)/s3.amazonaws.com/arc-wordpress-client-uploads/wweek/wp-content/uploads/2018/07/17182515/Kay-67-of-77-e1531877215776.jpg'
   },
   {
     title: 'Set',
-    hover: '75,879 monthly streamers on Spotify',
-    name: 'Bodega',
-    href: 'https://open.spotify.com/artist/3lnWfdMG9U0oVMC15SEbB5?si=R7R0DwXkRBSqZ7qgmRDjVQ',
-    src: 'https://ksassets.timeincuk.net/wp/uploads/sites/55/2018/07/BODEGA-EVL-4-920x584.jpg'
+    hover: '143,853 monthly streamers on Spotify',
+    name: 'Yola',
+    href: 'https://open.spotify.com/artist/2gqMBdyddvN82dzZt4ZF14?si=FkxJF8q3RdKqkLbtyeKEDw',
+    src: 'https://www.nonesuch.com/sites/g/files/g2000005811/f/styles/artist_banner__1180_x_480_/public/201901/yola-header.jpg?itok=AiiClMVX'
   },
   {
     title: 'Liftoff',
-    hover: '744, 959 monthly streamers on Spotify',
-    name: 'Bilderbuch',
-    href: 'https://open.spotify.com/artist/2ErWLckuGFl84nGmg5fwyG?si=6iO1s3dNRiSg-b1JFQkvlw',
-    src: 'https://tubestatic.orf.at/static/images/site/tube/20170520/x_l1005793.5607155.jpg'
+    hover: '479,423 monthly streamers on Spotify',
+    name: 'Jadu Heart',
+    href: 'https://open.spotify.com/artist/7vjRpVXoecwKTEsrb9iscj?si=YQqxTj-bRmKVuBPN_rwbig',
+    src: 'https://www.clashmusic.com/sites/default/files/field/image/a777f4a4-287d-4764-8e2e-06af6e4419ed_1523577600.png'
   },
 ]
 
