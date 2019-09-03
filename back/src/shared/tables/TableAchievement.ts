@@ -5,7 +5,6 @@ import { Timeseries } from '../../fns/graphql/types';
 import { TTableAchievement, StatRecordPreAchievementMetaDataKeyParams, KeyData, GetUserAchievementItem, TopArtistsRow, TimeseriesKeys, UserAchievementByArtistParams, AchievementRetrievalKeys, AKKeyRetrievalData, ArtistAchievementRetrievalKeys, AchievementRecord } from '../SharedTypes';
 import { PeriodType } from './TableStat';
 import { KeyMaker } from '../keyMaker';
-import { obj } from 'duplexify';
 import { renameKeysWith } from 'ramda-adjunct';
 
 /*=============================================
