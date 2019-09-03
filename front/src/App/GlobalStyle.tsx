@@ -51,6 +51,10 @@ html {
     border-left: 1px solid rgba(255,255,255,.1);
 
   }
+  .ant-drawer-close {
+    color: #fff!important;
+    left: -20px;
+  }
   .ant-card-head-title {
     color: #fff;
   }

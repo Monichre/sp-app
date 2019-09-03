@@ -240,7 +240,7 @@ export const SideBar: React.SFC<SideBarProps> = () => {
                         const aInstance: AchievementMetaData = periodAchievements ? periodAchievements[0].achievement : null
                         const achievementContext = period === 'life' ? 'lifetime achievements' : `achievements this ${period}`
                         const title = `Your ${achievementContext}`
-                        const description = periodAchievements && periodAchievements.length ? `Congratulations ${currentUser.displayName}! You have been awarded ${determineAchievementValueFromPK(aInstance)} place top listener for these artists. We will soon be introducing our rewards program so that you can turn these achievements into discounts on merchandise and additional exclusive offer.` : ''
+                        const description = periodAchievements && periodAchievements.length ? `Congratulations ${currentUser.displayName}! You have been awarded ${determineAchievementValueFromPK(aInstance)} place top listener for these artists.` : ''
 
                         return (
                             <Box>

@@ -8,6 +8,9 @@ import { InsightsStatsInsightsStats, InsightsStatsToday, InsightsStatsThisWeek, 
 import { VerticalSpacer } from '../../../../../shared/VerticalSpacer';
 import { TimeBlockPair } from './TimeBlockPair';
 import { Container } from '../../../../../shared/ui';
+import { Flex, Box } from 'rebass';
+import { MenuIcon } from '../../../../../shared/icons';
+import { UserAchievementContext } from '../../Authed';
 
 
 type InsightsStatsTimescope = InsightsStatsToday | InsightsStatsThisWeek | InsightsStatsThisMonth | InsightsStatsLifetime
@@ -28,7 +31,7 @@ const NavSelect = styled.select`
   -webkit-appearance: none;
   -moz-appearance: none;
   color: #FFF !important;
-  background-color: #555;
+  background-color: #030616;
   font-size: 1.25rem;
   border: none;
   padding: 1rem;
@@ -36,6 +39,7 @@ const NavSelect = styled.select`
 	background-repeat: no-repeat, repeat;
 	background-position: right .7em top 50%, 0 0;
 	background-size: .65em auto, 100%;
+  border-bottom: 1px solid rgba(255,255,255,.1);
 `
 
 const NavOption: React.SFC<{pathParams: TPathParams, label: string}> = ({pathParams, label}) =>
@@ -105,11 +109,18 @@ type TPerspectiveStats = {
 
 export type Stats = InsightsStatsInsightsStats | InsightsArtistStatsInsightsArtistStats | InsightsGenreStatsInsightsGenreStats
 export const StatPage: React.SFC<{stats: Stats, path: string, pathParams: TPathParams, history: History}> =
-({stats, history, path, pathParams, children }) => {
-  const navTo = (path: string) => history.push(path)
+  ({ stats, history, path, pathParams, children }) => {
+  
+    const { isOpen, setSideBarOpen }: any = React.useContext(UserAchievementContext)
+    const navTo = (path: string) => history.push(path)
+
   return (
     <FullHeight>
       <Large>
+        <Flex justifyContent='space-between' pt={10}>
+          <Box></Box>
+          <Box style={{cursor: 'pointer'}} onClick={() => setSideBarOpen((isOpen: any) => !isOpen)}><MenuIcon /></Box>
+        </Flex>
         <NavTabs {...{pathParams, stats}}/>
       </Large>
       <NotLarge>

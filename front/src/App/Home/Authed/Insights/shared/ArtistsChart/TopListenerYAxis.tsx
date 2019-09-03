@@ -40,7 +40,7 @@ const TopListenerLink: any = ({ className, handleClick, children }: any) => (
 
 
 
-const AchievementHoldersPopUp: React.SFC<any> = ({ x, y, artist=null, pathParams, totalTimeListened,
+const AchievementHoldersPopUp: React.SFC<any> = ({ x, y, artist: propsArtist, pathParams, totalTimeListened,
     groupScore, visible, handleClick }) => {
 
     console.count('AchievementHoldersPopUp render')
@@ -51,8 +51,8 @@ const AchievementHoldersPopUp: React.SFC<any> = ({ x, y, artist=null, pathParams
     const [currentPeriodAchievementHolders, setCurrentPeriodAchievementHolders]: any = useState(null)
 
     // Enriched Current Artist from filtering context props artist data toward passed props current artist
-    const { artist: currentArtist = null, achievementHolders } = (artist && topArtistsWithAchievementHolders && topArtistsWithAchievementHolders.length) ? topArtistsWithAchievementHolders.find((awa: any) => {
-        return awa && awa.artist && artist ? awa.artist.id === artist.id : false
+    const { artist: currentArtist = null, achievementHolders } = (propsArtist && topArtistsWithAchievementHolders && topArtistsWithAchievementHolders.length) ? topArtistsWithAchievementHolders.find((awa: any) => {
+        return awa && awa.artist && propsArtist ? awa.artist.id === propsArtist.id : false
     }) : {
             artist: null,
             achievementHolders: null
@@ -64,6 +64,7 @@ const AchievementHoldersPopUp: React.SFC<any> = ({ x, y, artist=null, pathParams
 
     const { timeScope }: any = pathParams
     let useDayData = false
+    let useLifeData = false
 
     const achievementHolderTimeScopeMap: any = {
         today: day ? day : null,
@@ -89,10 +90,17 @@ const AchievementHoldersPopUp: React.SFC<any> = ({ x, y, artist=null, pathParams
         console.log('TCL: useDayData', useDayData)
     }
 
+    if (allAchievementValuesForPeriodNull && timeScope === 'thisMonth') {
+        useLifeData = true
+        
+        console.log('all Achievement Values For Period are in fact Null')
+        console.log('TCL: useLifeData', useLifeData)
+    }
+
   
 
     useEffect(() => {
-        let currentPeriod = useDayData ? Object.assign({}, achievementHolderTimeScopeMap.today) : Object.assign({}, ahCurrentPeriod)
+        let currentPeriod = useDayData ? Object.assign({}, achievementHolderTimeScopeMap.today) : useLifeData ? Object.assign({}, achievementHolderTimeScopeMap.lifetime) : Object.assign({}, ahCurrentPeriod)
         for (let place in currentPeriod) {
             if (!currentPeriod[place].user) {
                 delete currentPeriod[place]
@@ -112,15 +120,16 @@ const AchievementHoldersPopUp: React.SFC<any> = ({ x, y, artist=null, pathParams
         first: null,
         second: null
     }
+    console.log('TCL: currentPeriodAchievementHolders', currentPeriodAchievementHolders)
     const title: any = normalizeTimeScope(pathParams)
-    const topBadge = currentUserIsTopListener ? firstPlaceBadge : first && first.user.photoURL ? first.user.photoURL : '/icons/headphones.svg'
-    achievementHolders
+    const topBadge = currentUserIsTopListener ? firstPlaceBadge : first && first.user.photoURL ? first.user.photoURL : second && second.user.photoURL ? second.user.photoURL : '/icons/headphones.svg'
     
-    const topSpot: any = currentUserIsTopListener ? <image href={topBadge} transform={`translate(${(x || 0) + 15}, ${(y || 0) - 20})`} width='30px' height='30px'
-    /> : achievementHolders
+    
+    const topSpot: any = <image href={topBadge} transform={`translate(${(x || 0) + 15}, ${(y || 0) - 20})`} width='30px' height='30px'
+    />
     
 
-    const content = <AchievementHoldersList {...{ artist, achievementHolders }} style={{
+    const content = <AchievementHoldersList artist={propsArtist} {...{achievementHolders }} style={{
         background: '#030616!important'
     }} />
 
@@ -129,7 +138,7 @@ const AchievementHoldersPopUp: React.SFC<any> = ({ x, y, artist=null, pathParams
 
     return (
 
-        <PopOverStyle placement="topLeft" content={content} title={artist ? `${artist.name}'s Top Listeners` : null} trigger="click"
+        <PopOverStyle placement="topLeft" content={content} title={propsArtist ? `${propsArtist.name}'s Top Listeners` : null} trigger="click"
             visible={visible} style={{
                 background: '#030616!important'
             }}>

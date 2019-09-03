@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Component } from 'react';
 import styled, { css } from 'styled-components';
 import { animated } from 'react-spring';
+import { notLargeQuery } from '../../shared/media';
 
 const bgSize = 6
 export const AlbumBackgroundDiv = styled.div<{ src: string }>`
@@ -75,15 +76,22 @@ ${(props: any) => props.artistPage && css`
 
 
 ${(props: any) => props.achievementHoldersList && css`
-  height: auto;
-  width: auto;
+    height: 3.9rem;
+    width: 2.9rem;
+
+    img, .ant-avatar.ant-avatar-circle.ant-avatar-image {
+      height: 3.9rem!important;
+      width: 2.9rem!important;
+      border-radius: 12px;
+      object-fit: cover;
+    }
 
     &:before {
-    border-radius: 50%;
+    border-radius: 12px;
     content: '';
     background-image: linear-gradient(to bottom, #e64a19 0%, #ffa726 100%);
-     height: 2.2rem;
-    width: 2.2rem;
+    height: 4rem;
+    width: 3rem;
     position:absolute;
     top: -1px;
     left: -1px;
@@ -102,6 +110,8 @@ ${(props: any) => props.sideNav && css`
       left: 0;
       z-index: -2;
     }
+
+   
     
 `}
 

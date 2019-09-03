@@ -76,9 +76,7 @@ ${notLargeQuery`
     margin-bottom: 0.5rem;
   }
 
-  ${NavLabel} {
-    display: none;
-  }
+ 
 
 `}
 `
@@ -147,13 +145,22 @@ export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: s
 
 
   const topByPeriod = Object.assign({}, usersTopArtistByPeriodData)
-  const artists: any = []
+  let artists: any = []
+
 
   for (let period in topByPeriod) {
     if (topByPeriod[period].personal) {
       topByPeriod[period].personal.forEach(({ artist }: any) => artists.push(artist))
     }
+    if (topByPeriod[period].group) {
+      topByPeriod[period].group.forEach(({ artist }: any) => artists.push(artist))
+    }
   }
+
+  // console.log('TCL: personal and group artists', artists)
+  // @ts-ignore
+  artists = [...new Set(artists)]
+  console.log('TCL: artists', artists)
 
 
   const { getTopArtistAchievementHolders = null }: any = (artists && artists.length) ? suspensefulHook(useGetTopArtistAchievementHolders({ variables: { perspectiveUID: 'global', artistIds: artists.map((artist: any) => artist.id) }, suspend: true, })) : {getTopArtistAchievementHolders: null}

@@ -3,12 +3,13 @@ import { ArtistsFragmentArtist, useGetArtistAchievementHolders } from '../../../
 import { User } from '../../../../../back/src/fns/graphql/types';
 import { ListStyle } from '../ListStyle';
 import { decimalToHrsMins, hrsAndMins } from '../../../lib/durationFormats';
-import { Popover, List, Row, Col, Card, Icon, Tag, Avatar } from 'antd';
+import { Popover, List, Row, Col, Card, Icon, Tag, Avatar, Badge } from 'antd';
 import { IconText, AvatarBg } from '../Elements';
 import 'antd/es/popover/style/css'
 import 'antd/es/tag/style/css'
 import 'antd/es/list/style/css'
 import 'antd/es/avatar/style/css'
+import { badgeMap } from '../../Home/Authed/Insights/shared/ArtistsChart/TopListenerYAxis';
 
 export interface AchievementHoldersListProps {
     artist: ArtistsFragmentArtist
@@ -24,15 +25,11 @@ export const AchievementHoldersList: React.SFC<AchievementHoldersListProps> = ({
             const { first, second, third } = timePeriod
             return (first.user !== null)
         })
-        console.log('TCL: items', items)
-
 
         return (
 
             <ListStyle {...{ style }}>
                 <List id='achievementHoldersList' dataSource={items} renderItem={item => {
-                    console.log('TCL: item', item)
-    
                     return (
                         <List.Item>
                             <Card title={item.title}>
@@ -51,13 +48,20 @@ export const AchievementHoldersList: React.SFC<AchievementHoldersListProps> = ({
                                         return (
                                             <List.Item
                                                 key={`${item.title}_${index}`}
-                                                actions={[
-                                                    <IconText key={2}><Tag color="cyan">{index === 1 ? 'Second' : index === 0 ? 'first' : 'third'}</Tag></IconText>
-                                                ]}
                                             >
                                                 <List.Item.Meta
-                                                    avatar={<AvatarBg achievementHoldersList><Avatar src={topListener.user && topListener.user.photoURL ? topListener.user.photoURL : '/icons/headphones.svg'} /></AvatarBg>}
-                                                    title={user.name}
+                                                    avatar={
+                                                        
+                                                            <Badge count={<img src={badgeMap[index]} style={{
+                                                              height: '25px',
+                                                              width: '25px',
+                                                              zIndex: 2,
+                                                              // left: '100%'
+                                                            }} />}>
+                                                              <AvatarBg achievementHoldersList><Avatar src={user.photoURL ? user.photoURL : '/icons/headphones.svg'} /></AvatarBg>
+                                                            </Badge>
+                                                          }
+                                                    title={user.displayName}
                                                     description={ttl}
                                                 />
     
@@ -74,10 +78,7 @@ export const AchievementHoldersList: React.SFC<AchievementHoldersListProps> = ({
         );
 
     }
-    return null
-  
-
-    
+    return null    
 }
 
 

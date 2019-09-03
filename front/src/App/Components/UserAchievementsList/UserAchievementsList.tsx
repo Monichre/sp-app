@@ -92,14 +92,8 @@ export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ use
     const {
         achievements
     } = parseAchievementsByPeriod(usersTopArtistByPeriodData, userId)
-
     const {setAchievements, isOpen, setSideBarOpen}: any = React.useContext(UserAchievementContext)
- 
-    const [wasClicked, setClicked] = useState(false)
     const handleClick = () => setSideBarOpen((isOpen: boolean) => !isOpen)
-    // const handleClick = () => setClicked(wasClicked => !wasClicked)
-    
-
     const {
         week: weeklyAchievements,
         month: monthlyAchievements,
@@ -137,10 +131,7 @@ export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ use
  
 
     React.useEffect(() => {
-
-        
         setAchievements(achievements)
-
     }, [])
 
     

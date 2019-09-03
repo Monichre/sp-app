@@ -21,7 +21,9 @@ const NavSelect = styled.select`
   -webkit-appearance: none;
   -moz-appearance: none;
   color: #FFF !important;
-  /* background-color: #555; */
+  background-color: #030616;
+
+  
   font-size: 1.25rem;
   border: none;
   padding: 1rem;

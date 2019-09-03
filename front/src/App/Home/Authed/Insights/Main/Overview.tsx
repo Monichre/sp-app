@@ -75,7 +75,7 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
 
   const genreContentSummary = `We're currently building out new features for platform genre leaders`
 
-  const artistContentSummary = `Introducing our new platform artist leaders. These achievements are for those Soundpruf users who have streamed the most of any given artist. View Your Achievements based on the current time perspective to the left.`
+  const artistContentSummary = `Introducing our new platform artist leaders. These achievements are for those Soundpruf users who have streamed the most of any given artist. View Your Achievements per time perspective by clicking the links to the left. Full achievement data can be found in the information sidebar that slides out. We will soon be introducing our rewards program so that you can turn these achievements into discounts on merchandise and additional exclusive offers.`
 
 
   console.count('Overview Render: ')

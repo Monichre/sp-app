@@ -79,26 +79,45 @@ const AuthedView = styled.div`
   `}
   ${NavMenuView} {
     position: fixed;
-    height: 100vh;
+    
     display: flex;
     ${largeQuery`
       flex-direction: column;
       left: 0;
+      height: 100vh;
       top: 0;
-      height: 100%;
       width: ${SIDEBAR_WIDTH}px;
       border-right: 1px solid rgba(255, 255, 255, .1);
     `}
+    
     ${notLargeQuery`
       display: flex;
       flex-direction: row;
       justify-content: center;
       background-color: #030616;
       position: fixed;
+      height: 15vh;
       left: 0;
       right: 0;
       width: 100%;
       bottom: 0;
+      .sc-iELTvK {
+       padding: 0;
+       justify-content: center;
+       display: flex;
+       align-content: center;
+
+       align-items: center;
+
+      }
+      .sc-feJyhm.escZRd {
+        display: none;
+      } 
+      .sc-hzDkRC.ldGACO {
+        margin: auto;
+        display: block;
+        position: relative;
+      }
     `}
   }
 `

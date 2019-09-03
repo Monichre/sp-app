@@ -17,10 +17,8 @@ const ListItem: any = styled.li`
     width: 100%;
     position: relative;
     color: #fff;
+    cursor: pointer;
 
-    ${(props: any) => props.clicked && css`
-        /* overflow: visible; */
-    `}
 
 &::before {
   /* content: counters(index, ".", decimal-leading-zero); */
