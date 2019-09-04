@@ -4,7 +4,8 @@ import { makeLogger } from '../logger'
 import { TableStat } from '../../shared/tables/TableStat'
 import * as _ from 'lodash'
 import {  ArtistImage } from '../../shared/SharedTypes';
-import { calculateAchievementsTimeSeries } from '../agl/functions';
+import { AchievementEnrichment } from '../agl/functions';
+
 
 export const handler: DynamoDBStreamHandler | any = async (event, context) => {
 	const log = makeLogger({
@@ -36,6 +37,7 @@ export const handler: DynamoDBStreamHandler | any = async (event, context) => {
 			: null
 
 		if (artist && artistInfo) {
+			const {calculateAchievementsTimeSeries} = AchievementEnrichment(false)
 
 			await calculateAchievementsTimeSeries({ artistId: artistInfo.id })
 		

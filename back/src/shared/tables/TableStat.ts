@@ -9,7 +9,10 @@ import { makeLogger } from '../../fns/logger';
 import { verifyEnv } from '../env';
 import { TableAchievement } from './TableAchievement';
 import { TableUser } from './TableUser';
-import { calculateAchievementsTimeSeries } from '../../fns/agl/functions';
+// import { calculateAchievementsTimeSeries } from '../../fns/agl/functions';
+
+
+let callCount = 0
 
 export type PeriodType =
 	| 'day'
@@ -377,6 +380,8 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 				':pk': [uid, 'artist', periodType, periodValue].join('#')
 			}
 		}
+
+		console.log('STAT FUNCTION: GET TOP ARTIST PK: ', [uid, 'artist', periodType, periodValue].join('#'))
 		
 		const artists = await doc
 			.query(statParams)
@@ -386,17 +391,7 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 					artist: i.artist,
 					playDurationMs: i.playDurationMs
 				}))
-			).then(async res => {
-				
-				// cc: This enriches the top artists that are about to appear on the front end with achievement records for their respective user/stat activity
-				// cc: I could likely make use of the periodType and periodValue params to inform #calculateAchievementsTimeSeries what sort of achievement records to enrich or update....
-				
-				await Promise.all(res.map(async ({ artist }) => {
-					const data = await calculateAchievementsTimeSeries({ artistId: artist.id })
-				}))
-				return res
-			})
-			.then(byTimeThenArtistName)
+			).then(byTimeThenArtistName)
 
 		return artists
 	}

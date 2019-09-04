@@ -9,6 +9,7 @@ import {
 import { TableUser } from '../../../shared/tables/TableUser'
 import * as moment from 'moment'
 import { QueueStartHarvestUser } from '../../../shared/queues'
+import {AchievementEnrichment} from '../../agl/functions'
 
 const typeDefs = `
 type Query {
@@ -169,6 +170,11 @@ const initialHarvestComplete: UserInfoResponseResolvers.InitialHarvestCompleteRe
 			uid: userInfo.uid
 		})
 	}
+
+
+	const {initialize} = AchievementEnrichment(userInfo)
+	await initialize()
+
 	// @ts-ignore
 	return isInitialHarvestComplete(userInfo)
 }
