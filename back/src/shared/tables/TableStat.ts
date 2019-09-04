@@ -387,19 +387,18 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 					playDurationMs: i.playDurationMs
 				}))
 			).then(async res => {
-				console.log(res)
+				
+				// cc: This enriches the top artists that are about to appear on the front end with achievement records for their respective user/stat activity
+				// cc: I could likely make use of the periodType and periodValue params to inform #calculateAchievementsTimeSeries what sort of achievement records to enrich or update....
+				
 				await Promise.all(res.map(async ({ artist }) => {
-					const data = await calculateAchievementsTimeSeries({ gid: 'global', artistId: artist.id })
-					console.log('TCL: data', data)
+					const data = await calculateAchievementsTimeSeries({ artistId: artist.id })
 				}))
 				return res
 			})
 			.then(byTimeThenArtistName)
 
 		return artists
-		console.log('TCL: artists', artists)
-
-
 	}
 
 	/**
