@@ -314,10 +314,5 @@ export type TTableAchievement = {
 			AWSError
 		>
 	>
-
-	getUserAchievementsByArtist: ({
-		aglPK,
-		userFK
-	}: UserAchievementByArtistParams) => Promise<PromiseResult<any, AWSError>>
 }
 

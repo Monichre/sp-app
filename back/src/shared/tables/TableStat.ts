@@ -5,6 +5,11 @@ import { UpdateItemOutput } from 'aws-sdk/clients/dynamodb'
 import { PromiseResult } from 'aws-sdk/lib/request'
 import { AWSError } from 'aws-sdk'
 import { StatRecordTopListenerDataWithUserId, TTableAchievement } from '../SharedTypes';
+import { makeLogger } from '../../fns/logger';
+import { verifyEnv } from '../env';
+import { TableAchievement } from './TableAchievement';
+import { TableUser } from './TableUser';
+import { calculateAchievementsTimeSeries } from '../../fns/agl/functions';
 
 export type PeriodType =
 	| 'day'
@@ -321,8 +326,6 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 				total: data.playDurationMs
 			}) : null))
 
-		console.log('topListeners', topListeners)
-
 		return topListeners
 	}
 
@@ -363,6 +366,7 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 		periodValue,
 		Limit = 5
 	}: ArtistAglTopKeys) => {
+	
 		const statParams = {
 			TableName,
 			Limit,
@@ -373,7 +377,7 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 				':pk': [uid, 'artist', periodType, periodValue].join('#')
 			}
 		}
-
+		
 		const artists = await doc
 			.query(statParams)
 			.promise()
@@ -382,13 +386,20 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 					artist: i.artist,
 					playDurationMs: i.playDurationMs
 				}))
-			)
+			).then(async res => {
+				console.log(res)
+				await Promise.all(res.map(async ({ artist }) => {
+					const data = await calculateAchievementsTimeSeries({ gid: 'global', artistId: artist.id })
+					console.log('TCL: data', data)
+				}))
+				return res
+			})
 			.then(byTimeThenArtistName)
-		
-		return artists
-        console.log('TCL: artists', artists)
 
-	
+		return artists
+		console.log('TCL: artists', artists)
+
+
 	}
 
 	/**
@@ -489,7 +500,6 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 		periodsFor,
 		getTimeseries,
 		getArtistTopListeners,
-		// getArtistAchievementHolders,
 		getStat,
 		getTopGenres,
 		getGenreStat,

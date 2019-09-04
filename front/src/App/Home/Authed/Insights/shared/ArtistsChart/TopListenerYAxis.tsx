@@ -107,19 +107,26 @@ const AchievementHoldersPopUp: React.SFC<any> = ({ x, y, artist: propsArtist, pa
             }
         }
 
-        return setCurrentPeriodAchievementHolders(currentPeriod)
+        setCurrentPeriodAchievementHolders(currentPeriod)
  
-    }, [])
+    }, [topArtistsWithAchievementHolders])
 
 
     const { total, status } = comparePersonalAndGroupScore(totalTimeListened, groupScore)
+    console.log('TCL: status', status)
+    console.log('TCL: total', total)
     const currentUserIsTopListener: any = status
  
 
-    const { first = null, second = null } = currentPeriodAchievementHolders ? currentPeriodAchievementHolders : {
+    const { first = null, second = null, third=null } = currentPeriodAchievementHolders ? currentPeriodAchievementHolders : {
         first: null,
-        second: null
+        second: null,
+        third: null
     }
+
+    console.log('TCL: third', third)
+    console.log('TCL: second', second)
+    console.log('TCL: first', first)
     console.log('TCL: currentPeriodAchievementHolders', currentPeriodAchievementHolders)
     const title: any = normalizeTimeScope(pathParams)
     const topBadge = currentUserIsTopListener ? firstPlaceBadge : first && first.user.photoURL ? first.user.photoURL : second && second.user.photoURL ? second.user.photoURL : '/icons/headphones.svg'

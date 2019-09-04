@@ -75,7 +75,7 @@ const featuredArtists: FeaturedArtist[] = [
     hover: '4,182 monthly streamers on Spotify',
     name: 'Junaco',
     href: 'https://open.spotify.com/artist/6Q3I3yOdG7MhwX6BCWiu0e?si=vxABANyDRR-OQTmyAGV0vQ',
-    src: 'https://www.wweek.com/resizer/HvBCEdQ7jORV81pFDyYQQqaKCqI=/1200x0/filters:quality(100)/s3.amazonaws.com/arc-wordpress-client-uploads/wweek/wp-content/uploads/2018/07/17182515/Kay-67-of-77-e1531877215776.jpg'
+    src: 'https://culturecollide.com/app/uploads/2019/03/featured-2.jpg'
   },
   {
     title: 'Set',

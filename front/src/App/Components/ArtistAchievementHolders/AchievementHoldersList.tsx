@@ -23,6 +23,8 @@ export const AchievementHoldersList: React.SFC<AchievementHoldersListProps> = ({
         const { day, week, month, life } = achievementHolders
         const items = [{ title: 'Today', ...day }, { title: 'This Week', ...week }, { title: 'This Month', ...month }, { title: 'Lifetime', ...life }].filter((timePeriod: any) => {
             const { first, second, third } = timePeriod
+            console.log('TCL: third', third)
+            console.log('TCL: second', second)
             return (first.user !== null)
         })
 

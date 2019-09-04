@@ -175,31 +175,6 @@ export const TableAchievement = (
 	}
 
 
-	const getUserAchievementsByArtist = async ({
-		aglPK,
-		userFK
-	}: UserAchievementByArtistParams) => {
-		return await doc
-			.query({
-				TableName,
-				IndexName: 'UserTimeIndex',
-				KeyConditionExpression: 'pk = :p AND fk = :f',
-				ExpressionAttributeValues: {
-					':p': aglPK,
-					':f': userFK
-				}
-			})
-			.promise()
-			.then((res: any) => {
-				const achievements:
-					| [GetUserAchievementItem]
-					| GetUserAchievementItem
-					| [] = res && res.Items && res.Items.length ? res.Items : []
-				console.log('getUserAchievementsByArtist: ', achievements)
-
-				return achievements
-			})
-	}
 
 	const getUserAchievements = async (pk: string, uk: string) => {
 
@@ -275,7 +250,6 @@ export const TableAchievement = (
 		periodsFor,
 		getArtistAchievementHoldersTimeSeries,
 		getArtistAchievementHolders,
-		getUserAchievementsByArtist,
 		getUserAchievements,
 		createOrModifyAchievement
 	}

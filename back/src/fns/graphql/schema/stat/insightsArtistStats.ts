@@ -196,7 +196,7 @@ const playtimePerspectiveStats = async (
 	}
 }
 
-type TPlaytimeTimescopeStatsKeys = {
+export type TPlaytimeTimescopeStatsKeys = {
 	timeseriesLabel: string
 	timeseriesPeriodType: PeriodType
 	uid: string
