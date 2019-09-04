@@ -43,6 +43,7 @@ html {
     margin: 0;
   }
 
+
   .ant-drawer-body {
     height: 100vh;
     overflow: scroll;
@@ -54,6 +55,7 @@ html {
   .ant-drawer-close {
     color: #fff!important;
     left: -20px;
+    display: none!important;
   }
   .ant-card-head-title {
     color: #fff;
@@ -90,6 +92,24 @@ html {
 
   }
 
+  &#SideBarAchievements {
+    .ant-list-item {
+      border-bottom: none;
+      background-color: rgba(216,216,216,.025);
+      border-radius: 12px;
+
+      &.lifetime {
+
+        h4 {
+          border-bottom: 1px solid #ffa726;
+          width: max-content;
+        }
+      
+      }
+      }
+    }
+  }
+
   &#achievementHoldersList {
     .ant-list-item {
       .ant-list-item {
@@ -113,6 +133,14 @@ html {
       position: relative;
       display: flex;
       flex-direction: row!important;
+      &.notLifeTimeAchievement {
+        .ant-list-item-extra {
+          margin-top: 40px;
+          .ant-carousel .slick-dots-bottom {
+            bottom: -5px;
+          }
+        }
+      }
       .ant-list-item-main, .ant-list-item-extra {
           margin-left: 0!important;
           width: 48%!important;

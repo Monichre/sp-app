@@ -1,10 +1,10 @@
 import React, { useContext, createContext, useReducer, useState, Reducer, SetStateAction, useCallback, useEffect } from 'react';
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { Container } from '../../../shared/ui';
-import { List, Avatar, Icon, Drawer, Carousel } from 'antd';
+import { List, Avatar, Icon, Drawer, Carousel, Alert } from 'antd';
 import { Box } from 'rebass';
 import { UserAchievementContext } from '../../Home/Authed/Authed';
-import { firstPlaceBadge, IconText } from '../Elements';
+import { firstPlaceBadge, IconText, FlexDiv } from '../Elements'
 import { determineAchievementValueFromPK, AchievementMetaData } from '../UserAchievementsList/achievements-utils';
 import { User } from '../../../../../back/src/fns/graphql/types';
 import { DecimalHoursToMinutes, decimalToHrsMins } from '../../../lib/durationFormats';
@@ -12,6 +12,8 @@ import { SpotifyLogoLink } from '../../../shared/SpotifyLogoLink/SpotifyLogoLink
 import 'antd/es/drawer/style/css'
 import 'antd/es/carousel/style/css'
 import 'antd/es/list/style/css'
+import 'antd/es/alert/style/css'
+import { badgeMap } from '../../Home/Authed/Insights/shared/ArtistsChart/TopListenerYAxis'
 
 const HoverIcon: any = styled.div`
    margin: 0 auto;
@@ -43,6 +45,15 @@ border-radius: 0.5rem;
 background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("${({ src }) => src}");
 background-position: center center;
 background-size: cover;
+
+${(props: any) => props.notLifeTimeAchievement && css`
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    min-height: 50px;
+  
+`}
+
 `
 
 const HoverTitle: any = styled.div`
@@ -114,17 +125,71 @@ const HoverCard: any = styled.div`
    }
 `
 
+export interface NonPriortityAchievementListProps {
+    achievements: AchievementMetaData[]
+    title: string
+    currentUser: User
+    period: string
+}
+
+const NonPriortityAchievementList: React.SFC<NonPriortityAchievementListProps> = ({ achievements, period, title, currentUser }) => {
+
+
+    return (
+        <Box>
+            <List
+                className="demo-loadmore-list"
+                itemLayout="horizontal"
+                dataSource={achievements}
+                renderItem={item => {
+
+                    const { artistData: { artist: { id, images, name, topListeners }, personal }, achievement } = item
+                    const formattedTotal = decimalToHrsMins(personal)
+                    const place = determineAchievementValueFromPK(achievement)
+                    console.log('TCL: place', place)
+                    const appropriateBadge = badgeMap[place]
+                    console.log('TCL: appropriateBadge', appropriateBadge)
+                    console.log('TCL: place', place)
+
+                    return (
+                        <List.Item
+                            actions={[
+                                <IconText key={1}>
+                                    {`${formattedTotal} mins of  ${name}`}
+                                </IconText>,
+
+                                <IconText key={2}>
+                                    <SpotifyLogoLink href={`https://open.spotify.com/artist/${id}`} />
+                                </IconText>
+                            ]}
+                        >
+
+                            <List.Item.Meta
+                                avatar={<Avatar src={appropriateBadge} />}
+                            />
+
+
+                        </List.Item>
+                    )
+                }}
+            />
+        </Box>
+    );
+}
+
+{/* <NonPriortityAchievementList achievements={achievements} period={period} title={title} currentUser={currentUser} /> */}
+
 interface SideBarSectionProps {
     achievements: AchievementMetaData[]
     title: string
-    description: string
     currentUser: User
+    period: string
 }
 
-const SideBarSection: React.SFC<SideBarSectionProps> = ({ achievements, title, description, currentUser }) => {
+const SideBarSection: React.SFC<SideBarSectionProps> = ({ achievements, period, title, currentUser }) => {
 
     const achievementContext = [
-        { title, description, currentUser }
+        { title, currentUser }
     ]
     const [currentArtist, setCurrentArtist] = useState(achievements[0])
     const handleCarouselChange = (current: any) => setCurrentArtist(achievements[current])
@@ -133,8 +198,9 @@ const SideBarSection: React.SFC<SideBarSectionProps> = ({ achievements, title, d
     const formattedTotal = decimalToHrsMins(personal)
 
 
-    return (
+    return   (
         <List
+            id='SideBarAchievements'
             itemLayout="vertical"
             size="large"
             pagination={false}
@@ -148,6 +214,7 @@ const SideBarSection: React.SFC<SideBarSectionProps> = ({ achievements, title, d
 
                 return (
                     <List.Item
+                        className={period !== 'life' ? 'notLifeTimeAchievement' : 'lifetime'}
                         key={title}
                         actions={[
                             <IconText key={1}>
@@ -159,20 +226,21 @@ const SideBarSection: React.SFC<SideBarSectionProps> = ({ achievements, title, d
                             </IconText>
                         ]}
                         extra={
-                            <Carousel autoplay afterChange={handleCarouselChange}>
+                            <Carousel autoplay={period === 'life'} afterChange={handleCarouselChange}>
                                 {achievements.map((achievementData: AchievementMetaData) => {
                                     const { artistData, achievement }: any = achievementData
                                     const { artist: { name, images } } = artistData
                                     const artistIMG = images[0].url
                                     return (
                                         <div style={{
-                                           height: '30vh'
+                                            height: '30vh'
                                         }}>
                                             <ArtistCarouselImage
-                                            style={{
-                                                margin: 'auto',
-                                                display: 'block'
-                                            }}
+                                                notLifeTimeAchievement={period !== 'life'}
+                                                style={{
+                                                    margin: 'auto',
+                                                    display: 'block'
+                                                }}
                                                 width={150}
                                                 height='100%'
                                                 alt={`${name} featured image`}
@@ -189,7 +257,6 @@ const SideBarSection: React.SFC<SideBarSectionProps> = ({ achievements, title, d
                         <List.Item.Meta
                             avatar={<Avatar src={firstPlaceBadge} />}
                             title={title}
-                            description={description}
                         />
 
                     </List.Item>
@@ -215,6 +282,7 @@ export const SideBar: React.SFC<SideBarProps> = () => {
     } = React.useContext(UserAchievementContext)
     const { achievements, isOpen, setSideBarOpen, currentUser } = context
     const onClose = () => setSideBarOpen((isOpen: any) => !isOpen)
+    const description = `Congratulations ${currentUser.displayName}! You have earned the following achievements for these artists. We will soon be introducing our custom rewards platform where you can exchange your achievements for discounts on exclusive artist merchandise`
 
     console.count('SideBar Render Count:')
 
@@ -230,9 +298,16 @@ export const SideBar: React.SFC<SideBarProps> = () => {
             }}
             visible={isOpen}
         >
-            <Container padded>
+            <Container padded style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-around',
+                height: '100%'
+            }}>
 
-                {achievements ? Object.keys(achievements).map((period: any, i: any) => {
+                {achievements ? <Alert message={description} type="info" showIcon /> : null}
+
+                {achievements ? Object.keys(achievements).reverse().map((period: any, i: any) => {
                     const periodAchievements: any = achievements[period]
 
                     if (periodAchievements && periodAchievements.length) {
@@ -240,11 +315,11 @@ export const SideBar: React.SFC<SideBarProps> = () => {
                         const aInstance: AchievementMetaData = periodAchievements ? periodAchievements[0].achievement : null
                         const achievementContext = period === 'life' ? 'lifetime achievements' : `achievements this ${period}`
                         const title = `Your ${achievementContext}`
-                        const description = periodAchievements && periodAchievements.length ? `Congratulations ${currentUser.displayName}! You have been awarded ${determineAchievementValueFromPK(aInstance)} place top listener for these artists.` : ''
+
 
                         return (
                             <Box>
-                                <SideBarSection achievements={periodAchievements} title={title} description={description} currentUser={currentUser} />
+                                <SideBarSection achievements={periodAchievements} period={period} title={title} currentUser={currentUser} />
                             </Box>
                         )
 
