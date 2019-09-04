@@ -169,11 +169,10 @@ const initialHarvestComplete: UserInfoResponseResolvers.InitialHarvestCompleteRe
 		QueueStartHarvestUser.publish(context.QUEUE_START_HARVEST_USER, {
 			uid: userInfo.uid
 		})
+
+		const {initialize} = AchievementEnrichment(userInfo)
+		await initialize()
 	}
-
-
-	const {initialize} = AchievementEnrichment(userInfo)
-	await initialize()
 
 	// @ts-ignore
 	return isInitialHarvestComplete(userInfo)

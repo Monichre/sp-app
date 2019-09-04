@@ -229,8 +229,11 @@ const SideBarSection: React.SFC<SideBarSectionProps> = ({ achievements, period, 
                             <Carousel autoplay={period === 'life'} afterChange={handleCarouselChange}>
                                 {achievements.map((achievementData: AchievementMetaData) => {
                                     const { artistData, achievement }: any = achievementData
+                                    console.log('TCL: achievement', achievement)
+                                    console.log('TCL: artistData', artistData)
                                     const { artist: { name, images } } = artistData
-                                    const artistIMG = images[0].url
+                                    console.log('TCL: images', images)
+                                    const artistIMG = images[0] ? images[0].url : ''
                                     return (
                                         <div style={{
                                             height: '30vh'

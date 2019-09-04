@@ -101,15 +101,16 @@ const AchievementHoldersPopUp: React.SFC<any> = ({ x, y, artist: propsArtist, pa
 
     useEffect(() => {
         let currentPeriod = useDayData ? Object.assign({}, achievementHolderTimeScopeMap.today) : useLifeData ? Object.assign({}, achievementHolderTimeScopeMap.lifetime) : Object.assign({}, ahCurrentPeriod)
+
         for (let place in currentPeriod) {
             if (!currentPeriod[place].user) {
-                delete currentPeriod[place]
+                currentPeriod[place] = null
             }
         }
 
         setCurrentPeriodAchievementHolders(currentPeriod)
  
-    }, [topArtistsWithAchievementHolders])
+    }, [topArtistsWithAchievementHolders, propsArtist, pathParams])
 
 
     const { total, status } = comparePersonalAndGroupScore(totalTimeListened, groupScore)
@@ -158,14 +159,13 @@ const AchievementHoldersPopUp: React.SFC<any> = ({ x, y, artist: propsArtist, pa
 }
 
 export const TopListenerYaxis: React.SFC<TickProps & any> = ({ x, y, offset, artist, pathParams, userId, totalTimeListened, groupScore }) => {
-console.log('TCL: artist', artist)
+
 
     const [visible, setVisible] = useState(false)
     const handleClick = () => setVisible(visible => !visible)
     console.count('TopListenerYaxis render')
 
 
-
-    return <AchievementHoldersPopUp {...{ x, y, offset, artist, pathParams, userId, totalTimeListened, groupScore, visible, handleClick }} />
+    return artist ? <AchievementHoldersPopUp {...{ x, y, offset, artist, pathParams, userId, totalTimeListened, groupScore, visible, handleClick }} /> : null
 
 }

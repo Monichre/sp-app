@@ -5,14 +5,7 @@ import { UpdateItemOutput } from 'aws-sdk/clients/dynamodb'
 import { PromiseResult } from 'aws-sdk/lib/request'
 import { AWSError } from 'aws-sdk'
 import { StatRecordTopListenerDataWithUserId, TTableAchievement } from '../SharedTypes';
-import { makeLogger } from '../../fns/logger';
-import { verifyEnv } from '../env';
-import { TableAchievement } from './TableAchievement';
-import { TableUser } from './TableUser';
-// import { calculateAchievementsTimeSeries } from '../../fns/agl/functions';
 
-
-let callCount = 0
 
 export type PeriodType =
 	| 'day'
@@ -380,8 +373,6 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 				':pk': [uid, 'artist', periodType, periodValue].join('#')
 			}
 		}
-
-		console.log('STAT FUNCTION: GET TOP ARTIST PK: ', [uid, 'artist', periodType, periodValue].join('#'))
 		
 		const artists = await doc
 			.query(statParams)
