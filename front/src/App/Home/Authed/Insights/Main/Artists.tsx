@@ -23,8 +23,11 @@ export const Artists: React.SFC<RouteComponentProps & { uid: string, pathParams:
   console.log('TCL: artists', artists)
 
   return (
-    <ArtistsChartBlock {...{ artists, pathParams }} userId={uid}>
+    <>
       <h1 style={{ color: '#fff' }}><InsightsBackLink /> {translatedPerspective} Top Artists {normalizetimeScopeMap[timeScope]} </h1>
-    </ArtistsChartBlock>
+      {artists && artists.length ? <ArtistsChartBlock {...{ artists, pathParams }} userId={uid} /> : <p>Loading</p>}
+      
+      {/* artists */}
+      </>
   )
 }

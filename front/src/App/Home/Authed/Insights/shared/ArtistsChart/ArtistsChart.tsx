@@ -95,9 +95,8 @@ const ArtistsChart: React.SFC<RouteComponentProps & ChartProps & UserIdProp> = (
 const ArtistsChartWithRouter = withRouter(ArtistsChart)
 
 export const ArtistsChartBlock: React.SFC<{ pathParams: TPathParams, artists: PerspectiveDashArtists[], height?: any } & UserIdProp> = ({ children, ...params }) => {
-  // const { getArtistAchievementHolders = null }: any = suspensefulHook(useGetArtistAchievementHolders({ variables: { artistId: artist.id }, suspend: true }))
-  // console.log('TCL: getArtistAchievementHolders', getArtistAchievementHolders)
-  console.log('TCL: params.artists', params.artists)
+console.log('TCL: params', params)
+
   return (
     <div>
       {children}

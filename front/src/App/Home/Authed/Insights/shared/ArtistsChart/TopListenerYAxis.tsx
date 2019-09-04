@@ -51,10 +51,9 @@ const AchievementHoldersPopUp: React.SFC<any> = ({ x, y, artist: propsArtist, pa
     const [currentPeriodAchievementHolders, setCurrentPeriodAchievementHolders]: any = useState(null)
 
     // Enriched Current Artist from filtering context props artist data toward passed props current artist
-    const { artist: currentArtist = null, achievementHolders } = (propsArtist && topArtistsWithAchievementHolders && topArtistsWithAchievementHolders.length) ? topArtistsWithAchievementHolders.find((awa: any) => {
+    const { achievementHolders } = (propsArtist && topArtistsWithAchievementHolders && topArtistsWithAchievementHolders.length) ? topArtistsWithAchievementHolders.find((awa: any) => {
         return awa && awa.artist && propsArtist ? awa.artist.id === propsArtist.id : false
     }) : {
-            artist: null,
             achievementHolders: null
         }
 
@@ -158,7 +157,7 @@ const AchievementHoldersPopUp: React.SFC<any> = ({ x, y, artist: propsArtist, pa
     );
 }
 
-export const TopListenerYaxis: React.SFC<TickProps & any> = ({ x, y, offset, artist, pathParams, userId, totalTimeListened, groupScore }) => {
+export const TopListenerYaxis: React.SFC<TickProps & any> = ({ x, y, offset, artist=null, pathParams, userId, totalTimeListened, groupScore }) => {
 
 
     const [visible, setVisible] = useState(false)

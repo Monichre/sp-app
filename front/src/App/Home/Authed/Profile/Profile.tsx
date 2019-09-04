@@ -64,7 +64,7 @@ export const Profile: React.SFC<RouteComponentProps & { user: any }> = ({ user }
           flex: 1,
           gridArea: 'left-box'
         }}>
-        Box Left
+        
       </Box>
       <Box
         sx={{
@@ -78,7 +78,7 @@ export const Profile: React.SFC<RouteComponentProps & { user: any }> = ({ user }
           flex: 1,
           gridArea: 'wide-box'
         }}>
-        Wide box
+        
       </Box>
     </Box>
   </Flex>
