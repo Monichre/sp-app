@@ -30,14 +30,14 @@ export class ArtistAndGenreLeaders {
             achievementValue,
             ...topListenerData
         })
-        console.log('TCL: ArtistAndGenreLeaders -> keyDataGlobal', keyDataGlobal)
+        
         const keyDataPersonal = KeyMaker().makeAchievementCreationKeys({
             perspectiveUID: 'personal',
             achievementType,
             achievementValue,
             ...topListenerData
         })
-        console.log('TCL: ArtistAndGenreLeaders -> keyDataPersonal', keyDataPersonal)
+        
         const { artist, user, total, lastUpdated } = topListenerData
         const achievementData: CreateAchievementRecordDataParams = {
             artist, user, total, lastUpdated
