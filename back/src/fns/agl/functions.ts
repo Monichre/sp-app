@@ -1,6 +1,6 @@
 import { TTableStat, PeriodType, TableStat } from '../../shared/tables/TableStat';
 import { ArtistAndGenreLeaders } from '../agl/AGL'
-import moment = require('moment');
+import * as moment from 'moment'
 import { verifyEnv } from '../../shared/env';
 import { makeLogger } from '../logger';
 import { TableAchievement } from '../../shared/tables/TableAchievement'
@@ -14,7 +14,7 @@ const localizedMoment = (utcOffset: number, m: moment.Moment) =>
 
 const localizedISOString = (m: moment.Moment) => m.toISOString(true)
 
-const determineTopListenersFromStatsTable = async (artistTopListenerAchievementsId, tableStat, tableUser) => {
+const determineTopListenersFromStatsTable = async (artistTopListenerAchievementsId: any, tableStat: any, tableUser: any) => {
 
     const topListeners = await tableStat.getArtistTopListeners(
         artistTopListenerAchievementsId
@@ -70,7 +70,7 @@ export const AchievementEnrichment = (user) => {
 
 
 
-    const recordTopListenerAchievements = async (topListenerData: any, index: number, tableAchievement) => {
+    const recordTopListenerAchievements = async (topListenerData: any, index: number) => {
         const d: any = await AGL.enrichAndRecordAchievement(
             topListenerData,
             index,
@@ -84,7 +84,7 @@ export const AchievementEnrichment = (user) => {
         const periodValue = data[period]
         const artistTopListenerAchievementsId = `${artistId}#${period}#${periodValue}#user`
         const periodTopListeners: any[] = await determineTopListenersFromStatsTable(artistTopListenerAchievementsId, tableStat, tableUser)
-        const periodAchievements = await Promise.all(periodTopListeners.map(async (topListenerData: any, index: any) => await recordTopListenerAchievements(topListenerData, index, tableAchievement)))
+        const periodAchievements = await Promise.all(periodTopListeners.map(async (topListenerData: any, index: any) => await recordTopListenerAchievements(topListenerData, index)))
 
         return periodAchievements
 

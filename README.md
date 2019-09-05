@@ -279,3 +279,7 @@ http://sp-app-front-test-frontend.s3-website-us-east-1.amazonaws.com/insights/th
 
 adnordenson@gmail.com
 Lentilcape92mena
+spotify:12449097
+
+artistAchievementsId
+HOzier: 2FXC3k01G6Gw61bmprjgqS
