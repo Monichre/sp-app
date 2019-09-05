@@ -33,14 +33,14 @@ const determineTopListenersFromStatsTable = async (artistTopListenerAchievements
 
 
 
-export const AchievementEnrichment = (user) => {
-
+export const AchievementEnrichment = (user: any) => {
 
     /**
      *
      * Environment Variables/Resources & Database Tables
      *
      */
+
     const log = makeLogger({
         handler: 'onPlayUpdateAchievements',
         awsEvent: 'ddbs'
@@ -120,4 +120,67 @@ export const AchievementEnrichment = (user) => {
 
 }
 
+export const StatEnrichment = async (user: any) => {
+console.log('RUNNING StatEnrichment')
 
+     /**
+     *
+     * Environment Variables/Resources & Database Tables
+     *
+     */
+
+    const log = makeLogger({
+        handler: 'onPlayUpdateAchievements',
+        awsEvent: 'ddbs'
+    })
+    const env: any = verifyEnv(
+        {
+            DYNAMO_ENDPOINT: process.env.DYNAMO_ENDPOINT,
+            TABLE_ACHIEVEMENT: process.env.TABLE_ACHIEVEMENT,
+            TABLE_STAT: process.env.TABLE_STAT,
+            TABLE_USER: process.env.TABLE_USER
+        },
+        log
+    )
+    const tableAchievement: any = TableAchievement(
+        env.DYNAMO_ENDPOINT,
+        env.TABLE_ACHIEVEMENT
+    )
+    const tableStat: any = TableStat(
+        env.DYNAMO_ENDPOINT,
+        env.TABLE_STAT
+    )
+    const tableUser: any = TableUser(env.DYNAMO_ENDPOINT, env.TABLE_USER)
+
+    // @ts-ignore
+    const now: any = user ? localizedMoment(user.utcOffset, moment()) : localizedMoment(0, moment())
+    const data: any = tableStat.periodsFor(localizedISOString(now))
+
+    // Fucking Extract This
+    const { uid } = user
+    const topArtists = await Promise.all(Object.keys(data).map(async (periodType: any) => {
+        const periodValue = data[periodType]
+        const Limit = 20
+        return await tableStat.getTopArtists({ uid, periodType: periodType, periodValue: periodValue, Limit })
+
+    }))
+        .then(res => res.flat())
+        .then(res => res.map(({ artist }) => artist))
+
+    const unique = Array.from(new Set(topArtists.map(a => a.id))).map(id => topArtists.find(a => a.id === id))
+    const recordsToUpdate = await Promise.all(unique.map(async (artist: any) => {
+        const artistRecordsToUpdate = await tableStat.findRecordsWithoutArtistAchievementId(uid, artist.id)
+        console.log('TCL: StatEnrichment -> artistRecordsToUpdate', artistRecordsToUpdate)
+
+        // TODO(1): no data is being returned from artistRecordsToUpdate locally BUT the next step is to iterate through (Promise.all) and extract the {pk, sk} from the record, create the appropriate artistAchievementsId and proceed to update the record by setting the artistAchievementsId, using the new tableStats function updateArtistStatWithArtistAchievementsId ... fairly straightforward? 
+            // TODO(1A): Need an extract periodType and periodValue function from the pk/sk (to create the artistAchievementsId)
+        
+        
+    })) 
+
+
+    // TODO(1): Iterate through top artists and create user oriented Stat pks and the analogous user + artist oriented sks, return those {pk, sk} in an array
+    // TODO(2): Loop through the array and request that record from the Stat table:
+        // TODO(2A) - If the record
+
+}
