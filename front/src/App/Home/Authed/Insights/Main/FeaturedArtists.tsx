@@ -72,24 +72,24 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: 'Ready',
-    hover: '4,182 monthly streamers on Spotify',
-    name: 'Junaco',
-    href: 'https://open.spotify.com/artist/6Q3I3yOdG7MhwX6BCWiu0e?si=vxABANyDRR-OQTmyAGV0vQ',
-    src: 'https://culturecollide.com/app/uploads/2019/03/featured-2.jpg'
+    hover: '446 monthly streamers on Spotify',
+    name: 'Duefunk',
+    href: 'https://open.spotify.com/artist/2RCWTrSBOb7l05ItPkdzTZ',
+    src: 'https://s3.amazonaws.com/bit-photos/large/9083503.jpeg'
   },
   {
     title: 'Set',
-    hover: '143,853 monthly streamers on Spotify',
-    name: 'Yola',
-    href: 'https://open.spotify.com/artist/2gqMBdyddvN82dzZt4ZF14?si=FkxJF8q3RdKqkLbtyeKEDw',
-    src: 'https://www.nonesuch.com/sites/g/files/g2000005811/f/styles/artist_banner__1180_x_480_/public/201901/yola-header.jpg?itok=AiiClMVX'
+    hover: '143,449 monthly streamers on Spotify',
+    name: 'Louis Cole',
+    href: 'https://open.spotify.com/artist/6uIst176jhzooPMetg2rtH',
+    src: 'https://image-ticketfly.imgix.net/00/02/94/97/06-og.jpg?w=500&h=666'
   },
   {
     title: 'Liftoff',
-    hover: '479,423 monthly streamers on Spotify',
-    name: 'Jadu Heart',
-    href: 'https://open.spotify.com/artist/7vjRpVXoecwKTEsrb9iscj?si=YQqxTj-bRmKVuBPN_rwbig',
-    src: 'https://www.clashmusic.com/sites/default/files/field/image/a777f4a4-287d-4764-8e2e-06af6e4419ed_1523577600.png'
+    hover: '2,201,249 monthly streamers on Spotify',
+    name: 'Snoh Aalegra',
+    href: 'https://open.spotify.com/artist/1A9o3Ljt67pFZ89YtPPL5X',
+    src: 'https://i.ytimg.com/vi/ut8zKDIT0f8/maxresdefault.jpg'
   },
 ]
 
