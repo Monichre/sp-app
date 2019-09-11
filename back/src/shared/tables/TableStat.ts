@@ -163,7 +163,7 @@ export type TTableStat = {
 	getTopArtists: (topKeys: ArtistAglTopKeys) => Promise<TopArtistsRow[]>
 	getArtistStat: (artistStatKeys: ArtistStatKeys) => Promise<number>
 	findRecordsWithoutArtistAchievementId: (uid: string, artistId: string) => Promise<any[]> // Fix this its lazy
-	updateArtistStatWithArtistAchievementsId: (pk: any, sk: any, artistAchievementsId: any) => Promise<any[]> // Fix this its lazy
+	updateArtistStatWithArtistAchievementsId: ({pk, sk, artistAchievementsId}: any) => Promise<any> // Fix this its lazy
 	getArtistTopListeners: (artistAchievementsId: string) => Promise<StatRecordTopListenerDataWithUserId[]>
 	writeTotalStat: (
 		stat: StatTotal
@@ -342,6 +342,7 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 		.promise()
 			.then(res => {
 				console.log('findRecordsWithoutArtistAchievementId results: ', res)
+				
 				return res.Items
 			})
 		
@@ -480,7 +481,7 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 			.promise()
 	}
 
-	const updateArtistStatWithArtistAchievementsId= async ({ pk, sk, artistAchievementsId }) => {
+	const updateArtistStatWithArtistAchievementsId = async ({ pk, sk, artistAchievementsId }) => {
 		return await doc
 			.update({
 				TableName,

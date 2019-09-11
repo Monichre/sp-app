@@ -9,7 +9,7 @@ import {
 import { TableUser } from '../../../shared/tables/TableUser'
 import * as moment from 'moment'
 import { QueueStartHarvestUser } from '../../../shared/queues'
-import {AchievementEnrichment, StatEnrichment} from '../../agl/functions'
+import { AchievementEnrichment, StatEnrichment } from '../../agl/functions'
 
 const typeDefs = `
 type Query {
@@ -94,6 +94,7 @@ type UserInfoResponse {
   displayName: String
   photoURL: String
   initialHarvestComplete: Boolean
+  statRecordsEnriched: Boolean
   
 }
 `
@@ -156,7 +157,7 @@ const getUserInfo: QueryResolvers.GetUserInfoResolver = async (
 
 const initialHarvestComplete: UserInfoResponseResolvers.InitialHarvestCompleteResolver = async (
 	userInfo,
-	{},
+	{ },
 	context
 ) => {
 	if (
@@ -170,13 +171,22 @@ const initialHarvestComplete: UserInfoResponseResolvers.InitialHarvestCompleteRe
 			uid: userInfo.uid
 		})
 
-		
+		const hasEnrichmentAttr = Object.keys(userInfo).includes('statRecordsEnriched')
+
+		// @ts-ignore
+		if (!hasEnrichmentAttr || hasEnrichmentAttr && !userInfo.statRecordsEnriched) {
+			console.log('USER HAS NOT HAD STAT RECORDS ENRICHED')
+			await StatEnrichment(userInfo)
+		}
+
+
 
 		// const {initialize} = AchievementEnrichment(userInfo)
 		// await initialize()
 	}
 
-	await StatEnrichment(userInfo)
+
+
 
 	// @ts-ignore
 	return isInitialHarvestComplete(userInfo)

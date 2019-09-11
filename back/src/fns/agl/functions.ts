@@ -121,13 +121,7 @@ export const AchievementEnrichment = (user: any) => {
 }
 
 export const StatEnrichment = async (user: any) => {
-console.log('RUNNING StatEnrichment')
-
-     /**
-     *
-     * Environment Variables/Resources & Database Tables
-     *
-     */
+    console.log('RUNNING StatEnrichment')
 
     const log = makeLogger({
         handler: 'onPlayUpdateAchievements',
@@ -168,19 +162,22 @@ console.log('RUNNING StatEnrichment')
         .then(res => res.map(({ artist }) => artist))
 
     const unique = Array.from(new Set(topArtists.map(a => a.id))).map(id => topArtists.find(a => a.id === id))
+
     const recordsToUpdate = await Promise.all(unique.map(async (artist: any) => {
         const artistRecordsToUpdate = await tableStat.findRecordsWithoutArtistAchievementId(uid, artist.id)
         console.log('TCL: StatEnrichment -> artistRecordsToUpdate', artistRecordsToUpdate)
 
         // TODO(1): no data is being returned from artistRecordsToUpdate locally BUT the next step is to iterate through (Promise.all) and extract the {pk, sk} from the record, create the appropriate artistAchievementsId and proceed to update the record by setting the artistAchievementsId, using the new tableStats function updateArtistStatWithArtistAchievementsId ... fairly straightforward? 
-            // TODO(1A): Need an extract periodType and periodValue function from the pk/sk (to create the artistAchievementsId)
-        
-        
-    })) 
+        // TODO(1A): Need an extract periodType and periodValue function from the pk/sk (to create the artistAchievementsId)
+
+
+    }))
+
+    return []
 
 
     // TODO(1): Iterate through top artists and create user oriented Stat pks and the analogous user + artist oriented sks, return those {pk, sk} in an array
     // TODO(2): Loop through the array and request that record from the Stat table:
-        // TODO(2A) - If the record
+    // TODO(2A) - If the record
 
 }
