@@ -3,13 +3,13 @@ import * as moment from 'moment'
 /*=============================================
 	=            NOTES ON KEYS            =
 
-	ak: AchievementType#AchievementValue#RelationType#RelationTypeId#PeriodType#PeriodValue. Ex: topListener#first#artist#4c2Fb5kfVRzodXZvitxnWk#month#2019-08
+	ak: Perspective#AchievementType#AchievementValue#RelationType#RelationTypeId#PeriodType#PeriodValue. Ex: topListener#first#artist#4c2Fb5kfVRzodXZvitxnWk#month#2019-08
 
-	pk: AchievementType#AchievementValue#RelationType#RelationId#PeriodType#PeriodValue. Ex: topListener#first#artist#month#2019-08
+	pk: Perspective#AchievementType#AchievementValue#RelationType#RelationId#PeriodType#PeriodValue. Ex: topListener#first#artist#month#2019-08
 
-	uk: UserId#AchievementType#AchievementValue#RelationType#PeriodType#PeriodValue. Ex: spotify:124053034#topListener#first#artist#month#2019-08
+	uk: Perspective#UserId#AchievementType#AchievementValue#RelationType#PeriodType#PeriodValue. Ex: spotify:124053034#topListener#first#artist#month#2019-08
 	
-	auk: ArtistId#PeriodType#PeriodValue#RelationType(User)#RelationTypeId. Ex: 4c2Fb5kfVRzodXZvitxnWk#month#2019-08#user#spotify:124053034
+	auk: Perspective#ArtistId#PeriodType#PeriodValue#RelationType(User)#RelationTypeId. Ex: 4c2Fb5kfVRzodXZvitxnWk#month#2019-08#user#spotify:124053034
 	
 
 =============================================*/

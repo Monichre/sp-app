@@ -153,7 +153,8 @@ export type TTableStat = {
 		moy: string
 		year: string
 		life: string
-	}
+		}
+		
 	getTimeseries: (timeseriesKeys: TimeseriesKeys) => Promise<Timeseries[]>
 	getStat: (statKeys: StatKeys) => Promise<number>
 	getTopGenres: (topKeys: TopKeys) => Promise<TopGenreRow[]>
@@ -161,8 +162,9 @@ export type TTableStat = {
 	getArtistInfo: (artistId: string) => Promise<Artist>
 	getTopArtists: (topKeys: ArtistAglTopKeys) => Promise<TopArtistsRow[]>
 	getArtistStat: (artistStatKeys: ArtistStatKeys) => Promise<number>
+	findRecordsWithoutArtistAchievementId: (uid: string, artistId: string) => Promise<any[]> // Fix this its lazy
+	updateArtistStatWithArtistAchievementsId: ({pk, sk, artistAchievementsId}: any) => Promise<any> // Fix this its lazy
 	getArtistTopListeners: (artistAchievementsId: string) => Promise<StatRecordTopListenerDataWithUserId[]>
-	// getArtistAchievementHolders: (args: any) => any
 	writeTotalStat: (
 		stat: StatTotal
 	) => Promise<PromiseResult<UpdateItemOutput, AWSError>>
@@ -325,6 +327,28 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 		return topListeners
 	}
 
+	const findRecordsWithoutArtistAchievementId = async (uid: string, artistId: string) => {
+		const params = {
+			TableName,
+			FilterExpression: "attribute_not_exists(artistAchievementsId) AND contains(pk, :userId) AND contains(sk, :artistId)",
+			ExpressionAttributeValues: {
+				':userId': uid,
+				':artistId': artistId
+			}
+		}
+
+		const results: any = await doc
+		.scan(params)
+		.promise()
+			.then(res => {
+				console.log('findRecordsWithoutArtistAchievementId results: ', res)
+				
+				return res.Items
+			})
+		
+		return results
+	}
+
 	const getGenreStat = async ({
 		uid,
 		genre,
@@ -457,6 +481,20 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 			.promise()
 	}
 
+	const updateArtistStatWithArtistAchievementsId = async ({ pk, sk, artistAchievementsId }) => {
+		return await doc
+			.update({
+				TableName,
+				Key: {
+					pk,
+					sk
+				},
+				UpdateExpression: 'SET artistAchievementsId = :id',
+				ExpressionAttributeValues: { ':id': artistAchievementsId }
+			})
+			.promise()
+	}
+
 	const writeGenreStat = async ({
 		uid,
 		relationType,
@@ -485,6 +523,8 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 		periodsFor,
 		getTimeseries,
 		getArtistTopListeners,
+		findRecordsWithoutArtistAchievementId,
+		updateArtistStatWithArtistAchievementsId,
 		getStat,
 		getTopGenres,
 		getGenreStat,
