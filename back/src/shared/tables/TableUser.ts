@@ -96,7 +96,8 @@ export const TableUser = (endpoint: string, TableName: string, log?: TLogger) =>
     const UpdateExpression = 'SET ' + nonNullKeys.map(k => `${k} = :${k}`).join(', ')
     const nonNullObj: object = R.pickAll(nonNullKeys, obj)
     const ExpressionAttributeValues = renameKeysWith(k => `:${k}`, nonNullObj)
-    await doc.update({
+
+    return await doc.update({
       TableName,
       Key: { pk: uid, sk: 'spotify' },
       UpdateExpression,

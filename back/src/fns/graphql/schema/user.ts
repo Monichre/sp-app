@@ -179,10 +179,8 @@ const initialHarvestComplete: UserInfoResponseResolvers.InitialHarvestCompleteRe
 			await StatEnrichment(userInfo)
 		}
 
-
-
-		// const {initialize} = AchievementEnrichment(userInfo)
-		// await initialize()
+		const {initialize} = AchievementEnrichment(userInfo)
+		await initialize()
 	}
 
 
