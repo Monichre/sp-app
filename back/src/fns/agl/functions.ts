@@ -198,9 +198,9 @@ export const StatEnrichment = async (user: any) => {
     }))
 
     const updatedUserData = {
-        statRecordsEnrichedWithAAID: true
+        statRecordsEnriched: true
     }
-    const updatedUser = Object.assign({updatedUserData}, user)
+    const updatedUser = Object.assign(updatedUserData, user)
 
     await tableUser.updateUser(updatedUser)
 
