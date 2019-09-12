@@ -163,21 +163,54 @@ export const StatEnrichment = async (user: any) => {
 
     const unique = Array.from(new Set(topArtists.map(a => a.id))).map(id => topArtists.find(a => a.id === id))
 
-    const recordsToUpdate = await Promise.all(unique.map(async (artist: any) => {
+    const enrichedStatRecords = await Promise.all(unique.map(async (artist: any) => {
+
+        const artistWithUpdatedRecords = Object.assign({}, artist)
+        const { id: artistId } = artistWithUpdatedRecords
         const artistRecordsToUpdate = await tableStat.findRecordsWithoutArtistAchievementId(uid, artist.id)
+
+
         console.log('TCL: StatEnrichment -> artistRecordsToUpdate', artistRecordsToUpdate)
 
-        // TODO(1): no data is being returned from artistRecordsToUpdate locally BUT the next step is to iterate through (Promise.all) and extract the {pk, sk} from the record, create the appropriate artistAchievementsId and proceed to update the record by setting the artistAchievementsId, using the new tableStats function updateArtistStatWithArtistAchievementsId ... fairly straightforward? 
-        // TODO(1A): Need an extract periodType and periodValue function from the pk/sk (to create the artistAchievementsId)
+        const updatedRecords = await Promise.all(artistRecordsToUpdate.map(async (recordToUpdate: any) => {
+
+            if(recordToUpdate) {
+                
+            // 1. pk will either start with 'global' or a userId like 'spotify:123..'
+            const {pk, sk, playDurationMs} = recordToUpdate
+            const split = pk.split('#')
+            const periodValue = split.pop() // end of array, .pop returns the last item in the array 'periodValue, ex: 2019-37' and transforms the array and its length...
+            const periodType = split.pop() // ...meaning this next pop will return the new item at the end of the array, 'periodType, ex: month'
+            const artistAchievementsId = `${artistId}#${periodType}#${periodValue}#user`
+
+            const updatedRecord = await tableStat.updateArtistStatWithArtistAchievementsId({pk, sk, artistAchievementsId})
+
+            console.log('updatedRecord', updatedRecord)
+
+            return updatedRecord
+
+            }
+
+            return updatedRecords
+        }))
 
 
     }))
 
-    return []
+    const updatedUserData = {
+        statRecordsEnrichedWithAAID: true
+    }
+
+    const updatedUser = Object.assign({updatedUserData}, user)
+
+    await tableUser.updateUser(updatedUser)
 
 
-    // TODO(1): Iterate through top artists and create user oriented Stat pks and the analogous user + artist oriented sks, return those {pk, sk} in an array
-    // TODO(2): Loop through the array and request that record from the Stat table:
-    // TODO(2A) - If the record
+    
+
+    return {
+        updatedUser,
+        enrichedStatRecords
+    }
 
 }
