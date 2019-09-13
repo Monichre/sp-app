@@ -8,22 +8,22 @@ import { LogoHorizontal } from '../../../shared/Logo';
 import { UserAchievementsList } from '../../Components/UserAchievementsList'
 import { suspensefulHook } from '../../../lib/suspensefulHook';
 import Moment from 'react-moment';
-import { AvatarBg } from '../../Components/Elements';
+
 import { UserAchievementContext } from './Authed';
 
-
+export const NavLabel: any = styled.div`
+padding: 10px;
+`
 
 
 export const NavMenuView = styled.div`
 background-color: #030616;
 z-index: 20;
-}
 `
 
-const NavLabel = styled.div`
-`
 
-const NavPrimaryLink = styled(NavLink)`
+
+export const NavPrimaryLink = styled(NavLink)`
 text-decoration: none;
 &:hover {
   color: ${BRAND_COLOR};
@@ -43,7 +43,7 @@ text-decoration: none;
 ${largeQuery`
   text-align: right;
   width: 100%;
-  padding: 1.5rem 2rem;
+  padding: .5rem;
   font-size: 1.25rem;
   flex-direction: row-reverse;
   align-items: center;
@@ -114,11 +114,6 @@ background-color: #AAA;
 color: #030616;
 `
 
-const AvatarLink = styled(NavPrimaryLink)`
-        border-top: 1px solid rgba(255,255,255,.1);
-    border-bottom: 1px solid rgba(255,255,255,.1);
-    background-color: rgba(216,216,216,.05);
-`
 
 const HarvestingNotice: React.SFC = () =>
   <HarvestingNoticeDiv>
@@ -133,7 +128,7 @@ export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: s
   // State
   const [topArtistByPeriodData, setTopArtistByPeriodData] = useState(false)
 
-  
+
   // Vars 
   const { uid } = user
   const { history, match } = rest
@@ -163,7 +158,7 @@ export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: s
   console.log('TCL: artists', artists)
 
 
-  const { getTopArtistAchievementHolders = null }: any = (artists && artists.length) ? suspensefulHook(useGetTopArtistAchievementHolders({ variables: { perspectiveUID: 'global', artistIds: artists.map((artist: any) => artist.id) }, suspend: true, })) : {getTopArtistAchievementHolders: null}
+  const { getTopArtistAchievementHolders = null }: any = (artists && artists.length) ? suspensefulHook(useGetTopArtistAchievementHolders({ variables: { perspectiveUID: 'global', artistIds: artists.map((artist: any) => artist.id) }, suspend: true, })) : { getTopArtistAchievementHolders: null }
 
   const ahWithArtist = getTopArtistAchievementHolders ? getTopArtistAchievementHolders.map(({ artistId, achievementHolders }: any) => ({ achievementHolders, artist: artists.find((artist: any) => artist.id === artistId) })) : null
   console.log('TCL: ahWithArtist', ahWithArtist)
@@ -178,10 +173,6 @@ export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: s
 
   return (
     <NavMenuView>
-      <AvatarLink to='#'>
-        <AvatarBg sideNav={true} src={user.photoURL ? user.photoURL : '/icons/headphones.svg'} />
-        <NavLabel>{user.displayName ? user.displayName : user.email}</NavLabel>
-      </AvatarLink>
       <NavPrimaryLink to='/insights'>
         <LineChart color='white' />
         <NavLabel>Insights</NavLabel>

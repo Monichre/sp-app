@@ -75,7 +75,8 @@ const AuthedView = styled.div`
   position: relative;
 
   ${largeQuery`
-    padding-left: ${SIDEBAR_WIDTH}px;
+    // padding-left: ${SIDEBAR_WIDTH}px;
+    padding-left: 185px;
   `}
   ${NavMenuView} {
     position: fixed;

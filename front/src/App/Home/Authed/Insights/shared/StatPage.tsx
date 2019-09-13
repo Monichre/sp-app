@@ -11,6 +11,7 @@ import { Container } from '../../../../../shared/ui';
 import { Flex, Box } from 'rebass';
 import { MenuIcon } from '../../../../../shared/icons';
 import { UserAchievementContext } from '../../Authed';
+import { AppBar } from '../../../../Components/AppBar';
 
 
 type InsightsStatsTimescope = InsightsStatsToday | InsightsStatsThisWeek | InsightsStatsThisMonth | InsightsStatsLifetime
@@ -60,6 +61,7 @@ const navOptions: TNavOption[]  = [
 
 const FullHeight = styled.div`
 min-height: 100vh;
+width: 85vw;
 `
 
 const NavTabView = styled.div`
@@ -111,16 +113,13 @@ export type Stats = InsightsStatsInsightsStats | InsightsArtistStatsInsightsArti
 export const StatPage: React.SFC<{stats: Stats, path: string, pathParams: TPathParams, history: History}> =
   ({ stats, history, path, pathParams, children }) => {
   
-    const { isOpen, setSideBarOpen }: any = React.useContext(UserAchievementContext)
+    
     const navTo = (path: string) => history.push(path)
 
   return (
     <FullHeight>
+      <AppBar />
       <Large>
-        <Flex justifyContent='space-between' pt={10}>
-          <Box></Box>
-          <Box style={{cursor: 'pointer'}} onClick={() => setSideBarOpen((isOpen: any) => !isOpen)}><MenuIcon /></Box>
-        </Flex>
         <NavTabs {...{pathParams, stats}}/>
       </Large>
       <NotLarge>

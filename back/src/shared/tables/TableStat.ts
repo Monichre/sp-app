@@ -153,8 +153,8 @@ export type TTableStat = {
 		moy: string
 		year: string
 		life: string
-		}
-		
+	}
+
 	getTimeseries: (timeseriesKeys: TimeseriesKeys) => Promise<Timeseries[]>
 	getStat: (statKeys: StatKeys) => Promise<number>
 	getTopGenres: (topKeys: TopKeys) => Promise<TopGenreRow[]>
@@ -163,7 +163,7 @@ export type TTableStat = {
 	getTopArtists: (topKeys: ArtistAglTopKeys) => Promise<TopArtistsRow[]>
 	getArtistStat: (artistStatKeys: ArtistStatKeys) => Promise<number>
 	findRecordsWithoutArtistAchievementId: (uid: string, artistId: string) => Promise<any[]> // Fix this its lazy
-	updateArtistStatWithArtistAchievementsId: ({pk, sk, artistAchievementsId}: any) => Promise<any> // Fix this its lazy
+	updateArtistStatWithArtistAchievementsId: ({ artist, sk, pk, playDurationMs, artistAchievementsId }: any) => Promise<any> // Fix this its lazy
 	getArtistTopListeners: (artistAchievementsId: string) => Promise<StatRecordTopListenerDataWithUserId[]>
 	writeTotalStat: (
 		stat: StatTotal
@@ -338,14 +338,14 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 		}
 
 		const results: any = await doc
-		.scan(params)
-		.promise()
+			.scan(params)
+			.promise()
 			.then(res => {
 				console.log('findRecordsWithoutArtistAchievementId results: ', res)
-				
+
 				return res.Items
 			})
-		
+
 		return results
 	}
 
@@ -386,7 +386,7 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 		periodValue,
 		Limit = 5
 	}: ArtistAglTopKeys) => {
-	
+
 		const statParams = {
 			TableName,
 			Limit,
@@ -397,7 +397,7 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 				':pk': [uid, 'artist', periodType, periodValue].join('#')
 			}
 		}
-		
+
 		const artists = await doc
 			.query(statParams)
 			.promise()
@@ -481,17 +481,26 @@ export const TableStat = (endpoint: string, TableName: string): TTableStat => {
 			.promise()
 	}
 
-	const updateArtistStatWithArtistAchievementsId = async ({ pk, sk, artistAchievementsId }) => {
+	const butFirstDeleteIt = async (params) => await doc.delete(params)
+
+	const updateArtistStatWithArtistAchievementsId = async ({ artist, sk, pk, playDurationMs, artistAchievementsId }) => {
+		console.log('Running updateArtistStatWithArtistAchievementsId')
+		const params: any = {
+			TableName,
+			Key: {
+				pk,
+				sk,
+				playDurationMs,
+				artistAchievementsId
+			}
+		}
+
+		const condition = {ConditionExpression: 'attribute_not_exists(artistAchievementsId)'}
+
+		await butFirstDeleteIt({...params, ...condition})
+
 		return await doc
-			.update({
-				TableName,
-				Key: {
-					pk,
-					sk
-				},
-				UpdateExpression: 'SET artistAchievementsId = :id',
-				ExpressionAttributeValues: { ':id': artistAchievementsId }
-			})
+			.put({...params, artist})
 			.promise()
 	}
 

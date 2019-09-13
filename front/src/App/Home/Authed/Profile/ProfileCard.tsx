@@ -21,6 +21,7 @@ PanelWrapper,
 Description,
 } from './ProfileCardStyles'
 import { Button, GradientButtonFilled } from '../../../../shared/ui';
+import { SpotifyLogoLink } from '../../../../shared/SpotifyLogoLink/SpotifyLogoLink';
 
 export interface ProfileCardProps {
     user: any
@@ -28,6 +29,7 @@ export interface ProfileCardProps {
  
 export const ProfileCard: React.SFC<ProfileCardProps> = ({ user }) => {
     const spotifyURL= `https://open.spotify.com/user/${user.uid.split(':')[1]}`
+    console.log('TCL: spotifyURL', spotifyURL)
     return ( 
         <ProfileBackground>
             <CardWrapper>
@@ -38,7 +40,9 @@ export const ProfileCard: React.SFC<ProfileCardProps> = ({ user }) => {
                         <Photo>{user.photoURL ? <img src={user.photoURL} /> : <UserHeadphonesAvatar />}</Photo>
                     </PhotoWrapper>
                     <SubtitleWrapper>
-                    
+                        <h4 style={{color: 'white'}}>Listen on Spotify</h4>
+                    <SpotifyLogoLink
+                                href={spotifyURL} />
 
                     </SubtitleWrapper>
                     <ButtonsWrapper>
@@ -51,9 +55,7 @@ export const ProfileCard: React.SFC<ProfileCardProps> = ({ user }) => {
 
                     </PanelWrapper>
                     <PanelWrapper>
-                    <GradientButtonFilled>
-                            <a href={spotifyURL}>SPOTIFY</a>
-                        </GradientButtonFilled>
+                    
                     </PanelWrapper>
                 </RightWrapper>
             </CardWrapper>

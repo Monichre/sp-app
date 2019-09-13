@@ -8,7 +8,7 @@ import { Genre } from './Genre';
 
 /**
  *
- * cc: Insights Component; Uses routing to configure which insights are queried...
+ * // cc: Insights Component; Uses routing to configure which insights are queried...
  *
  */
 
@@ -18,7 +18,6 @@ export const Insights: React.SFC<RouteComponentProps<TPathParams> & { uid: strin
   const focus = pathname.split('/').slice(5,99).join('/')
   const pathParams = { focus, ...params }
 
-  console.log('TCL: pathParams', pathParams)
     useEffect(() => {
 
       //@ts-ignore

@@ -177,13 +177,13 @@ export const StatEnrichment = async (user: any) => {
             if(recordToUpdate) {
                 
             // 1. pk will either start with 'global' or a userId like 'spotify:123..'
-            const {pk, sk, playDurationMs} = recordToUpdate
+            const { pk } = recordToUpdate
             const split = pk.split('#')
             const periodValue = split.pop() // end of array, .pop returns the last item in the array 'periodValue, ex: 2019-37' and transforms the array and its length...
             const periodType = split.pop() // ...meaning this next pop will return the new item at the end of the array, 'periodType, ex: month'
             const artistAchievementsId = `${artistId}#${periodType}#${periodValue}#user`
 
-            const updatedRecord = await tableStat.updateArtistStatWithArtistAchievementsId({pk, sk, artistAchievementsId})
+            const updatedRecord = await tableStat.updateArtistStatWithArtistAchievementsId({...recordToUpdate, artistAchievementsId})
 
             console.log('updatedRecord', updatedRecord)
 
