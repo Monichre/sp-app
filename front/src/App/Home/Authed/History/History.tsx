@@ -22,7 +22,7 @@ const Note = styled.div`
 
 const HistoryGrid = styled.div`
   display: grid;
-  margin: 2rem 1rem;
+  margin: auto;
   // margin-top: 2rem;
   // align-items: center;
   max-width: 760px;

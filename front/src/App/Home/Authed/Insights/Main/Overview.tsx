@@ -13,7 +13,10 @@ import { suspensefulHook } from '../../../../../lib/suspensefulHook';
 import { FeaturedArtists } from './FeaturedArtists';
 import ReactTooltip from 'react-tooltip'
 import { AchievementHoverSummary } from '../../../../Components/AchievementHoverSummary.tsx';
-import { UserAchievementContext } from '../../Authed';
+import { Tooltip } from 'antd';
+import 'antd/es/tooltip/style/css'
+import { Box } from 'rebass';
+
 
 
 
@@ -75,52 +78,67 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
 
   const genreContentSummary = `We're currently building out new features for platform genre leaders`
 
-  const artistContentSummary = `Introducing our new platform artist leaders. These achievements are for those Soundpruf users who have streamed the most of any given artist. View Your Achievements per time perspective by clicking the links to the left. Full achievement data can be found in the information sidebar that slides out. We will soon be introducing our rewards program so that you can turn these achievements into discounts on merchandise and additional exclusive offers.`
+  const artistContentSummary = `Introducing "Artist Leaders!" Think you're probably the biggest listener on Soundpruf to Tyler, The Creator? Or Lizzo? Maybe Yam Haus? Now you can prove it. If you are currently in 1st, 2nd or 3rd place for lifetime listening for an artist, you'll now see a badge indicating that to the right of the artist names in all Top lists. If you don't have a lifetime leader badge for that artist, you can see who does! You can also view your achievements per time perspective, including week and month, by clicking the links to the left and exploring the slide-out panel. Just remember, you never know when you might lose first place!`
 
 
   console.count('Overview Render: ')
 
   const artistCount = artists.length === 3 ? 3 : null
 
-  
+
 
   return <>
-    <TimeseriesChart {...{ timeSeries, showOnly: pathParams.perspective }} />
     <Row>
       <AchievementHoverSummary content={artistContentSummary} userId={uid} achievementsGraph period={period}>
-        <SeeAllLink to={`${insightLink(pathParams)}/artists`}>
-          <SeeAllLinkInner>
-            <SeeAllIcon />
-          </SeeAllLinkInner>
-        </SeeAllLink>
+        <Tooltip title="See All" placement="topRight">
+          <SeeAllLink to={`${insightLink(pathParams)}/artists`}>
+            <SeeAllLinkInner>
+              <SeeAllIcon />
+            </SeeAllLinkInner>
+          </SeeAllLink>
 
-        <ArtistsChartBlock {...{ artists, pathParams }} userId={uid}>
-          <BlockTitle>
-            {translatedPerspective} Top {artistCount} Artists {period}
-          </BlockTitle>
-        </ArtistsChartBlock>
+
+          <ArtistsChartBlock {...{ artists, pathParams }} userId={uid}>
+            <BlockTitle>
+              {translatedPerspective} Top {artistCount} Artists {period}
+            </BlockTitle>
+          </ArtistsChartBlock>
+        </Tooltip>
       </AchievementHoverSummary>
 
 
-      <AchievementHoverSummary content={genreContentSummary} userId={uid}>
-        <SeeAllLink to={`${insightLink(pathParams)}/genres`}>
-          <SeeAllLinkInner>
-            <SeeAllIcon />
-          </SeeAllLinkInner>
-        </SeeAllLink>
-
-        <GenresChartBlock {...{ genres, pathParams }}>
-          <BlockTitle>Top Genres</BlockTitle>
-        </GenresChartBlock>
+      <AchievementHoverSummary genres content={genreContentSummary} userId={uid}>
+        <Tooltip title="See All" placement="topRight">
+          <SeeAllLink to={`${insightLink(pathParams)}/genres`}>
+            <SeeAllLinkInner>
+              <SeeAllIcon />
+            </SeeAllLinkInner>
+          </SeeAllLink>
+          <GenresChartBlock {...{ genres, pathParams }}>
+            <BlockTitle>Top Genres</BlockTitle>
+          </GenresChartBlock>
+        </Tooltip>
       </AchievementHoverSummary>
-
     </Row>
-    <Row>
+    <Box style={{
+      backgroundColor: 'rgba(216,216,216,.015)', borderRadius: '12px',
+      padding: '2em',
+      margin: '30px'
+    }}>
+      <TimeseriesChart {...{ timeSeries, showOnly: pathParams.perspective }} />
+    </Box>
+    <Box style={{
+      backgroundColor: 'rgba(216,216,216,.015)', borderRadius: '12px',
+      padding: '2em',
+      margin: '30px'
+    }}>
       <BlockTitle>Emerging Artists: Staff Picks</BlockTitle>
-    </Row>
-    <Row>
-      <FeaturedArtists />
-    </Row>
+
+      <Row>
+        <FeaturedArtists />
+      </Row>
+    </Box>
+
     <VerticalSpacer height='100px' />
     <ReactTooltip place="top" type="dark" effect="float" />
   </>

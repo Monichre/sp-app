@@ -15,14 +15,15 @@ export interface AchievementHoverSummaryProps {
     content: string
     achievementsGraph?: boolean
     period?: string
+    genres?: Boolean
 
 }
 
-export const AchievementHoverSummary: React.SFC<AchievementHoverSummaryProps> = ({ children, userId, achievementsGraph=false, content , period}) => {
+export const AchievementHoverSummary: React.SFC<AchievementHoverSummaryProps> = ({ children, userId, genres=false, achievementsGraph=false, content , period}) => {
     return (
 
 
-        <HoverBoxWrapper>
+        <HoverBoxWrapper genres={genres}>
             <BubbleAprox></BubbleAprox>
             <Bubble>
                 <BubbleIcon>i</BubbleIcon>

@@ -12,7 +12,7 @@ export const AlbumBackgroundDiv = styled.div<{src: string}>`
   position: absolute;
   height: ${bgSize}rem;
   width: ${bgSize}rem;
-  z-index: -1;
+  z-index: 0;
   background: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.4) ), url("${({src}) => src}");
   background-repeat: no-repeat;
   border-radius: 1rem;
@@ -25,6 +25,8 @@ export const ArtistAvatarDiv = styled.div<{src: string}>`
   border-radius: ${bgSize/2/2}rem;
   background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("${({src}) => src}");
   background-size: cover;
+  position: relative;
+  z-index: 1;
   `
 
 export const ArtistInfoDiv = styled.div`
@@ -32,6 +34,8 @@ export const ArtistInfoDiv = styled.div`
 export const ArtistNameDiv = styled.div`
   font-size: ${bgSize/12}rem;
   font-weight: 500;
+  position: relative;
+  z-index: 1;
 `
 
 export const ArtistNavLink = styled(NavLink)`
@@ -59,7 +63,8 @@ export const TrackDiv = styled.div`
 
 export const TrackNameDiv = styled.div`
   font-size: ${bgSize/10}rem;
-  font-weight; 500;
+  font-weight: 500;
+  color: #fff;
   max-width: ${bgSize}rem;
 `
 

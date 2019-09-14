@@ -1,8 +1,8 @@
-import React, { useContext, createContext, useReducer, useState, Reducer, SetStateAction, useCallback, useEffect } from 'react';
+import React, { useContext, createContext, useReducer, useState, Reducer, SetStateAction, useCallback, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components'
 import { Container } from '../../../shared/ui';
 import { List, Avatar, Icon, Drawer, Carousel, Alert } from 'antd';
-import { Box } from 'rebass';
+import { Box, Flex } from 'rebass';
 import { UserAchievementContext } from '../../Home/Authed/Authed';
 import { firstPlaceBadge, IconText, FlexDiv } from '../Elements'
 import { determineAchievementValueFromPK, AchievementMetaData } from '../UserAchievementsList/achievements-utils';
@@ -14,6 +14,7 @@ import 'antd/es/carousel/style/css'
 import 'antd/es/list/style/css'
 import 'antd/es/alert/style/css'
 import { badgeMap } from '../../Home/Authed/Insights/shared/ArtistsChart/TopListenerYAxis'
+import { ArrowNext, ArrowPrev } from '../../../shared/icons';
 
 const HoverIcon: any = styled.div`
    margin: 0 auto;
@@ -47,11 +48,10 @@ background-position: center center;
 background-size: cover;
 
 ${(props: any) => props.notLifeTimeAchievement && css`
-    height: 50px;
-    width: 50px;
-    border-radius: 50%;
+    height: 100px; 
+    width: 100px; 
     min-height: 50px;
-  
+    
 `}
 
 `
@@ -125,6 +125,25 @@ const HoverCard: any = styled.div`
    }
 `
 
+const CarouselWrap = styled.div`
+position: relative;
+`
+
+const ArrowMenu: any = styled.div`
+display: flex;
+justify-content: space-between;
+position: absolute;
+top: 10px;
+left: 50%;
+z-index: 2;
+width: 50%;
+
+${(props: any) => props.small && css`
+    padding: 0 60px;
+    top: 70px;
+`}
+`
+
 export interface NonPriortityAchievementListProps {
     achievements: AchievementMetaData[]
     title: string
@@ -146,10 +165,7 @@ const NonPriortityAchievementList: React.SFC<NonPriortityAchievementListProps> =
                     const { artistData: { artist: { id, images, name, topListeners }, personal }, achievement } = item
                     const formattedTotal = decimalToHrsMins(personal)
                     const place = determineAchievementValueFromPK(achievement)
-                    console.log('TCL: place', place)
                     const appropriateBadge = badgeMap[place]
-                    console.log('TCL: appropriateBadge', appropriateBadge)
-                    console.log('TCL: place', place)
 
                     return (
                         <List.Item
@@ -186,6 +202,9 @@ interface SideBarSectionProps {
     period: string
 }
 
+
+
+
 const SideBarSection: React.SFC<SideBarSectionProps> = ({ achievements, period, title, currentUser }) => {
 
     const achievementContext = [
@@ -193,6 +212,19 @@ const SideBarSection: React.SFC<SideBarSectionProps> = ({ achievements, period, 
     ]
     const [currentArtist, setCurrentArtist] = useState(achievements[0])
     const handleCarouselChange = (current: any) => setCurrentArtist(achievements[current])
+
+    const carouselRef: any = useRef()
+    console.log('TCL: carouselRef', carouselRef)
+    
+
+    const next = () => {
+        console.log('fucking clicking next')
+        carouselRef.current.next()
+    }
+    const prev = () => {
+        console.log('fucking clicking prev')
+        carouselRef.current.prev()
+    }
 
     const { artistData: { artist: { id, images, name, topListeners }, personal }, achievement } = currentArtist
     const formattedTotal = decimalToHrsMins(personal)
@@ -226,7 +258,13 @@ const SideBarSection: React.SFC<SideBarSectionProps> = ({ achievements, period, 
                             </IconText>
                         ]}
                         extra={
-                            <Carousel autoplay={period === 'life'} afterChange={handleCarouselChange}>
+                            <div>
+                                <ArrowMenu small={period !== 'life'}>
+                                    <ArrowPrev onClick={prev} />
+                                    <ArrowNext onClick={next} />
+                                </ArrowMenu>
+                                
+                                <Carousel afterChange={handleCarouselChange} ref={carouselRef}>
                                 {achievements.map((achievementData: AchievementMetaData) => {
                                     const { artistData, achievement }: any = achievementData
                                     console.log('TCL: achievement', achievement)
@@ -241,7 +279,7 @@ const SideBarSection: React.SFC<SideBarSectionProps> = ({ achievements, period, 
                                             <ArtistCarouselImage
                                                 notLifeTimeAchievement={period !== 'life'}
                                                 style={{
-                                                    margin: 'auto',
+                                                    margin: period !== 'life' ? '30px auto' : 'auto',
                                                     display: 'block'
                                                 }}
                                                 width={150}
@@ -254,6 +292,8 @@ const SideBarSection: React.SFC<SideBarSectionProps> = ({ achievements, period, 
                                 })}
 
                             </Carousel>
+
+                            </div>
 
                         }
                     >
@@ -285,7 +325,7 @@ export const SideBar: React.SFC<SideBarProps> = () => {
     } = React.useContext(UserAchievementContext)
     const { achievements, isOpen, setSideBarOpen, currentUser } = context
     const onClose = () => setSideBarOpen((isOpen: any) => !isOpen)
-    const description = `Congratulations ${currentUser.displayName}! You have earned the following achievements for these artists. We will soon be introducing our custom rewards platform where you can exchange your achievements for discounts on exclusive artist merchandise`
+    const description = `Congratulations ${currentUser.displayName}! You have earned the following achievements for these artists.`
 
     console.count('SideBar Render Count:')
 

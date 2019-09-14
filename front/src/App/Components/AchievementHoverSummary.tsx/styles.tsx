@@ -1,22 +1,9 @@
 
 import * as React from 'react';
-import styled, {css} from 'styled-components'
+import styled, { css } from 'styled-components'
 
 
-export const HoverBoxWrapper = styled.div`
-	margin: 7.5em auto;
-	
-	border-radius: 12px;
-	padding: 2em;
-	overflow: hidden;
-	position: relative;
-    background-color: rgba(216,216,216,.015);
-	
-	
-	
-	*:first-child { margin-top: 0; }
-	*:last-child { margin-bottom: 0; }
-`
+
 export const BubbleAprox = styled.div`
 	width: 3em;
 	height: 3em;
@@ -129,5 +116,37 @@ export const AchievementAxisTitle: any = styled.div`
 	${(props: any) => props.achievementsGraph && css`
 		display: flex;
 
+	`}
+`
+
+
+export const HoverBoxWrapper: any = styled.div`
+	margin: 3.5em auto;
+	
+	border-radius: 12px;
+	padding: 2em;
+	overflow: hidden;
+	position: relative;
+    background-color: rgba(216,216,216,.015);
+	
+	
+	
+	*:first-child { margin-top: 0; }
+	*:last-child { margin-bottom: 0; }
+
+
+	${(props: any) => props.genres && css`
+	${BubbleAprox} {
+	display: none;
+		}
+	${BubbleIcon} {
+	display: none;
+	}
+	${BubbleContent} {
+
+	}
+	${Bubble} {
+	display: none;
+	}
 	`}
 `
