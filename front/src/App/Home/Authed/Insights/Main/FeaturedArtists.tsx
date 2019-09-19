@@ -72,24 +72,24 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: 'Ready',
-    hover: '446 monthly streamers on Spotify',
-    name: 'Duefunk',
-    href: 'https://open.spotify.com/artist/2RCWTrSBOb7l05ItPkdzTZ',
-    src: 'https://s3.amazonaws.com/bit-photos/large/9083503.jpeg'
+    hover: '138 monthly streamers on Spotify',
+    name: 'White Line Darko',
+    href: 'https://open.spotify.com/artist/15SK9kKDJJjMuL8K3LbZiA?si=kgviYNHDS8CPJL3hZ7qgQg',
+    src: 'https://i1.sndcdn.com/avatars-000511287876-z9zsjt-t500x500.jpg'
   },
   {
     title: 'Set',
-    hover: '143,449 monthly streamers on Spotify',
-    name: 'Louis Cole',
-    href: 'https://open.spotify.com/artist/6uIst176jhzooPMetg2rtH',
-    src: 'https://image-ticketfly.imgix.net/00/02/94/97/06-og.jpg?w=500&h=666'
+    hover: '149,003 monthly streamers on Spotify',
+    name: 'Ages and Ages',
+    href: 'https://open.spotify.com/artist/3DozezNrsIE37kJJfHhS9M?si=n9O8yLvAQZa9urobuo5nUg',
+    src: 'https://image-ticketfly.imgix.net/00/02/63/92/76-og.jpg?w=1800&h=1200'
   },
   {
     title: 'Liftoff',
-    hover: '2,201,249 monthly streamers on Spotify',
-    name: 'Snoh Aalegra',
-    href: 'https://open.spotify.com/artist/1A9o3Ljt67pFZ89YtPPL5X',
-    src: 'https://i.ytimg.com/vi/ut8zKDIT0f8/maxresdefault.jpg'
+    hover: '1,102,301 monthly streamers on Spotify',
+    name: 'Day Glow',
+    href: 'https://open.spotify.com/artist/6eJa3zG1QZLRB3xgRuyxbm?si=jVK77x7HTNmUWnhftp596A',
+    src: 'https://images.squarespace-cdn.com/content/v1/5b788d28697a98e17a6d4c7a/1556684200148-FDN2UG17IZJOTJ5KGGXM/ke17ZwdGBToddI8pDm48kEJAlHRYD6ljLjXJc6sfS_l7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QHyNOqBUUEtDDsRWrJLTmoJKo7K7P-K3iDKcb1IjyB9Vx7SOI8VLWnAjJoiseqf2xOujC2Ne5NVJEGRfW4jXz/image4.jpg?format=750w'
   },
 ]
 
