@@ -8,7 +8,7 @@ const Blue = Color('#00bcdd')
 const Pink = Color('#ff00ff')
 const Slate = Color('rgb(16,24,50)')
 
-export const Button = styled.button`
+export const Button: any = styled.button`
 @mixin transition-all {
   -webkit-transition: all 200ms ease-in-out;
   -moz-transition: all 200ms ease-in-out;

@@ -17,7 +17,7 @@ export const NavLabel: any = styled.div`
 
 export const HeaderBar = styled.div`
   width: 100%;
-  padding: 0.85rem 1rem;
+  /* padding: 0.85rem 1rem; */
   background-color: rgba(216,216,216,.05);
 
   ${AvatarLink} {
@@ -28,5 +28,56 @@ export const HeaderBar = styled.div`
   ${AvatarBg} {
       position: relative!important;
       margin-right: 10px;
+  }
+
+  .ant-menu-horizontal {
+    background: transparent;
+    color: #fff;
+    border: none!important;
+    &.ant-menu-light.ant-menu-root.ant-menu-horizontal {
+      line-height: normal;
+    }
+
+    .ant-menu-item {
+      padding: 0.85rem 1rem;
+      &:hover, &.ant-menu-item-selected {
+        color: #64d6ee;
+        border-bottom: 2px solid #64d6ee;
+
+      }
+      &:nth-of-type(1) {
+        padding-left: 0;
+      }
+      /* display: flex; */
+      a {
+        margin-right: 5px;
+        font-size: 14px;
+        width: auto;
+        display: flex;
+        height: 24px;
+        width: 24px;
+        overflow: visible;
+        position: relative;
+        div {
+          font-size: 14px;
+        }
+        .sc-hzDkRC.ldGACO {
+          position: absolute!important;
+    margin-right: 10px;
+    height: 40px;
+    width: 40px;
+        }
+
+      }
+      .sc-iAyFgw.gPdKCG {
+        display: inline-block;
+        height: 24px;
+        margin-right: 5px;
+        width: 24px;
+      }
+      svg {
+        margin-right: 5px;
+      }
+    }
   }
 `

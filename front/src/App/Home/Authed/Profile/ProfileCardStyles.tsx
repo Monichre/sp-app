@@ -22,8 +22,8 @@ export const ProfileBackground = styled.div`
   background-color: rgba(216,216,216,.05);
   border-radius: 12px;
   box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.25);
-  width: 400px;
   height: 400px;
+  min-width: 600px;
   /* display: flex; */
   /* align-items: center; */
   /* justify-content: center; */
@@ -31,75 +31,63 @@ export const ProfileBackground = styled.div`
 
 export const CardWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
-
+  justify-content: flex-start;
   height: 100%;
-  /* width: 300px; */
-	/* height: 300px; */
-	/* background: white; */
-	/* box-shadow: 4px 8px 12px 0 rgba(0,0,0,0.3); */
   color: #fff;
   border-radius: 5px;
+
+  .ant-menu {
+    background: transparent;
+    color: #fff;
+    border: none!important;
+    &.ant-menu-light.ant-menu-root.ant-menu-horizontal {
+    
+    }
+
+    .ant-menu-item {
+      &:hover, &.ant-menu-item-selected {
+        color: #64d6ee;
+        border-bottom: 2px solid #64d6ee;
+
+      }
+      .sc-iAyFgw.gPdKCG {
+        display: inline-block;
+        height: 24px;
+        margin-right: 5px;
+        width: 24px;
+      }
+      svg {
+        margin-right: 5px;
+      }
+    }
+  }
 `
 
 export const LeftWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: space-between;
-  padding: 20px;
-  width: 100%;
-`
+  justify-content: flex-start;
+  padding: 10px;
+  width: 170px;
+  text-align: left;
+  border-right: 1px solid #64d6ee;
 
-export const PhotoWrapper = styled.div`
-  position: relative;
-
-  &:hover {
-      .circleOne {
-        transform: rotate(360deg);
-      }
-      .circleTwo {
-          transform: rotate(-360deg);
-      }
+  p {
+    text-align: left;
   }
-  
-`
 
-export const CircleOne = styled.div`
-  position: absolute;
-  width: 150px;
-  height: 150px;
-  top: -5px;
-  left: -5px;
-  border-radius: 50%;
-  border-width: 1px;
-  border-style: solid;
-  border-color:  #786450 #786450 #786450 transparent;
-  transition: all 1.5s ease-in-out;
-`
-
-
-
-export const CircleTwo = styled.div`
-  position: absolute;
-  width: 156px;
-  height: 156px;
-  top: -8px;
-  left: -8px;
-  border-radius: 50%;
-  border-width: 1px;
-  border-style: solid;
-  border-color: #786450 transparent #786450 #786450;
-  transition: all 1.5s ease-in-out;
 `
 
 
 
 export const Photo = styled.div`
  img {
-      width: 150px;
-  height: 150px;
-  border-radius: 50%;
+  width: 150px;
+  margin-bottom: 20px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 12px;
  }
 `
 
