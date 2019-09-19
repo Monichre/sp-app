@@ -58,15 +58,27 @@ export const HeaderBar = styled.div`
         width: 24px;
         overflow: visible;
         position: relative;
+        @media screen and (max-width: 1000px) {
+          width: auto;
+          height: auto;
+        }
         div {
           font-size: 14px;
         }
-        .sc-hzDkRC.ldGACO {
+        .sc-hzDkRC {
           position: absolute!important;
-    margin-right: 10px;
-    height: 40px;
-    width: 40px;
+          margin-right: 10px;
+          height: 40px;
+          width: 40px;
+          @media screen and (max-width: 1000px) {
+              position: relative!important;
+              height: 32px;
+              width: 32px;
+              top: 4px;
+            }
         }
+
+       
 
       }
       .sc-iAyFgw.gPdKCG {

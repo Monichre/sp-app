@@ -3,12 +3,17 @@ import styled from 'styled-components'
 import { RouteComponentProps } from 'react-router';
 import { ButtonSignout, Container } from '../../../../shared/ui';
 import { ProfileCard } from './ProfileCard';
-import {Flex, Box} from 'rebass'
+import { Flex, Box } from 'rebass'
 
 const Placement = styled.div`
 position: absolute;
 top: 30px;
 right: 30px;
+
+
+@media screen and (max-width: 1000px) {
+  position: static;
+}
 
 `
 
@@ -27,65 +32,24 @@ export const Profile: React.SFC<RouteComponentProps & { user: any }> = ({ user }
 
   return (
     <Container padded>
-        <Flex
-    sx={{
-      flexDirection: 'column',
-      minHeight: '100vh'
-    }}>
-    <Box
-      sx={{
-        display: 'grid',
-        flex: 1,
-        minHeight: '100vh',
-        gridTemplateAreas: [
-          '"long-box long-box" "left-box right-box" "wide-box wide-box"',
-          '"long-box long-box left-box right-box" "long-box long-box wide-box wide-box"'
-        ],
-        gridTemplateColumns: [
-          'repeat(2, 1fr)',
-          'repeat(4, 1fr)'
-        ],
-        gridTemplateRows: [
-          '2fr 1fr 1fr',
-          'none'
-        ],
-        gridGap: 20,
-        margin: 20
-      }}>
-      <Box
+      <Flex
+        flexWrap='wrap'
+        justifyContent='space-between'
         sx={{
-          flex: 1,
-          gridArea: 'long-box'
+          minHeight: '100vh'
         }}>
-        <ProfileCard user={user} />
-      </Box>
-      <Box
-        sx={{
-          flex: 1,
-          gridArea: 'left-box'
-        }}>
-        
-      </Box>
-      <Box
-        sx={{
-          flex: 1,
-          gridArea: 'right-box'
-        }}>
-        <Placement><ButtonSignout /></Placement>
-      </Box>
-      <Box
-        sx={{
-          flex: 1,
-          gridArea: 'wide-box'
-        }}>
-        
-      </Box>
-    </Box>
-  </Flex>
-  
+        <Box>
+          <ProfileCard user={user} />
+        </Box>
+        <Box>
+          <Placement><ButtonSignout /></Placement>
+        </Box>
+
+      </Flex>
+
     </Container>
-  
-  
+
+
   )
 }
-  
+

@@ -29,9 +29,15 @@ const HistoryGrid = styled.div`
   width: 100%;
   grid-template-columns: 1fr;
 
+  @media (max-width: 760px) {
+    grid-gap: 100px;
+  }
+
+
   @media (min-width: 760px) {
     background-image: linear-gradient(to right, rgba(0,0,0,0) 49.99%, rgba(100,214,238,1) 50%, rgba(0,0,0,0) 50.2%);
     background-position: 0 8rem;
+    
 
     & > *:nth-child(odd) > * {
       margin-bottom: -6rem;

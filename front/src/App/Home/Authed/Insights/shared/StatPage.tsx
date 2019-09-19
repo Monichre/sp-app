@@ -62,6 +62,13 @@ const navOptions: TNavOption[]  = [
 const FullHeight = styled.div`
 min-height: 100vh;
 width: 85vw;
+
+
+@media screen and (max-width: 1000px) {
+  width: auto;
+}
+
+
 `
 
 const NavTabView = styled.div`
@@ -118,15 +125,18 @@ export const StatPage: React.SFC<{stats: Stats, path: string, pathParams: TPathP
 
   return (
     <FullHeight>
-      <AppBar />
+      {/* <AppBar /> */}
       <Large>
         <NavTabs {...{pathParams, stats}}/>
       </Large>
       <NotLarge>
+        
         <NavSelect data-test='top-artists-period-select' onChange={e => navTo(e.target.value)} defaultValue={insightLink(pathParams)}>
           { navOptions.map(({label, addParams}, key) => <NavOption {...{key, label, pathParams: Object.assign({}, pathParams, addParams)}}/>) }
         </NavSelect>
-        <VerticalSpacer height='55px'/>
+        <VerticalSpacer height='55px' />
+        <AppBar />
+        <VerticalSpacer height='25px' />
         <TimeBlockPair {...{pathParams, stats: stats[pathParams.timeScope]}}/>
       </NotLarge>
       <Container>

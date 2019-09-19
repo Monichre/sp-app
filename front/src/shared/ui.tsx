@@ -97,6 +97,12 @@ export const GradientButtonFilled = styled(Button)`
   border-image: linear-gradient(45deg, ${Blue.lighten(.2).hex()} 0%, ${Pink.lighten(.2).hex()} 100%);
   border-image-slice: 1;
   color: white;
+
+
+  @media screen and (max-width: 1000px) {
+    margin-top: 20px;
+    
+}
   
   &:before {
     border-image-slice: 1;

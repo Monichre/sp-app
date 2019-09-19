@@ -17,6 +17,7 @@ html {
     height: auto!important;
     min-height: 100vh;
     background-color: #030616;
+    overflow-x: hidden;
   }
   body {
     font-family: "${BODY_FONT}", sans-serif!important;

@@ -128,7 +128,10 @@ export const HoverBoxWrapper: any = styled.div`
 	overflow: hidden;
 	position: relative;
     background-color: rgba(216,216,216,.015);
-	
+
+	@media screen and (max-width: 1000px) {
+		width: 100%;
+	}
 	
 	
 	*:first-child { margin-top: 0; }

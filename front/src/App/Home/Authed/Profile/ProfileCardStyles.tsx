@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Component } from 'react';
 import styled, { css } from 'styled-components';
 
 
@@ -24,9 +23,15 @@ export const ProfileBackground = styled.div`
   box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.25);
   height: 400px;
   min-width: 600px;
+  margin-top: 20px;
   /* display: flex; */
   /* align-items: center; */
   /* justify-content: center; */
+
+  @media screen and (max-width: 1000px) {
+    min-width: auto;
+    
+}
 `
 
 export const CardWrapper = styled.div`
