@@ -85,8 +85,6 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
 
   const artistCount = artists.length === 3 ? 3 : null
 
-
-
   return <>
     <Row>
       <AchievementHoverSummary content={artistContentSummary} userId={uid} achievementsGraph period={period}>
@@ -121,16 +119,16 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
       </AchievementHoverSummary>
     </Row>
     <Box style={{
-      backgroundColor: 'rgba(216,216,216,.015)', borderRadius: '12px',
+      backgroundColor: 'rgba(216,216,216,.055)', borderRadius: '12px',
       padding: '2em',
-      margin: '30px'
+      margin: '30px auto'
     }}>
       <TimeseriesChart {...{ timeSeries, showOnly: pathParams.perspective }} />
     </Box>
     <Box style={{
-      backgroundColor: 'rgba(216,216,216,.015)', borderRadius: '12px',
+      backgroundColor: 'rgba(216,216,216,.055)', borderRadius: '12px',
       padding: '2em',
-      margin: '30px'
+      margin: '30px auto'
     }}>
       <BlockTitle>Emerging Artists: Staff Picks</BlockTitle>
 

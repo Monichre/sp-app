@@ -224,7 +224,7 @@ html {
 
  .ant-popover-inner {
 
-  background-color: rgba(216,216,216,.015)!important;
+  background-color: rgba(216,216,216,.055)!important;
 
   /* &::before {
         position: absolute;

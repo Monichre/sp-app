@@ -16,18 +16,20 @@ export const NavLabel: any = styled.div`
 `
 
 export const HeaderBar = styled.div`
-  width: 100%;
   background-color: rgba(216,216,216,.05);
+  
 
   .smallScreen  {
     display: none;
     @media screen and (max-width: 1000px) {
       display: block;
+      width: 100vw;
 	  }
 	
   }
   .largeScreen {
     display: block;
+    width: calc(100vw - 200px);
     @media screen and (max-width: 1000px) {
       display: none;
 	  }

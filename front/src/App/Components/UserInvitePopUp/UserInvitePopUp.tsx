@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Popover, Menu } from 'antd';
 import { Button } from '../../../shared/ui';
 import { UserInviteForm } from './UserInviteForm';
+import {TitleBar, AddButton} from './UserInviteForm.style';
 import 'antd/es/popover/style/css'
 import 'antd/es/menu/style/css'
 
@@ -35,15 +36,9 @@ export const AddUserIcon: React.SFC<AddUserIconProps> = () => {
     );
 }
 
-export interface SendIconProps {
 
-}
 
-export const SendIcon: React.SFC<SendIconProps> = () => {
-    return (
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="feather feather-send"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-    );
-}
+
 
 export interface UserInvitePopUpProps {
     toggle: any
@@ -51,15 +46,30 @@ export interface UserInvitePopUpProps {
     currentUserName: any
 }
 
+export interface CloseCircleIconProps {
+    
+ 
+}
+
+export const CloseCircleIcon: React.SFC<CloseCircleIconProps> = () => {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#64d6ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="feather feather-x-circle"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+    );
+}
+
+
+const PopOverTitleBar = ({onClick}: any) => (
+    <TitleBar><p>Invite Your Friends to Soundpruf</p> <div onClick={onClick}><CloseCircleIcon /></div></TitleBar>
+)
+
 
 export const UserInvitePopUp: React.SFC<UserInvitePopUpProps> = ({ toggle, visible, currentUserName }) =>  (
         <Popover
             content={<UserInviteForm currentUserName={currentUserName} close={toggle} />}
-            title="Invite Your Friends to Soundpruf"
+            title={<PopOverTitleBar onClick={toggle} />}
             trigger="click"
             visible={visible}
         >
-
             <span onClick={toggle}>
                 <AddUserIcon /> Add Friends
             </span>

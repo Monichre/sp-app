@@ -30,6 +30,7 @@ export const ButtonMenu: any = styled.div`
 display: flex;
 width: 100%;
 padding: 18px;
+justify-content: space-between;
 
 p, button {
     width: max-content!important;
@@ -37,10 +38,15 @@ p, button {
     background: none!important;
     margin: 0 10px;
     padding: 4px 8px;
-    border: 1px solid #64d6ee;
+    /* border: 1px solid #64d6ee; */
+    border: none!important;
     border-radius: 3px;
+}
 
-    
+button {
+    svg {
+        height: 20px;
+    }
 }
 `
 
@@ -84,4 +90,37 @@ export const EmailError: any = styled.p`
   
   
   
-  
+export const TitleBar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+    align-items: center;
+
+    p {
+        margin: 0;
+    }
+
+  span {
+      height: 24px;
+      width: 24px;
+
+      svg {
+          object-fit: contain;
+          height: 100%;
+          width: 100%;
+      }
+  }
+  `
+
+  export const AddButton: any = styled.span`
+    border: 1px solid #64d6ee;
+    border-radius: 50%;
+    height: 24px;
+    width: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    background-color: rgba(216,216,216,.055);
+  `

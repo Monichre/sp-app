@@ -127,16 +127,20 @@ export const HoverBoxWrapper: any = styled.div`
 	padding: 2em;
 	overflow: hidden;
 	position: relative;
-    background-color: rgba(216,216,216,.015);
+	background-color: rgba(216,216,216,.055);
 
 	@media screen and (max-width: 1000px) {
 		width: 100%;
+		padding: 10px;
+	}
+
+	@media screen and (max-width: 500px) {
+		width: 90%;
 	}
 	
 	
 	*:first-child { margin-top: 0; }
 	*:last-child { margin-bottom: 0; }
-
 
 	${(props: any) => props.genres && css`
 	${BubbleAprox} {

@@ -150,4 +150,8 @@ export const Container: any = styled.div`
   ${(props: any) => props.padded && css`
   /* padding-top: 20px; */
   `}
+
+  @media screen and (max-width: 768px) {
+    margin: 0;
+  }
 `

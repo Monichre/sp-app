@@ -6,7 +6,7 @@ import { largeQuery, notLargeQuery, BRAND_COLOR, BRAND_PERSONAL_COLOR, Large } f
 import { useInsightsDash, useInsightsArtists, useGetTopArtistAchievementHolders } from '../../../types'
 import { LogoHorizontal } from '../../../shared/Logo';
 import { UserAchievementsList } from '../../Components/UserAchievementsList'
-import { suspensefulHook } from '../../../lib/suspensefulHook';
+import { suspensefulHook, suspensefulPollingHook } from '../../../lib/suspensefulHook';
 import Moment from 'react-moment';
 
 import { UserAchievementContext } from './Authed';
@@ -122,11 +122,15 @@ const HarvestingNotice: React.SFC = () =>
 
 export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: string, user: any, history?: any, match?: any }> = ({ initialHarvestComplete, lastUpdate, user, ...rest }) => {
 
+
+  // Local State
+  const [dataEmpty, setDataEmpty] = useState(true)
+  const [topArtistByPeriodData, setTopArtistByPeriodData] = useState(false)
+
   // Context Props 
   const { setTopArtistsWithAchievementHolders, topArtistsWithAchievementHolders } = useContext(UserAchievementContext)
-
-  // State
-  const [topArtistByPeriodData, setTopArtistByPeriodData] = useState(false)
+  
+  const pollInterval = dataEmpty ? 1000 : 0
 
 
   // Vars 
@@ -135,7 +139,7 @@ export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: s
   const { location: { pathname } } = history
 
   // Hooks 
-  const { insightsArtists: usersTopArtistByPeriodData }: any = suspensefulHook(useInsightsArtists({ variables: { uid }, suspend: true }))
+  const { insightsArtists: usersTopArtistByPeriodData }: any = suspensefulPollingHook(true, useInsightsArtists({ variables: { uid }, suspend: true, pollInterval: 1000 }))
   console.log('TCL: usersTopArtistByPeriodData', usersTopArtistByPeriodData)
 
 
