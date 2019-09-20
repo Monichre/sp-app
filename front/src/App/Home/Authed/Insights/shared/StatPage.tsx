@@ -125,9 +125,10 @@ export const StatPage: React.SFC<{stats: Stats, path: string, pathParams: TPathP
 
   return (
     <FullHeight>
-      {/* <AppBar /> */}
+      
       <Large>
-        <NavTabs {...{pathParams, stats}}/>
+        <AppBar className='largeScreen' />
+        <NavTabs {...{ pathParams, stats }} />
       </Large>
       <NotLarge>
         
@@ -135,7 +136,7 @@ export const StatPage: React.SFC<{stats: Stats, path: string, pathParams: TPathP
           { navOptions.map(({label, addParams}, key) => <NavOption {...{key, label, pathParams: Object.assign({}, pathParams, addParams)}}/>) }
         </NavSelect>
         <VerticalSpacer height='55px' />
-        <AppBar />
+        <AppBar className='smallScreen' />
         <VerticalSpacer height='25px' />
         <TimeBlockPair {...{pathParams, stats: stats[pathParams.timeScope]}}/>
       </NotLarge>

@@ -11,10 +11,10 @@ import 'antd/es/menu/style/css'
 import { Menu } from 'antd';
 
 export interface AppBarProps {
-
+    className: string
 }
 
-export const AppBar: React.SFC<AppBarProps> = () => {
+export const AppBar: React.SFC<AppBarProps> = ({className}) => {
 
     const { isOpen, setSideBarOpen, currentUser }: any = React.useContext(UserAchievementContext)
     const [visible, setVisible]: any = React.useState(false)
@@ -30,7 +30,7 @@ export const AppBar: React.SFC<AppBarProps> = () => {
     }
 
     return (
-        <HeaderBar>
+        <HeaderBar className={className}>
             <Flex justifyContent='space-between' alignItems='center'>
                 <Box>
                     <Menu mode="horizontal">

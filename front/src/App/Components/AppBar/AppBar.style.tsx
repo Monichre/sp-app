@@ -17,8 +17,21 @@ export const NavLabel: any = styled.div`
 
 export const HeaderBar = styled.div`
   width: 100%;
-  /* padding: 0.85rem 1rem; */
   background-color: rgba(216,216,216,.05);
+
+  .smallScreen  {
+    display: none;
+    @media screen and (max-width: 1000px) {
+      display: block;
+	  }
+	
+  }
+  .largeScreen {
+    display: block;
+    @media screen and (max-width: 1000px) {
+      display: none;
+	  }
+  }
 
   ${AvatarLink} {
       padding: 0;
