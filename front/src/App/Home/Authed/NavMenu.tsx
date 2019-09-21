@@ -189,8 +189,8 @@ export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: s
         <User color='white' />
         <NavLabel>Profile</NavLabel>
       </NavPrimaryLink>
+      {topArtistByPeriodData ? <UserAchievementsList userId={user.uid} usersTopArtistByPeriodData={topArtistByPeriodData} /> : null}
       <Large>
-        {topArtistByPeriodData ? <UserAchievementsList userId={user.uid} usersTopArtistByPeriodData={topArtistByPeriodData} /> : null}
         <FillSpace>
           {!initialHarvestComplete ? <HarvestingNotice /> : <LastUpdate {...{ lastUpdate }} />}
           <LogoHorizontal size={8} />

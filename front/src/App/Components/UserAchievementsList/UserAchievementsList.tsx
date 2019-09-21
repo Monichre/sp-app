@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { useState } from 'react';
 import styled from 'styled-components';
 import { AchievementData, UserAchievementContext } from '../../Home/Authed/Authed';
 import { decimalToHrsMins, DecimalHoursToMinutes } from '../../../lib/durationFormats';
@@ -7,6 +6,8 @@ import { AchievementListItem } from './AchievementListItem'
 import { HeaderFlexDiv } from '../Elements'
 import { parseAchievementsByPeriod } from './achievements-utils';
 import * as _ from 'lodash'
+import {mapSizesToProps} from '../../../lib/mapSizes'
+import withSizes from 'react-sizes'
 
 
 const ListStyle = styled.ul`
@@ -82,7 +83,7 @@ export interface AchievementItemProps {
 }
 
 
-export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ userId, usersTopArtistByPeriodData }) => {
+const UAL: React.SFC<any> = ({ userId, usersTopArtistByPeriodData, isMobile }) => {
 
     // Check browser memory for some notification shit I wanna do
     // @ts-ignore
@@ -146,7 +147,7 @@ export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ use
          
     }, [achievementsFromMemory])
     
-    return (
+    return isMobile ? null : (
         <ListWrap>
             <HeaderFlexDiv><img src='/icons/award.svg' /> <h4>Achievements</h4></HeaderFlexDiv>
             <ListStyle>
@@ -163,3 +164,6 @@ export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ use
         </ListWrap>
     );
 }
+
+
+export const UserAchievementsList: any = withSizes(mapSizesToProps)(UAL)
