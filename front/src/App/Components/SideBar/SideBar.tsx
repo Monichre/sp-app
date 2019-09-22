@@ -88,12 +88,13 @@ interface SideBarSectionProps {
     title: string
     currentUser: User
     period: string
+    isMobile: boolean
 }
 
 
 
 
-const SideBarSection: React.SFC<SideBarSectionProps> = ({ achievements, period, title, currentUser }) => {
+const SideBarSection: React.SFC<SideBarSectionProps> = ({ isMobile, achievements, period, title, currentUser }) => {
 
     const achievementContext = [
         { title, currentUser }
@@ -234,7 +235,7 @@ const SB: React.SFC<SideBarProps> = ({isMobile}) => {
                 height: '100%'
             }}>
 
-                {achievements && <Alert message={description} type="info" showIcon /> }
+                {isMobile ? null : achievements && <Alert message={description} type="info" showIcon /> }
 
                 {achievements && Object.keys(achievements).reverse().map((period: any, i: any) => {
                     const periodAchievements: any = achievements[period]
@@ -247,7 +248,7 @@ const SB: React.SFC<SideBarProps> = ({isMobile}) => {
 
                         return (
                             <Box key={`sidebar_section_box_${i}`}>
-                                <SideBarSection key={`sidebar_section_${i}`} achievements={periodAchievements} period={period} title={title} currentUser={currentUser} />
+                                <SideBarSection key={`sidebar_section_${i}`} achievements={periodAchievements} isMobile={isMobile} period={period} title={title} currentUser={currentUser} />
                             </Box>
                         )
 
