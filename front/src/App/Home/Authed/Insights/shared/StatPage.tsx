@@ -8,9 +8,6 @@ import { InsightsStatsInsightsStats, InsightsStatsToday, InsightsStatsThisWeek, 
 import { VerticalSpacer } from '../../../../../shared/VerticalSpacer';
 import { TimeBlockPair } from './TimeBlockPair';
 import { Container } from '../../../../../shared/ui';
-import { Flex, Box } from 'rebass';
-import { MenuIcon } from '../../../../../shared/icons';
-import { UserAchievementContext } from '../../Authed';
 import { AppBar } from '../../../../Components/AppBar';
 
 
@@ -61,7 +58,7 @@ const navOptions: TNavOption[]  = [
 
 const FullHeight = styled.div`
 min-height: 100vh;
-width: 85vw;
+width: 100%;
 
 
 @media screen and (max-width: 1000px) {
@@ -140,7 +137,7 @@ export const StatPage: React.SFC<{stats: Stats, path: string, pathParams: TPathP
         <VerticalSpacer height='25px' />
         <TimeBlockPair {...{pathParams, stats: stats[pathParams.timeScope]}}/>
       </NotLarge>
-      <Container>
+      <Container padded>
         {children}
         <VerticalSpacer height='110px'/>
       </Container>

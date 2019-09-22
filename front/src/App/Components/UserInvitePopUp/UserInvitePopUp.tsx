@@ -44,6 +44,7 @@ export interface UserInvitePopUpProps {
     toggle: any
     visible: any
     currentUserName: any
+    isMobile: boolean
 }
 
 export interface CloseCircleIconProps {
@@ -63,7 +64,7 @@ const PopOverTitleBar = ({onClick}: any) => (
 )
 
 
-export const UserInvitePopUp: React.SFC<UserInvitePopUpProps> = ({ toggle, visible, currentUserName }) =>  (
+export const UserInvitePopUp: React.SFC<UserInvitePopUpProps> = ({ toggle, visible, currentUserName, isMobile }) =>  (
         <Popover
             content={<UserInviteForm currentUserName={currentUserName} close={toggle} />}
             title={<PopOverTitleBar onClick={toggle} />}
@@ -71,7 +72,7 @@ export const UserInvitePopUp: React.SFC<UserInvitePopUpProps> = ({ toggle, visib
             visible={visible}
         >
             <span onClick={toggle}>
-                <AddUserIcon /> Add Friends
+                <AddUserIcon /> {isMobile ? null : 'Add Friends'}
             </span>
         </Popover>
     );

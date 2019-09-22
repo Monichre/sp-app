@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useState } from 'react';
 import { HeaderBar, AvatarLink, NavLabel } from './AppBar.style';
 import { AvatarBg } from '../../Components/Elements';
 import { UserAchievementContext } from '../../Home/Authed/Authed';
@@ -7,14 +6,17 @@ import { Flex, Box } from 'rebass';
 import { MenuIcon } from '../../../shared/icons';
 import { UserInvitePopUp } from '../UserInvitePopUp/UserInvitePopUp';
 import { SpotifyLogoLink } from '../../../shared/SpotifyLogoLink/SpotifyLogoLink';
-import 'antd/es/menu/style/css'
 import { Menu } from 'antd';
+import {mapSizesToProps} from '../../../lib/mapSizes'
+import withSizes from 'react-sizes'
+import 'antd/es/menu/style/css'
 
 export interface AppBarProps {
     className: string
+    isMobile: boolean
 }
 
-export const AppBar: React.SFC<AppBarProps> = ({className}) => {
+const AB: React.SFC<any> = ({className, isMobile}) => {
 
     const { isOpen, setSideBarOpen, currentUser }: any = React.useContext(UserAchievementContext)
     const [visible, setVisible]: any = React.useState(false)
@@ -37,15 +39,14 @@ export const AppBar: React.SFC<AppBarProps> = ({className}) => {
                         <Menu.Item key="profile">
                             <AvatarLink to='/profile'>
                                 <AvatarBg sideNav={true} src={currentUser.photoURL ? currentUser.photoURL : '/icons/headphones.svg'} />
-                                {/* <NavLabel>{currentUser.displayName ? currentUser.displayName : currentUser.email}</NavLabel> */}
                             </AvatarLink>
                         </Menu.Item>
                         <Menu.Item key="invite">
-                            <UserInvitePopUp toggle={toggle} visible={visible} currentUserName={currentUser.displayName} />
+                            <UserInvitePopUp toggle={toggle} isMobile={isMobile} visible={visible} currentUserName={currentUser.displayName} />
                         </Menu.Item>
                         <Menu.Item key="spotify-link">
                             <SpotifyLogoLink href={spotifyURL} />
-                            Listen on Spotify
+                            {isMobile ? null : 'Listen on Spotify'}
                     </Menu.Item>
                     </Menu>
 
@@ -56,3 +57,5 @@ export const AppBar: React.SFC<AppBarProps> = ({className}) => {
         </HeaderBar>
     );
 }
+
+export const AppBar: any = withSizes(mapSizesToProps)(AB)

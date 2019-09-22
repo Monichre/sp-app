@@ -18,15 +18,6 @@ export const NavLabel: any = styled.div`
 export const HeaderBar = styled.div`
   background-color: rgba(216,216,216,.05);
   
-
-  .smallScreen  {
-    display: none;
-    @media screen and (max-width: 1000px) {
-      display: block;
-      width: 100vw;
-	  }
-	
-  }
   .largeScreen {
     display: block;
     width: calc(100vw - 200px);
@@ -45,7 +36,7 @@ export const HeaderBar = styled.div`
       margin-right: 10px;
   }
 
-  .ant-menu-horizontal {
+  .ant-menu {
     background: transparent;
     color: #fff;
     border: none!important;
@@ -55,6 +46,10 @@ export const HeaderBar = styled.div`
 
     .ant-menu-item {
       padding: 0.85rem 1rem;
+      @media screen and (max-width: 600px) {
+        padding: 2px;
+        margin: 0 5px;
+      }
       &:hover, &.ant-menu-item-selected {
         color: #64d6ee;
         border-bottom: 2px solid #64d6ee;
@@ -91,20 +86,49 @@ export const HeaderBar = styled.div`
               width: 32px;
               top: 4px;
             }
+            @media screen and (max-width: 600px) {
+              margin-left: 10px;
+              margin-right: 0;
+            }
         }
-
-       
-
       }
       .sc-iAyFgw.gPdKCG {
         display: inline-block;
         height: 24px;
         margin-right: 5px;
         width: 24px;
+
+        @media screen and (max-width: 600px) {
+          height: 24px;
+          margin: 0;
+          width: 28px;
+        }
       }
+
       svg {
         margin-right: 5px;
+        @media screen and (max-width: 600px) {
+          margin-right: 0;
+          height: 24px;
+        }
       }
     }
+  }
+
+
+  .smallScreen  {
+    display: none;
+    @media screen and (max-width: 1000px) {
+      display: block;
+      width: 100vw;
+	  }
+
+    
+      .ant-menu-item {
+        @media screen and (max-width: 600px) {
+        padding: 2px;
+      }
+    }
+	
   }
 `

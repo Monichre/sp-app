@@ -14,13 +14,16 @@ import {
 import { SpotifyLogoLink } from '../../../../shared/SpotifyLogoLink/SpotifyLogoLink';
 import { UserInvitePopUp } from '../../../Components/UserInvitePopUp/UserInvitePopUp';
 import { Menu } from 'antd';
+import {mapSizesToProps} from '../../../../lib/mapSizes'
+import withSizes from 'react-sizes'
 import 'antd/es/menu/style/css'
 
 export interface ProfileCardProps {
     user: any
+    isMobile: boolean
 }
 
-export const ProfileCard: React.SFC<ProfileCardProps> = ({ user }) => {
+export const PC: React.SFC<any> = ({ user, isMobile }) => {
     
     const [visible, setVisible]: any = useState(false)
 
@@ -53,7 +56,7 @@ export const ProfileCard: React.SFC<ProfileCardProps> = ({ user }) => {
                         Listen on Spotify
                     </Menu.Item>
                     <Menu.Item key="invite">
-                        <UserInvitePopUp toggle={toggle} visible={visible} currentUserName={user.displayName} />
+                        <UserInvitePopUp isMobile={isMobile} toggle={toggle} visible={visible} currentUserName={user.displayName} />
                     </Menu.Item>
                 </Menu>
                 
@@ -61,3 +64,6 @@ export const ProfileCard: React.SFC<ProfileCardProps> = ({ user }) => {
         </ProfileBackground>
     );
 }
+
+
+export const ProfileCard: any = withSizes(mapSizesToProps)(PC)

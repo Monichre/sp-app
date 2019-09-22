@@ -10,7 +10,7 @@ export const Home: React.SFC = (props) => {
   const { user, isLoading } = useUser()
   if (isLoading) return <Loading/>
   return <ErrorBoundary>{user ? 
-    <Container padded>
+    <Container>
       <Authed {...{ user }} {...props}/>
     </Container>
  : <Public/>}</ErrorBoundary>
