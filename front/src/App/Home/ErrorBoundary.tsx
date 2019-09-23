@@ -43,14 +43,11 @@ export class ErrorBoundary extends React.Component<{}, { error: Error | null, er
 
   render () {
     if (this.state.error) {
-      return process.env.NODE_ENV !== 'production' ? <ErrorPage>
+      return <ErrorPage>
         <h1>Something went wrong.</h1>
         <button onClick={() => Sentry.showReportDialog({ eventId: this.state.eventId })}>Report feedback</button>
         <ButtonSignout />
       </ErrorPage>
-        :
-
-        <ErrorFallback {...this.state} />
     }
 
     return this.props.children;
