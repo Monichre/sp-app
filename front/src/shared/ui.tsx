@@ -153,6 +153,27 @@ export const Container: any = styled.div`
     padding: 0 18px;
   `}
 
+  ${(props: any) => props.sideBar && css`
+  /* padding-top: 20px; */
+    padding: 0 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
+  `}
+
+  ${(props: any) => props.sideBarMobile && css`
+  /* padding-top: 20px; */
+    padding: 0;
+  `}
+
+
+  ${(props: any) => props.sideBarMobile && props.sideBar && css`
+  /* padding-top: 20px; */
+    padding: 0;
+    justify-content: flex-start;
+  `}
+
   @media screen and (max-width: 768px) {
     margin: 0;
   }

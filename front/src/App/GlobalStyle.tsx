@@ -1,6 +1,456 @@
 import { createGlobalStyle } from "styled-components"
 import { BODY_FONT } from "../shared/media";
 
+export const DASH_GREEN = `rgb(87, 192, 167)`
+export const DASH_DARK = `rgba(0, 3, 6, 0.7)`
+export const DASH_BLUE = `#99EEEE`
+export const DASH_YELLOW = `#EEEE99`
+export const DASH_PINK = `#EE9999`
+export const DASH_PURPLE = `#9999EE`
+
+
+/*
+position: absolute;
+width: 90px;
+height: 90px;
+left: 975px;
+top: 621px;
+
+background: #DD9999;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 975px;
+top: 531px;
+
+background: #DDBB99;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 975px;
+top: 441px;
+
+background: #DDDD99;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 975px;
+top: 891px;
+
+background: #99DDDD;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 975px;
+top: 801px;
+
+background: #99BBDD;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 975px;
+top: 711px;
+
+background: #9999DD;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1055px;
+top: 621px;
+
+background: #EE9999;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1055px;
+top: 531px;
+
+background: #EECC99;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1055px;
+top: 441px;
+
+background: #EEEE99;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1055px;
+top: 891px;
+
+background: #99EEEE;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1055px;
+top: 801px;
+
+background: #99CCEE;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1055px;
+top: 711px;
+
+background: #9999EE;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1135px;
+top: 621px;
+
+background: #FF9999;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1135px;
+top: 531px;
+
+background: #FFCC99;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1135px;
+top: 441px;
+
+background: #FFFF99;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1135px;
+top: 891px;
+
+background: #99FFFF;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1135px;
+top: 801px;
+
+background: #99CCFF;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1135px;
+top: 711px;
+
+background: #9999FF;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1215px;
+top: 621px;
+
+background: #EE8888;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1215px;
+top: 531px;
+
+background: #EEBB88;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1215px;
+top: 441px;
+
+background: #EEEE88;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1215px;
+top: 891px;
+
+background: #88EEEE;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1215px;
+top: 801px;
+
+background: #88BBEE;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1215px;
+top: 711px;
+
+background: #8888EE;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1295px;
+top: 622px;
+
+background: #FF7777;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1295px;
+top: 532px;
+
+background: #FFBB77;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1295px;
+top: 442px;
+
+background: #FFFF77;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1295px;
+top: 892px;
+
+background: #77FFFF;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1295px;
+top: 802px;
+
+background: #77BBFF;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1295px;
+top: 712px;
+
+background: #7777FF;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1375px;
+top: 622px;
+
+background: #FF6666;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1375px;
+top: 532px;
+
+background: #FFAA66;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1375px;
+top: 442px;
+
+background: #FFFF66;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1375px;
+top: 892px;
+
+background: #66FFFF;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1375px;
+top: 802px;
+
+background: #66AAFF;
+transform: rotate(90deg);
+
+
+
+
+position: absolute;
+width: 90px;
+height: 90px;
+left: 1375px;
+top: 712px;
+
+background: #6666FF;
+transform: rotate(90deg);
+Help Center
+Keyboard Shortcuts
+⌃⇧?
+Community Forum
+Video Tutorials
+Reset Onboarding
+Release Notes
+Legal Summary
+Get Help
+
+
+*/
+
 export const GlobalStyle = createGlobalStyle`
 html {
   box-sizing: border-box;

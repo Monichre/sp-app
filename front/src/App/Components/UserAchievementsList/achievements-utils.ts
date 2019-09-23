@@ -212,34 +212,7 @@ export const parseAchievementsByPeriod = (usersTopArtistByPeriodData: any, userI
 		life: null
 	}
 
-	// for (let period in topArtistsByPeriod) {
-
-	// 	achievements[period] = topArtistsByPeriod[period].filter((artistData: any) => {
-
-	// 		if (
-	// 			artistData.artist.topListeners[period] &&
-	// 			artistData.artist.topListeners[period].first
-	// 		) {
-	// 			if (artistData.artist.topListeners[period].first.user.uid === userId) {
-	// 				return true
-	// 			}
-	// 		}
-	// 	})
-	// 		.map((artistData: any) => ({
-	// 			artistData,
-	// 			achievement: artistData.artist.topListeners[period].first
-	// 		}))
-
-	// 	if (!achievements[period].length) {
-	// 		achievements[period] = null
-	// 	}
-	// }
-
-
-
 	const { existingAchievements }: any = determinePossibleAchievements(achievements, topArtistsByPeriod, userId)
-
-
 
 	return {
 		achievements: existingAchievements

@@ -1,21 +1,22 @@
-import React, { useContext, createContext, useReducer, useState, Reducer, SetStateAction, useCallback, useEffect, useRef } from 'react';
+import React, {  useState, useRef } from 'react';
 import styled, { css } from 'styled-components'
 import { Container } from '../../../shared/ui';
 import { List, Avatar, Icon, Drawer, Carousel, Alert } from 'antd';
 import { Box, Flex } from 'rebass';
 import { UserAchievementContext } from '../../Home/Authed/Authed';
 import { firstPlaceBadge, IconText, FlexDiv } from '../Elements'
-import { determineAchievementValueFromPK, AchievementMetaData } from '../UserAchievementsList/achievements-utils';
+import { AchievementMetaData } from '../UserAchievementsList/achievements-utils';
 import { User } from '../../../../../back/src/fns/graphql/types';
-import { DecimalHoursToMinutes, decimalToHrsMins } from '../../../lib/durationFormats';
+import { decimalToHrsMins } from '../../../lib/durationFormats';
 import { SpotifyLogoLink } from '../../../shared/SpotifyLogoLink/SpotifyLogoLink';
+import { ArrowNext, ArrowPrev } from '../../../shared/icons';
+import { mapSizesToProps } from '../../../lib/mapSizes'
+import withSizes from 'react-sizes'
+import {MobileSidebarSection} from './MobileSidebarSection'
 import 'antd/es/drawer/style/css'
 import 'antd/es/carousel/style/css'
 import 'antd/es/list/style/css'
 import 'antd/es/alert/style/css'
-import { ArrowNext, ArrowPrev } from '../../../shared/icons';
-import {mapSizesToProps} from '../../../lib/mapSizes'
-import withSizes from 'react-sizes'
 
 
 const HoverIcon: any = styled.div`
@@ -50,6 +51,13 @@ background-position: center center;
 background-size: cover;
 
 ${(props: any) => props.notLifeTimeAchievement && css`
+    height: 100px; 
+    width: 100px; 
+    min-height: 50px;
+    
+`}
+
+${(props: any) => props.isMobile && css`
     height: 100px; 
     width: 100px; 
     min-height: 50px;
@@ -104,7 +112,7 @@ const SideBarSection: React.SFC<SideBarSectionProps> = ({ isMobile, achievements
 
     const carouselRef: any = useRef()
     console.log('TCL: carouselRef', carouselRef)
-    
+
 
     const next = () => {
         console.log('fucking clicking next')
@@ -117,19 +125,56 @@ const SideBarSection: React.SFC<SideBarSectionProps> = ({ isMobile, achievements
 
     const { artistData: { artist: { id, images, name, topListeners }, personal }, achievement } = currentArtist
     const formattedTotal = decimalToHrsMins(personal)
+    const size = isMobile ? 'small' : 'large'
+
+    const CarouselExtra = <div>
+        <ArrowMenu small={period !== 'life'}>
+            <ArrowPrev onClick={prev} />
+            <ArrowNext onClick={next} />
+        </ArrowMenu>
+
+        <Carousel afterChange={handleCarouselChange} ref={carouselRef}>
+            {achievements.map((achievementData: AchievementMetaData) => {
+                const { artistData, achievement }: any = achievementData
+                const { artist: { name, images } } = artistData
+                const artistIMG = images[0] ? images[0].url : ''
+
+                return (
+                    <div style={{
+                        height: isMobile ? '125px' : '30vh'
+                    }}>
+                        <ArtistCarouselImage
+                            isMobile={isMobile}
+                            notLifeTimeAchievement={period !== 'life'}
+                            style={{
+                                margin: period !== 'life' ? '30px auto' : 'auto',
+                                display: 'block'
+                            }}
+                            width={isMobile ? 125 : 150}
+                            height='100%'
+                            alt={`${name} featured image`}
+                            src={artistIMG}
+                        />
+                    </div>
+                )
+            })}
+
+        </Carousel>
+
+    </div>
 
 
-    return   (
+    return (
         <List
             id='SideBarAchievements'
             itemLayout="vertical"
-            size="large"
+            size={size}
             pagination={false}
             dataSource={achievementContext}
-            footer={
-                <div>
-                    <b>{title}</b>
-                </div>
+            footer={isMobile ? <div>
+                <b>{title}</b>
+            </div> : null
+
             }
             renderItem={item => {
 
@@ -146,48 +191,13 @@ const SideBarSection: React.SFC<SideBarSectionProps> = ({ isMobile, achievements
                                 <SpotifyLogoLink href={`https://open.spotify.com/artist/${id}`} />
                             </IconText>
                         ]}
-                        extra={
-                            <div>
-                                <ArrowMenu small={period !== 'life'}>
-                                    <ArrowPrev onClick={prev} />
-                                    <ArrowNext onClick={next} />
-                                </ArrowMenu>
-                                
-                                <Carousel afterChange={handleCarouselChange} ref={carouselRef}>
-                                {achievements.map((achievementData: AchievementMetaData) => {
-                                    const { artistData, achievement }: any = achievementData
-                                    const { artist: { name, images } } = artistData
-                                    const artistIMG = images[0] ? images[0].url : ''
-
-                                    return (
-                                        <div style={{
-                                            height: '30vh'
-                                        }}>
-                                            <ArtistCarouselImage
-                                                notLifeTimeAchievement={period !== 'life'}
-                                                style={{
-                                                    margin: period !== 'life' ? '30px auto' : 'auto',
-                                                    display: 'block'
-                                                }}
-                                                width={150}
-                                                height='100%'
-                                                alt={`${name} featured image`}
-                                                src={artistIMG}
-                                            />
-                                        </div>
-                                    )
-                                })}
-
-                            </Carousel>
-
-                            </div>
-
-                        }
+                        extra={CarouselExtra}
                     >
-                        <List.Item.Meta
+
+                        {isMobile ? null : <List.Item.Meta
                             avatar={<Avatar src={firstPlaceBadge} />}
                             title={title}
-                        />
+                        />}
 
                     </List.Item>
                 )
@@ -196,14 +206,11 @@ const SideBarSection: React.SFC<SideBarSectionProps> = ({ isMobile, achievements
     );
 }
 
-
-
-
 export interface SideBarProps {
     isMobile: boolean
 }
 
-const SB: React.SFC<SideBarProps> = ({isMobile}) => {
+const SB: React.SFC<SideBarProps> = ({ isMobile }) => {
     const context: {
         achievements: AchievementMetaData[],
         isOpen: any,
@@ -219,7 +226,7 @@ const SB: React.SFC<SideBarProps> = ({isMobile}) => {
     return (
 
         <Drawer
-            width={'50%'}
+            width={isMobile ? '75%' : '50%'}
             placement="right"
             onClose={onClose}
             bodyStyle={{
@@ -228,14 +235,9 @@ const SB: React.SFC<SideBarProps> = ({isMobile}) => {
             }}
             visible={isOpen}
         >
-            <Container padded style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-around',
-                height: '100%'
-            }}>
+            <Container sideBarMobile={isMobile} sideBar={true}>
 
-                {isMobile ? null : achievements && <Alert message={description} type="info" showIcon /> }
+                {isMobile ? null : achievements && <Alert message={description} type="info" showIcon />}
 
                 {achievements && Object.keys(achievements).reverse().map((period: any, i: any) => {
                     const periodAchievements: any = achievements[period]
@@ -245,13 +247,11 @@ const SB: React.SFC<SideBarProps> = ({isMobile}) => {
                         const achievementContext = period === 'life' ? 'lifetime achievements' : `achievements this ${period}`
                         const title = `Your ${achievementContext}`
 
-
                         return (
                             <Box key={`sidebar_section_box_${i}`}>
-                                <SideBarSection key={`sidebar_section_${i}`} achievements={periodAchievements} isMobile={isMobile} period={period} title={title} currentUser={currentUser} />
+                                {isMobile ? <MobileSidebarSection key={`mobile_sidebar_section_${i}`} achievements={periodAchievements} isMobile={isMobile} period={period} title={title} currentUser={currentUser} /> : <SideBarSection key={`sidebar_section_${i}`} achievements={periodAchievements} isMobile={isMobile} period={period} title={title} currentUser={currentUser} /> }
                             </Box>
                         )
-
                     }
 
                     return null
