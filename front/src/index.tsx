@@ -17,7 +17,7 @@ if (process.env.REACT_APP_LOGROCKET_APP_ID) {
 }
 Sentry.init({
     dsn: "https://0dfd7c850a6341699ea2bfb55697ada3@sentry.io/1757770",
-    release: `sp-app@2.1.00:${currentBranch}`
+    release: `sp-app_${currentBranch}@2.1.00`
 });
 
 ReactDOM.render(<App />, document.getElementById('root'));
