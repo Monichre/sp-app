@@ -13,6 +13,7 @@ if (process.env.REACT_APP_LOGROCKET_APP_ID) {
 }
 Sentry.init({
     dsn: "https://0dfd7c850a6341699ea2bfb55697ada3@sentry.io/1757770",
+    environment: 'release/test',
     release: `db0939a792e161de32b2660807ed88e335cd0075`
 });
 
