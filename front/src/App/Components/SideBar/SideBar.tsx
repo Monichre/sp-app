@@ -1,7 +1,7 @@
-import React, {  useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import styled, { css } from 'styled-components'
 import { Container } from '../../../shared/ui';
-import { List, Avatar, Icon, Drawer, Carousel, Alert } from 'antd';
+import { List, Avatar, Icon, Drawer, Carousel, Alert, Tabs } from 'antd';
 import { Box, Flex } from 'rebass';
 import { UserAchievementContext } from '../../Home/Authed/Authed';
 import { firstPlaceBadge, IconText, FlexDiv } from '../Elements'
@@ -12,11 +12,15 @@ import { SpotifyLogoLink } from '../../../shared/SpotifyLogoLink/SpotifyLogoLink
 import { ArrowNext, ArrowPrev } from '../../../shared/icons';
 import { mapSizesToProps } from '../../../lib/mapSizes'
 import withSizes from 'react-sizes'
-import {MobileSidebarSection} from './MobileSidebarSection'
+import { MobileSidebarSection } from './MobileSidebarSection'
 import 'antd/es/drawer/style/css'
 import 'antd/es/carousel/style/css'
 import 'antd/es/list/style/css'
 import 'antd/es/alert/style/css'
+
+import 'antd/es/tabs/style/css'
+
+const { TabPane } = Tabs;
 
 
 const HoverIcon: any = styled.div`
@@ -239,7 +243,28 @@ const SB: React.SFC<SideBarProps> = ({ isMobile }) => {
 
                 {isMobile ? null : achievements && <Alert message={description} type="info" showIcon />}
 
-                {achievements && Object.keys(achievements).reverse().map((period: any, i: any) => {
+                {isMobile && achievements && <Tabs defaultActiveKey="1" tabPosition={'left'} style={{ height: '100%' }}>
+
+                    {Object.keys(achievements).reverse().map((period: any, i: any) => {
+                        const periodAchievements: any = achievements[period]
+
+                        if (periodAchievements && periodAchievements.length) {
+
+                            const achievementContext = period === 'life' ? 'lifetime achievements' : `achievements this ${period}`
+                            const title = `Your ${achievementContext}`
+
+                            return (
+                                <TabPane tab={period} key={i}>
+                                    <MobileSidebarSection key={`mobile_sidebar_section_${i}`} achievements={periodAchievements} isMobile={isMobile} period={period} title={title} currentUser={currentUser} i={i} />
+
+                                </TabPane>
+                            )
+                        }
+                    })}
+
+                </Tabs>}
+
+                {!isMobile && achievements && Object.keys(achievements).reverse().map((period: any, i: any) => {
                     const periodAchievements: any = achievements[period]
 
                     if (periodAchievements && periodAchievements.length) {
@@ -248,13 +273,13 @@ const SB: React.SFC<SideBarProps> = ({ isMobile }) => {
                         const title = `Your ${achievementContext}`
 
                         return (
+
                             <Box key={`sidebar_section_box_${i}`}>
-                                {isMobile ? <MobileSidebarSection key={`mobile_sidebar_section_${i}`} achievements={periodAchievements} isMobile={isMobile} period={period} title={title} currentUser={currentUser} /> : <SideBarSection key={`sidebar_section_${i}`} achievements={periodAchievements} isMobile={isMobile} period={period} title={title} currentUser={currentUser} /> }
+                                <SideBarSection key={`sidebar_section_${i}`} achievements={periodAchievements} isMobile={isMobile} period={period} title={title} currentUser={currentUser} />
                             </Box>
+
                         )
                     }
-
-                    return null
                 })}
 
             </Container>

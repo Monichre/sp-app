@@ -676,14 +676,40 @@ html {
 
   background-color: rgba(216,216,216,.055)!important;
 
-  /* &::before {
-        position: absolute;
-        top: 0;
-        content: '';
-        left: 0;
-        height: 100%;
-        width: 100%;
-        background-color: rgba(216,216,216,.015);
-    } */
 }
+.ant-tabs .ant-tabs-left-content {
+  border-left: none!important;
+}
+.ant-tabs .ant-tabs-left-bar {
+  border-right: none!important;
+  padding-right: 10px;
+  /* background-color: rgba(216,216,216,.075); */
+
+}
+.ant-collapse-item {
+  border: none!important;
+  background-color: rgba(216,216,216,.015);
+  margin: 10px 0 !important;
+}
+.ant-collapse > .ant-collapse-item > .ant-collapse-header {
+  color: #fff!important;
+}
+.ant-tabs-tab {
+  color: #fff;
+  text-align: left!important;
+}
+.ant-tabs .ant-tabs-left-content {
+    padding-left: 0!important;
+  }
+
+  .ant-collapse, .ant-collapse-content {
+    background: transparent!important;
+    background-color: none!important;
+    color: #fff;
+    border: none!important;
+
+    .ant-collapse-content-box {
+      /* background-color: rgba(216,216,216,.055); */
+    }
+  }
 `
