@@ -3,7 +3,6 @@ import { EmailInput, TagItem, EmailError, FormWrap, ButtonMenu } from './UserInv
 import emailjs from 'emailjs-com'
 import { notification } from 'antd';
 import {TitleBar, AddButton} from './UserInviteForm.style';
-import 'antd/es/notification/style/css'
 
 
 let service_id = "default_service";

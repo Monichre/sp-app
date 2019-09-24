@@ -16,7 +16,7 @@ import { UserInvitePopUp } from '../../../Components/UserInvitePopUp/UserInviteP
 import { Menu } from 'antd';
 import {mapSizesToProps} from '../../../../lib/mapSizes'
 import withSizes from 'react-sizes'
-import 'antd/es/menu/style/css'
+
 
 export interface ProfileCardProps {
     user: any

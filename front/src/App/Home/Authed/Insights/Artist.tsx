@@ -15,11 +15,7 @@ import { Box, Flex} from 'rebass';
 import { AchievementHoldersList } from '../../../Components/ArtistAchievementHolders/AchievementHoldersList';
 import { ListStyle } from '../../../Components/ListStyle';
 import { hrsAndMins } from '../../../../lib/durationFormats';
-import 'antd/es/badge/style/css'
-import 'antd/es/tag/style/css'
-import 'antd/es/list/style/css'
-import 'antd/es/avatar/style/css'
-import 'antd/es/progress/style/css'
+
 import { badgeMap } from './shared/ArtistsChart/TopListenerYAxis';
 
 

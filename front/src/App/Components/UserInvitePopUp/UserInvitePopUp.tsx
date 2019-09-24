@@ -3,8 +3,6 @@ import { Popover, Menu } from 'antd';
 import { Button } from '../../../shared/ui';
 import { UserInviteForm } from './UserInviteForm';
 import {TitleBar, AddButton} from './UserInviteForm.style';
-import 'antd/es/popover/style/css'
-import 'antd/es/menu/style/css'
 
 export interface ShareProps {
 

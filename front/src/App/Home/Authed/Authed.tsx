@@ -10,7 +10,6 @@ import { NavMenu, NavMenuView } from './NavMenu';
 import { Profile } from './Profile/Profile';
 import { History } from './History/History';
 import { IntercomHandler } from '../../../lib/intercom'
-import 'antd/es/drawer/style/css'
 import { UserAchievementPeriodMap } from '../../Components/UserAchievementsList/achievements-utils';
 import { SideBar } from '../../Components/SideBar/SideBar';
 

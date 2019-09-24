@@ -6,8 +6,6 @@ import { AchievementMetaData } from '../UserAchievementsList/achievements-utils'
 import { User } from '../../../../../back/src/fns/graphql/types';
 import { firstPlaceBadge } from '../Elements'
 import { decimalToHrsMins } from '../../../lib/durationFormats';
-import 'antd/es/collapse/style/css'
-import 'antd/es/icon/style/css'
 
 const { Panel } = Collapse;
 

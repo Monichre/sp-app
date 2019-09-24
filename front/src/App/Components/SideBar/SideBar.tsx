@@ -8,11 +8,7 @@ import { mapSizesToProps } from '../../../lib/mapSizes'
 import withSizes from 'react-sizes'
 import { MobileSidebarSection } from './MobileSidebarSection'
 import {SideBarSection} from './SideBarSection'
-import 'antd/es/drawer/style/css'
-import 'antd/es/carousel/style/css'
-import 'antd/es/list/style/css'
-import 'antd/es/alert/style/css'
-import 'antd/es/tabs/style/css'
+
 
 const { TabPane } = Tabs;
 

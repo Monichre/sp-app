@@ -7,11 +7,6 @@ import { decimalToHrsMins } from '../../../lib/durationFormats'
 import { firstPlaceBadge, IconText, FlexDiv } from '../Elements'
 import { ArrowNext, ArrowPrev } from '../../../shared/icons';
 import { SpotifyLogoLink } from '../../../shared/SpotifyLogoLink/SpotifyLogoLink';
-import 'antd/es/drawer/style/css'
-import 'antd/es/carousel/style/css'
-import 'antd/es/list/style/css'
-import 'antd/es/alert/style/css'
-
 
 
 interface SideBarSectionProps {

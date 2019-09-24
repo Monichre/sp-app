@@ -14,7 +14,7 @@ import { FeaturedArtists } from './FeaturedArtists';
 import ReactTooltip from 'react-tooltip'
 import { AchievementHoverSummary } from '../../../../Components/AchievementHoverSummary.tsx';
 import { Tooltip } from 'antd';
-import 'antd/es/tooltip/style/css'
+
 import { Box } from 'rebass';
 
 

@@ -5,10 +5,7 @@ import { ListStyle } from '../ListStyle';
 import { decimalToHrsMins, hrsAndMins } from '../../../lib/durationFormats';
 import { Popover, List, Row, Col, Card, Icon, Tag, Avatar, Badge } from 'antd';
 import { IconText, AvatarBg } from '../Elements';
-import 'antd/es/popover/style/css'
-import 'antd/es/tag/style/css'
-import 'antd/es/list/style/css'
-import 'antd/es/avatar/style/css'
+
 import { badgeMap } from '../../Home/Authed/Insights/shared/ArtistsChart/TopListenerYAxis';
 
 export interface AchievementHoldersListProps {

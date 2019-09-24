@@ -6,9 +6,7 @@ import { normalizeTimeScope } from '../../../../Authed/Insights/Main/Overview'
 import { PopOverStyle } from '../../../../../Components/PopOver';
 import { TickProps } from './ArtistsChart';
 import { AchievementHoldersList } from '../../../../../Components/ArtistAchievementHolders/AchievementHoldersList';
-import 'antd/es/popover/style/css'
-import 'antd/es/list/style/css'
-import 'antd/es/avatar/style/css'
+
 
 const firstPlaceBadge: any = '/icons/first-currentUser.png'
 const secondPlaceBadge = '/icons/second-currentUser.png'
