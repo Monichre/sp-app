@@ -40,12 +40,6 @@ ${(props: any) => props.notLifeTimeAchievement && css`
     
 `}
 
-${(props: any) => props.isMobile && css`
-    height: 100px; 
-    width: 100px; 
-    min-height: 50px;
-    
-`}
 
 `
 
@@ -99,13 +93,13 @@ export const SideBarSection: React.SFC<SideBarSectionProps> = ({ isMobile, achie
         </ArrowMenu>
 
         <Carousel afterChange={handleCarouselChange} ref={carouselRef}>
-            {achievements.map((achievementData: AchievementMetaData) => {
+            {achievements.map((achievementData: AchievementMetaData, index: number) => {
                 const { artistData, achievement }: any = achievementData
                 const { artist: { name, images } } = artistData
                 const artistIMG = images[0] ? images[0].url : ''
 
                 return (
-                    <div style={{
+                    <div key={index} style={{
                         height: isMobile ? '125px' : '30vh'
                     }}>
                         <ArtistCarouselImage
@@ -141,7 +135,7 @@ export const SideBarSection: React.SFC<SideBarSectionProps> = ({ isMobile, achie
             </div> : null
 
             }
-            renderItem={item => {
+            renderItem={(item) => {
 
                 return (
                     <List.Item

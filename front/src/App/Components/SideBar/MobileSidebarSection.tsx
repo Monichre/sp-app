@@ -16,13 +16,13 @@ export interface MobileSidebarSectionProps {
     title: string
     currentUser: User
     period: string
-    isMobile: boolean
+    
     i: any
 }
 
 const genIcon = (src: any) => <img src={src} height={24} width={24} style={{ borderRadius: '50%' }} />
 
-export const MobileSidebarSection: React.SFC<MobileSidebarSectionProps> = ({ isMobile, achievements, period, title, currentUser, i }) => {
+export const MobileSidebarSection: React.SFC<MobileSidebarSectionProps> = ({  achievements, period, title, currentUser, i }) => {
     return (
         <Collapse defaultActiveKey="1" accordion>
             {achievements.map((achievementData: AchievementMetaData, index: number) => {

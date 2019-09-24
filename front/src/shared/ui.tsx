@@ -156,11 +156,12 @@ export const Container: any = styled.div`
 
   ${(props: any) => props.sideBar && css`
   /* padding-top: 20px; */
-    padding: 0 18px;
+    padding: 0 18px 0 0;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    /* justify-content: space-around; */
     height: 100%;
+    justify-content: flex-start;
 
 
   `}

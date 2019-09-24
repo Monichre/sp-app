@@ -29,12 +29,32 @@ export const HeaderBar = styled.div`
   ${AvatarLink} {
       padding: 0;
       flex-direction: row!important;
+      &#AppBarAvatarLink {
+
+        @media screen and (max-width: 600px){
+          margin-right: 0px;
+        }
+
+        #AppBarAvatar {
+          height: 35px;
+          margin-right: 0px;
+          width: 35px;
+        @media screen and (max-width: 600px) {
+          height: 26px;
+          margin-right: 0px;
+          width: 26px;
+        }
+      }
+      }
+
   }
 
   ${AvatarBg} {
       position: relative!important;
       margin-right: 10px;
   }
+
+  
 
   .ant-menu {
     background: transparent;
@@ -46,6 +66,7 @@ export const HeaderBar = styled.div`
 
     .ant-menu-item {
       padding: 0.85rem 1rem;
+      vertical-align: middle!important;
       @media screen and (max-width: 600px) {
         padding: 2px;
         margin: 0 5px;
@@ -60,12 +81,11 @@ export const HeaderBar = styled.div`
       }
       /* display: flex; */
       a {
-        margin-right: 5px;
+        
         font-size: 14px;
         width: auto;
         display: flex;
-        height: 24px;
-        width: 24px;
+   
         overflow: visible;
         position: relative;
         @media screen and (max-width: 1000px) {
@@ -76,7 +96,7 @@ export const HeaderBar = styled.div`
           font-size: 14px;
         }
         .sc-hzDkRC {
-          position: absolute!important;
+          /* position: absolute!important; */
           margin-right: 10px;
           height: 40px;
           width: 40px;

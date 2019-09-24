@@ -37,8 +37,8 @@ const AB: React.SFC<any> = ({className, isMobile}) => {
                 <Box>
                     <Menu mode="horizontal">
                         <Menu.Item key="profile">
-                            <AvatarLink to='/profile'>
-                                <AvatarBg sideNav={true} src={currentUser.photoURL ? currentUser.photoURL : '/icons/headphones.svg'} />
+                            <AvatarLink to='/profile' id='AppBarAvatarLink'>
+                                <AvatarBg id='AppBarAvatar' sideNav={true} src={currentUser.photoURL ? currentUser.photoURL : '/icons/headphones.svg'} />
                             </AvatarLink>
                         </Menu.Item>
                         <Menu.Item key="invite">

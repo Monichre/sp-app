@@ -1,13 +1,11 @@
-import React, { useState, useRef } from 'react';
-import styled, { css } from 'styled-components'
+import React from 'react';
 import { Container } from '../../../shared/ui';
 import { List, Avatar, Icon, Drawer, Carousel, Alert, Tabs } from 'antd';
-import { Box, Flex } from 'rebass';
 import { UserAchievementContext } from '../../Home/Authed/Authed';
 import { mapSizesToProps } from '../../../lib/mapSizes'
 import withSizes from 'react-sizes'
 import { MobileSidebarSection } from './MobileSidebarSection'
-import {SideBarSection} from './SideBarSection'
+// import {SideBarSection} from './SideBarSection'
 
 
 const { TabPane } = Tabs;
@@ -42,11 +40,11 @@ const SB: React.SFC<SideBarProps> = ({ isMobile }) => {
             }}
             visible={isOpen}
         >
-            <Container sideBarMobile={isMobile} sideBar={true}>
+            <Container sideBar={true}>
 
                 {isMobile ? null : achievements && <Alert message={description} type="info" showIcon />}
 
-                {isMobile && achievements && <Tabs defaultActiveKey="1" tabPosition={'left'} style={{ height: '100%' }}>
+                {achievements && <Tabs defaultActiveKey="1" tabPosition={'left'} style={{ height: '100%' }}>
 
                     {Object.keys(achievements).reverse().map((period: any, i: any) => {
                         const periodAchievements: any = achievements[period]
@@ -58,7 +56,7 @@ const SB: React.SFC<SideBarProps> = ({ isMobile }) => {
 
                             return (
                                 <TabPane tab={period} key={i}>
-                                    <MobileSidebarSection key={`mobile_sidebar_section_${i}`} achievements={periodAchievements} isMobile={isMobile} period={period} title={title} currentUser={currentUser} i={i} />
+                                    <MobileSidebarSection key={`mobile_sidebar_section_${i}`} achievements={periodAchievements} period={period} title={title} currentUser={currentUser} i={i} />
 
                                 </TabPane>
                             )
@@ -67,7 +65,7 @@ const SB: React.SFC<SideBarProps> = ({ isMobile }) => {
 
                 </Tabs>}
 
-                {!isMobile && achievements && Object.keys(achievements).reverse().map((period: any, i: any) => {
+                {/* {!isMobile && achievements && Object.keys(achievements).reverse().map((period: any, i: any) => {
                     const periodAchievements: any = achievements[period]
 
                     if (periodAchievements && periodAchievements.length) {
@@ -83,7 +81,7 @@ const SB: React.SFC<SideBarProps> = ({ isMobile }) => {
 
                         )
                     }
-                })}
+                })} */}
 
             </Container>
         </Drawer>

@@ -1,10 +1,163 @@
-import * as React from 'react';
-import { Component } from 'react';
-import { Popover, List, Avatar } from 'antd';
+import { Popover, List, Avatar, Card } from 'antd';
 import styled from 'styled-components';
+import { APP_BLUE_TRANSPARENT, APP_BORDER_RADIUS_MD } from '../GlobalStyle';
 
+
+
+export const ListCard = styled(Card)`
+  .ant-card-head-title {
+    color: #fff;
+    padding: 14px 9px;
+  }
+  .ant-card {
+    background-color: ${APP_BLUE_TRANSPARENT};
+    border-radius: ${APP_BORDER_RADIUS_MD};
+    .ant-list-item {
+      background: transparent!important;
+    }
+  }
+  .ant-card, .ant-card.ant-card-bordered {
+    /* background-color: rgba(216,216,216,.025); */
+    /* background-color: ${APP_BLUE_TRANSPARENT}; */
+    background: transparent!important;
+    border: none;
+    border-radius: ${APP_BORDER_RADIUS_MD}!important;
+    width: 100%;
+  }
+  .ant-card-body {
+    /* background-color: rgba(216,216,216,.025); */
+    background: transparent!important;
+    width: 100%;
+        border-radius: 12px;
+        border-bottom: none;
+        padding: 18px;
+  }
+`
 
 export const ListStyle = styled(List)`
+
+${ListCard} {
+  background: transparent!important;
+  border: none!important;
+  width: 100%;
+ 
+
+
+}
+
+.ant-list {
+  /* background-color: #030616!important; */
+  background: transparent!important;
+
+  &#artistTopListeners {
+    .ant-list-item {
+      flex-direction: column!important;
+      align-content: flex-start;
+      border-bottom: none;
+      background-color: rgba(216,216,216,.025);
+      border-bottom: none;
+    }
+
+    
+
+  }
+
+  &#SideBarAchievements {
+    .ant-list-item {
+      border-bottom: none;
+      background-color: rgba(216,216,216,.025);
+      border-radius: 12px;
+
+      &.lifetime {
+
+        h4 {
+          border-bottom: 1px solid #ffa726;
+          width: max-content;
+        }
+      
+      }
+      }
+    }
+  }
+
+
+
+
+  .ant-list-footer {
+    display: none;
+  }
+
+  #achievementHoldersList {
+
+  }
+  .ant-list-items {
+    .ant-list-item {
+      position: relative;
+      display: flex;
+      flex-direction: row!important;
+      background-color: rgba(216,216,216,.055);
+      padding: 0!important;
+      border-radius: ${APP_BORDER_RADIUS_MD}!important;
+      margin-bottom: 18px;
+      border-bottom: none!important;
+
+      /* Nested List Item */ 
+        .ant-list-item {
+          background: transparent!important;
+          background-color: transparent;
+          margin-bottom: 0;
+        }
+      }
+
+  }
+      .ant-card-head {
+        padding: 0;
+      }
+
+      &.notLifeTimeAchievement {
+        .ant-list-item-extra {
+          margin-top: 40px;
+          .ant-carousel .slick-dots-bottom {
+            bottom: -5px;
+          }
+        }
+      }
+      .ant-list-item-main, .ant-list-item-extra {
+          margin-left: 0!important;
+          width: 48%!important;
+      }
+      .ant-list-item-main {
+        padding: 10px;
+      }
+      .ant-list-item-action {
+        margin-left: 48px;
+      }
+
+      .ant-list-item-extra {
+        .slick-dots.slick-dots-bottom {
+          li {
+            button {
+              width: 5px;
+              height: 5px;
+              background-image: linear-gradient(to bottom,#e64a19 0%,#ffa726 100%);
+              border-radius: 50%;
+            }
+
+            &.slick-active {
+              position: relative;
+              top: 1px;
+              button {
+              width: 16px;
+              height: 3px;
+              background-image: linear-gradient(to bottom,#e64a19 0%,#ffa726 100%);
+              opacity: 1;
+              border-radius: 5px;
+            }
+            }
+          }
+        }
+      }
+
 
 .ant-list {
   -webkit-box-sizing: border-box;
@@ -278,6 +431,5 @@ export const ListStyle = styled(List)`
     margin: auto auto 16px;
   }
 }
-
+  }
 `
-

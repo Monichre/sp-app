@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ArtistsFragmentArtist, useGetArtistAchievementHolders } from '../../../types';
 import { User } from '../../../../../back/src/fns/graphql/types';
-import { ListStyle } from '../ListStyle';
+import { ListStyle, ListCard } from '../ListStyle';
 import { decimalToHrsMins, hrsAndMins } from '../../../lib/durationFormats';
 import { Popover, List, Row, Col, Card, Icon, Tag, Avatar, Badge } from 'antd';
 import { IconText, AvatarBg } from '../Elements';
@@ -31,7 +31,7 @@ export const AchievementHoldersList: React.SFC<AchievementHoldersListProps> = ({
                 <List id='achievementHoldersList' dataSource={items} renderItem={item => {
                     return (
                         <List.Item>
-                            <Card title={item.title}>
+                            <ListCard title={item.title}>
                                 <List
                                     itemLayout="vertical"
                                     size="large"
@@ -68,7 +68,7 @@ export const AchievementHoldersList: React.SFC<AchievementHoldersListProps> = ({
                                         )
                                     }}
                                 />
-                            </Card>
+                            </ListCard>
                         </List.Item>
                     )
                 }} />
