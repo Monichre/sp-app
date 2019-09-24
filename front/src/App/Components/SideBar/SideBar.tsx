@@ -1,12 +1,12 @@
 import React from 'react';
 import { Container } from '../../../shared/ui';
-import { List, Avatar, Icon, Drawer, Carousel, Alert, Tabs } from 'antd';
+import {  Drawer, Alert, Tabs } from 'antd';
 import { UserAchievementContext } from '../../Home/Authed/Authed';
 import { mapSizesToProps } from '../../../lib/mapSizes'
 import withSizes from 'react-sizes'
-import { MobileSidebarSection } from './MobileSidebarSection'
-// import {SideBarSection} from './SideBarSection'
+import {SidebarSection} from './SideBarSection'
 
+import { AchievementsSideBarHeader } from './AchievementsSideBarHeader'
 
 const { TabPane } = Tabs;
 
@@ -42,7 +42,7 @@ const SB: React.SFC<SideBarProps> = ({ isMobile }) => {
         >
             <Container sideBar={true}>
 
-                {isMobile ? null : achievements && <Alert message={description} type="info" showIcon />}
+                <AchievementsSideBarHeader currentUser={currentUser} />
 
                 {achievements && <Tabs defaultActiveKey="1" tabPosition={'left'} style={{ height: '100%' }}>
 
@@ -56,33 +56,13 @@ const SB: React.SFC<SideBarProps> = ({ isMobile }) => {
 
                             return (
                                 <TabPane tab={period} key={i}>
-                                    <MobileSidebarSection key={`mobile_sidebar_section_${i}`} achievements={periodAchievements} period={period} title={title} currentUser={currentUser} i={i} />
-
+                                    <SidebarSection key={`mobile_sidebar_section_${i}`} achievements={periodAchievements} period={period} title={title} currentUser={currentUser} i={i} />
                                 </TabPane>
                             )
                         }
                     })}
 
                 </Tabs>}
-
-                {/* {!isMobile && achievements && Object.keys(achievements).reverse().map((period: any, i: any) => {
-                    const periodAchievements: any = achievements[period]
-
-                    if (periodAchievements && periodAchievements.length) {
-
-                        const achievementContext = period === 'life' ? 'lifetime achievements' : `achievements this ${period}`
-                        const title = `Your ${achievementContext}`
-
-                        return (
-
-                            <Box key={`sidebar_section_box_${i}`}>
-                                <SideBarSection key={`sidebar_section_${i}`} achievements={periodAchievements} isMobile={isMobile} period={period} title={title} currentUser={currentUser} />
-                            </Box>
-
-                        )
-                    }
-                })} */}
-
             </Container>
         </Drawer>
 

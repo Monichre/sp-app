@@ -6,8 +6,8 @@ import { Flex, Box } from 'rebass';
 import { MenuIcon } from '../../../shared/icons';
 import { UserInvitePopUp } from '../UserInvitePopUp/UserInvitePopUp';
 import { SpotifyLogoLink } from '../../../shared/SpotifyLogoLink/SpotifyLogoLink';
-import { Menu } from 'antd';
-import {mapSizesToProps} from '../../../lib/mapSizes'
+import { Menu, Badge, Icon, Popover, Tag } from 'antd';
+import { mapSizesToProps } from '../../../lib/mapSizes'
 import withSizes from 'react-sizes'
 
 
@@ -16,19 +16,28 @@ export interface AppBarProps {
     isMobile: boolean
 }
 
-const AB: React.SFC<any> = ({className, isMobile}) => {
+const AB: React.SFC<any> = ({ className, isMobile }) => {
 
     const { isOpen, setSideBarOpen, currentUser }: any = React.useContext(UserAchievementContext)
     const [visible, setVisible]: any = React.useState(false)
+    const [notificationsVisible, setNotificationsVisible]: any = React.useState(false)
 
     const spotifyURL = `https://open.spotify.com/user/${currentUser.uid.split(':')[1]}`
 
     const toggle = (e: any) => {
         if (e) {
-            console.log('TCL: toggle -> e', e)
+            
             e.preventDefault()
         }
         setVisible((visible: any) => !visible);
+    }
+
+    const toggleNotifications = (e: any) => {
+        if (e) {
+            
+            e.preventDefault()
+        }
+        setNotificationsVisible((notificationsVisible: any) => !notificationsVisible);
     }
 
     return (
@@ -47,7 +56,23 @@ const AB: React.SFC<any> = ({className, isMobile}) => {
                         <Menu.Item key="spotify-link">
                             <SpotifyLogoLink href={spotifyURL} />
                             {isMobile ? null : 'Listen on Spotify'}
-                    </Menu.Item>
+                        </Menu.Item>
+                        <Menu.Item key="achievements">
+                        <Popover
+                            content={<p>Introducing Artist & Genre Leaders <br />Check out your achievements in the the achievements side bar menu to the right</p>}
+                                title={<p style={{margin: 0}}>New Feature! <Tag color="blue">Beta</Tag></p>}
+                            trigger="click"
+                            visible={notificationsVisible}
+                        >
+                            <span onClick={toggleNotifications}>
+                                <Badge count={1} color='#e64a19'>
+                                    <Icon type="notification" />
+                                </Badge>
+                            </span>
+                                
+                        </Popover>
+                           
+                        </Menu.Item>
                     </Menu>
 
                 </Box>

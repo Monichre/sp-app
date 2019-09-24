@@ -163,22 +163,6 @@ export const Container: any = styled.div`
     height: 100%;
     justify-content: flex-start;
 
-
-  `}
-
-  ${(props: any) => props.sideBarMobile && css`
-  /* padding-top: 20px; */
-    padding: 0;
-  `}
-
-
-  ${(props: any) => props.sideBarMobile && props.sideBar && css`
-  /* padding-top: 20px; */
-    padding: 0;
-    justify-content: flex-start;
-  `}
-
-  @media screen and (max-width: 600px) {
     .ant-tabs-nav-container {
       background-color: ${APP_BG_LIGHTEN};
       padding: 20px 0;
@@ -211,6 +195,23 @@ export const Container: any = styled.div`
         }
       }
     }
+
+  `}
+
+  ${(props: any) => props.sideBarMobile && css`
+  /* padding-top: 20px; */
+    padding: 0;
+  `}
+
+
+  ${(props: any) => props.sideBarMobile && props.sideBar && css`
+  /* padding-top: 20px; */
+    padding: 0;
+    justify-content: flex-start;
+  `}
+
+  @media screen and (max-width: 600px) {
+    
 
   }
 

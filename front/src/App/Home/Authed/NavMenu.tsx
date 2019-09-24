@@ -166,7 +166,7 @@ export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: s
 
   useEffect(() => {
     setTopArtistsWithAchievementHolders(ahWithArtist) // Sets the App's Larger Data Context with Top Artists and their respective Top Listeners or Achievement Holders
-  }, [])
+  }, [usersTopArtistByPeriodData])
 
   useEffect(() => {
     setTopArtistByPeriodData(usersTopArtistByPeriodData) // Sets the current users achievements based on the data from line #159 - useGetTopArtistAchievementHolders
