@@ -8,453 +8,55 @@ import { BODY_FONT } from "../shared/media";
 // export const DASH_PINK = `#EE9999`
 // export const DASH_PURPLE = `#9999EE`
 
+/*
+  BLUES: 22284A, 1D223F, 191D36, 15192E, 121527, 0F1221, 0C0F1B, 0A0C16, 080A12, 07080F 06070C
+
+  Some other ones...
+  background: #DD9999;
+background: #DDBB99;
+background: #DDDD99;
+background: #99DDDD;
+background: #99BBDD;
+background: #9999DD;
+background: #EE9999;
+background: #EECC99;
+background: #EEEE99;
+background: #99EEEE;
+background: #99CCEE;
+background: #9999EE;
+background: #FF9999;
+background: #FFCC99;
+background: #FFFF99;
+background: #99FFFF;
+background: #99CCFF;
+background: #9999FF;
+background: #EE8888;
+background: #EEBB88;
+background: #EEEE88;
+background: #88EEEE;
+background: #88BBEE;
+background: #8888EE;
+background: #FF7777;
+background: #FFBB77;
+background: #FFFF77;
+background: #77FFFF;
+background: #77BBFF;
+background: #7777FF;
+background: #FF6666;
+background: #FFAA66;
+background: #FFFF66;
+background: #66FFFF;
+background: #66AAFF;
+background: #6666FF;
+*/
+
 export const APP_BG_COLOR = `#030616`
 export const APP_BLUE = `rgba(100,214,238,1)`
 export const APP_BG_LIGHTEN = `rgba(216,216,216,.055)`
 export const APP_BORDER_RADIUS_LG = `12px`
 export const APP_BORDER_RADIUS_MD = `6px`
 export const APP_BORDER_RADIUS_SM = `3px`
-/*
-position: absolute;
-width: 90px;
-height: 90px;
-left: 975px;
-top: 621px;
 
-background: #DD9999;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 975px;
-top: 531px;
-
-background: #DDBB99;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 975px;
-top: 441px;
-
-background: #DDDD99;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 975px;
-top: 891px;
-
-background: #99DDDD;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 975px;
-top: 801px;
-
-background: #99BBDD;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 975px;
-top: 711px;
-
-background: #9999DD;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1055px;
-top: 621px;
-
-background: #EE9999;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1055px;
-top: 531px;
-
-background: #EECC99;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1055px;
-top: 441px;
-
-background: #EEEE99;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1055px;
-top: 891px;
-
-background: #99EEEE;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1055px;
-top: 801px;
-
-background: #99CCEE;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1055px;
-top: 711px;
-
-background: #9999EE;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1135px;
-top: 621px;
-
-background: #FF9999;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1135px;
-top: 531px;
-
-background: #FFCC99;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1135px;
-top: 441px;
-
-background: #FFFF99;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1135px;
-top: 891px;
-
-background: #99FFFF;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1135px;
-top: 801px;
-
-background: #99CCFF;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1135px;
-top: 711px;
-
-background: #9999FF;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1215px;
-top: 621px;
-
-background: #EE8888;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1215px;
-top: 531px;
-
-background: #EEBB88;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1215px;
-top: 441px;
-
-background: #EEEE88;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1215px;
-top: 891px;
-
-background: #88EEEE;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1215px;
-top: 801px;
-
-background: #88BBEE;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1215px;
-top: 711px;
-
-background: #8888EE;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1295px;
-top: 622px;
-
-background: #FF7777;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1295px;
-top: 532px;
-
-background: #FFBB77;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1295px;
-top: 442px;
-
-background: #FFFF77;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1295px;
-top: 892px;
-
-background: #77FFFF;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1295px;
-top: 802px;
-
-background: #77BBFF;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1295px;
-top: 712px;
-
-background: #7777FF;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1375px;
-top: 622px;
-
-background: #FF6666;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1375px;
-top: 532px;
-
-background: #FFAA66;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1375px;
-top: 442px;
-
-background: #FFFF66;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1375px;
-top: 892px;
-
-background: #66FFFF;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1375px;
-top: 802px;
-
-background: #66AAFF;
-transform: rotate(90deg);
-
-
-
-
-position: absolute;
-width: 90px;
-height: 90px;
-left: 1375px;
-top: 712px;
-
-background: #6666FF;
-transform: rotate(90deg);
-Help Center
-Keyboard Shortcuts
-⌃⇧?
-Community Forum
-Video Tutorials
-Reset Onboarding
-Release Notes
-Legal Summary
-Get Help
-
-
-*/
 
 export const GlobalStyle = createGlobalStyle`
 html {
