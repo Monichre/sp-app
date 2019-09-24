@@ -61,8 +61,8 @@ export const TimeseriesChart: React.SFC<{timeSeries: TimescopeDashTimeSeries, sh
   <AreaChart data={timeSeries.values}>
     <defs>
       <linearGradient id="Gradient">
-        <stop offset="0%" stop-color="#e64a19"/>
-        <stop offset="100%" stop-color="#ffa726"/>
+        <stop offset="0%" stopColor="#e64a19"/>
+        <stop offset="100%" stopColor="#ffa726"/>
       </linearGradient>
       <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
           <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8}/>

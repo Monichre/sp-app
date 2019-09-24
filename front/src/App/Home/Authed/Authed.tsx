@@ -74,6 +74,16 @@ const AuthedView = styled.div`
       right: 0;
       width: 100%;
       bottom: 0;
+
+      @media screen and (max-width: 600px) {
+        height: 10vh;
+
+        svg {
+          margin-bottom: 0;
+          height: 20px;
+          width: 20px;
+        }
+      }
       .sc-iELTvK {
        padding: 0;
        justify-content: center;

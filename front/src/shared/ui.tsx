@@ -2,6 +2,7 @@ import React from 'react';
 import styled, {css} from 'styled-components'
 import { useUser, useAuthHandlers, BasicUser, impersonate } from '../App/FirebaseContext';
 import { Redirect } from 'react-router';
+import { APP_BG_LIGHTEN, APP_BG_COLOR, APP_BORDER_RADIUS_LG, APP_BORDER_RADIUS_MD, APP_BORDER_RADIUS_SM, APP_BLUE } from '../App/GlobalStyle';
 const Color = require('color')
 
 const Blue = Color('#00bcdd')
@@ -160,6 +161,8 @@ export const Container: any = styled.div`
     flex-direction: column;
     justify-content: space-around;
     height: 100%;
+
+
   `}
 
   ${(props: any) => props.sideBarMobile && css`
@@ -173,6 +176,42 @@ export const Container: any = styled.div`
     padding: 0;
     justify-content: flex-start;
   `}
+
+  @media screen and (max-width: 600px) {
+    .ant-tabs-nav-container {
+      background-color: ${APP_BG_LIGHTEN};
+      padding: 20px 0;
+      .ant-tabs-tab-active.ant-tabs-tab {
+        color: ${APP_BLUE};
+        background-color: ${APP_BG_COLOR};
+
+      }
+      .ant-tabs-ink-bar.ant-tabs-ink-bar-animated {
+        background-color: ${APP_BLUE};
+      }
+    }
+
+    .ant-collapse-item {
+      border: none!important;
+      border-radius: ${APP_BORDER_RADIUS_MD};
+      background-color: rgba(216,216,216,.055);
+      margin: 10px 0 !important;
+    }
+    /* Its on the right but fuck it whatever */
+    .ant-tabs .ant-tabs-left-content { 
+      overflow: scroll;
+      height: 100vh;
+    }
+
+    .ant-collapse-content-box {
+      p {
+        img {
+          margin-right: 10px;
+        }
+      }
+    }
+
+  }
 
   @media screen and (max-width: 768px) {
     margin: 0;

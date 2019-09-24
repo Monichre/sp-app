@@ -1,14 +1,19 @@
 import { createGlobalStyle } from "styled-components"
 import { BODY_FONT } from "../shared/media";
 
-export const DASH_GREEN = `rgb(87, 192, 167)`
-export const DASH_DARK = `rgba(0, 3, 6, 0.7)`
-export const DASH_BLUE = `#99EEEE`
-export const DASH_YELLOW = `#EEEE99`
-export const DASH_PINK = `#EE9999`
-export const DASH_PURPLE = `#9999EE`
+// export const DASH_GREEN = `rgb(87, 192, 167)`
+// export const DASH_DARK = `rgba(0, 3, 6, 0.7)`
+// export const DASH_BLUE = `#99EEEE`
+// export const DASH_YELLOW = `#EEEE99`
+// export const DASH_PINK = `#EE9999`
+// export const DASH_PURPLE = `#9999EE`
 
-
+export const APP_BG_COLOR = `#030616`
+export const APP_BLUE = `rgba(100,214,238,1)`
+export const APP_BG_LIGHTEN = `rgba(216,216,216,.055)`
+export const APP_BORDER_RADIUS_LG = `12px`
+export const APP_BORDER_RADIUS_MD = `6px`
+export const APP_BORDER_RADIUS_SM = `3px`
 /*
 position: absolute;
 width: 90px;
@@ -462,6 +467,7 @@ html {
     height: 100%;
     background-color: #030616;
     
+    
   }
   #root {
     height: auto!important;
@@ -675,6 +681,7 @@ html {
  .ant-popover-inner {
 
   background-color: rgba(216,216,216,.055)!important;
+  
 
 }
 .ant-tabs .ant-tabs-left-content {

@@ -124,15 +124,12 @@ export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: s
 
 
   // Local State
-  const [dataEmpty, setDataEmpty] = useState(true)
   const [topArtistByPeriodData, setTopArtistByPeriodData] = useState(false)
 
   // Context Props 
-  const { setTopArtistsWithAchievementHolders, topArtistsWithAchievementHolders } = useContext(UserAchievementContext)
+  const { setTopArtistsWithAchievementHolders, topArtistsWithAchievementHolders, achievements } = useContext(UserAchievementContext)
   
-  const pollInterval = dataEmpty ? 1000 : 0
-
-
+  
   // Vars 
   const { uid } = user
   const { history, match } = rest
@@ -162,7 +159,7 @@ export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: s
   console.log('TCL: artists', artists)
 
 
-  const { getTopArtistAchievementHolders = null }: any = (artists && artists.length) ? suspensefulHook(useGetTopArtistAchievementHolders({ variables: { perspectiveUID: 'global', artistIds: artists.map((artist: any) => artist.id) }, suspend: true, })) : { getTopArtistAchievementHolders: null }
+  const { getTopArtistAchievementHolders = null }: any = suspensefulHook(useGetTopArtistAchievementHolders({ variables: { perspectiveUID: 'global', artistIds: artists.map((artist: any) => artist.id) }, suspend: true, })) 
 
   const ahWithArtist = getTopArtistAchievementHolders ? getTopArtistAchievementHolders.map(({ artistId, achievementHolders }: any) => ({ achievementHolders, artist: artists.find((artist: any) => artist.id === artistId) })) : null
   console.log('TCL: ahWithArtist', ahWithArtist)
@@ -173,7 +170,7 @@ export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: s
 
   useEffect(() => {
     setTopArtistByPeriodData(usersTopArtistByPeriodData) // Sets the current users achievements based on the data from line #159 - useGetTopArtistAchievementHolders
-  }, [])
+  }, [achievements])
 
   return (
     <NavMenuView>
