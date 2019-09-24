@@ -3,19 +3,19 @@ import { TPathParams, insightLink, artistLink, navigateTo } from '../functions';
 import { Link, withRouter, BrowserRouter, RouteComponentProps } from 'react-router-dom';
 import { History } from 'history'
 import { PerspectiveDashArtists } from '../../../../../../types';
-import { ResponsiveContainer, BarChart, XAxis, YAxis, Bar, CartesianGrid, Label, Text, LineChart, Line, Tooltip, Legend } from 'recharts';
-import { BRAND_GLOBAL_COLOR, BRAND_PERSONAL_COLOR, notLargeQuery } from '../../../../../../shared/media';
+import { ResponsiveContainer, BarChart, XAxis, YAxis, Bar, Label } from 'recharts';
+import { BRAND_GLOBAL_COLOR, BRAND_PERSONAL_COLOR } from '../../../../../../shared/media';
 import { Comment } from '../Comment';
 import max from 'ramda/es/max';
 import pluck from 'ramda/es/pluck';
 import reduce from 'ramda/es/reduce';
-import styled from 'styled-components';
 import pipe from 'ramda/es/pipe';
-import { hrsAndMins, decimalToHrsMins } from '../../../../../../lib/durationFormats'
+import { decimalToHrsMins } from '../../../../../../lib/durationFormats'
 import { TopListenerYaxis } from './TopListenerYAxis'
 import { CustomArtistTick } from './CustomArtistTick'
 import { normalizeTimeScope } from '../../Main/Overview'
-
+import {mapSizesToProps} from '../../../../../../lib/mapSizes'
+import withSizes from 'react-sizes'
 
 export type TickProps = {
   x?: number
@@ -30,6 +30,7 @@ export type TickProps = {
   userId: string,
   revealTopListener: Function
   pathParams: TPathParams
+  isMobile: boolean
 }
 
 type UserIdProp = {
@@ -55,12 +56,16 @@ const domainMaxBuilder: (values: PerspectiveDashArtists[]) => (maxValue: number)
 
 
 
-type ChartProps = { pathParams: TPathParams, artists: PerspectiveDashArtists[], height?: any }
+type ChartProps = { pathParams: TPathParams, artists: PerspectiveDashArtists[], height?: any, isMobile: boolean }
 
-const ArtistsChart: React.SFC<RouteComponentProps & ChartProps & UserIdProp> = ({ pathParams, artists, history, height = 70, userId }) => {
-  console.log('TCL: artists', artists)
-
+const ArtistsChart: React.SFC<RouteComponentProps & ChartProps & UserIdProp> = ({ pathParams, artists, history, height = 70, userId, isMobile }) => {
+  
+  console.log('ArtistsChart: isMobile', isMobile)
   console.count('Artist Chart Render')
+
+  const yAxisArtistWidth = isMobile ? 50 : 150
+  const yAxisAchievementsWidth = isMobile ? 50 : 75
+
   return (
     <ResponsiveContainer width='100%' height={(height * artists.length) + 100}>
 
@@ -70,14 +75,14 @@ const ArtistsChart: React.SFC<RouteComponentProps & ChartProps & UserIdProp> = (
           <Label position='insideTopLeft' dy={-2} offset={0} stroke='#fff'>hours</Label>
         </XAxis>
 
-        <YAxis width={150} yAxisId="left" orientation="left" type='category' stroke={BRAND_PERSONAL_COLOR} interval={0} tick={({ payload, ...props }) => {
+        <YAxis width={yAxisArtistWidth} yAxisId="left" orientation="left" type='category' stroke={BRAND_PERSONAL_COLOR} interval={0} tick={({ payload, ...props }) => {
           console.log('TCL: payload', payload)
           return <CustomArtistTick {...props} pathParams={pathParams} artist={artists[payload.value].artist} />
         }}
 
         />
 
-        <YAxis width={75} yAxisId="right" orientation="right" stroke={BRAND_PERSONAL_COLOR} type='category' interval={0} tick={({ payload, ...props }) =>
+        <YAxis width={yAxisAchievementsWidth} yAxisId="right" orientation="right" stroke={BRAND_PERSONAL_COLOR} type='category' interval={0} tick={({ payload, ...props }) =>
           <TopListenerYaxis {...props} pathParams={pathParams} artist={artists[payload.value].artist} totalTimeListened={artists[payload.value].personal} groupScore={artists[payload.value].group} userId={userId} />}>
           <Label position='insideBottomRight' dy={4} offset={0} stroke='#fff'>{`Platform Leaders ${normalizeTimeScope(pathParams)}`}</Label>
         </YAxis>
@@ -94,17 +99,21 @@ const ArtistsChart: React.SFC<RouteComponentProps & ChartProps & UserIdProp> = (
 
 const ArtistsChartWithRouter = withRouter(ArtistsChart)
 
-export const ArtistsChartBlock: React.SFC<{ pathParams: TPathParams, artists: PerspectiveDashArtists[], height?: any } & UserIdProp> = ({ children, ...params }) => {
+const ChartBlock: React.SFC<{ pathParams: TPathParams, artists: PerspectiveDashArtists[], height?: any, isMobile: boolean } & UserIdProp | any> = ({ children, isMobile, ...params }) => {
 console.log('TCL: params', params)
+console.log('TCL: isMobile', isMobile)
 
   return (
     <div>
       {children}
       {params.artists.length > 0 ?
-        <ArtistsChartWithRouter {...params} /> :
+        <ArtistsChartWithRouter {...params} {...{isMobile}} /> :
         <Comment>I don't see any artists for you here.  Have you <a target='new' href='http://open.spotify.com'>listened to Spotify lately?</a></Comment>
       }
     </div>
   )
 
 }
+
+
+export const ArtistsChartBlock: any = withSizes(mapSizesToProps)(ChartBlock)

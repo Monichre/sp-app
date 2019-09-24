@@ -1,87 +1,69 @@
 import * as React from 'react';
-import { Component } from 'react';
-import styled, { css } from 'styled-components';
-
+import { useState } from 'react';
 import {
-    Signature,
-ProfileBackground,
-CardWrapper,
-LeftWrapper,
-PhotoWrapper,
-CircleOne,
-CircleTwo,
-Photo,
-SubtitleWrapper,
-Name,
-Job,
-UserHeadphonesAvatar,
-ButtonsWrapper,
-RightWrapper,
-PanelWrapper,
-Description,
+    ProfileBackground,
+    CardWrapper,
+    LeftWrapper,
+ 
+    Photo,
+    UserHeadphonesAvatar,
+    ButtonsWrapper,
+
 } from './ProfileCardStyles'
-import { Button, GradientButtonFilled } from '../../../../shared/ui';
+
 import { SpotifyLogoLink } from '../../../../shared/SpotifyLogoLink/SpotifyLogoLink';
+import { UserInvitePopUp } from '../../../Components/UserInvitePopUp/UserInvitePopUp';
+import { Menu } from 'antd';
+import {mapSizesToProps} from '../../../../lib/mapSizes'
+import withSizes from 'react-sizes'
+
 
 export interface ProfileCardProps {
     user: any
+    isMobile: boolean
 }
- 
-export const ProfileCard: React.SFC<ProfileCardProps> = ({ user }) => {
-    const spotifyURL= `https://open.spotify.com/user/${user.uid.split(':')[1]}`
-    console.log('TCL: spotifyURL', spotifyURL)
-    return ( 
+
+export const PC: React.SFC<any> = ({ user, isMobile }) => {
+    
+    const [visible, setVisible]: any = useState(false)
+
+    const spotifyURL = `https://open.spotify.com/user/${user.uid.split(':')[1]}`
+
+    const toggle = (e: any) => {
+        if (e) {
+            console.log('TCL: toggle -> e', e)
+            e.preventDefault()
+}
+        // e.stopPropagation()
+        setVisible((visible: any) => !visible);
+    }
+
+    return (
         <ProfileBackground>
             <CardWrapper>
                 <LeftWrapper>
-                    <PhotoWrapper>
-                        <CircleOne></CircleOne>
-                        <CircleTwo></CircleTwo>
-                        <Photo>{user.photoURL ? <img src={user.photoURL} /> : <UserHeadphonesAvatar />}</Photo>
-                    </PhotoWrapper>
-                    <SubtitleWrapper>
-                        <h4 style={{color: 'white'}}>Listen on Spotify</h4>
-                    <SpotifyLogoLink
-                                href={spotifyURL} />
 
-                    </SubtitleWrapper>
+                        <Photo>{user.photoURL ? <img src={user.photoURL} /> : <UserHeadphonesAvatar />}</Photo>
+                    
                     <ButtonsWrapper>
-                        <Button>{user.displayName}</Button>
-                        <Button>{user.email}</Button>
+                        <p>{user.displayName}</p>
+                        <p>{user.email}</p>
                     </ButtonsWrapper>
                 </LeftWrapper>
-                <RightWrapper>
-                    <PanelWrapper>
-
-                    </PanelWrapper>
-                    <PanelWrapper>
-                    
-                    </PanelWrapper>
-                </RightWrapper>
+                <Menu mode="horizontal">
+                    <Menu.Item key="spotify">
+                        <SpotifyLogoLink href={spotifyURL} />
+                        Listen on Spotify
+                    </Menu.Item>
+                    <Menu.Item key="invite">
+                        <UserInvitePopUp isMobile={isMobile} toggle={toggle} visible={visible} currentUserName={user.displayName} />
+                    </Menu.Item>
+                </Menu>
+                
             </CardWrapper>
-
-
-
         </ProfileBackground>
-
-     );
+    );
 }
- 
 
 
-
-
-
-// <div class="panelWrapper">
-//     <div class="value">523</div>
-//     <div class="description">posts</div>
-// </div>
-// <div class="panelWrapper">
-//     <div class="value">1387</div>
-//     <div class="description">likes</div>
-
-// </div>
-// <div class="panelWrapper">
-//     <div class="value">146</div>
-//     <div class="description">followers</div>
-// </div>
+export const ProfileCard: any = withSizes(mapSizesToProps)(PC)

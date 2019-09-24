@@ -1,15 +1,13 @@
 import * as React from 'react'
-import { useState } from 'react';
 import styled from 'styled-components';
 import { AchievementData, UserAchievementContext } from '../../Home/Authed/Authed';
 import { decimalToHrsMins, DecimalHoursToMinutes } from '../../../lib/durationFormats';
 import { AchievementListItem } from './AchievementListItem'
 import { HeaderFlexDiv } from '../Elements'
-import * as _ from 'lodash'
 import { parseAchievementsByPeriod } from './achievements-utils';
-import { suspensefulHook } from '../../../lib/suspensefulHook';
-import { useGetArtistAchievementHolders } from '../../../types';
-
+import * as _ from 'lodash'
+import {mapSizesToProps} from '../../../lib/mapSizes'
+import withSizes from 'react-sizes'
 
 
 const ListStyle = styled.ul`
@@ -78,7 +76,6 @@ const extractAchievementTypeAndValue = (pk: any) => {
 }
 
 
-
 export interface AchievementItemProps {
     achievementData: AchievementData
     title: string,
@@ -86,20 +83,23 @@ export interface AchievementItemProps {
 }
 
 
+const UAL: React.SFC<any> = ({ userId, usersTopArtistByPeriodData, isMobile }) => {
 
-export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ userId, usersTopArtistByPeriodData }) => {
+    // Check browser memory for some notification shit I wanna do
+    // @ts-ignore
+    const achievementsFromMemory = JSON.parse(localStorage.getItem('userAchievements'))
+
 
     const {
         achievements
     } = parseAchievementsByPeriod(usersTopArtistByPeriodData, userId)
-    const {setAchievements, isOpen, setSideBarOpen}: any = React.useContext(UserAchievementContext)
+    const {setAchievements, isOpen, setSideBarOpen, appNotifications, setNotifications}: any = React.useContext(UserAchievementContext)
     const handleClick = () => setSideBarOpen((isOpen: boolean) => !isOpen)
     const {
         week: weeklyAchievements,
         month: monthlyAchievements,
         life: lifetimeAchievements,
     } = achievements
-
 
   
     const la: any = (lifetimeAchievements) ? lifetimeAchievements.slice(0, 3).map(({ artistData, achievement }: any) => {
@@ -127,16 +127,27 @@ export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ use
         return { artistData, achievement }
     }) : []
 
-    
- 
-
     React.useEffect(() => {
         setAchievements(achievements)
     }, [])
 
-    
 
-    return (
+    React.useEffect(() => {
+        if (achievementsFromMemory && achievementsFromMemory.length) {
+            alert('we have achievements from last login. Lets compare the latest')
+    
+            if (achievements.length > achievementsFromMemory.length) {
+                let diff = achievements.length - achievementsFromMemory.length
+                const diffItems = _.difference(achievements.length, achievementsFromMemory.length);
+                console.log('TCL: diffItems', diffItems)
+    
+                setNotifications(diffItems)
+            }
+          }
+         
+    }, [achievementsFromMemory])
+    
+    return isMobile ? null : (
         <ListWrap>
             <HeaderFlexDiv><img src='/icons/award.svg' /> <h4>Achievements</h4></HeaderFlexDiv>
             <ListStyle>
@@ -153,3 +164,6 @@ export const UserAchievementsList: React.SFC<UserAchievementsListProps> = ({ use
         </ListWrap>
     );
 }
+
+
+export const UserAchievementsList: any = withSizes(mapSizesToProps)(UAL)

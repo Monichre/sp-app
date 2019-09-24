@@ -1,329 +1,28 @@
-import React, { useContext, createContext, useReducer, useState, Reducer, SetStateAction, useCallback, useEffect, useRef } from 'react';
-import styled, { css } from 'styled-components'
+import React from 'react';
 import { Container } from '../../../shared/ui';
-import { List, Avatar, Icon, Drawer, Carousel, Alert } from 'antd';
-import { Box, Flex } from 'rebass';
+import {  Drawer, Alert, Tabs } from 'antd';
 import { UserAchievementContext } from '../../Home/Authed/Authed';
-import { firstPlaceBadge, IconText, FlexDiv } from '../Elements'
-import { determineAchievementValueFromPK, AchievementMetaData } from '../UserAchievementsList/achievements-utils';
-import { User } from '../../../../../back/src/fns/graphql/types';
-import { DecimalHoursToMinutes, decimalToHrsMins } from '../../../lib/durationFormats';
-import { SpotifyLogoLink } from '../../../shared/SpotifyLogoLink/SpotifyLogoLink';
-import 'antd/es/drawer/style/css'
-import 'antd/es/carousel/style/css'
-import 'antd/es/list/style/css'
-import 'antd/es/alert/style/css'
-import { badgeMap } from '../../Home/Authed/Insights/shared/ArtistsChart/TopListenerYAxis'
-import { ArrowNext, ArrowPrev } from '../../../shared/icons';
+import { mapSizesToProps } from '../../../lib/mapSizes'
+import withSizes from 'react-sizes'
+import {SidebarSection} from './SideBarSection'
 
-const HoverIcon: any = styled.div`
-   margin: 0 auto;
-   width: 100%;
-   height: 80px;
-   max-width:80px;
-   background: linear-gradient(90deg, #FF7E7E 0%, #FF4848 40%, rgba(0, 0, 0, 0.28) 60%);
-   border-radius: 100%;
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   color: white;
-   transition: all 0.8s ease;
-   background-position: 0px;
-   background-size: 200px;
-`
-const ArtistCarouselImage: any = styled.div<{ src: string }>`
-display: flex;
-align-items: center;
-text-align: center;
-flex-direction: column;
-padding-bottom: 2rem;
-margin-bottom: 1rem;
-text-decoration: none;
-min-height: 250px;
-height: 100%;
-width: 100%;
-border-radius: 0.5rem;
-background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("${({ src }) => src}");
-background-position: center center;
-background-size: cover;
+import { AchievementsSideBarHeader } from './AchievementsSideBarHeader'
 
-${(props: any) => props.notLifeTimeAchievement && css`
-    height: 100px; 
-    width: 100px; 
-    min-height: 50px;
-    
-`}
-
-`
-
-const HoverTitle: any = styled.div`
-width: 100%;
-   margin: 0;
-   text-align: center;
-   margin-top: 30px;
-   color: white;
-   font-weight: 600;
-   text-transform: uppercase;
-   letter-spacing: 4px;
-`
-
-const HoverText: any = styled.div`
-  width: 80%;
-   margin: 0 auto;
-   font-size: 13px;
-   text-align: center;
-   margin-top: 20px;
-   color: white;
-   font-weight: 200;
-   letter-spacing: 2px;
-   opacity: 0;
-   max-height:0;
-   transition: all 0.3s ease;
-`
-
-const HoverCard: any = styled.div`
-  
-   width: 150px;
-   
-   height: 150px;
-   background-color: #292929;
-   margin: 10px;
-   border-radius: 10px;
-   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.24);
-   border: 2px solid rgba(7, 7, 7, 0.12);
-   font-size: 16px;   
-   transition: all 0.3s ease;
-   position: relative;
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   flex-direction: column;
-   cursor: pointer;
-   transition: all 0.3s ease;
-
-   &:hover {
-    .info {
-   height: 90%;
-}
-    ${HoverText} {
-        transition: all 0.3s ease;
-        opacity: 1;
-        max-height:40px;
-    }
-
-       ${HoverIcon} {
-        background-position: -120px;
-        transition: all 0.3s ease;
-        svg {
-            background: linear-gradient(90deg, #FF7E7E, #FF4848);
-        -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        opacity: 1;
-        transition: all 0.3s ease;
-        }
-       }
-   }
-`
-
-const CarouselWrap = styled.div`
-position: relative;
-`
-
-const ArrowMenu: any = styled.div`
-display: flex;
-justify-content: space-between;
-position: absolute;
-top: 10px;
-left: 50%;
-z-index: 2;
-width: 50%;
-
-${(props: any) => props.small && css`
-    padding: 0 60px;
-    top: 70px;
-`}
-`
-
-export interface NonPriortityAchievementListProps {
-    achievements: AchievementMetaData[]
-    title: string
-    currentUser: User
-    period: string
-}
-
-const NonPriortityAchievementList: React.SFC<NonPriortityAchievementListProps> = ({ achievements, period, title, currentUser }) => {
-
-
-    return (
-        <Box>
-            <List
-                className="demo-loadmore-list"
-                itemLayout="horizontal"
-                dataSource={achievements}
-                renderItem={item => {
-
-                    const { artistData: { artist: { id, images, name, topListeners }, personal }, achievement } = item
-                    const formattedTotal = decimalToHrsMins(personal)
-                    const place = determineAchievementValueFromPK(achievement)
-                    const appropriateBadge = badgeMap[place]
-
-                    return (
-                        <List.Item
-                            actions={[
-                                <IconText key={1}>
-                                    {`${formattedTotal} mins of  ${name}`}
-                                </IconText>,
-
-                                <IconText key={2}>
-                                    <SpotifyLogoLink href={`https://open.spotify.com/artist/${id}`} />
-                                </IconText>
-                            ]}
-                        >
-
-                            <List.Item.Meta
-                                avatar={<Avatar src={appropriateBadge} />}
-                            />
-
-
-                        </List.Item>
-                    )
-                }}
-            />
-        </Box>
-    );
-}
-
-{/* <NonPriortityAchievementList achievements={achievements} period={period} title={title} currentUser={currentUser} /> */}
-
-interface SideBarSectionProps {
-    achievements: AchievementMetaData[]
-    title: string
-    currentUser: User
-    period: string
-}
-
-
-
-
-const SideBarSection: React.SFC<SideBarSectionProps> = ({ achievements, period, title, currentUser }) => {
-
-    const achievementContext = [
-        { title, currentUser }
-    ]
-    const [currentArtist, setCurrentArtist] = useState(achievements[0])
-    const handleCarouselChange = (current: any) => setCurrentArtist(achievements[current])
-
-    const carouselRef: any = useRef()
-    console.log('TCL: carouselRef', carouselRef)
-    
-
-    const next = () => {
-        console.log('fucking clicking next')
-        carouselRef.current.next()
-    }
-    const prev = () => {
-        console.log('fucking clicking prev')
-        carouselRef.current.prev()
-    }
-
-    const { artistData: { artist: { id, images, name, topListeners }, personal }, achievement } = currentArtist
-    const formattedTotal = decimalToHrsMins(personal)
-
-
-    return   (
-        <List
-            id='SideBarAchievements'
-            itemLayout="vertical"
-            size="large"
-            pagination={false}
-            dataSource={achievementContext}
-            footer={
-                <div>
-                    <b>{title}</b>
-                </div>
-            }
-            renderItem={item => {
-
-                return (
-                    <List.Item
-                        className={period !== 'life' ? 'notLifeTimeAchievement' : 'lifetime'}
-                        key={title}
-                        actions={[
-                            <IconText key={1}>
-                                {`${formattedTotal} mins of  ${name}`}
-                            </IconText>,
-
-                            <IconText key={2}>
-                                <SpotifyLogoLink href={`https://open.spotify.com/artist/${id}`} />
-                            </IconText>
-                        ]}
-                        extra={
-                            <div>
-                                <ArrowMenu small={period !== 'life'}>
-                                    <ArrowPrev onClick={prev} />
-                                    <ArrowNext onClick={next} />
-                                </ArrowMenu>
-                                
-                                <Carousel afterChange={handleCarouselChange} ref={carouselRef}>
-                                {achievements.map((achievementData: AchievementMetaData) => {
-                                    const { artistData, achievement }: any = achievementData
-                                    console.log('TCL: achievement', achievement)
-                                    console.log('TCL: artistData', artistData)
-                                    const { artist: { name, images } } = artistData
-                                    console.log('TCL: images', images)
-                                    const artistIMG = images[0] ? images[0].url : ''
-                                    return (
-                                        <div style={{
-                                            height: '30vh'
-                                        }}>
-                                            <ArtistCarouselImage
-                                                notLifeTimeAchievement={period !== 'life'}
-                                                style={{
-                                                    margin: period !== 'life' ? '30px auto' : 'auto',
-                                                    display: 'block'
-                                                }}
-                                                width={150}
-                                                height='100%'
-                                                alt={`${name} featured image`}
-                                                src={artistIMG}
-                                            />
-                                        </div>
-                                    )
-                                })}
-
-                            </Carousel>
-
-                            </div>
-
-                        }
-                    >
-                        <List.Item.Meta
-                            avatar={<Avatar src={firstPlaceBadge} />}
-                            title={title}
-                        />
-
-                    </List.Item>
-                )
-            }}
-        />
-    );
-}
-
-
+const { TabPane } = Tabs;
 
 
 export interface SideBarProps {
-
+    isMobile: boolean
 }
 
-export const SideBar: React.SFC<SideBarProps> = () => {
-    const context: {
-        achievements: AchievementMetaData[],
-        isOpen: any,
-        setSideBarOpen: any,
-        currentUser: User
+const SB: React.SFC<SideBarProps> = ({ isMobile }) => {
+    const {
+        achievements,
+        isOpen,
+        setSideBarOpen,
+        currentUser
     } = React.useContext(UserAchievementContext)
-    const { achievements, isOpen, setSideBarOpen, currentUser } = context
+    
     const onClose = () => setSideBarOpen((isOpen: any) => !isOpen)
     const description = `Congratulations ${currentUser.displayName}! You have earned the following achievements for these artists.`
 
@@ -332,7 +31,7 @@ export const SideBar: React.SFC<SideBarProps> = () => {
     return (
 
         <Drawer
-            width={640}
+            width={isMobile ? '75%' : '50%'}
             placement="right"
             onClose={onClose}
             bodyStyle={{
@@ -341,40 +40,33 @@ export const SideBar: React.SFC<SideBarProps> = () => {
             }}
             visible={isOpen}
         >
-            <Container padded style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-around',
-                height: '100%'
-            }}>
+            <Container sideBar={true}>
 
-                {achievements ? <Alert message={description} type="info" showIcon /> : null}
+                <AchievementsSideBarHeader currentUser={currentUser} />
 
-                {achievements ? Object.keys(achievements).reverse().map((period: any, i: any) => {
-                    const periodAchievements: any = achievements[period]
+                {achievements && <Tabs defaultActiveKey="1" tabPosition={'left'} style={{ height: '100%' }}>
 
-                    if (periodAchievements && periodAchievements.length) {
+                    {Object.keys(achievements).reverse().map((period: any, i: any) => {
+                        const periodAchievements: any = achievements[period]
 
-                        const aInstance: AchievementMetaData = periodAchievements ? periodAchievements[0].achievement : null
-                        const achievementContext = period === 'life' ? 'lifetime achievements' : `achievements this ${period}`
-                        const title = `Your ${achievementContext}`
+                        if (periodAchievements && periodAchievements.length) {
 
+                            const achievementContext = period === 'life' ? 'lifetime achievements' : `achievements this ${period}`
+                            const title = `Your ${achievementContext}`
 
-                        return (
-                            <Box>
-                                <SideBarSection achievements={periodAchievements} period={period} title={title} currentUser={currentUser} />
-                            </Box>
-                        )
+                            return (
+                                <TabPane tab={period} key={i}>
+                                    <SidebarSection key={`mobile_sidebar_section_${i}`} achievements={periodAchievements} period={period} title={title} currentUser={currentUser} i={i} />
+                                </TabPane>
+                            )
+                        }
+                    })}
 
-                    }
-
-                    return null
-                }) : null
-                }
-
+                </Tabs>}
             </Container>
         </Drawer>
 
     );
 }
 
+export const SideBar: any = withSizes(mapSizesToProps)(SB)

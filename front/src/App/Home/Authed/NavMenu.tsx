@@ -6,7 +6,7 @@ import { largeQuery, notLargeQuery, BRAND_COLOR, BRAND_PERSONAL_COLOR, Large } f
 import { useInsightsDash, useInsightsArtists, useGetTopArtistAchievementHolders } from '../../../types'
 import { LogoHorizontal } from '../../../shared/Logo';
 import { UserAchievementsList } from '../../Components/UserAchievementsList'
-import { suspensefulHook } from '../../../lib/suspensefulHook';
+import { suspensefulHook, suspensefulPollingHook } from '../../../lib/suspensefulHook';
 import Moment from 'react-moment';
 
 import { UserAchievementContext } from './Authed';
@@ -122,20 +122,21 @@ const HarvestingNotice: React.SFC = () =>
 
 export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: string, user: any, history?: any, match?: any }> = ({ initialHarvestComplete, lastUpdate, user, ...rest }) => {
 
-  // Context Props 
-  const { setTopArtistsWithAchievementHolders, topArtistsWithAchievementHolders } = useContext(UserAchievementContext)
 
-  // State
+  // Local State
   const [topArtistByPeriodData, setTopArtistByPeriodData] = useState(false)
 
-
+  // Context Props 
+  const { setTopArtistsWithAchievementHolders, topArtistsWithAchievementHolders, achievements } = useContext(UserAchievementContext)
+  
+  
   // Vars 
   const { uid } = user
   const { history, match } = rest
   const { location: { pathname } } = history
 
   // Hooks 
-  const { insightsArtists: usersTopArtistByPeriodData }: any = suspensefulHook(useInsightsArtists({ variables: { uid }, suspend: true }))
+  const { insightsArtists: usersTopArtistByPeriodData }: any = suspensefulPollingHook(true, useInsightsArtists({ variables: { uid }, suspend: true, pollInterval: 1000 }))
   console.log('TCL: usersTopArtistByPeriodData', usersTopArtistByPeriodData)
 
 
@@ -158,18 +159,18 @@ export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: s
   console.log('TCL: artists', artists)
 
 
-  const { getTopArtistAchievementHolders = null }: any = (artists && artists.length) ? suspensefulHook(useGetTopArtistAchievementHolders({ variables: { perspectiveUID: 'global', artistIds: artists.map((artist: any) => artist.id) }, suspend: true, })) : { getTopArtistAchievementHolders: null }
+  const { getTopArtistAchievementHolders = null }: any = suspensefulHook(useGetTopArtistAchievementHolders({ variables: { perspectiveUID: 'global', artistIds: artists.map((artist: any) => artist.id) }, suspend: true, })) 
 
   const ahWithArtist = getTopArtistAchievementHolders ? getTopArtistAchievementHolders.map(({ artistId, achievementHolders }: any) => ({ achievementHolders, artist: artists.find((artist: any) => artist.id === artistId) })) : null
   console.log('TCL: ahWithArtist', ahWithArtist)
 
   useEffect(() => {
     setTopArtistsWithAchievementHolders(ahWithArtist) // Sets the App's Larger Data Context with Top Artists and their respective Top Listeners or Achievement Holders
-  }, [])
+  }, [usersTopArtistByPeriodData])
 
   useEffect(() => {
     setTopArtistByPeriodData(usersTopArtistByPeriodData) // Sets the current users achievements based on the data from line #159 - useGetTopArtistAchievementHolders
-  }, [])
+  }, [achievements])
 
   return (
     <NavMenuView>
@@ -185,8 +186,8 @@ export const NavMenu: React.SFC<{ initialHarvestComplete: boolean, lastUpdate: s
         <User color='white' />
         <NavLabel>Profile</NavLabel>
       </NavPrimaryLink>
+      {topArtistByPeriodData ? <UserAchievementsList userId={user.uid} usersTopArtistByPeriodData={topArtistByPeriodData} /> : null}
       <Large>
-        {topArtistByPeriodData ? <UserAchievementsList userId={user.uid} usersTopArtistByPeriodData={topArtistByPeriodData} /> : null}
         <FillSpace>
           {!initialHarvestComplete ? <HarvestingNotice /> : <LastUpdate {...{ lastUpdate }} />}
           <LogoHorizontal size={8} />

@@ -19,8 +19,11 @@
     "install:_back-layer": "cd back-layer/layers/npm/nodejs && yarn install && cd ../../../..",
     "install:_back": "cd back && yarn install && yarn install:extra && cd ..",
     "install:_front": "cd front && yarn install && cd ..",
-    "start": "echo 'Dont `yarn start` here.  Read the docs.  You need to have four shells: first yarn start from back/ and then yarn start from front/'",
-    "start:all": "yarn start",
+    "front": "cd front && source ../.env/local.env.sh && yarn start",
+    "first": "cd back && source ../.env/local.env.sh && yarn start:first",
+    "second": "cd back && source ../.env/local.env.sh && yarn start:second",
+    "last": "cd back && source ../.env/local.env.sh && yarn start:last",
+    "start": "concurrently --kill-others-on-fail \"yarn first\"  \"yarn second\" \"yarn last\" \"yarn front\"",
     "": ""
   },
   "devDependencies": {

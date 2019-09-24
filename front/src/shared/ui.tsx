@@ -2,13 +2,14 @@ import React from 'react';
 import styled, {css} from 'styled-components'
 import { useUser, useAuthHandlers, BasicUser, impersonate } from '../App/FirebaseContext';
 import { Redirect } from 'react-router';
+import { APP_BG_LIGHTEN, APP_BG_COLOR, APP_BORDER_RADIUS_LG, APP_BORDER_RADIUS_MD, APP_BORDER_RADIUS_SM, APP_BLUE } from '../App/GlobalStyle';
 const Color = require('color')
 
 const Blue = Color('#00bcdd')
 const Pink = Color('#ff00ff')
 const Slate = Color('rgb(16,24,50)')
 
-export const Button = styled.button`
+export const Button: any = styled.button`
 @mixin transition-all {
   -webkit-transition: all 200ms ease-in-out;
   -moz-transition: all 200ms ease-in-out;
@@ -97,6 +98,12 @@ export const GradientButtonFilled = styled(Button)`
   border-image: linear-gradient(45deg, ${Blue.lighten(.2).hex()} 0%, ${Pink.lighten(.2).hex()} 100%);
   border-image-slice: 1;
   color: white;
+
+
+  @media screen and (max-width: 1000px) {
+    margin-top: 20px;
+    
+}
   
   &:before {
     border-image-slice: 1;
@@ -139,9 +146,76 @@ export const ButtonSignout: React.SFC = () => {
 }
 
 export const Container: any = styled.div`
-  margin: 0rem 1rem;
+  /* margin: 0rem 1rem; */
+  
 
   ${(props: any) => props.padded && css`
   /* padding-top: 20px; */
+    padding: 0 18px;
   `}
+
+  ${(props: any) => props.sideBar && css`
+  /* padding-top: 20px; */
+    padding: 0 18px 0 0;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-around; */
+    height: 100%;
+    justify-content: flex-start;
+
+    .ant-tabs-nav-container {
+      background-color: ${APP_BG_LIGHTEN};
+      padding: 20px 0;
+      .ant-tabs-tab-active.ant-tabs-tab {
+        color: ${APP_BLUE};
+        background-color: ${APP_BG_COLOR};
+
+      }
+      .ant-tabs-ink-bar.ant-tabs-ink-bar-animated {
+        background-color: ${APP_BLUE};
+      }
+    }
+
+    .ant-collapse-item {
+      border: none!important;
+      border-radius: ${APP_BORDER_RADIUS_MD};
+      background-color: rgba(216,216,216,.055);
+      margin: 10px 0 !important;
+    }
+    /* Its on the right but fuck it whatever */
+    .ant-tabs .ant-tabs-left-content { 
+      overflow: scroll;
+      height: 100vh;
+    }
+
+    .ant-collapse-content-box {
+      p {
+        img {
+          margin-right: 10px;
+        }
+      }
+    }
+
+  `}
+
+  ${(props: any) => props.sideBarMobile && css`
+  /* padding-top: 20px; */
+    padding: 0;
+  `}
+
+
+  ${(props: any) => props.sideBarMobile && props.sideBar && css`
+  /* padding-top: 20px; */
+    padding: 0;
+    justify-content: flex-start;
+  `}
+
+  @media screen and (max-width: 600px) {
+    
+
+  }
+
+  @media screen and (max-width: 768px) {
+    margin: 0;
+  }
 `

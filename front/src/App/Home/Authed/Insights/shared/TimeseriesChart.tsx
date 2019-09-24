@@ -43,46 +43,48 @@ flex: 1;
 color: ${({color}) => color}
 `
 
-const CustomTooltip: React.SFC<TooltipProps> = ({active, label, payload}) =>
-  active ? <TooltipDiv>
-    <TooltipTitle>{label}</TooltipTitle>
-    { payload && payload[1] &&
-      <TooltipItem>
-        <TooltipLabel color={BRAND_PERSONAL_COLOR}>You</TooltipLabel>
-        <TooltipValue color={BRAND_PERSONAL_COLOR}>{decimalToHrsMins(payload[1].value as number)}</TooltipValue>
-      </TooltipItem>
-    }
-    { payload && payload[0] &&
-      <TooltipItem>
-        <TooltipLabel color={BRAND_GLOBAL_COLOR}>Soundpruf</TooltipLabel>
-        <TooltipValue color={BRAND_GLOBAL_COLOR}>{decimalToHrsMins(payload[0].value as number)}</TooltipValue>
-      </TooltipItem>
-    }
-  </TooltipDiv> : <></>
+const gradient = `linear-gradient(to bottom,#e64a19 0%,#ffa726 100%)`
+/* const gradient = `linear-gradient(to bottom,#e64a19 0%,#ffa726 100%)` */
+/* <linearGradient id="Gradient">
+      <stop offset="0%" stop-color="#e64a19"/>
+      <stop offset="100%" stop-color="#ffa726"/>
+    </linearGradient>
+    "url(#Gradient2)" */
 
-export const TimeseriesChart: React.SFC<{timeSeries: TimescopeDashTimeSeries, showOnly?: TPerspectiveOption}> = ({timeSeries, showOnly}) =>
+
+export const TimeseriesChart: React.SFC<{timeSeries: TimescopeDashTimeSeries, showOnly?: TPerspectiveOption}> = ({timeSeries, showOnly}) => {
+  return (
+
 <div>
 <BlockTitle>{timeSeries.label}</BlockTitle>
 <ResponsiveContainer width='100%' height={240}>
   <AreaChart data={timeSeries.values}>
-    {/* <CartesianGrid stroke='#999'/> */}
+    <defs>
+      <linearGradient id="Gradient">
+        <stop offset="0%" stopColor="#e64a19"/>
+        <stop offset="100%" stopColor="#ffa726"/>
+      </linearGradient>
+      <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8}/>
+          <stop offset="95%" stopColor="#82ca9d" stopOpacity={0}/>
+      </linearGradient>
+    </defs>
     <XAxis dataKey='period' stroke='#ccc' textAnchor='middle' tickMargin={12}>
     </XAxis>
-    {/* <Tooltip content={<CustomTooltip/>}/> */}
-    {/* <YAxis yAxisId='left' type='number' stroke={BRAND_PERSONAL_COLOR} interval={0} orientation='left' tickFormatter={Math.floor} allowDecimals={true} domain={[0, domainMaxBuilder(timeSeries.values)]}> */}
+
     <YAxis yAxisId='left' type='number' stroke={BRAND_PERSONAL_COLOR} interval={0} orientation='left'
       tickFormatter={decimalToHrsMins} allowDecimals={true} domain={[0, domainMaxBuilder(timeSeries.values, showOnly)]}>
       <Label position='left' angle={90} offset={-8}  y={-32} stroke={BRAND_PERSONAL_COLOR}>hours</Label>
     </YAxis>
-    {/* <YAxis yAxisId='right' type='number' stroke={BRAND_GLOBAL_COLOR} interval={0} orientation='right' tickFormatter={Math.floor} allowDecimals={false}>
-      <Label position='right' angle={90} offset={-4} stroke={BRAND_GLOBAL_COLOR}>hours by soundpruf</Label>
-    </YAxis> */}
+   
     {
-      !showOnly || (showOnly === 'group') ? <Area dataKey='group' stackId="1" fill={BRAND_GLOBAL_COLOR} stroke={BRAND_GLOBAL_COLOR} yAxisId='left'/> : ''
+      !showOnly || (showOnly === 'group') ? <Area dataKey='group' stackId="1" fill="url(#Gradient)" stroke='#fd5f00' yAxisId='left'/> : ''
     }
     {
-      !showOnly || (showOnly === 'personal') ? <Area dataKey='personal' stackId="2" fill={BRAND_PERSONAL_COLOR} stroke={BRAND_PERSONAL_COLOR} yAxisId='left'/> : ''
+      !showOnly || (showOnly === 'personal') ? <Area dataKey='personal' stackId="2" fill="url(#Gradient)" stroke='#fd5f00' yAxisId='left'/> : ''
     }
   </AreaChart>
 </ResponsiveContainer>
 </div>
+  )
+}

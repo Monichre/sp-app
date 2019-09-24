@@ -10,10 +10,7 @@ import { NavMenu, NavMenuView } from './NavMenu';
 import { Profile } from './Profile/Profile';
 import { History } from './History/History';
 import { IntercomHandler } from '../../../lib/intercom'
-import { Drawer, List, Avatar, Divider, Col, Row } from 'antd';
-import 'antd/es/drawer/style/css'
 import { UserAchievementPeriodMap } from '../../Components/UserAchievementsList/achievements-utils';
-import { Card, Box } from 'rebass';
 import { SideBar } from '../../Components/SideBar/SideBar';
 
 
@@ -42,31 +39,6 @@ const DescriptionItem = ({ title, content }: any) => (
 
 const SIDEBAR_WIDTH = 200
 
-const GridContainer = styled.div`
-  display: grid;
-  grid-template-columns: ;
-  grid-template-rows: 1fr 1fr;
-  grid-template-areas: "Top" "Bottom";
-`
-
-const Top = styled.div`
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  grid-template-rows: 1fr;
-  grid-template-areas: "SideBarTop .";
-  grid-area: Top;
-  `
-const Bottom = styled.div`
-display: grid;
-  grid-template-columns: 200px 1fr;
-  grid-template-rows: 1fr;
-  grid-template-areas: "SideBarBottom .";
-  grid-area: Bottom;
-  `
-
-const SideBarTop = styled.div`grid-area: SideBarTop;`
-
-const SideBarBottom = styled.div`grid-area: SideBarBottom;`
 
 const AuthedView = styled.div`
   height: 100%;
@@ -75,8 +47,7 @@ const AuthedView = styled.div`
   position: relative;
 
   ${largeQuery`
-    // padding-left: ${SIDEBAR_WIDTH}px;
-    padding-left: 185px;
+    padding-left: ${SIDEBAR_WIDTH}px;
   `}
   ${NavMenuView} {
     position: fixed;
@@ -102,6 +73,16 @@ const AuthedView = styled.div`
       right: 0;
       width: 100%;
       bottom: 0;
+
+      @media screen and (max-width: 600px) {
+        height: 10vh;
+
+        svg {
+          margin-bottom: 0;
+          height: 20px;
+          width: 20px;
+        }
+      }
       .sc-iELTvK {
        padding: 0;
        justify-content: center;
@@ -167,17 +148,13 @@ export type AchievementsState = {
  *
  */
 
-type UserAchievementContextProps = {
-  achievements: {}
-  setAchievements: (a: UserAchievementPeriodMap) => void
-  isOpen: Boolean
-  setSideBarOpen: (o: Boolean) => Boolean
-}
+
 
 const initialState: any = {
   currentUser: {},
   achievements: { week: null, month: null, life: null },
   topArtistsWithAchievementHolders: [],
+  notifications: [],
   isOpen: false
 
 }
@@ -189,7 +166,10 @@ export const UserAchievementContext = createContext({
   ...initialState.achievements.isOpen,
   setSideBarOpen: () => initialState.achievements.isOpen,
   ...initialState.topArtistsWithAchievementHolders,
-  setTopArtistsWithAchievementHolders: () => initialState.topArtistsWithAchievementHolders
+  setTopArtistsWithAchievementHolders: () => initialState.topArtistsWithAchievementHolders,
+  ...initialState.notifications,
+  setNotifications: () => []
+
 })
 
 
@@ -197,15 +177,27 @@ export const UserAchievementContext = createContext({
 
 const UserAchievementDataProvider = ({ user, children, isOpen, setSideBarOpen }: any) => {
   
-  const [achievements, setParentAchievements]: [UserAchievementPeriodMap, any] = useState(initialState.achievements)
-  const [topArtistsWithAchievementHolders, setParentComponentWithArtistsWithAchievementHolders]: [UserAchievementPeriodMap, any] = useState(initialState.topArtistsWithAchievementHolders)
+  const [achievements, setAppAchievements]: [UserAchievementPeriodMap, any] = useState(initialState.achievements)
+  const [topArtistsWithAchievementHolders, setAppComponentWithArtistsWithAchievementHolders]: [UserAchievementPeriodMap, any] = useState(initialState.topArtistsWithAchievementHolders)
   const [currentUser, setCurrentUser] = useState(user)
 
-  const setAchievements: any = (newAchievements: any) => setParentAchievements(newAchievements)
-  const setTopArtistsWithAchievementHolders: any = (newArtistsWithAchievements: any) => setParentComponentWithArtistsWithAchievementHolders((topArtistsWithAchievementHolders: any) => (topArtistsWithAchievementHolders && topArtistsWithAchievementHolders.length && newArtistsWithAchievements && newArtistsWithAchievements.length ? [...topArtistsWithAchievementHolders, ...newArtistsWithAchievements] : newArtistsWithAchievements && newArtistsWithAchievements.length ? [...newArtistsWithAchievements] : []))
+  const [appNotifications, setAppNotifications] = useState(null)
+
+  const setNotifications = (newNotifications: any) => {
+    setAppNotifications(appNotifications => newNotifications)
+  }
+
+  const setAchievements: any = (newAchievements: any) => {
+    localStorage.setItem('userAchievements', JSON.stringify(newAchievements))
+
+    setAppAchievements(newAchievements)
+  }
+
+  
+  const setTopArtistsWithAchievementHolders: any = (newArtistsWithAchievements: any) => setAppComponentWithArtistsWithAchievementHolders((topArtistsWithAchievementHolders: any) => (topArtistsWithAchievementHolders && topArtistsWithAchievementHolders.length && newArtistsWithAchievements && newArtistsWithAchievements.length ? [...topArtistsWithAchievementHolders, ...newArtistsWithAchievements] : newArtistsWithAchievements && newArtistsWithAchievements.length ? [...newArtistsWithAchievements] : []))
 
   return (
-    <UserAchievementContext.Provider value={{ achievements, setAchievements, currentUser, setSideBarOpen, isOpen, setTopArtistsWithAchievementHolders,  topArtistsWithAchievementHolders}}>
+    <UserAchievementContext.Provider value={{ achievements, setAchievements, currentUser, setSideBarOpen, isOpen, setTopArtistsWithAchievementHolders,  topArtistsWithAchievementHolders, appNotifications, setNotifications}}>
       {children}
     </UserAchievementContext.Provider>
   )
