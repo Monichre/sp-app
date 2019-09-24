@@ -42,7 +42,7 @@ const SB: React.SFC<SideBarProps> = ({ isMobile }) => {
         >
             <Container sideBar={true}>
 
-                <AchievementsSideBarHeader currentUser={currentUser} />
+                {/* <AchievementsSideBarHeader currentUser={currentUser} /> */}
 
                 {achievements && <Tabs defaultActiveKey="1" tabPosition={'left'} style={{ height: '100%' }}>
 

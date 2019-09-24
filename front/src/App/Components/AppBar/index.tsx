@@ -58,7 +58,7 @@ const AB: React.SFC<any> = ({ className, isMobile }) => {
                             {isMobile ? null : 'Listen on Spotify'}
                         </Menu.Item>
                         <Menu.Item key="achievements">
-                        <Popover
+                        {/* <Popover
                             content={<p>Introducing Artist & Genre Leaders <br />Check out your achievements in the the achievements side bar menu to the right</p>}
                                 title={<p style={{margin: 0}}>New Feature! <Tag color="blue">Beta</Tag></p>}
                             trigger="click"
@@ -70,7 +70,7 @@ const AB: React.SFC<any> = ({ className, isMobile }) => {
                                 </Badge>
                             </span>
                                 
-                        </Popover>
+                        </Popover> */}
                            
                         </Menu.Item>
                     </Menu>
