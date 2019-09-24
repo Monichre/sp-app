@@ -72,24 +72,24 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: 'Ready',
-    hover: '138 monthly streamers on Spotify',
-    name: 'White Line Darko',
-    href: 'https://open.spotify.com/artist/15SK9kKDJJjMuL8K3LbZiA?si=kgviYNHDS8CPJL3hZ7qgQg',
-    src: 'https://i1.sndcdn.com/avatars-000511287876-z9zsjt-t500x500.jpg'
+    hover: '1,954 monthly streamers on Spotify',
+    name: 'Author',
+    href: 'https://open.spotify.com/artist/168uFZhYHTAe248zahXxfY?si=2QhPH-BISWaiDcH5x-aDTQ',
+    src: 'https://s3.amazonaws.com/bit-photos/large/8991655.jpeg'
   },
   {
     title: 'Set',
-    hover: '149,003 monthly streamers on Spotify',
-    name: 'Ages and Ages',
-    href: 'https://open.spotify.com/artist/3DozezNrsIE37kJJfHhS9M?si=n9O8yLvAQZa9urobuo5nUg',
-    src: 'https://image-ticketfly.imgix.net/00/02/63/92/76-og.jpg?w=1800&h=1200'
+    hover: '132,335 monthly streamers on Spotify',
+    name: 'Sir Woman',
+    href: 'https://open.spotify.com/artist/3H03S3ZtyYLdzsk6EYndUL?si=MmcqGpQ7T5iRvLzI9Jq6FQ',
+    src: 'https://www.centraltrack.com/wp-content/uploads/2019/06/SIR-WOMAN.png'
   },
   {
     title: 'Liftoff',
-    hover: '1,102,301 monthly streamers on Spotify',
-    name: 'Day Glow',
-    href: 'https://open.spotify.com/artist/6eJa3zG1QZLRB3xgRuyxbm?si=jVK77x7HTNmUWnhftp596A',
-    src: 'https://images.squarespace-cdn.com/content/v1/5b788d28697a98e17a6d4c7a/1556684200148-FDN2UG17IZJOTJ5KGGXM/ke17ZwdGBToddI8pDm48kEJAlHRYD6ljLjXJc6sfS_l7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QHyNOqBUUEtDDsRWrJLTmoJKo7K7P-K3iDKcb1IjyB9Vx7SOI8VLWnAjJoiseqf2xOujC2Ne5NVJEGRfW4jXz/image4.jpg?format=750w'
+    hover: '1,144,515 monthly streamers on Spotify',
+    name: 'Stick Figure',
+    href: 'https://open.spotify.com/artist/5SXEylV07TC57eanSxxg4R?si=HvkMG56SQIaAd6fRSbf-qQ',
+    src: 'https://i1.wp.com/liveforlivemusic.com/wp-content/uploads/2015/06/stick_figure_final_update-3.jpg?fit=1200%2C799&ssl=1'
   },
 ]
 
