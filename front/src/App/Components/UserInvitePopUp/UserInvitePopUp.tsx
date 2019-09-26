@@ -62,7 +62,7 @@ export const CloseCircleIcon: React.SFC<CloseCircleIconProps> = () => {
 
 
 const PopOverTitleBar = ({onClick}: any) => (
-    <TitleBar><p>Invite Your Friends to Soundpruf</p> <div onClick={onClick}><CloseCircleIcon /></div></TitleBar>
+    <TitleBar><p>Invite Your Friends to Soundpruf</p><div onClick={onClick}><CloseCircleIcon /></div></TitleBar>
 )
 
 

@@ -205,8 +205,6 @@ html {
     }
   }
   .ant-popover-content .ant-popover-inner-content {
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
-
+    border-radius: 12px;
   }
 `

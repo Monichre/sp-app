@@ -7,6 +7,7 @@ import { InsightsStatsInsightsStats, InsightsStatsToday, InsightsStatsThisWeek, 
 
 import { Ascend, Descend } from 'grommet-icons';
 import { LineChart, History, User } from 'grommet-icons'
+import { Music } from '../../../../../shared/icons';
 
 const MajorValue = styled.div`
   font-weight: 500;
@@ -227,6 +228,10 @@ const TimeBlockTitleRow = styled.div`
 
 */
 
+const MusicWrap: any = styled.span`
+  margin-right: 10px;
+`
+
 export const TimeBlockPair: React.SFC<{ label?: string, pathParams: TPathParams, stats: InsightsStatsTimescope }> = ({ label, pathParams, stats }) => {
   const { personal, group } = stats
   const { delta } = personal
@@ -234,7 +239,7 @@ export const TimeBlockPair: React.SFC<{ label?: string, pathParams: TPathParams,
 
   return (
     <Fragment>
-      {label ? <NavTabLink to={insightLink(pathParams)}>{label}: {delta ? <TimeBlockDelta {...{ delta }} /> : ''}</NavTabLink> :  delta? <TimeBlockDelta {...{ delta } } /> : ''}
+      {label ? <NavTabLink to={insightLink(pathParams)}><MusicWrap><Music /></MusicWrap>{label}: {delta ? <TimeBlockDelta {...{ delta }} /> : ''}</NavTabLink> :  delta? <TimeBlockDelta {...{ delta } } /> : ''}
     
       <TimeBlockPairView>
         <TimeBlockTitleRow>

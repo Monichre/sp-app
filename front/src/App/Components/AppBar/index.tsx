@@ -18,15 +18,16 @@ export interface AppBarProps {
 
 const AB: React.SFC<any> = ({ className, isMobile }) => {
 
-    const { isOpen, setSideBarOpen, currentUser }: any = React.useContext(UserAchievementContext)
+    const { isOpen, setSideBarOpen, currentUser, appNotifications }: any = React.useContext(UserAchievementContext)
     const [visible, setVisible]: any = React.useState(false)
     const [notificationsVisible, setNotificationsVisible]: any = React.useState(false)
+    const [localNotifications, setLocalNotifications]: any = React.useState(false)
 
     const spotifyURL = `https://open.spotify.com/user/${currentUser.uid.split(':')[1]}`
 
     const toggle = (e: any) => {
         if (e) {
-            
+
             e.preventDefault()
         }
         setVisible((visible: any) => !visible);
@@ -34,11 +35,15 @@ const AB: React.SFC<any> = ({ className, isMobile }) => {
 
     const toggleNotifications = (e: any) => {
         if (e) {
-            
+
             e.preventDefault()
         }
         setNotificationsVisible((notificationsVisible: any) => !notificationsVisible);
     }
+
+    // React.useEffect(() => {
+    //     setLocalNotifications(appNotifications)
+    // })
 
     return (
         <HeaderBar className={className}>
@@ -58,20 +63,21 @@ const AB: React.SFC<any> = ({ className, isMobile }) => {
                             {isMobile ? null : 'Listen on Spotify'}
                         </Menu.Item>
                         <Menu.Item key="achievements">
-                        <Popover
-                            content={<p>Introducing Artist & Genre Leaders <br />Check out your achievements in the the achievements side bar menu to the right</p>}
-                                title={<p style={{margin: 0}}>New Feature! <Tag color="blue">Beta</Tag></p>}
-                            trigger="click"
-                            visible={notificationsVisible}
-                        >
-                            <span onClick={toggleNotifications}>
-                                <Badge count={1} color='#e64a19'>
-                                    <Icon type="notification" />
-                                </Badge>
-                            </span>
-                                
-                        </Popover>
-                           
+                            <Popover
+                                content={<p>Introducing Artist & Genre Leaders <br />Check out your achievements in the the achievements side bar menu to the right</p>}
+                                title={<p style={{ margin: 0 }}>New Feature! <Tag color="blue">Beta</Tag></p>}
+                                trigger="click"
+                                visible={notificationsVisible}
+                            >
+                                <span onClick={toggleNotifications}>
+                                    <Badge count={localNotifications && localNotifications.total ? localNotifications.total : 0} color='#e64a19'>
+                                        <Icon type="notification" />
+                                    </Badge>
+
+                                </span>
+
+                            </Popover>
+
                         </Menu.Item>
                     </Menu>
 

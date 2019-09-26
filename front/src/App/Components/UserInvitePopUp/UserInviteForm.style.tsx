@@ -1,4 +1,5 @@
-import styled, {css} from 'styled-components';
+import styled, { css } from 'styled-components';
+import { Popconfirm } from 'antd';
 
 export const EmailInput: any = styled.input`
  width: 100%;
@@ -23,7 +24,18 @@ export const EmailInput: any = styled.input`
 `
 
 export const FormWrap: any = styled.form`
-    min-width: 385px
+    min-width: 385px;
+
+    .UserInviteConfirm {
+        .ant-popover-inner-content {
+        border-radius: 12px;  
+    }
+    .ant-popover-message-title {
+        color: #fff!important;
+    }
+    }
+
+    
 `
 
 export const ButtonMenu: any = styled.div`
@@ -50,7 +62,7 @@ button {
 }
 `
 
-  
+
 export const TagItem: any = styled.div`
 background-color: rgba(216,216,216,.05);
     display: inline-block;
@@ -81,15 +93,15 @@ background-color: rgba(216,216,216,.05);
   }
 
 `
-  
+
 export const EmailError: any = styled.p`
     margin: 0;
     font-size: 90%;
     color: tomato;
  `
-  
-  
-  
+
+
+
 export const TitleBar = styled.div`
   display: flex;
   justify-content: space-between;
@@ -112,7 +124,7 @@ export const TitleBar = styled.div`
   }
   `
 
-  export const AddButton: any = styled.span`
+export const AddButton: any = styled.span`
     border: 1px solid #64d6ee;
     border-radius: 50%;
     height: 24px;
@@ -124,3 +136,12 @@ export const TitleBar = styled.div`
     align-items: center;
     background-color: rgba(216,216,216,.055);
   `
+
+// const NewHeader = styled(Header)<{ customColor: string }>`
+// color: ${props => props.customColor};
+// `
+export const PopConfirmWrap: any = styled.div`
+    .ant-popover-inner-content {
+        border-radius: 12px!important;
+    }
+`
