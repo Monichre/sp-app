@@ -75,6 +75,12 @@ typings/
 
 # because some creds and big data files are json
 *.json
+*.csv
 !tsconfig.json
 !package.json
 !settings.json
+
+# csv/json database back up files
+backups__r1__sept26/
+backups__r1__sept27/
+backups__rc__sept27/
