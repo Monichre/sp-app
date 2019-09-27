@@ -605,7 +605,6 @@ resources:
 ################################################################################
 # resources: stats
 ################################################################################
-
     TableStat:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -617,6 +616,8 @@ resources:
             AttributeType: S
           - AttributeName: playDurationMs
             AttributeType: N
+          - AttributeName: artistAchievementsId
+            AttributeType: S
         KeySchema:
           - AttributeName: pk
             KeyType: HASH
@@ -631,6 +632,14 @@ resources:
             - AttributeName: sk
               KeyType: HASH
             - AttributeName: pk
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: TopListenerGSI
+          KeySchema:
+            - AttributeName: artistAchievementsId
+              KeyType: HASH
+            - AttributeName: playDurationMs
               KeyType: RANGE
           Projection:
             ProjectionType: ALL
