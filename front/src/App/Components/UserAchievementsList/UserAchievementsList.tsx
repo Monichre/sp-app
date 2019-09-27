@@ -168,7 +168,7 @@ const UAL: React.SFC<any> = ({ userId, usersTopArtistByPeriodData, isMobile }) =
 
     return isMobile ? null : (
         <ListWrap>
-            <HeaderFlexDiv><img src='/icons/award.svg' /> <h4>Achievements</h4></HeaderFlexDiv>
+            <HeaderFlexDiv><h4>Badges</h4><img src='/icons/award.svg' style={{marginLeft: '8px'}} /></HeaderFlexDiv>
             <ListStyle>
 
                 {la.length ? <AchievementListItem achievementTotal={lifetimeAchievements.length} achievements={la} title='LifeTime' handleClick={handleClick} /> : null}

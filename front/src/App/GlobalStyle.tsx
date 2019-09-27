@@ -102,7 +102,9 @@ html {
   h1, h2 {
     margin: 0;
   }
-
+  .ant-popover {
+  z-index: 2000!important;
+}
 
   .ant-drawer-body {
     height: 100vh;
@@ -163,6 +165,8 @@ html {
   }
 }
 
+
+
  .ant-popover-inner {
 
   background-color: rgba(216,216,216,.055)!important;
@@ -188,7 +192,11 @@ html {
 }
 .ant-tabs-tab {
   color: #fff;
-  text-align: left!important;
+  text-align: center!important;
+}
+.ant-tabs .ant-tabs-left-bar .ant-tabs-tab, .ant-tabs .ant-tabs-right-bar .ant-tabs-tab, .ant-tabs-tab-active ant-tabs-tab {
+  margin: 0!important;
+  padding: 24px!important;
 }
 .ant-tabs .ant-tabs-left-content {
     padding-left: 0!important;

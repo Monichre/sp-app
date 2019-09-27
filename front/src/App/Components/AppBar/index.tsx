@@ -64,7 +64,7 @@ const AB: React.SFC<any> = ({ className, isMobile }) => {
                         </Menu.Item>
                         <Menu.Item key="achievements">
                             <Popover
-                                content={<p>Introducing Artist & Genre Leaders <br />Check out your achievements in the the achievements side bar menu to the right</p>}
+                                content={<p>Introducing Artist Leader Badges <img style={{marginLeft: '10px'}} height={24} width={24} src='/icons/award.svg' /> <br />Check out your achievements in the the achievements side bar menu to the right</p>}
                                 title={<p style={{ margin: 0 }}>New Feature! <Tag color="blue">Beta</Tag></p>}
                                 trigger="click"
                                 visible={notificationsVisible}

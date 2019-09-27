@@ -202,9 +202,9 @@ export const Frame = styled('div')`
 
 export const HeaderFlexDiv = styled.div`
     display: flex;
-    justify-content: space-evenly;
+    justify-content: flex-end;
     width: 100%;
-    padding: 1.5rem 0rem;
+    padding: 1.5rem;
     border-top: 1px solid rgba(255,255,255,.1);
     border-bottom: 1px solid rgba(255,255,255,.1);
     background-color: rgba(216,216,216,.05);

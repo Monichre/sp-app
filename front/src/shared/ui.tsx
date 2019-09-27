@@ -165,7 +165,7 @@ export const Container: any = styled.div`
 
     .ant-tabs-nav-container {
       background-color: ${APP_BG_LIGHTEN};
-      padding: 20px 0;
+      padding: 0;
       .ant-tabs-tab-active.ant-tabs-tab {
         color: ${APP_BLUE};
         background-color: ${APP_BG_COLOR};
