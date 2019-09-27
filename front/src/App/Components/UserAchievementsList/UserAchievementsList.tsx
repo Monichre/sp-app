@@ -6,7 +6,7 @@ import { AchievementListItem } from './AchievementListItem'
 import { HeaderFlexDiv } from '../Elements'
 import { parseAchievementsByPeriod } from './achievements-utils';
 import * as _ from 'lodash'
-import {mapSizesToProps} from '../../../lib/mapSizes'
+import { mapSizesToProps } from '../../../lib/mapSizes'
 import withSizes from 'react-sizes'
 
 
@@ -89,11 +89,10 @@ const UAL: React.SFC<any> = ({ userId, usersTopArtistByPeriodData, isMobile }) =
     // @ts-ignore
     const achievementsFromMemory = JSON.parse(localStorage.getItem('userAchievements'))
 
-
     const {
         achievements
     } = parseAchievementsByPeriod(usersTopArtistByPeriodData, userId)
-    const {setAchievements, isOpen, setSideBarOpen, appNotifications, setNotifications}: any = React.useContext(UserAchievementContext)
+    const { setAchievements, isOpen, setSideBarOpen, appNotifications, setNotifications }: any = React.useContext(UserAchievementContext)
     const handleClick = () => setSideBarOpen((isOpen: boolean) => !isOpen)
     const {
         week: weeklyAchievements,
@@ -101,7 +100,7 @@ const UAL: React.SFC<any> = ({ userId, usersTopArtistByPeriodData, isMobile }) =
         life: lifetimeAchievements,
     } = achievements
 
-  
+
     const la: any = (lifetimeAchievements) ? lifetimeAchievements.slice(0, 3).map(({ artistData, achievement }: any) => {
 
         let total: DecimalHoursToMinutes = decimalToHrsMins(achievement.total)
@@ -111,7 +110,7 @@ const UAL: React.SFC<any> = ({ userId, usersTopArtistByPeriodData, isMobile }) =
     }) : []
 
 
-    const ma: any = (monthlyAchievements ) ? monthlyAchievements.slice(0, 3).map(({ artistData, achievement }: any) => {
+    const ma: any = (monthlyAchievements) ? monthlyAchievements.slice(0, 3).map(({ artistData, achievement }: any) => {
 
         let total: DecimalHoursToMinutes = decimalToHrsMins(achievement.total)
         achievement.formattedTotal = total
@@ -132,24 +131,44 @@ const UAL: React.SFC<any> = ({ userId, usersTopArtistByPeriodData, isMobile }) =
     }, [])
 
 
-    React.useEffect(() => {
-        if (achievementsFromMemory && achievementsFromMemory.length) {
-            alert('we have achievements from last login. Lets compare the latest')
     
-            if (achievements.length > achievementsFromMemory.length) {
-                let diff = achievements.length - achievementsFromMemory.length
-                const diffItems = _.difference(achievements.length, achievementsFromMemory.length);
-                console.log('TCL: diffItems', diffItems)
-    
-                setNotifications(diffItems)
-            }
-          }
-         
-    }, [achievementsFromMemory])
-    
+    // React.useEffect(() => {
+    //     if (achievementsFromMemory) {
+    //         const weekDiff = Math.abs(achievementsFromMemory.week.length - weeklyAchievements.length)
+    //         const monthDiff = Math.abs(achievementsFromMemory.month.length - monthlyAchievements.length)
+    //         const lifeDiff = Math.abs(achievementsFromMemory.life.length - lifetimeAchievements.length)
+
+    //         if (weekDiff > 0 || monthDiff > 0 || lifeDiff > 0) {
+    //             alert('we have achievements from last login. Lets compare the latest')
+    //             let total = weekDiff + monthDiff + lifeDiff
+
+    //             const notificationData = {
+    //                 total,
+    //                 week: weekDiff,
+    //                 month: monthDiff,
+    //                 life: lifeDiff
+    //             }
+
+    //             setNotifications(notificationData)
+    //         }
+    //     } else {
+
+    //         const notificationData = {
+    //             total: weeklyAchievements.length + monthlyAchievements.length + lifetimeAchievements.length,
+    //             week: weeklyAchievements.length,
+    //             month: monthlyAchievements.length,
+    //             life:  lifetimeAchievements.length
+    //         }
+
+    //         setNotifications(notificationData)
+            
+    //     }
+
+    // }, [achievements.week, achievements.month, achievements.life])
+
     return isMobile ? null : (
         <ListWrap>
-            <HeaderFlexDiv><img src='/icons/award.svg' /> <h4>Achievements</h4></HeaderFlexDiv>
+            <HeaderFlexDiv><h4>Badges</h4><img src='/icons/award.svg' style={{marginLeft: '8px'}} /></HeaderFlexDiv>
             <ListStyle>
 
                 {la.length ? <AchievementListItem achievementTotal={lifetimeAchievements.length} achievements={la} title='LifeTime' handleClick={handleClick} /> : null}

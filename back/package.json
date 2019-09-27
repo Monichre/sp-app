@@ -24,12 +24,6 @@
 		"generate": "gql-gen --config ./config/codegen.yml",
 		"": ""
 	},
-	"quokka": {
-		"env": {
-			"DYNAMO_ENDPOINT": "http://localhost:8888",
-			"TABLE_STAT": "sp-app-back-local-TableStat"
-		}
-	},
 	"devDependencies": {
 		"@google-cloud/resource": "^0.9.1",
 		"@slack/webhook": "^5.0.0",
@@ -48,6 +42,7 @@
 		"babel-core": "^6.26.3",
 		"babel-loader": "^8.0.5",
 		"babel-preset-stage-0": "^6.24.1",
+		"csvtojson": "^2.0.10",
 		"epsagon": "^1.16.0",
 		"eslint": "^6.0.1",
 		"firebase": "^5.8.6",

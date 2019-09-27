@@ -2,7 +2,7 @@ import React from 'react';
 import { ButtonSignout } from '../../shared/ui';
 import styled from 'styled-components';
 import LogRocket from 'logrocket'
-import * as Sentry from '@sentry/browser';
+
 
 const ErrorPage = styled.div`
   text-align: center;
@@ -13,7 +13,7 @@ export const ErrorFallback: React.SFC<{ error?: Error | null, errorInfo?: any }>
   <ErrorPage>
     <h1>Something went wrong.</h1>
     {/* <h2>This will be reported to the proper authorities.</h2> */}
-    <h2>Have you tried turning it off and on again?</h2>
+    <h2>Lets try signing you in again</h2>
     <ButtonSignout />
   </ErrorPage>
 
@@ -28,16 +28,7 @@ export class ErrorBoundary extends React.Component<{}, { error: Error | null, er
   }
 
   componentDidCatch (error: Error, errorInfo: any) {
-    Sentry.withScope((scope: any) => {
-      scope.setExtras(errorInfo)
-
-      const eventId: any = Sentry.captureException(error);
-      LogRocket.captureException(error, { extra: { errorInfo } })
-
-      // @ts-ignore
-      this.setState({ eventId })
-    });
-
+    LogRocket.captureException(error, { extra: { errorInfo } })
     console.log(error, errorInfo);
   }
 
@@ -45,7 +36,7 @@ export class ErrorBoundary extends React.Component<{}, { error: Error | null, er
     if (this.state.error) {
       return <ErrorPage>
         <h1>Something went wrong.</h1>
-        <button onClick={() => Sentry.showReportDialog({ eventId: this.state.eventId })}>Report feedback</button>
+        
         <ButtonSignout />
       </ErrorPage>
     }
