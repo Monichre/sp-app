@@ -164,6 +164,7 @@ custom:
     TableUser: ${env:TableUser, self:custom.cfref.TableUser}
     TablePlay: ${env:TablePlay, self:custom.cfref.TablePlay}
     TableStat: ${env:TableStat, self:custom.cfref.TableStat}
+    TableAchievement: ${env:TableAchievement, self:custom.cfref.TableAchievement}
 
   cfref:
     QueueHiFetchSpotifyPlays:
@@ -180,6 +181,8 @@ custom:
       Ref: TablePlay
     TableStat:
       Ref: TableStat
+    TableAchievement:
+      Ref: TableAchievement
     # StreamCreatePlayFromSpotify:
     #   Ref: StreamCreatePlayFromSpotify
 
@@ -652,3 +655,55 @@ resources:
               KeyType: RANGE
           Projection:
             ProjectionType: ALL
+
+
+          ################################################################################
+          # resources: TableAchievement
+          ################################################################################
+          
+    TableAchievement:
+        Type: AWS::DynamoDB::Table
+        Properties:
+          TableName: ${self:custom.ns}-TableAchievement
+          AttributeDefinitions:
+            - AttributeName: pk # Will be Artist's pk/spotify uid
+              AttributeType: S
+            - AttributeName: ak 
+              AttributeType: S
+            - AttributeName: uk 
+              AttributeType: S
+            - AttributeName: auk 
+              AttributeType: S
+            - AttributeName: total
+              AttributeType: N
+          KeySchema:
+            - AttributeName: pk
+              KeyType: HASH
+            - AttributeName: ak
+              KeyType: RANGE
+          BillingMode: PAY_PER_REQUEST
+          StreamSpecification:
+            StreamViewType: NEW_AND_OLD_IMAGES
+          GlobalSecondaryIndexes:
+          - IndexName: ArtistUserAchievementGSI
+            KeySchema:
+              - AttributeName: auk
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+          - IndexName: ArtistAchievementHoldersGSI # //: cc ArtistAchievementHoldersIndex#1
+            KeySchema:
+              - AttributeName: ak
+                KeyType: HASH
+              - AttributeName: total
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: UserAchievementGSI
+            KeySchema:
+              - AttributeName: pk
+                KeyType: HASH
+              - AttributeName: uk
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
