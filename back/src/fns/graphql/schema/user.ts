@@ -107,8 +107,6 @@ const MAGIC_STALE_THRESHOLD = 30
 =            // cc: User Type#1            =
 =============================================*/
 
-// cc: User Type#1 
-// cc: Helper 
 const isInitialHarvestComplete = ({
 	totalUpdates,
 	lastUpdate
@@ -154,7 +152,6 @@ const getUserInfo: QueryResolvers.GetUserInfoResolver = async (
  * cc: User Resolver#2; isInitialHarvestComplete
  *
  */
-
 const initialHarvestComplete: UserInfoResponseResolvers.InitialHarvestCompleteResolver = async (
 	userInfo,
 	{ },
@@ -171,19 +168,17 @@ const initialHarvestComplete: UserInfoResponseResolvers.InitialHarvestCompleteRe
 			uid: userInfo.uid
 		})
 
-		const hasEnrichmentAttr = Object.keys(userInfo).includes('statRecordsEnriched')
+		// const hasEnrichmentAttr = Object.keys(userInfo).includes('statRecordsEnriched')
 
-		// @ts-ignore
-		if (!hasEnrichmentAttr || hasEnrichmentAttr && !userInfo.statRecordsEnriched) {
-			console.log('USER HAS NOT HAD STAT RECORDS ENRICHED')
-			await StatEnrichment(userInfo)
-		}
+		// // @ts-ignore
+		// if (!hasEnrichmentAttr || hasEnrichmentAttr && !userInfo.statRecordsEnriched) {
+		// 	console.log('USER HAS NOT HAD STAT RECORDS ENRICHED')
+		// 	await StatEnrichment(userInfo)
+		// }
 
 		const {initialize} = AchievementEnrichment(userInfo)
 		await initialize()
 	}
-
-
 
 
 	// @ts-ignore

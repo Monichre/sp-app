@@ -212,12 +212,6 @@ custom:
         sources:
           - table: ${self:custom.ref.TableUser}
             sources: [./config/seed/TableUser.json]
-          - table: ${self:custom.ref.TableAchievement}
-            sources: [./config/seed/TableAchievement.json]
-          - table: ${self:custom.ref.TablePlay}
-            sources: [./config/seed/TablePlay.json]
-          - table: ${self:custom.ref.TableStat}
-            sources: [./config/seed/TableStat.json]
 
   dynamodbStream:
     host: localhost
