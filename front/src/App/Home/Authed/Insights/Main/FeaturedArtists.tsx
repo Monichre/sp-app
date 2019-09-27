@@ -68,7 +68,6 @@ type FeaturedArtist = {
 
 
 
-
 const featuredArtists: FeaturedArtist[] = [
   {
     title: 'Ready',
