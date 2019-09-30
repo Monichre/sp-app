@@ -18,16 +18,10 @@ export const Artists: React.SFC<RouteComponentProps & { uid: string, pathParams:
   const { timeScope, perspective }: any = pathParams
   const translatedPerspective: string = perspective === 'personal' ? 'Your' : 'Everyone'
 
-
-
-  console.log('TCL: artists', artists)
-
   return (
     <>
-      <h1 style={{ color: '#fff' }}><InsightsBackLink /> {translatedPerspective} Top Artists {normalizetimeScopeMap[timeScope]} </h1>
-      {artists && artists.length ? <ArtistsChartBlock {...{ artists, pathParams }} userId={uid} /> : <p>Loading</p>}
-      
-      {/* artists */}
-      </>
+      <h1 style={{ color: '#fff', margin: '32px 0' }}><InsightsBackLink /> {translatedPerspective} Top Artists {normalizetimeScopeMap[timeScope]} </h1>
+      {artists && artists.length ? <ArtistsChartBlock {...{ artists, pathParams }} userId={uid} /> : <p>Loading</p>}  
+    </>
   )
 }

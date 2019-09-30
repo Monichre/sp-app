@@ -71,24 +71,24 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: 'Ready',
-    hover: '1,954 monthly streamers on Spotify',
-    name: 'Author',
-    href: 'https://open.spotify.com/artist/168uFZhYHTAe248zahXxfY?si=2QhPH-BISWaiDcH5x-aDTQ',
-    src: 'https://s3.amazonaws.com/bit-photos/large/8991655.jpeg'
+    hover: '187 monthly streamers on Spotify',
+    name: 'Little Man',
+    href: 'https://open.spotify.com/artist/665B5lcXiaWnsLIwtJ7epw?si=n7dB0QbsT1OfgvxI1l5NUg',
+    src: 'https://f4.bcbits.com/img/a1811484532_16.jpg'
   },
   {
     title: 'Set',
-    hover: '132,335 monthly streamers on Spotify',
-    name: 'Sir Woman',
-    href: 'https://open.spotify.com/artist/3H03S3ZtyYLdzsk6EYndUL?si=MmcqGpQ7T5iRvLzI9Jq6FQ',
-    src: 'https://www.centraltrack.com/wp-content/uploads/2019/06/SIR-WOMAN.png'
+    hover: '106,643 monthly streamers on Spotify',
+    name: 'GUM',
+    href: 'https://open.spotify.com/artist/4Oov8BULUOBiX6UVpP04JW?si=MkjlWodBR0-RisWJl0CmyA',
+    src: 'http://www.undertheradarmag.com/uploads/article_images/Gum_Interview_under_the_radar.jpg'
   },
   {
     title: 'Liftoff',
-    hover: '1,144,515 monthly streamers on Spotify',
-    name: 'Stick Figure',
-    href: 'https://open.spotify.com/artist/5SXEylV07TC57eanSxxg4R?si=HvkMG56SQIaAd6fRSbf-qQ',
-    src: 'https://i1.wp.com/liveforlivemusic.com/wp-content/uploads/2015/06/stick_figure_final_update-3.jpg?fit=1200%2C799&ssl=1'
+    hover: '877,023 monthly streamers on Spotify',
+    name: 'Shay Lia',
+    href: 'https://open.spotify.com/artist/3sJQwG0SsGRyv5C5kh4o9a?si=NUT5uvZiQpablPOQWJvgTQ',
+    src: 'https://lastfm-img2.akamaized.net/i/u/770x0/2a4be8e4c1af612a3942e2dd89ecd4c9.jpg'
   },
 ]
 

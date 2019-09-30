@@ -211,7 +211,7 @@ custom:
       all:
         sources:
           - table: ${self:custom.ref.TableUser}
-            sources: [./config/seed/TableUser.json]
+            sources: [./config/seed/profile.json]
 
   dynamodbStream:
     host: localhost
