@@ -74,7 +74,7 @@ const featuredArtists: FeaturedArtist[] = [
     hover: '187 monthly streamers on Spotify',
     name: 'Little Man',
     href: 'https://open.spotify.com/artist/665B5lcXiaWnsLIwtJ7epw?si=n7dB0QbsT1OfgvxI1l5NUg',
-    src: 'https://f4.bcbits.com/img/a1811484532_16.jpg'
+    src: '/littleman.jpg'
   },
   {
     title: 'Set',
