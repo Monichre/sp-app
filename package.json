@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "explore:front": "codecrumbs -d front -e front/src/index.tsx",
-    "explore:back": "codecrumbs -d back -e back/webpack.config.js",
+    "view:front": "codecrumbs -d ./front/src -e front/src/index.tsx",
+    "view:back": "codecrumbs -d ./back -e ./back/serverless.yml",
     "check:target": "./bin/check-target.sh",
     "check:config": "./bin/check-config.sh",
     "deploy:all:test": "TARGET=test CONFIG=test yarn deploy:all",

@@ -287,6 +287,4 @@ HOzier: 2FXC3k01G6Gw61bmprjgqS
 
 ### Database Backup S3 Buckets
 
-1. TableStat: r1-table-stat-backup
-2. TablePlay: r1-table-play-backup
-3. TableUser: r1-table-user-backup
+http://localhost:8888/shell/

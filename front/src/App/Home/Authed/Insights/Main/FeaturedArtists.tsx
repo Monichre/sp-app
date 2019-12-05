@@ -71,24 +71,24 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: 'Ready',
-    hover: '187 monthly streamers on Spotify',
-    name: 'Little Man',
-    href: 'https://open.spotify.com/artist/665B5lcXiaWnsLIwtJ7epw?si=n7dB0QbsT1OfgvxI1l5NUg',
-    src: '/littleman.jpg'
+    hover: '93 monthly streamers on Spotify',
+    name: 'Warren Thomas Fenzi',
+    href: 'https://open.spotify.com/artist/6oVxxtwC1wrrnDtEIuSIHW?si=TQvvafDtS4aOiFxyr57DBw',
+    src: 'https://f4.bcbits.com/img/0016280307_10.jpg'
   },
   {
     title: 'Set',
-    hover: '106,643 monthly streamers on Spotify',
-    name: 'GUM',
-    href: 'https://open.spotify.com/artist/4Oov8BULUOBiX6UVpP04JW?si=MkjlWodBR0-RisWJl0CmyA',
-    src: 'http://www.undertheradarmag.com/uploads/article_images/Gum_Interview_under_the_radar.jpg'
+    hover: '234,572 monthly streamers on Spotify',
+    name: 'Bayonne',
+    href: 'https://open.spotify.com/artist/6BbqU3r1G2mwkRIfIbkCek?si=0rllXlliQSySWht35Mj8wA',
+    src: 'http://s3-eu-west-1.amazonaws.com/diy-magazine//diy/Artists/B/Bayonne/Bayonne001.jpeg'
   },
   {
     title: 'Liftoff',
-    hover: '877,023 monthly streamers on Spotify',
-    name: 'Shay Lia',
-    href: 'https://open.spotify.com/artist/3sJQwG0SsGRyv5C5kh4o9a?si=NUT5uvZiQpablPOQWJvgTQ',
-    src: 'https://lastfm-img2.akamaized.net/i/u/770x0/2a4be8e4c1af612a3942e2dd89ecd4c9.jpg'
+    hover: '688,232 monthly streamers on Spotify',
+    name: 'Arlo Parks',
+    href: 'https://open.spotify.com/artist/4kIwETcbpuFgRukE8o7Opx?si=nuX8tNsTSCqybR0H_2tzLA',
+    src: 'https://www.readdork.com/images/article/Artist-Images/A/Arlo%20Parks/Latitude%202019%20Portraits/_crop1500x1000/Arlo-Parks-Latitude-2019-www.patrickgunning.com-0841.jpg'
   },
 ]
 

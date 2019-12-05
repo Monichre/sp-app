@@ -17,10 +17,10 @@ type Query {
   getUserAchievements(pk: String!, uk: String!): [UserAchievement]
 }
 
-
 type Image {
   url: String!
 }
+
 type SpotifyUrl {
   spotify: String!
 }
@@ -141,8 +141,8 @@ const getUserInfo: QueryResolvers.GetUserInfoResolver = async (
 	{ log, DYNAMO_ENDPOINT, TABLE_USER }
 ) => {
 	log.info(uid)
-	const tablePlay = TableUser(DYNAMO_ENDPOINT, TABLE_USER)
-	const { valid } = await tablePlay.getUser(uid)
+	const tableUser = TableUser(DYNAMO_ENDPOINT, TABLE_USER)
+	const { valid } = await tableUser.getUser(uid)
 
 	return valid
 }

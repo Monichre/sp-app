@@ -75,9 +75,6 @@ const SendWithConfirmation: React.SFC<SendWithConfirmationProps> = ({ handleConf
 }
 
 
-
-
-
 export const UserInviteForm: React.SFC<UserInviteFormProps> = ({ close, currentUserName }) => {
     const [currentAddress, setCurrentAddress]: any = useState('')
     const [addresses, addAddress]: any = useState([])
