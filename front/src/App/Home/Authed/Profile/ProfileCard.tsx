@@ -4,7 +4,7 @@ import {
     ProfileBackground,
     CardWrapper,
     LeftWrapper,
- 
+
     Photo,
     UserHeadphonesAvatar,
     ButtonsWrapper,
@@ -14,7 +14,7 @@ import {
 import { SpotifyLogoLink } from '../../../../shared/SpotifyLogoLink/SpotifyLogoLink';
 import { UserInvitePopUp } from '../../../Components/UserInvitePopUp/UserInvitePopUp';
 import { Menu } from 'antd';
-import {mapSizesToProps} from '../../../../lib/mapSizes'
+import { mapSizesToProps } from '../../../../lib/mapSizes'
 import withSizes from 'react-sizes'
 
 
@@ -24,7 +24,7 @@ export interface ProfileCardProps {
 }
 
 export const PC: React.SFC<any> = ({ user, isMobile }) => {
-    
+
     const [visible, setVisible]: any = useState(false)
 
     const spotifyURL = `https://open.spotify.com/user/${user.uid.split(':')[1]}`
@@ -33,7 +33,7 @@ export const PC: React.SFC<any> = ({ user, isMobile }) => {
         if (e) {
             console.log('TCL: toggle -> e', e)
             e.preventDefault()
-}
+        }
         // e.stopPropagation()
         setVisible((visible: any) => !visible);
     }
@@ -43,8 +43,8 @@ export const PC: React.SFC<any> = ({ user, isMobile }) => {
             <CardWrapper>
                 <LeftWrapper>
 
-                        <Photo>{user.photoURL ? <img src={user.photoURL} /> : <UserHeadphonesAvatar />}</Photo>
-                    
+                    <Photo>{user.photoURL ? <img src={user.photoURL} /> : <UserHeadphonesAvatar />}</Photo>
+
                     <ButtonsWrapper>
                         <p>{user.displayName}</p>
                         <p>{user.email}</p>
@@ -59,7 +59,7 @@ export const PC: React.SFC<any> = ({ user, isMobile }) => {
                         <UserInvitePopUp isMobile={isMobile} toggle={toggle} visible={visible} currentUserName={user.displayName} />
                     </Menu.Item>
                 </Menu>
-                
+
             </CardWrapper>
         </ProfileBackground>
     );
