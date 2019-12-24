@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { ArtistsFragmentArtist, useGetArtistAchievementHolders } from '../../../types';
-import { User } from '../../../../../back/src/fns/graphql/types';
+import { ArtistsFragmentArtist } from '../../../types';
 import { ListStyle, ListCard } from '../ListStyle';
-import { decimalToHrsMins, hrsAndMins } from '../../../lib/durationFormats';
-import { Popover, List, Row, Col, Card, Icon, Tag, Avatar, Badge } from 'antd';
+import {  hrsAndMins } from '../../../lib/durationFormats';
+import { List, Badge } from 'antd';
 import { IconText, AvatarBg } from '../Elements';
 
+
 import { badgeMap } from '../../Home/Authed/Insights/shared/ArtistsChart/TopListenerYAxis';
+import { Avatar } from '../Avatar';
 
 export interface AchievementHoldersListProps {
     artist: ArtistsFragmentArtist
@@ -57,7 +58,7 @@ export const AchievementHoldersList: React.SFC<AchievementHoldersListProps> = ({
                                                               zIndex: 2,
                                                               // left: '100%'
                                                             }} />}>
-                                                              <AvatarBg achievementHoldersList><Avatar src={user.photoURL ? user.photoURL : '/icons/headphones.svg'} /></AvatarBg>
+                                                              <AvatarBg achievementHoldersList><Avatar src={user.photoURL ? user.photoURL : null} /></AvatarBg>
                                                             </Badge>
                                                           }
                                                     title={user.displayName}

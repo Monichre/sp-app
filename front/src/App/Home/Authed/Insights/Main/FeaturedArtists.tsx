@@ -71,24 +71,24 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: 'Ready',
-    hover: '93 monthly streamers on Spotify',
-    name: 'Warren Thomas Fenzi',
-    href: 'https://open.spotify.com/artist/6oVxxtwC1wrrnDtEIuSIHW?si=TQvvafDtS4aOiFxyr57DBw',
-    src: 'https://f4.bcbits.com/img/0016280307_10.jpg'
+    hover: '5,965 monthly streamers on Spotify',
+    name: 'Katie Kuffel',
+    href: 'https://open.spotify.com/artist/49r0LXAISWCcQbwojWLTQ8?si=QBaLnrLIQ0Syg880fz-r2g',
+    src: 'https://f4.bcbits.com/img/0009375034_10.jpg'
   },
   {
     title: 'Set',
-    hover: '234,572 monthly streamers on Spotify',
-    name: 'Bayonne',
-    href: 'https://open.spotify.com/artist/6BbqU3r1G2mwkRIfIbkCek?si=0rllXlliQSySWht35Mj8wA',
-    src: 'http://s3-eu-west-1.amazonaws.com/diy-magazine//diy/Artists/B/Bayonne/Bayonne001.jpeg'
+    hover: '107,273monthly streamers on Spotify',
+    name: 'La Luz',
+    href: 'https://open.spotify.com/artist/6QRlkjrHz5A62mqeNZz7t3?si=QmpKL_yDR4KeoK7PHoa4UA',
+    src: 'https://f4.bcbits.com/img/0013343596_10.jpg'
   },
   {
     title: 'Liftoff',
-    hover: '688,232 monthly streamers on Spotify',
-    name: 'Arlo Parks',
-    href: 'https://open.spotify.com/artist/4kIwETcbpuFgRukE8o7Opx?si=nuX8tNsTSCqybR0H_2tzLA',
-    src: 'https://www.readdork.com/images/article/Artist-Images/A/Arlo%20Parks/Latitude%202019%20Portraits/_crop1500x1000/Arlo-Parks-Latitude-2019-www.patrickgunning.com-0841.jpg'
+    hover: '934,331 monthly streamers on Spotify',
+    name: 'Dree Low',
+    href: 'https://open.spotify.com/artist/3tNPDodRNuLdezJnTsYOqy?si=yyG9jdoKS6eZivSThxDoeQ',
+    src: 'https://spottedsounds.com/wp-content/uploads/2019/10/dree-low.jpg'
   },
 ]
 

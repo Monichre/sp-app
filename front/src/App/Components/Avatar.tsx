@@ -1,9 +1,50 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { Popover, List, Avatar } from 'antd';
+import { Popover, List, Avatar as AntAvatar, Icon } from 'antd';
+import Img from 'react-image'
 import styled from 'styled-components';
 
-export const AvatarStyle = styled(Avatar)`
+
+
+const SoundprufAvatar = styled(Img)`
+	-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+		margin: 0;
+		padding: 0;
+		color: rgba(0, 0, 0, 0.65);
+		font-size: 14px;
+		font-variant: tabular-nums;
+		line-height: 1.5;
+		list-style: none;
+		-webkit-font-feature-settings: 'tnum';
+		font-feature-settings: 'tnum';
+		position: relative;
+		display: inline-block;
+		overflow: hidden;
+		color: #fff;
+		white-space: nowrap;
+		text-align: center;
+		vertical-align: middle;
+		background: #ccc;
+		width: 32px;
+		height: 32px;
+		line-height: 32px;
+		border-radius: 50%;
+`
+
+export interface AvatarProps {
+	src: string | null
+}
+ 
+export const Avatar: React.SFC<AvatarProps> = ({src}) => {
+	return ( 
+		<SoundprufAvatar src={[src, '/icons/headphones.svg']} loader={<Icon type="loading" /> } />
+	 );
+}
+ 
+
+
+export const AvatarStyle = styled(AntAvatar)`
 	.ant-avatar {
 		-webkit-box-sizing: border-box;
 		box-sizing: border-box;
@@ -82,4 +123,4 @@ export const AvatarStyle = styled(Avatar)`
 		width: 100%;
 		height: 100%;
 	}
-`
+`	
