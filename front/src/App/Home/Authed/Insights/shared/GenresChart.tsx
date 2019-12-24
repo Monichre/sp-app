@@ -5,11 +5,15 @@ import { History } from 'history'
 import { PerspectiveDashGenres } from '../../../../../types';
 import { ResponsiveContainer, BarChart, XAxis, YAxis, Bar, CartesianGrid, Label, Text, LineChart, Line, Tooltip, TooltipProps } from 'recharts';
 import { BRAND_GLOBAL_COLOR, BRAND_PERSONAL_COLOR, notLargeQuery } from '../../../../../shared/media';
+
 import { Comment } from './Comment';
+
+// @ts-ignore
 import max from 'ramda/es/max';
 import pluck from 'ramda/es/pluck';
 import reduce from 'ramda/es/reduce';
 import pipe from 'ramda/es/pipe';
+
 
 type TickProps = {
   x?: number
@@ -66,7 +70,7 @@ const TriangleBar = (props: any) => {
 
 const domainMaxBuilder: (values: PerspectiveDashGenres[]) => (maxValue: number) => number =
   // (values: TimescopeDashValues[]) => (maxValue: number) => pipe((vals: TimescopeDashValues[]) => vals.map(v => v.group), reduce(max, -Infinity))(values), 
-  (values: PerspectiveDashGenres[]) => (maxValue: number) => Math.ceil(pipe<PerspectiveDashGenres[], number[], number>(pluck('group'), reduce(max, -Infinity))(values))
+  (values: PerspectiveDashGenres[]) => (maxValue: number) => Math.ceil(pipe<any, any, any>(pluck('group'), reduce(max, -Infinity))(values))
 
 const decimalToHrsMins = (value: number) => `${Math.floor(value)}:${Math.floor((value % 1) * 60).toString().padStart(2, '0')}`
 

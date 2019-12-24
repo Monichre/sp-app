@@ -7,16 +7,15 @@ import { InsightsBackLink } from './shared/InsightsBackLink';
 import { useInsightsArtistStats, ArtistFragmentFragment, useGetArtistAchievementHolders } from '../../../../types';
 import { SpotifyLogoLink } from '../../../../shared/SpotifyLogoLink/SpotifyLogoLink';
 import { TimeseriesChart } from './shared/TimeseriesChart';
-import { ArtistTopListeners, scopeTheListeners, TopListenerAcheivementCard } from './ArtistTopListeners'
 import { suspensefulHook } from '../../../../lib/suspensefulHook';
-import { AvatarBg, firstPlaceBadge, IconText } from '../../../Components/Elements';
-import { List, Card, Avatar, Badge, Tag, Progress } from 'antd';
+import { AvatarBg, } from '../../../Components/Elements';
+import { List,  Badge, Tag, Progress } from 'antd';
 import { Box, Flex} from 'rebass';
-import { AchievementHoldersList } from '../../../Components/ArtistAchievementHolders/AchievementHoldersList';
 import { ListStyle } from '../../../Components/ListStyle';
 import { hrsAndMins } from '../../../../lib/durationFormats';
 
 import { badgeMap } from './shared/ArtistsChart/TopListenerYAxis';
+import { Avatar } from '../../../Components/Avatar';
 
 
 const ArtistBannerDiv = styled.div<{ backgroundUrl: string }>`
@@ -161,11 +160,7 @@ export const Artist: React.SFC<RouteComponentProps<{ artistId: string }> & { uid
                                   // left: '100%'
                                 }} />}>
                                   <AvatarBg><Avatar src={user.photoURL} /></AvatarBg>
-                                  {/* <AvatarBg  style={{
-                                    marginTop: '0.5rem'
-                                  }}>
-                                    <img src={user.photoURL} />
-                                  </AvatarBg> */}
+                                
                                 </Badge>
                               }
                               title={user.displayName}

@@ -5,6 +5,10 @@ import { APP_BLUE_TRANSPARENT, APP_BORDER_RADIUS_MD } from '../GlobalStyle';
 
 
 export const ListCard = styled(Card)`
+  /* border: 2px solid #ddd;
+  border-radius: 6px;
+  back */
+
   .ant-card-head-title {
     color: #fff;
     padding: 14px 9px;
