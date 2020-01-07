@@ -71,24 +71,24 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: 'Ready',
-    hover: '5,965 monthly streamers on Spotify',
-    name: 'Katie Kuffel',
-    href: 'https://open.spotify.com/artist/49r0LXAISWCcQbwojWLTQ8?si=QBaLnrLIQ0Syg880fz-r2g',
-    src: 'https://f4.bcbits.com/img/0009375034_10.jpg'
+    hover: '1,814 monthly streamers on Spotify',
+    name: 'Jenny Mitchell',
+    href: 'https://open.spotify.com/artist/4nuqPXV9cR0OGDbYw0Zwj9?si=5ZcS6rWXTu6MEhM5Yk6tVA',
+    src: 'https://f4.bcbits.com/img/0007710463_10.jpg'
   },
   {
     title: 'Set',
-    hover: '107,273monthly streamers on Spotify',
-    name: 'La Luz',
-    href: 'https://open.spotify.com/artist/6QRlkjrHz5A62mqeNZz7t3?si=QmpKL_yDR4KeoK7PHoa4UA',
-    src: 'https://f4.bcbits.com/img/0013343596_10.jpg'
+    hover: '50,937 monthly streamers on Spotify',
+    name: 'Tacocat',
+    href: 'https://open.spotify.com/artist/3h0MN1neFknEvlYKxFmSQW?si=qSRbZX4lTbSWXs475KpMyg',
+    src: 'https://hardlyart-production-image.s3.amazonaws.com/asset/artist_images/attachments/000/000/100/cropped_620_415/tacocat1.jpg?1459902904'
   },
   {
     title: 'Liftoff',
-    hover: '934,331 monthly streamers on Spotify',
-    name: 'Dree Low',
-    href: 'https://open.spotify.com/artist/3tNPDodRNuLdezJnTsYOqy?si=yyG9jdoKS6eZivSThxDoeQ',
-    src: 'https://spottedsounds.com/wp-content/uploads/2019/10/dree-low.jpg'
+    hover: '1,567,820 monthly streamers on Spotify',
+    name: 'Tyler Childers',
+    href: 'https://open.spotify.com/artist/13ZEDW6vyBF12HYcZRr4EV?si=CE7o3_npQOmSWtzyjJNqEA',
+    src: 'https://www.kentucky.com/latest-news/npmo1g/picture232725427/alternates/FREE_1140/a0017.JPG'
   },
 ]
 
