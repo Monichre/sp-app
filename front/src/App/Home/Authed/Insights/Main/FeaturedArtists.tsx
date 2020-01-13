@@ -71,24 +71,24 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: 'Ready',
-    hover: '1,814 monthly streamers on Spotify',
-    name: 'Jenny Mitchell',
-    href: 'https://open.spotify.com/artist/4nuqPXV9cR0OGDbYw0Zwj9?si=5ZcS6rWXTu6MEhM5Yk6tVA',
-    src: 'https://f4.bcbits.com/img/0007710463_10.jpg'
+    hover: '1,590 monthly streamers on Spotify',
+    name: 'Fizzy Soup',
+    href: 'https://open.spotify.com/artist/4H9JKsK80UHLurX3TeYDD0?si=jCjdRbNfQGeNBP_aIlkU3Q',
+    src: 'https://www.segundopremio.com/wp-content/uploads/2019/04/Fizzy-Soup-1024x640.jpg'
   },
   {
     title: 'Set',
-    hover: '50,937 monthly streamers on Spotify',
-    name: 'Tacocat',
-    href: 'https://open.spotify.com/artist/3h0MN1neFknEvlYKxFmSQW?si=qSRbZX4lTbSWXs475KpMyg',
-    src: 'https://hardlyart-production-image.s3.amazonaws.com/asset/artist_images/attachments/000/000/100/cropped_620_415/tacocat1.jpg?1459902904'
+    hover: '200,022 monthly streamers on Spotify',
+    name: 'Paul Cauthen',
+    href: 'https://open.spotify.com/artist/6yHM0XQEdu9sIlbILMaKBp?si=DHQR16D4Sfynyj76XYFCkA',
+    src: 'https://thebluegrasssituation.com/wp-content/uploads/2018/09/Paul-Cauthen.jpg'
   },
   {
     title: 'Liftoff',
-    hover: '1,567,820 monthly streamers on Spotify',
-    name: 'Tyler Childers',
-    href: 'https://open.spotify.com/artist/13ZEDW6vyBF12HYcZRr4EV?si=CE7o3_npQOmSWtzyjJNqEA',
-    src: 'https://www.kentucky.com/latest-news/npmo1g/picture232725427/alternates/FREE_1140/a0017.JPG'
+    hover: '452,051 monthly streamers on Spotify',
+    name: 'Jamila Woods',
+    href: 'https://open.spotify.com/artist/4UodukR17NIQfNu5uaqm9B?si=gER86qUGQv2pc9NcNUbuAQ',
+    src: 'https://static01.nyt.com/images/2019/05/15/arts/15ALBUM-WOODS/merlin_154875852_f2d63d5e-5b8e-48f9-b9b5-e015165c3f46-articleLarge.jpg?quality=75&auto=webp&disable=upscale'
   },
 ]
 
