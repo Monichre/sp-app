@@ -71,24 +71,24 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: 'Ready',
-    hover: '5,965 monthly streamers on Spotify',
-    name: 'Katie Kuffel',
-    href: 'https://open.spotify.com/artist/49r0LXAISWCcQbwojWLTQ8?si=QBaLnrLIQ0Syg880fz-r2g',
-    src: 'https://f4.bcbits.com/img/0009375034_10.jpg'
+    hover: '1,590 monthly streamers on Spotify',
+    name: 'Fizzy Soup',
+    href: 'https://open.spotify.com/artist/4H9JKsK80UHLurX3TeYDD0?si=jCjdRbNfQGeNBP_aIlkU3Q',
+    src: 'https://www.segundopremio.com/wp-content/uploads/2019/04/Fizzy-Soup-1024x640.jpg'
   },
   {
     title: 'Set',
-    hover: '107,273monthly streamers on Spotify',
-    name: 'La Luz',
-    href: 'https://open.spotify.com/artist/6QRlkjrHz5A62mqeNZz7t3?si=QmpKL_yDR4KeoK7PHoa4UA',
-    src: 'https://f4.bcbits.com/img/0013343596_10.jpg'
+    hover: '200,022 monthly streamers on Spotify',
+    name: 'Paul Cauthen',
+    href: 'https://open.spotify.com/artist/6yHM0XQEdu9sIlbILMaKBp?si=DHQR16D4Sfynyj76XYFCkA',
+    src: 'https://thebluegrasssituation.com/wp-content/uploads/2018/09/Paul-Cauthen.jpg'
   },
   {
     title: 'Liftoff',
-    hover: '934,331 monthly streamers on Spotify',
-    name: 'Dree Low',
-    href: 'https://open.spotify.com/artist/3tNPDodRNuLdezJnTsYOqy?si=yyG9jdoKS6eZivSThxDoeQ',
-    src: 'https://spottedsounds.com/wp-content/uploads/2019/10/dree-low.jpg'
+    hover: '452,051 monthly streamers on Spotify',
+    name: 'Jamila Woods',
+    href: 'https://open.spotify.com/artist/4UodukR17NIQfNu5uaqm9B?si=gER86qUGQv2pc9NcNUbuAQ',
+    src: 'https://static01.nyt.com/images/2019/05/15/arts/15ALBUM-WOODS/merlin_154875852_f2d63d5e-5b8e-48f9-b9b5-e015165c3f46-articleLarge.jpg?quality=75&auto=webp&disable=upscale'
   },
 ]
 
