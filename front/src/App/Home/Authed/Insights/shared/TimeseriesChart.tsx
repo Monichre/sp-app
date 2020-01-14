@@ -12,7 +12,7 @@ import { TPerspectiveOption } from './functions';
 
 const domainMaxBuilder: (values: TimescopeDashValues[], fromSeries?: TPerspectiveOption) => (maxValue: number) => number =
   // (values: TimescopeDashValues[]) => (maxValue: number) => pipe((vals: TimescopeDashValues[]) => vals.map(v => v.group), reduce(max, -Infinity))(values), 
-  (values, fromSeries = 'group') => (maxValue) => Math.ceil(pipe<TimescopeDashValues[], number[], number>(pluck(fromSeries), reduce(max, -Infinity))(values))
+  (values, fromSeries = 'group') => (maxValue) => Math.ceil(pipe<any[], any[], any>(pluck(fromSeries), reduce(max, -Infinity))(values))
 
   const decimalToHrsMins = (value: number) => `${Math.floor(value)}:${Math.floor((value % 1) * 60).toString().padStart(2, '0')}`
 

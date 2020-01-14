@@ -57,7 +57,9 @@ export const normalizeTimeScope = (pathParams: any) => {
   }
   const { timeScope, perspective }: any = pathParams
 
-  return normalizetimeScopeMap[timeScope]
+  const t = normalizetimeScopeMap[timeScope]
+  console.log('TCL: normalizeTimeScope -> t', t)
+  return t
 }
 
 
@@ -67,12 +69,15 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
       [pathParams.timeScope]: {
         timeSeries,
         [pathParams.perspective]: { artists, genres }
+       
       }
     }
   } = suspensefulHook(useInsightsDash({ variables: { uid }, suspend: true, pollInterval: 10000 }))
 
-
+  console.log('TCL: genres', genres)
+  console.log('TCL: artists', artists)
   const { timeScope, perspective }: any = pathParams
+  console.log('TCL: timeScope', timeScope)
   const translatedPerspective: string = perspective === 'personal' ? 'Your' : 'Everyone'
   const period = normalizeTimeScope(pathParams)
 

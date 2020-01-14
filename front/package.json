@@ -17,6 +17,7 @@
     "build:test": "TARGET=test yarn build",
     "deploy": "yarn check:target && sls deploy && sls info --verbose | grep SiteUrl",
     "deploy:test": "TARGET=test yarn deploy",
+    "gen": "node ./scripts/gen.ts",
     "e2e": "jest",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006",

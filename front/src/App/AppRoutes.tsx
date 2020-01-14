@@ -10,3 +10,5 @@ export const AppRoutes: React.SFC = () =>
       <Route path="/" component={Home} />
     </Switch>
   </Router>
+
+

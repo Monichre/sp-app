@@ -52,7 +52,7 @@ const navigateToArtist = (history: History, pathParams: TPathParams) => (obj: an
 }
 
 const domainMaxBuilder: (values: PerspectiveDashArtists[]) => (maxValue: number) => number =
-  (values: PerspectiveDashArtists[]) => (maxValue: number) => Math.ceil(pipe<PerspectiveDashArtists[], number[], number>(pluck('group'), reduce(max, -Infinity))(values))
+  (values: PerspectiveDashArtists[]) => (maxValue: number) => Math.ceil(pipe<any[], any[], any>(pluck('group'), reduce(max, -Infinity))(values))
 
 
 

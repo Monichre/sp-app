@@ -196,9 +196,13 @@ const determinePossibleAchievements = (achievements: any = {}, topArtistsByPerio
 }
 
 export const parseAchievementsByPeriod = (usersTopArtistByPeriodData: any, userId: string) => {
+    console.log('TCL: parseAchievementsByPeriod -> usersTopArtistByPeriodData', usersTopArtistByPeriodData)
 	const { lifetime, thisMonth, thisWeek, today } = usersTopArtistByPeriodData
+    console.log('TCL: parseAchievementsByPeriod -> thisMonth', thisMonth)
+    console.log('TCL: parseAchievementsByPeriod -> thisWeek', thisWeek)
 	// @ts-ignore
 	const weeklyArtists = [...new Set([...today.personal, ...thisWeek.personal])]
+    console.log('TCL: parseAchievementsByPeriod -> weeklyArtists', weeklyArtists)
 	const topArtistsByPeriod: any = {
 		week: weeklyArtists,
 		month: thisMonth.personal,

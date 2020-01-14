@@ -16,7 +16,7 @@ const backUntilNewFocus = (history: History) => {
   const startFocus = focusFrom(window.location.pathname)
   const insightPath = insightPathFrom(window.location.pathname)
   console.log('startFocus, insightPath', startFocus, insightPath)
-  window.onpopstate = (...args) => {
+  window.onpopstate = (...args: any) => {
     console.log('onpopstate', args, window.location.pathname)
     if (startFocus === focusFrom(window.location.pathname)) {
       console.log('back again!')

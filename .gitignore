@@ -84,3 +84,7 @@ typings/
 backups__r1__sept26/
 backups__r1__sept27/
 backups__rc__sept27/
+
+
+back/src/fns/graphql/.DS_Store
+back/src/shared/.DS_Store

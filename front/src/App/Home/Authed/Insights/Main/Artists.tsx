@@ -16,6 +16,7 @@ export const Artists: React.SFC<RouteComponentProps & { uid: string, pathParams:
 
   }
   const { timeScope, perspective }: any = pathParams
+  console.log('TCL: timeScope', timeScope)
   const translatedPerspective: string = perspective === 'personal' ? 'Your' : 'Everyone'
 
   return (

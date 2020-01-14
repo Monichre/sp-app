@@ -9,9 +9,11 @@ import {Container } from '../../shared/ui';
 export const Home: React.SFC = (props) => {
   const { user, isLoading } = useUser()
   if (isLoading) return <Loading/>
-  return <ErrorBoundary>{user ? 
+  return (<ErrorBoundary>
+    {user ? 
     <Container>
       <Authed {...{ user }} {...props}/>
     </Container>
- : <Public/>}</ErrorBoundary>
+      : <Public />}
+  </ErrorBoundary>)
 }

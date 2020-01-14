@@ -24,6 +24,8 @@
     "second": "cd back && source ../.env/local.env.sh && yarn start:second",
     "last": "cd back && source ../.env/local.env.sh && yarn start:last",
     "start": "concurrently --kill-others-on-fail \"yarn first\"  \"yarn second\" \"yarn last\" \"yarn front\"",
+    "gen": "cd ./front && yarn gen",
+    "storybook": "cd ./front && yarn storybook",
     "": ""
   },
   "devDependencies": {
