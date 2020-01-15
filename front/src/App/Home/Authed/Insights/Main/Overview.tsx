@@ -119,7 +119,10 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
               <SeeAllIcon />
             </SeeAllLinkInner>
           </SeeAllLink>
-          {translatedPerspective == "Everyone" ? <TotalNumberOfUsers>451 Users</TotalNumberOfUsers> : null}
+
+          {/* Appends a p tag with current users shown when user looks at everyone tab on insights */}
+          {translatedPerspective == "Everyone" ? <TotalNumberOfUsers>451 SoundPruf Users</TotalNumberOfUsers> : null}
+
           <GenresChartBlock {...{ genres, pathParams }}>
             <BlockTitle>{translatedPerspective} Top Genres {period}</BlockTitle>
           </GenresChartBlock>

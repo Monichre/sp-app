@@ -244,7 +244,7 @@ export const TimeBlockPair: React.SFC<{ label?: string, pathParams: TPathParams,
           <MusicWrap>
             <Music />
           </MusicWrap>
-          Listened {label}: {delta ? <TimeBlockDelta {...{ delta }} /> : ''}
+          {label}: {delta ? <TimeBlockDelta {...{ delta }} /> : ''}
         </NavTabLink>
         : delta ? <TimeBlockDelta {...{ delta }} /> : ''
       }
