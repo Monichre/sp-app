@@ -18,7 +18,9 @@ import { Tooltip } from 'antd';
 import { Box } from 'rebass';
 
 
-
+const TotalNumberOfUsers = styled.p`
+  margin-bottom: -21px;
+`
 
 const Row = styled.div`
   display: flex;
@@ -69,7 +71,7 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
       [pathParams.timeScope]: {
         timeSeries,
         [pathParams.perspective]: { artists, genres }
-       
+
       }
     }
   } = suspensefulHook(useInsightsDash({ variables: { uid }, suspend: true, pollInterval: 10000 }))
@@ -117,8 +119,9 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
               <SeeAllIcon />
             </SeeAllLinkInner>
           </SeeAllLink>
+          {translatedPerspective == "Everyone" ? <TotalNumberOfUsers>451 Users</TotalNumberOfUsers> : null}
           <GenresChartBlock {...{ genres, pathParams }}>
-            <BlockTitle>Top Genres</BlockTitle>
+            <BlockTitle>{translatedPerspective} Top Genres {period}</BlockTitle>
           </GenresChartBlock>
         </Tooltip>
       </AchievementHoverSummary>
