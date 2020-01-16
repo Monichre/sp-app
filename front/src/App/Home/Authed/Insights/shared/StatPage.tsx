@@ -40,19 +40,19 @@ const NavSelect = styled.select`
   border-bottom: 1px solid rgba(255,255,255,.1);
 `
 
-const NavOption: React.SFC<{pathParams: TPathParams, label: string}> = ({pathParams, label}) =>
+const NavOption: React.SFC<{ pathParams: TPathParams, label: string }> = ({ pathParams, label }) =>
   <option value={insightLink(pathParams)}>{label}</option>
-  // <option selected={pathname.includes(insightLink(pathParams))} value={insightLink(pathParams)}>{label}</option>
+// <option selected={pathname.includes(insightLink(pathParams))} value={insightLink(pathParams)}>{label}</option>
 
-  type TNavOption = {
-    label: string
-    addParams: { timeScope: TTimeScopeOption }
-  }
-const navOptions: TNavOption[]  = [
+type TNavOption = {
+  label: string
+  addParams: { timeScope: TTimeScopeOption }
+}
+const navOptions: TNavOption[] = [
   // { label: 'Today', addParams: {timeScope: 'today'} },
-  { label: 'This Week', addParams: {timeScope: 'thisWeek'} },
-  { label: 'This Month', addParams: {timeScope: 'thisMonth'} },
-  { label: 'Lifetime', addParams: {timeScope: 'lifetime'} },
+  { label: 'This Week', addParams: { timeScope: 'thisWeek' } },
+  { label: 'This Month', addParams: { timeScope: 'thisMonth' } },
+  { label: 'Lifetime', addParams: { timeScope: 'lifetime' } },
 ]
 
 
@@ -74,9 +74,9 @@ flex: 1;
 margin-right: 0.75rem;
 `
 
-const NavTab: React.SFC<{label: string, pathParams: TPathParams, stats: InsightsStatsTimescope}> = ({label, pathParams, stats}) =>
+const NavTab: React.SFC<{ label: string, pathParams: TPathParams, stats: InsightsStatsTimescope }> = ({ label, pathParams, stats }) =>
   <NavTabView>
-    <TimeBlockPair {...{label, pathParams, stats}}/>
+    <TimeBlockPair {...{ label, pathParams, stats }} />
   </NavTabView>
 
 const NavTabsView = styled.div`
@@ -84,9 +84,9 @@ const NavTabsView = styled.div`
   flex-direction: row;
   padding-left: 1rem;
 `
-const NavTabs: React.SFC<{pathParams: TPathParams, stats: Stats}> = ({pathParams, stats}) =>
+const NavTabs: React.SFC<{ pathParams: TPathParams, stats: Stats }> = ({ pathParams, stats }) =>
   <NavTabsView>
-    { navOptions.map( ({label, addParams}, key) => <NavTab {...{key, label, stats: stats[addParams.timeScope], pathParams: Object.assign({}, pathParams, addParams)}}/> )}
+    {navOptions.map(({ label, addParams }, key) => <NavTab {...{ key, label, stats: stats[addParams.timeScope], pathParams: Object.assign({}, pathParams, addParams) }} />)}
   </NavTabsView>
 
 type TTimeScopeOption = 'today' | 'thisWeek' | 'thisMonth' | 'lifetime'
@@ -114,33 +114,33 @@ type TPerspectiveStats = {
 }
 
 export type Stats = InsightsStatsInsightsStats | InsightsArtistStatsInsightsArtistStats | InsightsGenreStatsInsightsGenreStats
-export const StatPage: React.SFC<{stats: Stats, path: string, pathParams: TPathParams, history: History}> =
+
+export const StatPage: React.SFC<{ stats: Stats, path: string, pathParams: TPathParams, history: History }> =
   ({ stats, history, path, pathParams, children }) => {
-  
-    
+
+
     const navTo = (path: string) => history.push(path)
 
-  return (
-    <FullHeight>
-      
-      <Large>
-        <AppBar className='largeScreen' />
-        <NavTabs {...{ pathParams, stats }} />
-      </Large>
-      <NotLarge>
-        
-        <NavSelect data-test='top-artists-period-select' onChange={e => navTo(e.target.value)} defaultValue={insightLink(pathParams)}>
-          { navOptions.map(({label, addParams}, key) => <NavOption {...{key, label, pathParams: Object.assign({}, pathParams, addParams)}}/>) }
-        </NavSelect>
-        <VerticalSpacer height='55px' />
-        <AppBar className='smallScreen' />
-        <VerticalSpacer height='25px' />
-        <TimeBlockPair {...{pathParams, stats: stats[pathParams.timeScope]}}/>
-      </NotLarge>
-      <Container padded>
-        {children}
-        <VerticalSpacer height='110px'/>
-      </Container>
-    </FullHeight>
-  )
-}
+    return (
+      <FullHeight>
+        <Large>
+          <AppBar className='largeScreen' />
+          <NavTabs {...{ pathParams, stats }} />
+        </Large>
+        <NotLarge>
+
+          <NavSelect data-test='top-artists-period-select' onChange={e => navTo(e.target.value)} defaultValue={insightLink(pathParams)}>
+            {navOptions.map(({ label, addParams }, key) => <NavOption {...{ key, label, pathParams: Object.assign({}, pathParams, addParams) }} />)}
+          </NavSelect>
+          <VerticalSpacer height='55px' />
+          <AppBar className='smallScreen' />
+          <VerticalSpacer height='25px' />
+          <TimeBlockPair {...{ pathParams, stats: stats[pathParams.timeScope] }} />
+        </NotLarge>
+        <Container padded>
+          {children}
+          <VerticalSpacer height='110px' />
+        </Container>
+      </FullHeight>
+    )
+  }
