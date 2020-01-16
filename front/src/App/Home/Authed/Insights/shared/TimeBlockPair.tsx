@@ -159,7 +159,7 @@ const TimeBlockLink = styled(({ colors, ...rest }) => <NavLink {...rest} />) <{ 
 const TimeBlock: React.SFC<{ stats: InsightsStats, colors: TimeBlockColors, pathParams: TPathParams }> = ({ stats: { current: { hrs, mins }, delta }, colors, pathParams }) =>
   <TimeBlockLink {...{ colors, to: insightLink(pathParams) }}>
     <MajorValue>
-      {mins ? `${hrs} h ${mins.toString().padStart(2, '0')} m` : `${hrs} h`}
+      {mins ? `${hrs}h ${mins.toString().padStart(2, '0')}m` : `${hrs} h`}
     </MajorValue>
   </TimeBlockLink>
 
