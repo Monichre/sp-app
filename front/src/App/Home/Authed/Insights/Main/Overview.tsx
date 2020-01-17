@@ -96,7 +96,7 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
 
   return <>
     {/* Gets total users when perspective is Everyone. Currently Static Data */}
-    {translatedPerspective == "Everyone" ? <TotalNumberOfUsers>Everyone: 453 people</TotalNumberOfUsers> : null}
+    {translatedPerspective == "Everyone" ? <TotalNumberOfUsers>Everyone: 458 people</TotalNumberOfUsers> : null}
 
     <Row>
       <AchievementHoverSummary content={artistContentSummary} userId={uid} achievementsGraph period={period}>
