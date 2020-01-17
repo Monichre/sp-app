@@ -18,7 +18,11 @@ import { Tooltip } from 'antd';
 import { Box } from 'rebass';
 
 
-
+const TotalNumberOfUsers = styled.p`
+  margin-top: 30px;
+  margin-bottom: -51px;
+  text-align: right;
+`
 
 const Row = styled.div`
   display: flex;
@@ -69,7 +73,7 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
       [pathParams.timeScope]: {
         timeSeries,
         [pathParams.perspective]: { artists, genres }
-       
+
       }
     }
   } = suspensefulHook(useInsightsDash({ variables: { uid }, suspend: true, pollInterval: 10000 }))
@@ -91,8 +95,12 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
   const artistCount = artists.length === 3 ? 3 : null
 
   return <>
+    {/* Gets total users when perspective is Everyone. Currently Static Data */}
+    {translatedPerspective == "Everyone" ? <TotalNumberOfUsers>Everyone: 453 people</TotalNumberOfUsers> : null}
+
     <Row>
       <AchievementHoverSummary content={artistContentSummary} userId={uid} achievementsGraph period={period}>
+
         <Tooltip title="See All" placement="topRight">
           <SeeAllLink to={`${insightLink(pathParams)}/artists`}>
             <SeeAllLinkInner>
@@ -117,8 +125,9 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
               <SeeAllIcon />
             </SeeAllLinkInner>
           </SeeAllLink>
+
           <GenresChartBlock {...{ genres, pathParams }}>
-            <BlockTitle>Top Genres</BlockTitle>
+            <BlockTitle>{translatedPerspective} Top Genres {period}</BlockTitle>
           </GenresChartBlock>
         </Tooltip>
       </AchievementHoverSummary>

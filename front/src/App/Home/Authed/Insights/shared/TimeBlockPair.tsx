@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import styled from 'styled-components'
 import { NotLarge, Large, BRAND_COLOR, BRAND_GLOBAL_COLOR_BACKGROUND, BRAND_PERSONAL_COLOR_BACKGROUND, BRAND_PERSONAL_COLOR, BRAND_GLOBAL_COLOR, BRAND_GLOBAL_COLOR_BACKGROUND_INACTIVE, BRAND_PERSONAL_COLOR_BACKGROUND_INACTIVE, largeQuery, notLargeQuery, largeNotXLargeQuery, xLargeQuery } from '../../../../../shared/media';
 import { NavLink } from 'react-router-dom';
@@ -159,7 +159,7 @@ const TimeBlockLink = styled(({ colors, ...rest }) => <NavLink {...rest} />) <{ 
 const TimeBlock: React.SFC<{ stats: InsightsStats, colors: TimeBlockColors, pathParams: TPathParams }> = ({ stats: { current: { hrs, mins }, delta }, colors, pathParams }) =>
   <TimeBlockLink {...{ colors, to: insightLink(pathParams) }}>
     <MajorValue>
-      {mins ? `${hrs}:${mins.toString().padStart(2, '0')}` : hrs}
+      {mins ? `${hrs}h ${mins.toString().padStart(2, '0')}m` : `${hrs}h`}
     </MajorValue>
   </TimeBlockLink>
 
@@ -239,22 +239,30 @@ export const TimeBlockPair: React.SFC<{ label?: string, pathParams: TPathParams,
 
   return (
     <Fragment>
-      {label ? <NavTabLink to={insightLink(pathParams)}><MusicWrap><Music /></MusicWrap>{label}: {delta ? <TimeBlockDelta {...{ delta }} /> : ''}</NavTabLink> :  delta? <TimeBlockDelta {...{ delta } } /> : ''}
-    
+      {label ?
+        <NavTabLink to={insightLink(pathParams)}>
+          <MusicWrap>
+            <Music />
+          </MusicWrap>
+          {label}: {delta ? <TimeBlockDelta {...{ delta }} /> : ''}
+        </NavTabLink>
+        : delta ? <TimeBlockDelta {...{ delta }} /> : ''
+      }
+
       <TimeBlockPairView>
         <TimeBlockTitleRow>
           <TimeBlockHeaderWrap><h4>You</h4></TimeBlockHeaderWrap>
           <TimeBlockHeaderWrap>
             <h4>Everyone</h4>
           </TimeBlockHeaderWrap>
-      </TimeBlockTitleRow>
+        </TimeBlockTitleRow>
         <TimeBlock stats={personal} colors={COLORS.personal} pathParams={Object.assign({}, pathParams, { perspective: 'personal' })} />
-        
+
         <TimeBlock stats={group} colors={COLORS.group} pathParams={Object.assign({}, pathParams, { perspective: 'group' })} />
-        
+
       </TimeBlockPairView>
-      </Fragment>
+    </Fragment>
   )
 }
-  
+
 
