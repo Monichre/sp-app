@@ -20,6 +20,7 @@ import { Box } from 'rebass';
 
 const TotalNumberOfUsers = styled.p`
   margin-bottom: -21px;
+  text-align: right;
 `
 
 const Row = styled.div`
@@ -93,9 +94,10 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
   const artistCount = artists.length === 3 ? 3 : null
 
   return <>
+    {translatedPerspective == "Everyone" ? <TotalNumberOfUsers>451 SoundPruf Users</TotalNumberOfUsers> : null}
     <Row>
-      {translatedPerspective == "Everyone" ? <TotalNumberOfUsers>451 SoundPruf Users</TotalNumberOfUsers> : null}
       <AchievementHoverSummary content={artistContentSummary} userId={uid} achievementsGraph period={period}>
+
         <Tooltip title="See All" placement="topRight">
           <SeeAllLink to={`${insightLink(pathParams)}/artists`}>
             <SeeAllLinkInner>
