@@ -19,7 +19,8 @@ import { Box } from 'rebass';
 
 
 const TotalNumberOfUsers = styled.p`
-  margin-bottom: -21px;
+  margin-top: 30px;
+  margin-bottom: -51px;
   text-align: right;
 `
 
@@ -94,7 +95,9 @@ export const Overview: React.SFC<RouteComponentProps & { uid: string, pathParams
   const artistCount = artists.length === 3 ? 3 : null
 
   return <>
-    {translatedPerspective == "Everyone" ? <TotalNumberOfUsers>451 SoundPruf Users</TotalNumberOfUsers> : null}
+    {/* Gets total users when perspective is Everyone. Currently Static Data */}
+    {translatedPerspective == "Everyone" ? <TotalNumberOfUsers>Everyone: 453 people</TotalNumberOfUsers> : null}
+
     <Row>
       <AchievementHoverSummary content={artistContentSummary} userId={uid} achievementsGraph period={period}>
 
