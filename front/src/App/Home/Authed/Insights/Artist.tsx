@@ -16,6 +16,7 @@ import { hrsAndMins } from '../../../../lib/durationFormats';
 
 import { badgeMap } from './shared/ArtistsChart/TopListenerYAxis';
 import { Avatar } from '../../../Components/Avatar';
+import { ArtistTopListenersList } from '../../../Components/ArtistTopListenersList/ArtistTopListenersList';
 
 
 const ArtistBannerDiv = styled.div<{ backgroundUrl: string }>`
@@ -77,50 +78,17 @@ export const Artist: React.SFC<RouteComponentProps<{ artistId: string }> & { uid
       return (first.user !== null)
     })
 
+    console.log ("badge life", month)
+    const listeners: any = Object.keys(life).map((place:any) => life[place])
+
+    console.log("listeners: ", listeners)
 
     return (
       <StatPage {...{ stats, history, path, pathParams }}>
         <ArtistBanner {...{ artist }}>
 
-          {Object.keys(life).map((place: any) => {
-            const listener = life[place]
+        {listeners && listeners.length && <ArtistTopListenersList place="life" listeners={listeners}/>}
 
-            if(listener.user) {
-              const { user } = listener
-              const { hrs, mins } = hrsAndMins(listener.total)
-              const hours = hrs ? `${hrs} hours & ` : ''
-              const minutes = mins ? `${mins} mins` : ''
-              const ttl = `${hours}${minutes}`
-
-              return (
-                <Box mt={45}>
-                  
-                <Badge count={<img src={badgeMap[place]}  style={{
-                    height: '30px',
-                    width: '30px',
-                    zIndex: 2,
-                    left: '40%'
-                  }} />}>
-                    <AvatarBg artistPage style={{
-                      marginTop: '0.5rem'
-                    }}>
-                      <img src={user.photoURL} />
-                    </AvatarBg>
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <h4 style={{ color: '#fff', position: 'relative', zIndex: 2, textTransform: 'capitalize' }}>{place} place all time top listener <br /> {user.displayName}</h4>
-                    <p style={{ position: 'relative', zIndex: 2 }}><b>{ttl}</b></p>
-                  </Badge>
-                </Box>
-              )
-            } else {
-              return null
-            }
-
-          })}
         </ArtistBanner>
 
         <TimeseriesChart {...{ timeSeries }} />
