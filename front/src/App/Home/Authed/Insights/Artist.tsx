@@ -91,6 +91,9 @@ export const Artist: React.SFC<RouteComponentProps<{ artistId: string }> & { uid
               const hours = hrs ? `${hrs} hours & ` : ''
               const minutes = mins ? `${mins} mins` : ''
               const ttl = `${hours}${minutes}`
+              console.log("badgeMap", badgeMap)
+              console.log("badgeMap place", place)
+              console.log("badgeMap[place]", badgeMap[place])
 
               return (
                 <Box mt={45}>
