@@ -71,24 +71,24 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: 'Ready',
-    hover: '1,590 monthly streamers on Spotify',
-    name: 'Fizzy Soup',
-    href: 'https://open.spotify.com/artist/4H9JKsK80UHLurX3TeYDD0?si=jCjdRbNfQGeNBP_aIlkU3Q',
-    src: 'https://www.segundopremio.com/wp-content/uploads/2019/04/Fizzy-Soup-1024x640.jpg'
+    hover: '144 monthly streamers on Spotify',
+    name: 'Jessica Manning',
+    href: 'https://open.spotify.com/artist/0k1PAoOCwbcnj96aakriks?si=8cUItye6QC2QlEtnvPu-Ew',
+    src: 'https://ksr-ugc.imgix.net/assets/012/350/690/79fb788387af8af9d183c0505511e4ad_original.jpg?ixlib=rb-2.1.0&crop=faces&w=1552&h=873&fit=crop&v=1463756211&auto=format&frame=1&q=92&s=6f7303a892316866e6de75a272c53db0'
   },
   {
     title: 'Set',
-    hover: '200,022 monthly streamers on Spotify',
-    name: 'Paul Cauthen',
-    href: 'https://open.spotify.com/artist/6yHM0XQEdu9sIlbILMaKBp?si=DHQR16D4Sfynyj76XYFCkA',
-    src: 'https://thebluegrasssituation.com/wp-content/uploads/2018/09/Paul-Cauthen.jpg'
+    hover: '102,737 monthly streamers on Spotify',
+    name: 'ALASKALASKA',
+    href: 'https://open.spotify.com/artist/78CgVNlDQMvOVDIrRL84tJ?si=0ujboSHnQ06FYyelROx9sg',
+    src: 'http://www.marathonartists.com/wp-content/uploads/2017/05/DSC_8032-copy.jpg'
   },
   {
     title: 'Liftoff',
-    hover: '452,051 monthly streamers on Spotify',
-    name: 'Jamila Woods',
-    href: 'https://open.spotify.com/artist/4UodukR17NIQfNu5uaqm9B?si=gER86qUGQv2pc9NcNUbuAQ',
-    src: 'https://static01.nyt.com/images/2019/05/15/arts/15ALBUM-WOODS/merlin_154875852_f2d63d5e-5b8e-48f9-b9b5-e015165c3f46-articleLarge.jpg?quality=75&auto=webp&disable=upscale'
+    hover: '1,801,316 monthly streamers on Spotify',
+    name: 'The Blaze',
+    href: 'https://open.spotify.com/artist/1Dt1UKLtrJIW1xxRBejjos?si=tS_cFFJKS8SzCeSPxk2tbg',
+    src: 'https://ichef.bbci.co.uk/images/ic/960x540/p062d6bp.jpg'
   },
 ]
 
