@@ -9,13 +9,14 @@ import { SpotifyLogoLink } from '../../../../shared/SpotifyLogoLink/SpotifyLogoL
 import { TimeseriesChart } from './shared/TimeseriesChart';
 import { suspensefulHook } from '../../../../lib/suspensefulHook';
 import { AvatarBg, } from '../../../Components/Elements';
-import { List,  Badge, Tag, Progress } from 'antd';
-import { Box, Flex} from 'rebass';
+import { List, Badge, Tag, Progress } from 'antd';
+import { Box, Flex } from 'rebass';
 import { ListStyle } from '../../../Components/ListStyle';
 import { hrsAndMins } from '../../../../lib/durationFormats';
 
 import { badgeMap } from './shared/ArtistsChart/TopListenerYAxis';
 import { Avatar } from '../../../Components/Avatar';
+import { ArtistTopListenersList } from '../../../Components/ArtistTopListenersList/ArtistTopListenersList';
 
 
 const ArtistBannerDiv = styled.div<{ backgroundUrl: string }>`
@@ -77,53 +78,12 @@ export const Artist: React.SFC<RouteComponentProps<{ artistId: string }> & { uid
       return (first.user !== null)
     })
 
-
     return (
       <StatPage {...{ stats, history, path, pathParams }}>
         <ArtistBanner {...{ artist }}>
 
-          {Object.keys(life).map((place: any) => {
-            const listener = life[place]
+          {life && Object.keys(life).length && <ArtistTopListenersList listeners={life} />}
 
-            if(listener.user) {
-              const { user } = listener
-              const { hrs, mins } = hrsAndMins(listener.total)
-              const hours = hrs ? `${hrs} hours & ` : ''
-              const minutes = mins ? `${mins} mins` : ''
-              const ttl = `${hours}${minutes}`
-              console.log("badgeMap", badgeMap)
-              console.log("badgeMap place", place)
-              console.log("badgeMap[place]", badgeMap[place])
-
-              return (
-                <Box mt={45}>
-                  
-                <Badge count={<img src={badgeMap[place]}  style={{
-                    height: '30px',
-                    width: '30px',
-                    zIndex: 2,
-                    left: '40%'
-                  }} />}>
-                    <AvatarBg artistPage style={{
-                      marginTop: '0.5rem'
-                    }}>
-                      <img src={user.photoURL} />
-                    </AvatarBg>
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <h4 style={{ color: '#fff', position: 'relative', zIndex: 2, textTransform: 'capitalize' }}>{place} place all time top listener <br /> {user.displayName}</h4>
-                    <p style={{ position: 'relative', zIndex: 2 }}><b>{ttl}</b></p>
-                  </Badge>
-                </Box>
-              )
-            } else {
-              return null
-            }
-
-          })}
         </ArtistBanner>
 
         <TimeseriesChart {...{ timeSeries }} />
@@ -163,7 +123,7 @@ export const Artist: React.SFC<RouteComponentProps<{ artistId: string }> & { uid
                                   // left: '100%'
                                 }} />}>
                                   <AvatarBg><Avatar src={user.photoURL} /></AvatarBg>
-                                
+
                                 </Badge>
                               }
                               title={user.displayName}
@@ -185,18 +145,8 @@ export const Artist: React.SFC<RouteComponentProps<{ artistId: string }> & { uid
             }} />
           </ListStyle>
 
-
-          {/* <ArtistTopListeners>
-          {month && month.first && month.first.user ? <TopListenerAcheivementCard topListenerData={month.first} title='Monthly Top Listener' /> : null}
-
-          {week && week.first && week.first.user ? <TopListenerAcheivementCard topListenerData={week.first} title='weekly Top Listener' /> : null}
-
-          {day && day.first && day.first.user ? <TopListenerAcheivementCard topListenerData={day.first} title='daily Top Listener' /> : null}
-        </ArtistTopListeners> */}
-
         </Box>
 
       </StatPage>
     )
   }
-// TARGET=test CONFIG=test yarn build && TARGET=test CONFIG=test yarn deploy

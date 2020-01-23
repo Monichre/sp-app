@@ -37,13 +37,6 @@ type UserIdProp = {
   userId: string
 }
 
-
-
-
-
-
-
-
 const navigateToArtist = (history: History, pathParams: TPathParams) => (obj: any) => {
   if (!obj) { return }
   const artistId = obj['activePayload'][0]['payload']['artist']['id']
@@ -90,7 +83,6 @@ const ArtistsChart: React.SFC<RouteComponentProps & ChartProps & UserIdProp> = (
         <Bar dataKey='personal' fill={BRAND_PERSONAL_COLOR} xAxisId='top' yAxisId="left" barSize={5} cursor='pointer' />
         <Bar dataKey='group' fill={BRAND_GLOBAL_COLOR} xAxisId='top' yAxisId="left" barSize={5} cursor='pointer' />
 
-
       </BarChart>
     </ResponsiveContainer>
 
@@ -112,7 +104,6 @@ console.log('TCL: isMobile', isMobile)
       }
     </div>
   )
-
 }
 
 
