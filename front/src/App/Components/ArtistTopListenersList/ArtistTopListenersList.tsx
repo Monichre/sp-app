@@ -22,14 +22,14 @@ export const ArtistTopListenersList:
             const minutes = mins ? `${mins} mins` : ''
             const ttl = `${hours}${minutes}`
 
-            if (!user) {
-              return <div></div>
-            }
+            // if (!user) {
+            //   return <div></div>
+            // }
 
             return (
-              <Box mt={45}>
+              <Box className="boxguy" mt={45}>
 
-                <Badge2 className="LBadge" count={<img src={badgeMap[place]}
+                <Badge2 className="boxguy2" count={<img src={badgeMap[place]}
                   style={{
                     height: '30px',
                     width: '30px',
@@ -40,8 +40,8 @@ export const ArtistTopListenersList:
                     marginTop: '0.5rem'
                   }}>
                     <img src={
-                      // user ? user.photoURL : ""
-                      user.photoURL
+                      user ? user.photoURL : ""
+                      // user.photoURL
                     } />
                   </AvatarBg>
                   <div className="texty"><br />
@@ -50,8 +50,8 @@ export const ArtistTopListenersList:
                     <br />
                     <br />
                     <h4 style={{ color: '#fff', position: 'relative', zIndex: 2, textTransform: 'capitalize' }}>{place} place all time top listener <br /> {
-                      // user ? user.displayName : ""
-                      user.displayName
+                      user ? user.displayName : ""
+                      //user.displayName
                     }</h4>
                     <p style={{ position: 'relative', zIndex: 2 }}><b>{ttl}</b></p></div>
                 </Badge2>
