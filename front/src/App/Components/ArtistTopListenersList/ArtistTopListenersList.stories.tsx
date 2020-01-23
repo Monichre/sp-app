@@ -5,7 +5,7 @@ export default { title: 'ArtistTopListenersList' };
 
 const listeners = [
   {
-    user : {
+    user: {
       uid: "1",
       email: "michael",
       displayName: "Tom",
@@ -15,7 +15,7 @@ const listeners = [
     total: 10000000 // a number
   },
   {
-    user : {
+    user: {
       uid: "2",
       email: "klsldsj",
       displayName: "Sam",
@@ -25,7 +25,7 @@ const listeners = [
     total: 1200000 // a number
   },
   {
-    user : {
+    user: {
       uid: "3",
       email: "asdf",
       displayName: "Toriii",
@@ -38,4 +38,4 @@ const listeners = [
 
 const place = "first";
 
-export const ArtistTopListenersListFirstStory = () => <ArtistTopListenersList listeners={listeners} place={place} />;
+export const ArtistTopListenersListFirstStory = () => <ArtistTopListenersList listeners={listeners} />;

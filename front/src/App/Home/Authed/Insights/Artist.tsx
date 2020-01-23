@@ -78,17 +78,11 @@ export const Artist: React.SFC<RouteComponentProps<{ artistId: string }> & { uid
       return (first.user !== null)
     })
 
-    console.log("badge life", month)
-    const listeners: any = Object.keys(life).map((place: any) => life[place])
-
-    console.log("listeners: ", listeners)
-    console.log("badge key", Object.keys(life))
-
     return (
       <StatPage {...{ stats, history, path, pathParams }}>
         <ArtistBanner {...{ artist }}>
 
-          {listeners && listeners.length && <ArtistTopListenersList place="first" listeners={listeners} />}
+          {listeners && Object.keys(listeners).length && <ArtistTopListenersList listeners={life} />}
 
         </ArtistBanner>
 
