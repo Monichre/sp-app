@@ -9,8 +9,8 @@ import { SpotifyLogoLink } from '../../../../shared/SpotifyLogoLink/SpotifyLogoL
 import { TimeseriesChart } from './shared/TimeseriesChart';
 import { suspensefulHook } from '../../../../lib/suspensefulHook';
 import { AvatarBg, } from '../../../Components/Elements';
-import { List,  Badge, Tag, Progress } from 'antd';
-import { Box, Flex} from 'rebass';
+import { List, Badge, Tag, Progress } from 'antd';
+import { Box, Flex } from 'rebass';
 import { ListStyle } from '../../../Components/ListStyle';
 import { hrsAndMins } from '../../../../lib/durationFormats';
 
@@ -78,8 +78,8 @@ export const Artist: React.SFC<RouteComponentProps<{ artistId: string }> & { uid
       return (first.user !== null)
     })
 
-    console.log ("badge life", month)
-    const listeners: any = Object.keys(life).map((place:any) => life[place])
+    console.log("badge life", month)
+    const listeners: any = Object.keys(life).map((place: any) => life[place])
 
     console.log("listeners: ", listeners)
     console.log("badge key", Object.keys(life))
@@ -88,7 +88,7 @@ export const Artist: React.SFC<RouteComponentProps<{ artistId: string }> & { uid
       <StatPage {...{ stats, history, path, pathParams }}>
         <ArtistBanner {...{ artist }}>
 
-        {listeners && listeners.length && <ArtistTopListenersList place="life" listeners={listeners}/>}
+          {listeners && listeners.length && <ArtistTopListenersList place="first" listeners={listeners} />}
 
         </ArtistBanner>
 
@@ -129,7 +129,7 @@ export const Artist: React.SFC<RouteComponentProps<{ artistId: string }> & { uid
                                   // left: '100%'
                                 }} />}>
                                   <AvatarBg><Avatar src={user.photoURL} /></AvatarBg>
-                                
+
                                 </Badge>
                               }
                               title={user.displayName}
