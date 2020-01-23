@@ -1,5 +1,6 @@
-import * as React from 'react';
+// import * as React from 'react';
 import styled, { css } from 'styled-components';
+import { Badge } from 'antd';
 
 export const TopListeners = styled.div`
   display: flex;
@@ -9,3 +10,8 @@ export const TopListeners = styled.div`
   }
 `
 
+export const Badge2 = styled(Badge)`
+  @media (max-width: 600px) {
+    display: flex !important;
+  }
+`
