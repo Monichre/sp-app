@@ -82,6 +82,7 @@ export const Artist: React.SFC<RouteComponentProps<{ artistId: string }> & { uid
     const listeners: any = Object.keys(life).map((place:any) => life[place])
 
     console.log("listeners: ", listeners)
+    console.log("badge key", Object.keys(life))
 
     return (
       <StatPage {...{ stats, history, path, pathParams }}>

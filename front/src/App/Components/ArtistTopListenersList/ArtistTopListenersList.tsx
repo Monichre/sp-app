@@ -14,8 +14,7 @@ export const ArtistTopListenersList: React.SFC<ArtistTopListenersListProps> = ({
     return (
         <div style={{}}>
             {
-            listeners.map((listener: any) => {
-              console.log("badgeMap", place);
+              listeners.map((listener: any) => {
               const { user } = listener
               const { hrs, mins } = hrsAndMins(listener.total)
               const hours = hrs ? `${hrs} hours & ` : ''
