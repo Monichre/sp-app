@@ -4,7 +4,7 @@ import { Badge } from 'antd';
 
 export const TopListeners = styled.div`
   display: flex;
-  @media (max-width: 600px) {
+  @media (max-width: 650px) {
     display: flex;
     flex-direction: column;
   }
