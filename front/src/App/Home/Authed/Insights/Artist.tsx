@@ -82,7 +82,7 @@ export const Artist: React.SFC<RouteComponentProps<{ artistId: string }> & { uid
       <StatPage {...{ stats, history, path, pathParams }}>
         <ArtistBanner {...{ artist }}>
 
-          {listeners && Object.keys(listeners).length && <ArtistTopListenersList listeners={life} />}
+          {life && Object.keys(life).length && <ArtistTopListenersList listeners={life} />}
 
         </ArtistBanner>
 
@@ -145,18 +145,8 @@ export const Artist: React.SFC<RouteComponentProps<{ artistId: string }> & { uid
             }} />
           </ListStyle>
 
-
-          {/* <ArtistTopListeners>
-          {month && month.first && month.first.user ? <TopListenerAcheivementCard topListenerData={month.first} title='Monthly Top Listener' /> : null}
-
-          {week && week.first && week.first.user ? <TopListenerAcheivementCard topListenerData={week.first} title='weekly Top Listener' /> : null}
-
-          {day && day.first && day.first.user ? <TopListenerAcheivementCard topListenerData={day.first} title='daily Top Listener' /> : null}
-        </ArtistTopListeners> */}
-
         </Box>
 
       </StatPage>
     )
   }
-// TARGET=test CONFIG=test yarn build && TARGET=test CONFIG=test yarn deploy

@@ -11,7 +11,5 @@ export const TopListeners = styled.div`
 `
 
 export const Badge2 = styled(Badge)`
-  // @media (max-width: 600px) {
-  //   display: flex !important;
-  // }
+  
 `

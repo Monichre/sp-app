@@ -22,9 +22,9 @@
     "noEmit": true,
     "jsx": "preserve"
   },
-  // "exclude": [
-  //   "src/**/*.stories.tsx"
-  // ],
+  "exclude": [
+    "src/**/*.stories.tsx"
+  ],
   "include": [
     "src",
     "e2e"
