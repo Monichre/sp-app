@@ -27,20 +27,19 @@ export const ArtistTopListenersList:
             }
 
             return (
-              <Box mt={45}>
+              <Box className="boxguy" mt={45}>
 
-                <Badge2 className="LBadge" count={<img src={badgeMap[place]}
+                <Badge2 className="boxguy2" count={<img src={badgeMap[place]}
                   style={{
                     height: '30px',
                     width: '30px',
                     zIndex: 2,
                     left: '40%'
                   }} />}>
-                  <AvatarBg artistPage style={{
+                  <AvatarBg class="AvatarBg" artistPage style={{
                     marginTop: '0.5rem'
                   }}>
                     <img src={
-                      // user ? user.photoURL : ""
                       user.photoURL
                     } />
                   </AvatarBg>
@@ -50,7 +49,6 @@ export const ArtistTopListenersList:
                     <br />
                     <br />
                     <h4 style={{ color: '#fff', position: 'relative', zIndex: 2, textTransform: 'capitalize' }}>{place} place all time top listener <br /> {
-                      // user ? user.displayName : ""
                       user.displayName
                     }</h4>
                     <p style={{ position: 'relative', zIndex: 2 }}><b>{ttl}</b></p></div>
