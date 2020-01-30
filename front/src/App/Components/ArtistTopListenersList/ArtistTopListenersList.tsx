@@ -22,9 +22,9 @@ export const ArtistTopListenersList:
             const minutes = mins ? `${mins} mins` : ''
             const ttl = `${hours}${minutes}`
 
-            // if (!user) {
-            //   return <div></div>
-            // }
+            if (!user) {
+              return <div></div>
+            }
 
             return (
               <Box className="boxguy" mt={45}>
@@ -36,12 +36,11 @@ export const ArtistTopListenersList:
                     zIndex: 2,
                     left: '40%'
                   }} />}>
-                  <AvatarBg artistPage style={{
+                  <AvatarBg class="AvatarBg" artistPage style={{
                     marginTop: '0.5rem'
                   }}>
                     <img src={
-                      user ? user.photoURL : ""
-                      // user.photoURL
+                      user.photoURL
                     } />
                   </AvatarBg>
                   <div className="texty"><br />
@@ -50,8 +49,7 @@ export const ArtistTopListenersList:
                     <br />
                     <br />
                     <h4 style={{ color: '#fff', position: 'relative', zIndex: 2, textTransform: 'capitalize' }}>{place} place all time top listener <br /> {
-                      user ? user.displayName : ""
-                      //user.displayName
+                      user.displayName
                     }</h4>
                     <p style={{ position: 'relative', zIndex: 2 }}><b>{ttl}</b></p></div>
                 </Badge2>
