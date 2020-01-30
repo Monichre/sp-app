@@ -71,24 +71,24 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: 'Ready',
-    hover: '144 monthly streamers on Spotify',
-    name: 'Jessica Manning',
-    href: 'https://open.spotify.com/artist/0k1PAoOCwbcnj96aakriks?si=8cUItye6QC2QlEtnvPu-Ew',
-    src: 'https://ksr-ugc.imgix.net/assets/012/350/690/79fb788387af8af9d183c0505511e4ad_original.jpg?ixlib=rb-2.1.0&crop=faces&w=1552&h=873&fit=crop&v=1463756211&auto=format&frame=1&q=92&s=6f7303a892316866e6de75a272c53db0'
+    hover: '2,697 monthly streamers on Spotify',
+    name: 'The Raddlers',
+    href: 'https://open.spotify.com/artist/5OyL9bvMZEYUMtCMjussZ3?si=bFnsZUawSdKr8E7yALFCrw',
+    src: 'https://www.arcgis.com/sharing/rest/content/items/5827f57924ab4d1ca7da19f0fb1704e6/resources/1562388224464.jpeg?w=800'
   },
   {
     title: 'Set',
-    hover: '102,737 monthly streamers on Spotify',
-    name: 'ALASKALASKA',
-    href: 'https://open.spotify.com/artist/78CgVNlDQMvOVDIrRL84tJ?si=0ujboSHnQ06FYyelROx9sg',
-    src: 'http://www.marathonartists.com/wp-content/uploads/2017/05/DSC_8032-copy.jpg'
+    hover: '34,163 monthly streamers on Spotify',
+    name: 'Terr',
+    href: 'https://open.spotify.com/artist/79ipwfkZpcwMYwHJdqtGsN?si=jyelrshcQiujPqQqmBRA6A',
+    src: 'https://torturetheartistcom.files.wordpress.com/2018/07/terr-hi-res-hands-credit-gustavo-marx.jpg?w=1024'
   },
   {
     title: 'Liftoff',
-    hover: '1,801,316 monthly streamers on Spotify',
-    name: 'The Blaze',
-    href: 'https://open.spotify.com/artist/1Dt1UKLtrJIW1xxRBejjos?si=tS_cFFJKS8SzCeSPxk2tbg',
-    src: 'https://ichef.bbci.co.uk/images/ic/960x540/p062d6bp.jpg'
+    hover: '1,082,484 monthly streamers on Spotify',
+    name: 'Cass McCombs',
+    href: 'https://open.spotify.com/artist/2iUVQjheBnvOt8vaBrxXJz?si=SKlhUiIKTc6dtxzmXpSaXQ',
+    src: 'https://media2.fdncms.com/eastbayexpress/imager/cass-mccombs/u/zoom/3061818/music2.jpg'
   },
 ]
 
