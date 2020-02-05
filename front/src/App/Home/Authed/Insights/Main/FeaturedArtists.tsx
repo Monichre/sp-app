@@ -71,24 +71,24 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: 'Ready',
-    hover: '2,697 monthly streamers on Spotify',
-    name: 'The Raddlers',
-    href: 'https://open.spotify.com/artist/5OyL9bvMZEYUMtCMjussZ3?si=bFnsZUawSdKr8E7yALFCrw',
-    src: 'https://www.arcgis.com/sharing/rest/content/items/5827f57924ab4d1ca7da19f0fb1704e6/resources/1562388224464.jpeg?w=800'
+    hover: '952 monthly streamers on Spotify',
+    name: 'YYY',
+    href: 'https://open.spotify.com/artist/5NaRtpIiM6r54JmJ6AFWta?si=BnvQOER0T--FR4NP52hO5w',
+    src: 'https://stmedia.stimg.co/ctyp-yyyyyyy.jpg?w=800'
   },
   {
     title: 'Set',
-    hover: '34,163 monthly streamers on Spotify',
-    name: 'Terr',
-    href: 'https://open.spotify.com/artist/79ipwfkZpcwMYwHJdqtGsN?si=jyelrshcQiujPqQqmBRA6A',
-    src: 'https://torturetheartistcom.files.wordpress.com/2018/07/terr-hi-res-hands-credit-gustavo-marx.jpg?w=1024'
+    hover: '106,151 monthly streamers on Spotify',
+    name: 'Amyl and The Sniffers',
+    href: 'https://open.spotify.com/artist/3NqV2DJoAWsjl787bWaHW7?si=hJp2-rVSSHOkaABVxR0Ndg',
+    src: 'https://diy-magazine.s3.amazonaws.com/d/diy/Artists/A/Amyl-and-the-Sniffers/DIY85/Amyl-and-the-Sniffers_c_Charles-Engelken-03-web.jpg'
   },
   {
     title: 'Liftoff',
-    hover: '1,082,484 monthly streamers on Spotify',
-    name: 'Cass McCombs',
-    href: 'https://open.spotify.com/artist/2iUVQjheBnvOt8vaBrxXJz?si=SKlhUiIKTc6dtxzmXpSaXQ',
-    src: 'https://media2.fdncms.com/eastbayexpress/imager/cass-mccombs/u/zoom/3061818/music2.jpg'
+    hover: '756,118 monthly streamers on Spotify',
+    name: 'Caroline Polachek',
+    href: 'https://open.spotify.com/artist/4Ge8xMJNwt6EEXOzVXju9a?si=ZKtPBjc6RE6vAytUA24tWA',
+    src: 'https://mtv.mtvnimages.com/uri/mgid:ao:image:mtv.com:683351?quality=0.8&format=jpg&width=1440&height=810&.jpg'
   },
 ]
 
