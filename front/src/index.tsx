@@ -8,7 +8,7 @@ import 'sanitize.css'
 if (process.env.REACT_APP_LOGROCKET_APP_ID) {
     LogRocket.init(process.env.REACT_APP_LOGROCKET_APP_ID)
 } else {
-  throw new Error('cannot initialize logrocket, is REACT_APP_LOGROCKET_APP_ID missing from frontend build?')
+    throw new Error('cannot initialize logrocket, is REACT_APP_LOGROCKET_APP_ID missing from frontend build?')
 }
 
 
