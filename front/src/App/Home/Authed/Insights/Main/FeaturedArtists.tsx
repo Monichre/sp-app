@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from 'styled-components'
-import { SpotifyLogoLink } from '../../../../../shared/SpotifyLogoLink/SpotifyLogoLink';
+import React from "react";
+import styled from "styled-components";
+import { SpotifyLogoLink } from "../../../../../shared/SpotifyLogoLink/SpotifyLogoLink";
 
 const bgSize = 24;
 
@@ -14,7 +14,7 @@ const ThreeColumns = styled.div`
   }
 
   align-items: center;
-`
+`;
 
 export const ArtistLinkBlock = styled.a<{ src: string }>`
 display: flex;
@@ -30,70 +30,86 @@ height: ${bgSize}rem;
 width: 100%;
 // width: ${bgSize}rem;
 border-radius: 0.5rem;
-background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("${({ src }) => src}");
+background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("${({
+  src
+}) => src}");
 background-position: center center;
 background-size: cover;
-`
+`;
 
 export const ArtistName = styled.div`
   font-size: ${bgSize / 6}rem;
   // font-weight: 500;
   font-weight: bold;
   font-family: Righteous;
-`
+`;
 
 export const PaddedRight = styled.div`
-width: 100%;
+  width: 100%;
   padding: 2rem;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-`
+`;
 
-export const ArtistPromoItem: React.SFC<FeaturedArtist> = ({ title, hover, src, href, name }) =>
+export const ArtistPromoItem: React.SFC<FeaturedArtist> = ({
+  title,
+  hover,
+  src,
+  href,
+  name
+}) => (
   <div data-tip={hover}>
-    <ArtistLinkBlock data-test='artist-row' target='new' {...{ href, src }}>
-      <PaddedRight><SpotifyLogoLink href={href} size='3rem' /></PaddedRight>
-      <ArtistName data-test='artist-row-name'>{name}</ArtistName>
+    <ArtistLinkBlock data-test="artist-row" target="new" {...{ href, src }}>
+      <PaddedRight>
+        <SpotifyLogoLink href={href} size="3rem" />
+      </PaddedRight>
+      <ArtistName data-test="artist-row-name">{name}</ArtistName>
     </ArtistLinkBlock>
   </div>
+);
 
 type FeaturedArtist = {
-  title: string
-  hover: string
-  name: string
-  href: string
-  src: string
-}
-
-
+  title: string;
+  hover: string;
+  name: string;
+  href: string;
+  src: string;
+};
 
 const featuredArtists: FeaturedArtist[] = [
   {
-    title: 'Ready',
-    hover: '952 monthly streamers on Spotify',
-    name: 'YYY',
-    href: 'https://open.spotify.com/artist/5NaRtpIiM6r54JmJ6AFWta?si=BnvQOER0T--FR4NP52hO5w',
-    src: 'https://stmedia.stimg.co/ctyp-yyyyyyy.jpg?w=800'
+    title: "Ready",
+    hover: "410 monthly streamers on Spotify",
+    name: "Tongue Party",
+    href:
+      "https://open.spotify.com/artist/5ZN5lbKQ8D0uwWmDRLVmJG?si=h_5wzStRSayLF6ASpmUOUA",
+    src: "https://f4.bcbits.com/img/0013490120_10.jpg"
   },
   {
-    title: 'Set',
-    hover: '106,151 monthly streamers on Spotify',
-    name: 'Amyl and The Sniffers',
-    href: 'https://open.spotify.com/artist/3NqV2DJoAWsjl787bWaHW7?si=hJp2-rVSSHOkaABVxR0Ndg',
-    src: 'https://diy-magazine.s3.amazonaws.com/d/diy/Artists/A/Amyl-and-the-Sniffers/DIY85/Amyl-and-the-Sniffers_c_Charles-Engelken-03-web.jpg'
+    title: "Set",
+    hover: "386,959 monthly streamers on Spotify",
+    name: "Oneohtrix Point Never",
+    href:
+      "https://open.spotify.com/artist/2wPDbhaGXCqROrVmwDdCrK?si=ZKjaB8cuSqa15UyN9cmXcg",
+    src:
+      "https://shorefire.com/images/uploads/gallery/OPN_5_AtibaJefferson_3000.jpg"
   },
   {
-    title: 'Liftoff',
-    hover: '756,118 monthly streamers on Spotify',
-    name: 'Caroline Polachek',
-    href: 'https://open.spotify.com/artist/4Ge8xMJNwt6EEXOzVXju9a?si=ZKtPBjc6RE6vAytUA24tWA',
-    src: 'https://mtv.mtvnimages.com/uri/mgid:ao:image:mtv.com:683351?quality=0.8&format=jpg&width=1440&height=810&.jpg'
-  },
-]
+    title: "Liftoff",
+    hover: "817,668 monthly streamers on Spotify",
+    name: "Leikeli47",
+    href:
+      "https://open.spotify.com/artist/0DtXHIvJ8NWBg5pGvsgWnR?si=HUuaJ3okT6GncUfRh4p9-A",
+    src:
+      "https://media1.popsugar-assets.com/files/thumbor/QOZB5sCAuhoVezHXM-tE4Hz7jFQ/fit-in/2048xorig/filters:format_auto-!!-:strip_icc-!!-/2019/08/16/723/n/1922283/tmp_mEr4Im_9b4f8fe89af41965_051319-Skullcandy-Empowered-Pink-Leikeli474820.jpg"
+  }
+];
 
-
-export const FeaturedArtists: React.SFC = () =>
+export const FeaturedArtists: React.SFC = () => (
   <ThreeColumns>
-    {featuredArtists.map((artist, key) => <ArtistPromoItem key={key} {...artist} />)}
+    {featuredArtists.map((artist, key) => (
+      <ArtistPromoItem key={key} {...artist} />
+    ))}
   </ThreeColumns>
+);
