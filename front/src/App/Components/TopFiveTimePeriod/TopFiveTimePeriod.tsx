@@ -7,7 +7,9 @@ import {
   Headline,
   DateRange,
   LogoDiv,
-  HorizontalRule
+  HorizontalRule,
+  TitleHr,
+  CloseButton
 } from "./TopFiveTimePeriod.styles";
 
 export interface TopFiveTimePeriodProps {
@@ -19,10 +21,11 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
 }) => {
   return (
     <OpaqueBackground>
+      <CloseButton />
       <TopFiveParentDiv>
         <TopFiveHeader>
           <Headline>My Week In Music</Headline>
-          <HorizontalRule />
+          <TitleHr />
           <DateRange>Feb 2 - Feb 9</DateRange>
         </TopFiveHeader>
         {artistArray.map((artist: any) => {

@@ -11,6 +11,8 @@ export const OrderNumber = styled.h2`
   opacity: 0.5;
   padding-right: 10px;
   margin: 0;
+  font-size: 54px;
+  font-weight: 600;
 `;
 
 export const ArtistInfo = styled.div`
