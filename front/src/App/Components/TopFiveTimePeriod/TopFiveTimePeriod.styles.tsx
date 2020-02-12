@@ -15,12 +15,21 @@ export const OpaqueBackground = styled.div`
   overflow: hidden;
 `;
 
-export const CloseButton = styled.div`
-  width: 50px;
-  height: 50px;
+export const ModalWrapper = styled.div`
   padding: 0;
   margin: 0;
   background: green;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+`;
+
+export const CloseButton = styled.div`
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  margin: 0 0 0 auto;
+  background: blue;
   display: flex;
 `;
 
@@ -34,11 +43,10 @@ export const TopFiveParentDiv = styled.div`
     rgba(246, 133, 31, 1) 0%,
     rgba(229, 76, 25, 1) 100%
   );
-  width: 80%;
   max-width: 414px;
-  // max-height: 90vh;
   padding: 20px;
   border-radius: 10px;
+  margin-top: 10px;
 `;
 
 export const TopFiveHeader = styled.div`
@@ -73,6 +81,6 @@ export const TitleHr = styled.hr`
 export const HorizontalRule = styled.hr`
   border-top: 0.5px solid white;
   opacity: 0.3;
-  margin: 10px 0 15px 0;
+  margin: 5px 0 8px 0;
   // margin-bottom: 10px;
 `;

@@ -9,7 +9,8 @@ import {
   LogoDiv,
   HorizontalRule,
   TitleHr,
-  CloseButton
+  CloseButton,
+  ModalWrapper
 } from "./TopFiveTimePeriod.styles";
 
 export interface TopFiveTimePeriodProps {
@@ -21,21 +22,23 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
 }) => {
   return (
     <OpaqueBackground>
-      <CloseButton />
-      <TopFiveParentDiv>
-        <TopFiveHeader>
-          <Headline>My Week In Music</Headline>
-          <TitleHr />
-          <DateRange>Feb 2 - Feb 9</DateRange>
-        </TopFiveHeader>
-        {artistArray.map((artist: any) => {
-          return <ArtistListElement artist={artist} />;
-        })}
-        <LogoDiv
-          src="http://live.soundpruf.com/static/media/sp-white-logo-horizontal.99cc2d83.png"
-          alt=""
-        />
-      </TopFiveParentDiv>
+      <ModalWrapper>
+        <CloseButton />
+        <TopFiveParentDiv>
+          <TopFiveHeader>
+            <Headline>My Week In Music</Headline>
+            <TitleHr />
+            <DateRange>Feb 2 - Feb 9</DateRange>
+          </TopFiveHeader>
+          {artistArray.map((artist: any) => {
+            return <ArtistListElement artist={artist} />;
+          })}
+          <LogoDiv
+            src="http://live.soundpruf.com/static/media/sp-white-logo-horizontal.99cc2d83.png"
+            alt=""
+          />
+        </TopFiveParentDiv>
+      </ModalWrapper>
     </OpaqueBackground>
   );
 };
