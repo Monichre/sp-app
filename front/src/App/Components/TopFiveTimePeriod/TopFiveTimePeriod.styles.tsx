@@ -3,14 +3,16 @@ import styled, { css } from "styled-components";
 
 export const OpaqueBackground = styled.div`
   width: 100%;
-  height: 100%vh;
-  padding: 30px 0;
-  background: black;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+  background: rgba(0, 0, 0, 0.75);
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
   font-family: "Source Sans Pro", sans-serif;
+  overflow: hidden;
 `;
 
 export const TopFiveParentDiv = styled.div`
@@ -31,15 +33,25 @@ export const TopFiveParentDiv = styled.div`
 
 export const TopFiveHeader = styled.div`
   text-align: center;
+  margin-bottom: 30px;
+`;
+
+export const Headline = styled.h1`
+  margin: 0;
+`;
+
+export const DateRange = styled.h3`
+  margin: 0;
 `;
 
 export const LogoDiv = styled.img`
   width: 144px;
   margin: auto;
-  padding-top: 34px;
+  padding-top: 35px;
 `;
 
 export const HorizontalRule = styled.hr`
-  border-top: 1px solid white;
+  border-top: 0.5px solid white;
   opacity: 0.3;
+  // margin-bottom: 10px;
 `;

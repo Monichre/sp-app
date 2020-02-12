@@ -4,6 +4,8 @@ import {
   OpaqueBackground,
   TopFiveParentDiv,
   TopFiveHeader,
+  Headline,
+  DateRange,
   LogoDiv,
   HorizontalRule
 } from "./TopFiveTimePeriod.styles";
@@ -19,9 +21,9 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
     <OpaqueBackground>
       <TopFiveParentDiv>
         <TopFiveHeader>
-          <h1>My Week In Music</h1>
+          <Headline>My Week In Music</Headline>
           <HorizontalRule />
-          <h3>Feb 2 - Feb 9</h3>
+          <DateRange>Feb 2 - Feb 9</DateRange>
         </TopFiveHeader>
         {artistArray.map((artist: any) => {
           return <ArtistListElement artist={artist} />;
