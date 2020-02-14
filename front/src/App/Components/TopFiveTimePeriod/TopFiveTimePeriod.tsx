@@ -29,7 +29,7 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
   timeScope
 }) => {
   return (
-    <OpaqueBackground>
+    <OpaqueBackground className="top-five-time-period">
       <ModalWrapper>
         <CloseButton
           className='test'
