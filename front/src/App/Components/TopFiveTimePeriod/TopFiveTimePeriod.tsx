@@ -4,8 +4,15 @@ import {
   OpaqueBackground,
   TopFiveParentDiv,
   TopFiveHeader,
+  Headline,
+  DateRange,
   LogoDiv,
-  HorizontalRule
+  HorizontalRule,
+  TitleHr,
+  CloseButton,
+  ModalWrapper,
+  Hx,
+  Vx
 } from "./TopFiveTimePeriod.styles";
 
 export interface TopFiveTimePeriodProps {
@@ -17,20 +24,31 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
 }) => {
   return (
     <OpaqueBackground>
-      <TopFiveParentDiv>
-        <TopFiveHeader>
-          <h1>My Week In Music</h1>
-          <HorizontalRule />
-          <h3>Feb 2 - Feb 9</h3>
-        </TopFiveHeader>
-        {artistArray.map((artist: any) => {
-          return <ArtistListElement artist={artist} />;
-        })}
-        <LogoDiv
-          src="http://live.soundpruf.com/static/media/sp-white-logo-horizontal.99cc2d83.png"
-          alt=""
-        />
-      </TopFiveParentDiv>
+      <ModalWrapper>
+        <CloseButton
+          className="test"
+          onClick={() => {
+            console.log("clicked");
+          }}
+        >
+          <Hx />
+          <Vx />
+        </CloseButton>
+        <TopFiveParentDiv>
+          <TopFiveHeader>
+            <Headline>My Week In Music</Headline>
+            <TitleHr />
+            <DateRange>Feb 2 - Feb 9</DateRange>
+          </TopFiveHeader>
+          {artistArray.map((artist: any) => {
+            return <ArtistListElement artist={artist} />;
+          })}
+          <LogoDiv
+            src="http://live.soundpruf.com/static/media/sp-white-logo-horizontal.99cc2d83.png"
+            alt=""
+          />
+        </TopFiveParentDiv>
+      </ModalWrapper>
     </OpaqueBackground>
   );
 };
