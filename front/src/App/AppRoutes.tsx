@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Home } from "./Home/Home";
 import { CustomAuth } from "./CustomAuth";
-import { TopFiveTimePeriod } from "./Components/TopFiveTimePeriod/TopFiveTimePeriod";
 
 export const AppRoutes: React.SFC = () => (
   <Router>
