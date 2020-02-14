@@ -1,0 +1,67 @@
+var $cb1dcb8285aa345ec5313db015ac4$exports = {};
+$parcel$require("018cb1dcb8285aa345ec5313db015ac4", "react");
+$parcel$require("018cb1dcb8285aa345ec5313db015ac4", "../../../shared/ui");
+$parcel$require("018cb1dcb8285aa345ec5313db015ac4", "antd");
+$parcel$require("018cb1dcb8285aa345ec5313db015ac4", "../../Home/Authed/Authed");
+$parcel$require("018cb1dcb8285aa345ec5313db015ac4", "../../../lib/mapSizes");
+$parcel$require("018cb1dcb8285aa345ec5313db015ac4", "react-sizes");
+$parcel$require("018cb1dcb8285aa345ec5313db015ac4", "./SideBarSection");
+var $cb1dcb8285aa345ec5313db015ac4$var$TabPane = $cb1dcb8285aa345ec5313db015ac4$import$Tabs.TabPane;
+
+var $cb1dcb8285aa345ec5313db015ac4$var$SB = function SB(_ref) {
+  var isMobile = _ref.isMobile;
+
+  var _React$useContext = $cb1dcb8285aa345ec5313db015ac4$import$React.useContext($cb1dcb8285aa345ec5313db015ac4$import$UserAchievementContext),
+      achievements = _React$useContext.achievements,
+      isOpen = _React$useContext.isOpen,
+      setSideBarOpen = _React$useContext.setSideBarOpen,
+      currentUser = _React$useContext.currentUser;
+
+  var onClose = function onClose() {
+    return setSideBarOpen(function (isOpen) {
+      return !isOpen;
+    });
+  };
+
+  var description = "Congratulations ".concat(currentUser.displayName, "! You have earned the following achievements for these artists.");
+  console.count('SideBar Render Count:');
+  return $cb1dcb8285aa345ec5313db015ac4$import$React.createElement($cb1dcb8285aa345ec5313db015ac4$import$Drawer, {
+    width: isMobile ? '75%' : '50%',
+    placement: "right",
+    onClose: onClose,
+    bodyStyle: {
+      background: '#030616',
+      height: '100%'
+    },
+    visible: isOpen
+  }, $cb1dcb8285aa345ec5313db015ac4$import$React.createElement($cb1dcb8285aa345ec5313db015ac4$import$Container, {
+    sideBar: true
+  }, achievements && $cb1dcb8285aa345ec5313db015ac4$import$React.createElement($cb1dcb8285aa345ec5313db015ac4$import$Tabs, {
+    defaultActiveKey: "1",
+    tabPosition: 'left',
+    style: {
+      height: '100%'
+    }
+  }, Object.keys(achievements).reverse().map(function (period, i) {
+    var periodAchievements = achievements[period];
+
+    if (periodAchievements && periodAchievements.length) {
+      var achievementContext = period === 'life' ? 'lifetime achievements' : "achievements this ".concat(period);
+      var title = "Your ".concat(achievementContext);
+      return $cb1dcb8285aa345ec5313db015ac4$import$React.createElement($cb1dcb8285aa345ec5313db015ac4$var$TabPane, {
+        tab: period,
+        key: i
+      }, $cb1dcb8285aa345ec5313db015ac4$import$React.createElement($cb1dcb8285aa345ec5313db015ac4$import$SidebarSection, {
+        key: "mobile_sidebar_section_".concat(i),
+        achievements: periodAchievements,
+        period: period,
+        title: title,
+        currentUser: currentUser,
+        i: i
+      }));
+    }
+  }))));
+};
+
+var $cb1dcb8285aa345ec5313db015ac4$export$SideBar = $cb1dcb8285aa345ec5313db015ac4$import$withSizes($cb1dcb8285aa345ec5313db015ac4$import$mapSizesToProps)($cb1dcb8285aa345ec5313db015ac4$var$SB);
+$cb1dcb8285aa345ec5313db015ac4$exports.SideBar = $cb1dcb8285aa345ec5313db015ac4$export$SideBar;

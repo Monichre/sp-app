@@ -1,0 +1,9 @@
+var $b988e52601aeafc6ff199c04adbe96a$exports = {};
+$b988e52601aeafc6ff199c04adbe96a$exports = {
+  position: true,
+  gfm: true,
+  commonmark: false,
+  footnotes: false,
+  pedantic: false,
+  blocks: $parcel$require("5b988e52601aeafc6ff199c04adbe96a", "./block-elements.json")
+};

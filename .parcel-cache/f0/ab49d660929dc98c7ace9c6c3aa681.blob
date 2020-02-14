@@ -1,0 +1,174 @@
+var $e8c73250de81b29f2286b61a9f2$exports = {};
+$parcel$require("79367e8c73250de81b29f2286b61a9f2", "react");
+$parcel$require("79367e8c73250de81b29f2286b61a9f2", "@babel/runtime/helpers/inheritsLoose");
+$parcel$require("79367e8c73250de81b29f2286b61a9f2", "prop-types");
+$parcel$require("79367e8c73250de81b29f2286b61a9f2", "gud");
+$parcel$require("79367e8c73250de81b29f2286b61a9f2", "tiny-warning");
+var $e8c73250de81b29f2286b61a9f2$var$MAX_SIGNED_31_BIT_INT = 1073741823;
+
+function $e8c73250de81b29f2286b61a9f2$var$objectIs(x, y) {
+  if (x === y) {
+    return x !== 0 || 1 / x === 1 / y;
+  } else {
+    return x !== x && y !== y;
+  }
+}
+
+function $e8c73250de81b29f2286b61a9f2$var$createEventEmitter(value) {
+  var handlers = [];
+  return {
+    on: function on(handler) {
+      handlers.push(handler);
+    },
+    off: function off(handler) {
+      handlers = handlers.filter(function (h) {
+        return h !== handler;
+      });
+    },
+    get: function get() {
+      return value;
+    },
+    set: function set(newValue, changedBits) {
+      value = newValue;
+      handlers.forEach(function (handler) {
+        return handler(value, changedBits);
+      });
+    }
+  };
+}
+
+function $e8c73250de81b29f2286b61a9f2$var$onlyChild(children) {
+  return Array.isArray(children) ? children[0] : children;
+}
+
+function $e8c73250de81b29f2286b61a9f2$var$createReactContext(defaultValue, calculateChangedBits) {
+  var _Provider$childContex, _Consumer$contextType;
+
+  var contextProp = '__create-react-context-' + $e8c73250de81b29f2286b61a9f2$import$gud() + '__';
+
+  var Provider =
+  /*#__PURE__*/
+  function (_Component) {
+    $e8c73250de81b29f2286b61a9f2$import$_inheritsLoose(Provider, _Component);
+
+    function Provider() {
+      var _this;
+
+      _this = _Component.apply(this, arguments) || this;
+      _this.emitter = $e8c73250de81b29f2286b61a9f2$var$createEventEmitter(_this.props.value);
+      return _this;
+    }
+
+    var _proto = Provider.prototype;
+
+    _proto.getChildContext = function getChildContext() {
+      var _ref;
+
+      return _ref = {}, _ref[contextProp] = this.emitter, _ref;
+    };
+
+    _proto.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+      if (this.props.value !== nextProps.value) {
+        var oldValue = this.props.value;
+        var newValue = nextProps.value;
+        var changedBits;
+
+        if ($e8c73250de81b29f2286b61a9f2$var$objectIs(oldValue, newValue)) {
+          changedBits = 0;
+        } else {
+          changedBits = typeof calculateChangedBits === 'function' ? calculateChangedBits(oldValue, newValue) : $e8c73250de81b29f2286b61a9f2$var$MAX_SIGNED_31_BIT_INT;
+
+          if ("production" !== 'production') {
+            $e8c73250de81b29f2286b61a9f2$import$warning((changedBits & $e8c73250de81b29f2286b61a9f2$var$MAX_SIGNED_31_BIT_INT) === changedBits, 'calculateChangedBits: Expected the return value to be a ' + '31-bit integer. Instead received: ' + changedBits);
+          }
+
+          changedBits |= 0;
+
+          if (changedBits !== 0) {
+            this.emitter.set(nextProps.value, changedBits);
+          }
+        }
+      }
+    };
+
+    _proto.render = function render() {
+      return this.props.children;
+    };
+
+    return Provider;
+  }($e8c73250de81b29f2286b61a9f2$import$Component);
+
+  Provider.childContextTypes = (_Provider$childContex = {}, _Provider$childContex[contextProp] = $e8c73250de81b29f2286b61a9f2$import$PropTypes.object.isRequired, _Provider$childContex);
+
+  var Consumer =
+  /*#__PURE__*/
+  function (_Component2) {
+    $e8c73250de81b29f2286b61a9f2$import$_inheritsLoose(Consumer, _Component2);
+
+    function Consumer() {
+      var _this2;
+
+      _this2 = _Component2.apply(this, arguments) || this;
+      _this2.state = {
+        value: _this2.getValue()
+      };
+
+      _this2.onUpdate = function (newValue, changedBits) {
+        var observedBits = _this2.observedBits | 0;
+
+        if ((observedBits & changedBits) !== 0) {
+          _this2.setState({
+            value: _this2.getValue()
+          });
+        }
+      };
+
+      return _this2;
+    }
+
+    var _proto2 = Consumer.prototype;
+
+    _proto2.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+      var observedBits = nextProps.observedBits;
+      this.observedBits = observedBits === undefined || observedBits === null ? $e8c73250de81b29f2286b61a9f2$var$MAX_SIGNED_31_BIT_INT : observedBits;
+    };
+
+    _proto2.componentDidMount = function componentDidMount() {
+      if (this.context[contextProp]) {
+        this.context[contextProp].on(this.onUpdate);
+      }
+
+      var observedBits = this.props.observedBits;
+      this.observedBits = observedBits === undefined || observedBits === null ? $e8c73250de81b29f2286b61a9f2$var$MAX_SIGNED_31_BIT_INT : observedBits;
+    };
+
+    _proto2.componentWillUnmount = function componentWillUnmount() {
+      if (this.context[contextProp]) {
+        this.context[contextProp].off(this.onUpdate);
+      }
+    };
+
+    _proto2.getValue = function getValue() {
+      if (this.context[contextProp]) {
+        return this.context[contextProp].get();
+      } else {
+        return defaultValue;
+      }
+    };
+
+    _proto2.render = function render() {
+      return $e8c73250de81b29f2286b61a9f2$var$onlyChild(this.props.children)(this.state.value);
+    };
+
+    return Consumer;
+  }($e8c73250de81b29f2286b61a9f2$import$Component);
+
+  Consumer.contextTypes = (_Consumer$contextType = {}, _Consumer$contextType[contextProp] = $e8c73250de81b29f2286b61a9f2$import$PropTypes.object, _Consumer$contextType);
+  return {
+    Provider: Provider,
+    Consumer: Consumer
+  };
+}
+
+var $e8c73250de81b29f2286b61a9f2$export$default = $e8c73250de81b29f2286b61a9f2$import$React.createContext || $e8c73250de81b29f2286b61a9f2$var$createReactContext;
+$e8c73250de81b29f2286b61a9f2$exports.default = $e8c73250de81b29f2286b61a9f2$export$default;

@@ -1,0 +1,18 @@
+var $f1a44a30cdc81ad80828d33483b59062$exports = {};
+$f1a44a30cdc81ad80828d33483b59062$exports = $f1a44a30cdc81ad80828d33483b59062$var$escapes;
+var $f1a44a30cdc81ad80828d33483b59062$var$defaults = ['\\', '`', '*', '{', '}', '[', ']', '(', ')', '#', '+', '-', '.', '!', '_', '>'];
+var $f1a44a30cdc81ad80828d33483b59062$var$gfm = $f1a44a30cdc81ad80828d33483b59062$var$defaults.concat(['~', '|']);
+var $f1a44a30cdc81ad80828d33483b59062$var$commonmark = $f1a44a30cdc81ad80828d33483b59062$var$gfm.concat(['\n', '"', '$', '%', '&', "'", ',', '/', ':', ';', '<', '=', '?', '@', '^']);
+$f1a44a30cdc81ad80828d33483b59062$var$escapes.default = $f1a44a30cdc81ad80828d33483b59062$var$defaults;
+$f1a44a30cdc81ad80828d33483b59062$var$escapes.gfm = $f1a44a30cdc81ad80828d33483b59062$var$gfm;
+$f1a44a30cdc81ad80828d33483b59062$var$escapes.commonmark = $f1a44a30cdc81ad80828d33483b59062$var$commonmark; // Get markdown escapes.
+
+function $f1a44a30cdc81ad80828d33483b59062$var$escapes(options) {
+  var settings = options || {};
+
+  if (settings.commonmark) {
+    return $f1a44a30cdc81ad80828d33483b59062$var$commonmark;
+  }
+
+  return settings.gfm ? $f1a44a30cdc81ad80828d33483b59062$var$gfm : $f1a44a30cdc81ad80828d33483b59062$var$defaults;
+}

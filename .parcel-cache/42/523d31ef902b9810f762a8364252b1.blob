@@ -1,0 +1,8 @@
+var $c71e2a1c01696eb5015e74b036495de7$exports = {};
+// toObject with fallback for non-array-like ES3 strings
+var $c71e2a1c01696eb5015e74b036495de7$var$IndexedObject = $parcel$require("c71e2a1c01696eb5015e74b036495de7", "../internals/indexed-object");
+var $c71e2a1c01696eb5015e74b036495de7$var$requireObjectCoercible = $parcel$require("c71e2a1c01696eb5015e74b036495de7", "../internals/require-object-coercible");
+
+$c71e2a1c01696eb5015e74b036495de7$exports = function (it) {
+  return $c71e2a1c01696eb5015e74b036495de7$var$IndexedObject($c71e2a1c01696eb5015e74b036495de7$var$requireObjectCoercible(it));
+};

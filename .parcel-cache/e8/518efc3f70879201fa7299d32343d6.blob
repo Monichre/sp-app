@@ -1,0 +1,166 @@
+var $f0e704ef032749e205350da3d06854f3$exports = {};
+$parcel$require("f0e704ef032749e205350da3d06854f3", "react");
+$parcel$require("f0e704ef032749e205350da3d06854f3", "firebase");
+$parcel$require("f0e704ef032749e205350da3d06854f3", "rxjs");
+$parcel$require("f0e704ef032749e205350da3d06854f3", "logrocket");
+
+function $f0e704ef032749e205350da3d06854f3$var$_slicedToArray(arr, i) { return $f0e704ef032749e205350da3d06854f3$var$_arrayWithHoles(arr) || $f0e704ef032749e205350da3d06854f3$var$_iterableToArrayLimit(arr, i) || $f0e704ef032749e205350da3d06854f3$var$_nonIterableRest(); }
+
+function $f0e704ef032749e205350da3d06854f3$var$_nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function $f0e704ef032749e205350da3d06854f3$var$_iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function $f0e704ef032749e205350da3d06854f3$var$_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+// import { useGetUserInfo } from '../types';
+// import { _getActiveUserRootRef, _getActiveUsersStateRef} from './ActiveUsers'
+// should be AuthContext and return uid or nothing
+var $f0e704ef032749e205350da3d06854f3$export$FirebaseContext = $f0e704ef032749e205350da3d06854f3$import$React.createContext(null);
+$f0e704ef032749e205350da3d06854f3$exports.FirebaseContext = $f0e704ef032749e205350da3d06854f3$export$FirebaseContext;
+
+var $f0e704ef032749e205350da3d06854f3$var$useFirebase = function useFirebase() {
+  var firebase = $f0e704ef032749e205350da3d06854f3$import$useContext($f0e704ef032749e205350da3d06854f3$export$FirebaseContext);
+
+  if (!firebase) {
+    throw new Error('no firebase! provider value not set?');
+  }
+
+  return firebase;
+};
+
+var $f0e704ef032749e205350da3d06854f3$export$useFirebaseAuth = function useFirebaseAuth() {
+  return $f0e704ef032749e205350da3d06854f3$var$useFirebase().auth();
+};
+
+$f0e704ef032749e205350da3d06854f3$exports.useFirebaseAuth = $f0e704ef032749e205350da3d06854f3$export$useFirebaseAuth;
+
+var $f0e704ef032749e205350da3d06854f3$export$useFirebaseAuthDatabase = function useFirebaseAuthDatabase() {
+  return $f0e704ef032749e205350da3d06854f3$import$firebase.database();
+}; // export const firebaseActiveUsers = useFirebaseAuthDatabase().ref("USERS_ONLINE")
+
+
+$f0e704ef032749e205350da3d06854f3$exports.useFirebaseAuthDatabase = $f0e704ef032749e205350da3d06854f3$export$useFirebaseAuthDatabase;
+var $f0e704ef032749e205350da3d06854f3$var$impersonations = new $f0e704ef032749e205350da3d06854f3$import$Subject();
+
+var $f0e704ef032749e205350da3d06854f3$export$impersonate = function impersonate(uid) {
+  $f0e704ef032749e205350da3d06854f3$var$impersonations.next({
+    isLoading: false,
+    user: {
+      uid: uid,
+      displayName: "Impersonated ".concat(uid),
+      photoURL: '',
+      email: 'impersonated@none'
+    }
+  });
+};
+
+$f0e704ef032749e205350da3d06854f3$exports.impersonate = $f0e704ef032749e205350da3d06854f3$export$impersonate;
+
+var $f0e704ef032749e205350da3d06854f3$export$useUser = function useUser() {
+  var auth = $f0e704ef032749e205350da3d06854f3$export$useFirebaseAuth(); // const activeUsersListRef = firebase.database().ref('USERS_ONLINE')
+  // const connectedRef = firebase.database().ref('.info/connected')
+  // activeUsersListRef.on("child_added", (snap: any) => {
+  // console.log('TCL: useUser -> snap, new user added', snap.val())
+  //   // const presence: PresenceIF = snap.val();
+  //   // ctx.emit(GLOBAL_CONSTANTS.LE_PRESENCE_USER_ADDED, presence);
+  // });
+  // // update the UI to show that a user has left (gone offline)
+  // activeUsersListRef.on("child_removed", (snap: any) => {
+  //   // const presence: PresenceIF = snap.val();
+  //   console.log('TCL: useUser -> snap', snap)
+  //   // ctx.emit(GLOBAL_CONSTANTS.LE_PRESENCE_USER_REMOVED, presence);
+  // });
+  // // update the UI to show that a user's status has changed
+  // activeUsersListRef.on("child_changed", (snap: any) => {
+  //   // const presence: PresenceIF = snap.val();
+  //   console.log('TCL: useUser -> snap', snap)
+  //   // ctx.emit(GLOBAL_CONSTANTS.LE_PRESENCE_USER_CHANGED, presence);
+  // });
+
+  var _useState = $f0e704ef032749e205350da3d06854f3$import$useState({
+    isLoading: true,
+    user: null
+  }),
+      _useState2 = $f0e704ef032749e205350da3d06854f3$var$_slicedToArray(_useState, 2),
+      authState = _useState2[0],
+      setState = _useState2[1];
+
+  $f0e704ef032749e205350da3d06854f3$import$useEffect(function () {
+    var unsub = auth.onAuthStateChanged(function (authState) {
+      console.log('new authState:', authState);
+
+      if (authState) {
+        $f0e704ef032749e205350da3d06854f3$import$LogRocket.identify(authState.uid, {
+          name: authState.displayName || 'N/A',
+          email: authState.email || 'N/A'
+        }); // const currentUserRef = activeUsersListRef.push()
+        // console.log('TCL: useUser -> currentUserRef', currentUserRef)
+        // // Monitor connection state on browser tab
+        // connectedRef.on('value', (snap: any) => {
+        //   if (snap.val()) {
+        //     console.log('TCL: initPresence -> snap.val()', snap.val())
+        //     currentUserRef.set({
+        //       user: {
+        //         name: authState.displayName || 'N/A',
+        //         email: authState.email || 'N/A'
+        //       }, status: 'online'
+        //     })
+        //     // const result = useGetUserInfo({ variables: { uid: authState.uid }, pollInterval: 4000, suspend: true })
+        //     // console.log('TCL: useUser -> result', result)
+        //     // const user = result.data && result.data.getUserInfo
+        //     // console.log('TCL: useUser -> user', user)
+        //     // If we lose our internet connection, we want ourselves removed from the list.
+        //     // Set our initial online status.
+        //     // setUserStatus(PRESENCE_STATES.ONLINE, ctx)
+        //   } else {
+        //     // We need to catch anytime we are marked as offline and then set the correct
+        //     // status. We could be marked as offline 1) on page load or 2) when we lose our
+        //     // internet connection temporarily.
+        //     // setUserStatus(PRESENCE_STATES.OFFLINE, ctx)
+        //   }
+        // })
+      }
+
+      return setState({
+        isLoading: false,
+        user: authState
+      });
+    });
+    var iUnsub = $f0e704ef032749e205350da3d06854f3$var$impersonations.subscribe(function (authState) {
+      console.log('impersonating authState', authState);
+      return setState(authState);
+    });
+    return unsub;
+  }, [auth]);
+  return authState;
+};
+
+$f0e704ef032749e205350da3d06854f3$exports.useUser = $f0e704ef032749e205350da3d06854f3$export$useUser;
+
+var $f0e704ef032749e205350da3d06854f3$export$useAuthHandlers = function useAuthHandlers() {
+  var auth = $f0e704ef032749e205350da3d06854f3$export$useFirebaseAuth();
+  return {
+    // gotta wrap two of em, might as well provide all at the same place
+    signInWithGoogle: function signInWithGoogle() {
+      return auth.signInWithPopup(new $f0e704ef032749e205350da3d06854f3$import$firebase.auth.GoogleAuthProvider());
+    },
+    signInWithFacebook: function signInWithFacebook() {
+      return auth.signInWithPopup(new $f0e704ef032749e205350da3d06854f3$import$firebase.auth.FacebookAuthProvider());
+    },
+    signOut: auth.signOut.bind(auth),
+    createUserWithEmailAndPassword: auth.createUserWithEmailAndPassword.bind(auth),
+    signInWithEmailAndPassword: auth.signInWithEmailAndPassword.bind(auth)
+  };
+};
+
+$f0e704ef032749e205350da3d06854f3$exports.useAuthHandlers = $f0e704ef032749e205350da3d06854f3$export$useAuthHandlers;
+
+var $f0e704ef032749e205350da3d06854f3$export$useUserChange = function useUserChange(fn) {
+  var auth = $f0e704ef032749e205350da3d06854f3$export$useFirebaseAuth();
+  console.log('TCL: useUserChange -> auth', auth);
+  $f0e704ef032749e205350da3d06854f3$import$useEffect(function () {
+    return auth.onAuthStateChanged(fn);
+  }, [auth]);
+};
+
+$f0e704ef032749e205350da3d06854f3$exports.useUserChange = $f0e704ef032749e205350da3d06854f3$export$useUserChange;

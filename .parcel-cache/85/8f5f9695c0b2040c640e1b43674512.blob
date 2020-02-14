@@ -1,0 +1,193 @@
+var $f2685c88507d10120ed0ebbe44960$exports = {};
+$parcel$require("258f2685c88507d10120ed0ebbe44960", "react");
+$parcel$require("258f2685c88507d10120ed0ebbe44960", "styled-components");
+$parcel$require("258f2685c88507d10120ed0ebbe44960", "./shared");
+$parcel$require("258f2685c88507d10120ed0ebbe44960", "./shared/InsightsBackLink");
+$parcel$require("258f2685c88507d10120ed0ebbe44960", "../../../../types");
+$parcel$require("258f2685c88507d10120ed0ebbe44960", "../../../../shared/SpotifyLogoLink/SpotifyLogoLink");
+$parcel$require("258f2685c88507d10120ed0ebbe44960", "./shared/TimeseriesChart");
+$parcel$require("258f2685c88507d10120ed0ebbe44960", "../../../../lib/suspensefulHook");
+$parcel$require("258f2685c88507d10120ed0ebbe44960", "../../../Components/Elements");
+$parcel$require("258f2685c88507d10120ed0ebbe44960", "antd");
+$parcel$require("258f2685c88507d10120ed0ebbe44960", "rebass");
+$parcel$require("258f2685c88507d10120ed0ebbe44960", "../../../Components/ListStyle");
+$parcel$require("258f2685c88507d10120ed0ebbe44960", "../../../../lib/durationFormats");
+$parcel$require("258f2685c88507d10120ed0ebbe44960", "./shared/ArtistsChart/TopListenerYAxis");
+$parcel$require("258f2685c88507d10120ed0ebbe44960", "../../../Components/Avatar");
+$parcel$require("258f2685c88507d10120ed0ebbe44960", "../../../Components/ArtistTopListenersList/ArtistTopListenersList");
+
+function $f2685c88507d10120ed0ebbe44960$var$ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function $f2685c88507d10120ed0ebbe44960$var$_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { $f2685c88507d10120ed0ebbe44960$var$ownKeys(Object(source), true).forEach(function (key) { $f2685c88507d10120ed0ebbe44960$var$_defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { $f2685c88507d10120ed0ebbe44960$var$ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function $f2685c88507d10120ed0ebbe44960$var$_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function $f2685c88507d10120ed0ebbe44960$var$_templateObject2() {
+  var data = $f2685c88507d10120ed0ebbe44960$var$_taggedTemplateLiteral(["\n  font-weight: 500;\n  font-size: 3rem;\n  color: #fff;\n  @media (max-width: 800px) {\n    font-size: 1.5rem;\n  }\n"]);
+
+  $f2685c88507d10120ed0ebbe44960$var$_templateObject2 = function _templateObject2() {
+    return data;
+  };
+
+  return data;
+}
+
+function $f2685c88507d10120ed0ebbe44960$var$_templateObject() {
+  var data = $f2685c88507d10120ed0ebbe44960$var$_taggedTemplateLiteral(["\n  display: flex;\n  align-items: center;\n  background: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7) ), url(\"", "\");\n  background-size: cover;\n  background-position: center center;\n  min-height: 12rem;\n  margin: 1rem -1rem 0rem -1rem;\n  padding: 0rem 1rem 0rem 1rem;\n  @media (max-width: 800px) {\n    margin-top: 0;\n    min-height: 6rem;\n  }\n  & > * {\n    margin-right: 2rem;\n  }\n"]);
+
+  $f2685c88507d10120ed0ebbe44960$var$_templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function $f2685c88507d10120ed0ebbe44960$var$_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var $f2685c88507d10120ed0ebbe44960$var$ArtistBannerDiv = $f2685c88507d10120ed0ebbe44960$import$styled.div($f2685c88507d10120ed0ebbe44960$var$_templateObject(), function (_ref) {
+  var backgroundUrl = _ref.backgroundUrl;
+  return backgroundUrl;
+});
+var $f2685c88507d10120ed0ebbe44960$var$ArtistTitle = $f2685c88507d10120ed0ebbe44960$import$styled.div($f2685c88507d10120ed0ebbe44960$var$_templateObject2());
+
+var $f2685c88507d10120ed0ebbe44960$var$ArtistBanner = function ArtistBanner(_ref2) {
+  var artist = _ref2.artist,
+      children = _ref2.children;
+  var name = artist.name,
+      images = artist.images,
+      spotify = artist.external_urls.spotify,
+      topListeners = artist.topListeners;
+  var backgroundUrl = images[0] && images[0].url;
+  return $f2685c88507d10120ed0ebbe44960$import$React.createElement($f2685c88507d10120ed0ebbe44960$var$ArtistBannerDiv, {
+    backgroundUrl: backgroundUrl
+  }, $f2685c88507d10120ed0ebbe44960$import$React.createElement($f2685c88507d10120ed0ebbe44960$import$InsightsBackLink, null), $f2685c88507d10120ed0ebbe44960$import$React.createElement($f2685c88507d10120ed0ebbe44960$var$ArtistTitle, null, name), $f2685c88507d10120ed0ebbe44960$import$React.createElement($f2685c88507d10120ed0ebbe44960$import$SpotifyLogoLink, {
+    href: spotify,
+    size: "35px"
+  }), children);
+};
+
+var $f2685c88507d10120ed0ebbe44960$export$Artist = function Artist(_ref3) {
+  var uid = _ref3.uid,
+      history = _ref3.history,
+      _ref3$match = _ref3.match,
+      path = _ref3$match.path,
+      artistId = _ref3$match.params.artistId,
+      pathParams = _ref3.pathParams;
+
+  var _suspensefulHook = $f2685c88507d10120ed0ebbe44960$import$suspensefulHook($f2685c88507d10120ed0ebbe44960$import$useInsightsArtistStats({
+    variables: {
+      uid: uid,
+      artistId: artistId
+    },
+    suspend: true
+  })),
+      stats = _suspensefulHook.insightsArtistStats; // const 
+
+
+  var artist = stats.artist,
+      timeSeries = stats[pathParams.timeScope].timeseries;
+
+  var _suspensefulHook2 = $f2685c88507d10120ed0ebbe44960$import$suspensefulHook($f2685c88507d10120ed0ebbe44960$import$useGetArtistAchievementHolders({
+    variables: {
+      perspectiveUID: 'global',
+      artistId: artistId
+    },
+    suspend: true
+  })),
+      getArtistAchievementHolders = _suspensefulHook2.getArtistAchievementHolders;
+
+  var day = getArtistAchievementHolders.day,
+      week = getArtistAchievementHolders.week,
+      month = getArtistAchievementHolders.month,
+      life = getArtistAchievementHolders.life;
+  console.log('TCL: life', life);
+  var data = [$f2685c88507d10120ed0ebbe44960$var$_objectSpread({
+    title: 'Top Listeners Today'
+  }, day), $f2685c88507d10120ed0ebbe44960$var$_objectSpread({
+    title: 'Top Listeners This Week'
+  }, week), $f2685c88507d10120ed0ebbe44960$var$_objectSpread({
+    title: 'Top Listeners This Month'
+  }, month)].filter(function (timePeriod) {
+    var first = timePeriod.first,
+        second = timePeriod.second,
+        third = timePeriod.third;
+    return first.user !== null;
+  });
+  return $f2685c88507d10120ed0ebbe44960$import$React.createElement($f2685c88507d10120ed0ebbe44960$import$StatPage, {
+    stats: stats,
+    history: history,
+    path: path,
+    pathParams: pathParams
+  }, $f2685c88507d10120ed0ebbe44960$import$React.createElement($f2685c88507d10120ed0ebbe44960$var$ArtistBanner, {
+    artist: artist
+  }, life && Object.keys(life).length && $f2685c88507d10120ed0ebbe44960$import$React.createElement($f2685c88507d10120ed0ebbe44960$import$ArtistTopListenersList, {
+    listeners: life
+  })), $f2685c88507d10120ed0ebbe44960$import$React.createElement($f2685c88507d10120ed0ebbe44960$import$TimeseriesChart, {
+    timeSeries: timeSeries
+  }), $f2685c88507d10120ed0ebbe44960$import$React.createElement($f2685c88507d10120ed0ebbe44960$import$Box, {
+    my: 40
+  }, $f2685c88507d10120ed0ebbe44960$import$React.createElement($f2685c88507d10120ed0ebbe44960$import$ListStyle, null, $f2685c88507d10120ed0ebbe44960$import$React.createElement($f2685c88507d10120ed0ebbe44960$import$List, {
+    id: "artistTopListeners",
+    dataSource: data,
+    renderItem: function renderItem(item) {
+      console.log('TCL: item', item);
+      return $f2685c88507d10120ed0ebbe44960$import$React.createElement($f2685c88507d10120ed0ebbe44960$import$List.Item, null, $f2685c88507d10120ed0ebbe44960$import$React.createElement($f2685c88507d10120ed0ebbe44960$import$Box, {
+        style: {
+          width: '100%',
+          backgroundColor: 'rgba(216,216,216,.025)',
+          padding: '20px',
+          borderRadius: '12px'
+        }
+      }, $f2685c88507d10120ed0ebbe44960$import$React.createElement("h4", {
+        style: {
+          color: '#fff'
+        }
+      }, item.title), $f2685c88507d10120ed0ebbe44960$import$React.createElement($f2685c88507d10120ed0ebbe44960$import$List, {
+        itemLayout: "vertical",
+        size: "large",
+        dataSource: [item.first, item.second, item.third].filter(function (item) {
+          return item.user !== null;
+        }),
+        renderItem: function renderItem(topListener, index) {
+          var user = topListener.user;
+
+          var _hrsAndMins = $f2685c88507d10120ed0ebbe44960$import$hrsAndMins(topListener.total),
+              hrs = _hrsAndMins.hrs,
+              mins = _hrsAndMins.mins;
+
+          var hours = hrs ? "".concat(hrs, " hours & ") : '';
+          var minutes = mins ? "".concat(mins, " mins") : '';
+          var ttl = "".concat(hours).concat(minutes);
+          console.log('TCL: topListener', topListener);
+          return $f2685c88507d10120ed0ebbe44960$import$React.createElement($f2685c88507d10120ed0ebbe44960$import$List.Item, {
+            key: "".concat(item.title, "_").concat(index)
+          }, $f2685c88507d10120ed0ebbe44960$import$React.createElement($f2685c88507d10120ed0ebbe44960$import$List.Item.Meta, {
+            avatar: $f2685c88507d10120ed0ebbe44960$import$React.createElement($f2685c88507d10120ed0ebbe44960$import$Badge, {
+              count: $f2685c88507d10120ed0ebbe44960$import$React.createElement("img", {
+                src: $f2685c88507d10120ed0ebbe44960$import$badgeMap[index],
+                style: {
+                  height: '25px',
+                  width: '25px',
+                  zIndex: 2 // left: '100%'
+
+                }
+              })
+            }, $f2685c88507d10120ed0ebbe44960$import$React.createElement($f2685c88507d10120ed0ebbe44960$import$AvatarBg, null, $f2685c88507d10120ed0ebbe44960$import$React.createElement($f2685c88507d10120ed0ebbe44960$import$Avatar, {
+              src: user.photoURL
+            }))),
+            title: user.displayName,
+            description: ttl
+          }), $f2685c88507d10120ed0ebbe44960$import$React.createElement($f2685c88507d10120ed0ebbe44960$import$Progress, {
+            percent: mins * 10,
+            strokeColor: {
+              '0%': '#108ee9',
+              '100%': '#87d068'
+            }
+          }));
+        }
+      })));
+    }
+  }))));
+};
+
+$f2685c88507d10120ed0ebbe44960$exports.Artist = $f2685c88507d10120ed0ebbe44960$export$Artist;

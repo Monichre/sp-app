@@ -1,0 +1,20 @@
+var $caf08ec8f21b2e5c351be7c3975ac48e$exports = {};
+var $caf08ec8f21b2e5c351be7c3975ac48e$var$DESCRIPTORS = $parcel$require("caf08ec8f21b2e5c351be7c3975ac48e", "../internals/descriptors");
+var $caf08ec8f21b2e5c351be7c3975ac48e$var$IE8_DOM_DEFINE = $parcel$require("caf08ec8f21b2e5c351be7c3975ac48e", "../internals/ie8-dom-define");
+var $caf08ec8f21b2e5c351be7c3975ac48e$var$anObject = $parcel$require("caf08ec8f21b2e5c351be7c3975ac48e", "../internals/an-object");
+var $caf08ec8f21b2e5c351be7c3975ac48e$var$toPrimitive = $parcel$require("caf08ec8f21b2e5c351be7c3975ac48e", "../internals/to-primitive");
+var $caf08ec8f21b2e5c351be7c3975ac48e$var$nativeDefineProperty = Object.defineProperty;
+var $caf08ec8f21b2e5c351be7c3975ac48e$export$f = $caf08ec8f21b2e5c351be7c3975ac48e$var$DESCRIPTORS ? $caf08ec8f21b2e5c351be7c3975ac48e$var$nativeDefineProperty : function defineProperty(O, P, Attributes) {
+  $caf08ec8f21b2e5c351be7c3975ac48e$var$anObject(O);
+  P = $caf08ec8f21b2e5c351be7c3975ac48e$var$toPrimitive(P, true);
+  $caf08ec8f21b2e5c351be7c3975ac48e$var$anObject(Attributes);
+  if ($caf08ec8f21b2e5c351be7c3975ac48e$var$IE8_DOM_DEFINE) try {
+    return $caf08ec8f21b2e5c351be7c3975ac48e$var$nativeDefineProperty(O, P, Attributes);
+  } catch (error) {
+    /* empty */
+  }
+  if ('get' in Attributes || 'set' in Attributes) throw TypeError('Accessors not supported');
+  if ('value' in Attributes) O[P] = Attributes.value;
+  return O;
+};
+$caf08ec8f21b2e5c351be7c3975ac48e$exports.f = $caf08ec8f21b2e5c351be7c3975ac48e$export$f;

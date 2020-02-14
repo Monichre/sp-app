@@ -1,0 +1,18 @@
+var $e2c6c768c4fba3bc7639b2cdf93b629$exports = {};
+var $e2c6c768c4fba3bc7639b2cdf93b629$var$fails = $parcel$require("4e2c6c768c4fba3bc7639b2cdf93b629", "../internals/fails");
+var $e2c6c768c4fba3bc7639b2cdf93b629$var$SPECIES = $parcel$require("4e2c6c768c4fba3bc7639b2cdf93b629", "../internals/well-known-symbol")('species');
+
+$e2c6c768c4fba3bc7639b2cdf93b629$exports = function (METHOD_NAME) {
+  return !$e2c6c768c4fba3bc7639b2cdf93b629$var$fails(function () {
+    var array = [];
+    var constructor = array.constructor = {};
+
+    constructor[$e2c6c768c4fba3bc7639b2cdf93b629$var$SPECIES] = function () {
+      return {
+        foo: 1
+      };
+    };
+
+    return array[METHOD_NAME](Boolean).foo !== 1;
+  });
+};

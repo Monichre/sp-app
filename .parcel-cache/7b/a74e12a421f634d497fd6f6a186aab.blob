@@ -1,0 +1,21 @@
+var $fb7329c070ddf68798a4cd7be1c7f414$exports = {};
+var $fb7329c070ddf68798a4cd7be1c7f414$var$has = $parcel$require("fb7329c070ddf68798a4cd7be1c7f414", "../internals/has");
+var $fb7329c070ddf68798a4cd7be1c7f414$var$toIndexedObject = $parcel$require("fb7329c070ddf68798a4cd7be1c7f414", "../internals/to-indexed-object");
+var $fb7329c070ddf68798a4cd7be1c7f414$var$arrayIndexOf = $parcel$require("fb7329c070ddf68798a4cd7be1c7f414", "../internals/array-includes")(false);
+var $fb7329c070ddf68798a4cd7be1c7f414$var$hiddenKeys = $parcel$require("fb7329c070ddf68798a4cd7be1c7f414", "../internals/hidden-keys");
+
+$fb7329c070ddf68798a4cd7be1c7f414$exports = function (object, names) {
+  var O = $fb7329c070ddf68798a4cd7be1c7f414$var$toIndexedObject(object);
+  var i = 0;
+  var result = [];
+  var key;
+
+  for (key in O) !$fb7329c070ddf68798a4cd7be1c7f414$var$has($fb7329c070ddf68798a4cd7be1c7f414$var$hiddenKeys, key) && $fb7329c070ddf68798a4cd7be1c7f414$var$has(O, key) && result.push(key); // Don't enum bug & hidden keys
+
+
+  while (names.length > i) if ($fb7329c070ddf68798a4cd7be1c7f414$var$has(O, key = names[i++])) {
+    ~$fb7329c070ddf68798a4cd7be1c7f414$var$arrayIndexOf(result, key) || result.push(key);
+  }
+
+  return result;
+};

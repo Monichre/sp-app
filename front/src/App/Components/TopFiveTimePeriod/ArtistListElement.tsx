@@ -1,36 +1,47 @@
-import * as React from "react";
+import * as React from 'react'
 import {
   ListElement,
   ArtistInfo,
   ArtistImage,
   OrderNumber,
   InfoText
-} from "./ArtistListElement.styles";
-import { HorizontalRule } from "./TopFiveTimePeriod.styles";
+} from './ArtistListElement.styles'
+import { HorizontalRule } from './TopFiveTimePeriod.styles'
+import { Artist } from '../../../../../back/src/fns/graphql/types'
+import { hrsAndMins } from '../../../lib/durationFormats'
 
-export interface ArtistListElementProps {
-  artist: {
-    artistName: string;
-    timePlayed: number;
-    artistImage: string;
-    artistPlace: number;
-  };
+const formatListeningTime = (total: number) => {
+  const { hrs, mins } = hrsAndMins(total)
+  const hours = hrs ? `${hrs} hours & ` : ''
+  const minutes = mins ? `${mins} mins` : ''
+
+  return `${hours}${minutes}`
+}
+
+export type ArtistListElementProps = {
+  artist: Artist
+  place: number
+  totalTimeListened: number
 }
 
 export const ArtistListElement: React.SFC<ArtistListElementProps> = ({
-  artist
+  artist,
+  place,
+  totalTimeListened
 }) => {
+  const ttl = formatListeningTime(totalTimeListened)
+
   return (
     <div>
       <ListElement>
-        <OrderNumber>{artist.artistPlace}</OrderNumber>
+        <OrderNumber>{place}</OrderNumber>
         <ArtistInfo>
-          <InfoText className="artist-title">{artist.artistName}</InfoText>
-          <InfoText className="time-played">{artist.timePlayed}</InfoText>
+          <InfoText className='artist-title'>{artist.name}</InfoText>
+          <InfoText className='time-played'>{ttl}</InfoText>
         </ArtistInfo>
-        <ArtistImage src={artist.artistImage} alt="" />
+        <ArtistImage src={artist.images[0].url} alt='' />
       </ListElement>
-      {artist.artistPlace == 5 ? null : <HorizontalRule />}
+      {place == 5 ? null : <HorizontalRule />}
     </div>
-  );
-};
+  )
+}

@@ -1,0 +1,6 @@
+var $a31f72fca96c3ff1af584cff3e74ce16$exports = {};
+var $a31f72fca96c3ff1af584cff3e74ce16$var$hasOwnProperty = {}.hasOwnProperty;
+
+$a31f72fca96c3ff1af584cff3e74ce16$exports = function (it, key) {
+  return $a31f72fca96c3ff1af584cff3e74ce16$var$hasOwnProperty.call(it, key);
+};

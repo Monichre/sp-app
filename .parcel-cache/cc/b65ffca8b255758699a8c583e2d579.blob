@@ -1,0 +1,65 @@
+var $afc9aa6eacbddb12cad5a60307216dd2$exports = {};
+var $afc9aa6eacbddb12cad5a60307216dd2$var$trim = $parcel$require("afc9aa6eacbddb12cad5a60307216dd2", "trim");
+var $afc9aa6eacbddb12cad5a60307216dd2$var$repeat = $parcel$require("afc9aa6eacbddb12cad5a60307216dd2", "repeat-string");
+var $afc9aa6eacbddb12cad5a60307216dd2$var$getIndent = $parcel$require("afc9aa6eacbddb12cad5a60307216dd2", "./get-indentation");
+$afc9aa6eacbddb12cad5a60307216dd2$exports = $afc9aa6eacbddb12cad5a60307216dd2$var$indentation;
+var $afc9aa6eacbddb12cad5a60307216dd2$var$C_SPACE = ' ';
+var $afc9aa6eacbddb12cad5a60307216dd2$var$C_NEWLINE = '\n';
+var $afc9aa6eacbddb12cad5a60307216dd2$var$C_TAB = '\t';
+/* Remove the minimum indent from every line in `value`.
+ * Supports both tab, spaced, and mixed indentation (as
+ * well as possible). */
+
+function $afc9aa6eacbddb12cad5a60307216dd2$var$indentation(value, maximum) {
+  var values = value.split($afc9aa6eacbddb12cad5a60307216dd2$var$C_NEWLINE);
+  var position = values.length + 1;
+  var minIndent = Infinity;
+  var matrix = [];
+  var index;
+  var indentation;
+  var stops;
+  var padding;
+  values.unshift($afc9aa6eacbddb12cad5a60307216dd2$var$repeat($afc9aa6eacbddb12cad5a60307216dd2$var$C_SPACE, maximum) + '!');
+
+  while (position--) {
+    indentation = $afc9aa6eacbddb12cad5a60307216dd2$var$getIndent(values[position]);
+    matrix[position] = indentation.stops;
+
+    if ($afc9aa6eacbddb12cad5a60307216dd2$var$trim(values[position]).length === 0) {
+      continue;
+    }
+
+    if (indentation.indent) {
+      if (indentation.indent > 0 && indentation.indent < minIndent) {
+        minIndent = indentation.indent;
+      }
+    } else {
+      minIndent = Infinity;
+      break;
+    }
+  }
+
+  if (minIndent !== Infinity) {
+    position = values.length;
+
+    while (position--) {
+      stops = matrix[position];
+      index = minIndent;
+
+      while (index && !(index in stops)) {
+        index--;
+      }
+
+      if ($afc9aa6eacbddb12cad5a60307216dd2$var$trim(values[position]).length !== 0 && minIndent && index !== minIndent) {
+        padding = $afc9aa6eacbddb12cad5a60307216dd2$var$C_TAB;
+      } else {
+        padding = '';
+      }
+
+      values[position] = padding + values[position].slice(index in stops ? stops[index] + 1 : 0);
+    }
+  }
+
+  values.shift();
+  return values.join($afc9aa6eacbddb12cad5a60307216dd2$var$C_NEWLINE);
+}

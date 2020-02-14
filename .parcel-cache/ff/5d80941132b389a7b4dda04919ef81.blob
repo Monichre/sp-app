@@ -1,0 +1,29 @@
+var $ff422cdf05c1657ba52df94354b854f1$exports = {};
+var $ff422cdf05c1657ba52df94354b854f1$var$visit = $parcel$require("ff422cdf05c1657ba52df94354b854f1", "unist-util-visit");
+
+$ff422cdf05c1657ba52df94354b854f1$exports = function (node) {
+  $ff422cdf05c1657ba52df94354b854f1$var$visit(node, 'table', $ff422cdf05c1657ba52df94354b854f1$var$wrap);
+  return node;
+};
+
+function $ff422cdf05c1657ba52df94354b854f1$var$wrap(table) {
+  var children = table.children;
+  table.children = [{
+    type: 'tableHead',
+    align: table.align,
+    children: [children[0]],
+    position: children[0].position
+  }];
+
+  if (children.length > 1) {
+    table.children.push({
+      type: 'tableBody',
+      align: table.align,
+      children: children.slice(1),
+      position: {
+        start: children[1].position.start,
+        end: children[children.length - 1].position.end
+      }
+    });
+  }
+}

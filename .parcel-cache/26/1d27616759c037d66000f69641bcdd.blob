@@ -1,0 +1,3 @@
+// Math[@@toStringTag] property
+// https://tc39.github.io/ecma262/#sec-math-@@tostringtag
+$parcel$require("d83dc848e9f928876c67de55237bf0e3", "../internals/set-to-string-tag")(Math, 'Math', true);

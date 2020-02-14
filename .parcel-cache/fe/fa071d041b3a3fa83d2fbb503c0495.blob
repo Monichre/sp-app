@@ -1,0 +1,26 @@
+var $c24048ec3125bfc370a7382dd42d97a2$exports = {};
+
+/* eslint-env browser */
+var $c24048ec3125bfc370a7382dd42d97a2$var$el;
+var $c24048ec3125bfc370a7382dd42d97a2$var$semicolon = 59; //  ';'
+
+$c24048ec3125bfc370a7382dd42d97a2$exports = $c24048ec3125bfc370a7382dd42d97a2$var$decodeEntity;
+
+function $c24048ec3125bfc370a7382dd42d97a2$var$decodeEntity(characters) {
+  var entity = '&' + characters + ';';
+  var char;
+  $c24048ec3125bfc370a7382dd42d97a2$var$el = $c24048ec3125bfc370a7382dd42d97a2$var$el || document.createElement('i');
+  $c24048ec3125bfc370a7382dd42d97a2$var$el.innerHTML = entity;
+  char = $c24048ec3125bfc370a7382dd42d97a2$var$el.textContent; // Some entities do not require the closing semicolon (`&not` - for instance),
+  // which leads to situations where parsing the assumed entity of &notit; will
+  // result in the string `¬it;`.  When we encounter a trailing semicolon after
+  // parsing and the entity to decode was not a semicolon (`&semi;`), we can
+  // assume that the matching was incomplete
+
+  if (char.charCodeAt(char.length - 1) === $c24048ec3125bfc370a7382dd42d97a2$var$semicolon && characters !== 'semi') {
+    return false;
+  } // If the decoded string is equal to the input, the entity was not valid
+
+
+  return char === entity ? false : char;
+}

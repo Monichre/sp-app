@@ -1,0 +1,5 @@
+var $c54d7ceeb6eb7721edf922848bf5$exports = {};
+$parcel$require("7499c54d7ceeb6eb7721edf922848bf5", "../../modules/es.symbol.iterator");
+$parcel$require("7499c54d7ceeb6eb7721edf922848bf5", "../../modules/es.string.iterator");
+$parcel$require("7499c54d7ceeb6eb7721edf922848bf5", "../../modules/web.dom-collections.iterator");
+$c54d7ceeb6eb7721edf922848bf5$exports = $parcel$require("7499c54d7ceeb6eb7721edf922848bf5", "../../internals/wrapped-well-known-symbol").f('iterator');

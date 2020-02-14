@@ -1,0 +1,43 @@
+var $c95015e76b08a73d851b9682ba0eabe$exports = {};
+
+var $c95015e76b08a73d851b9682ba0eabe$export$suspensefulHook = function suspensefulHook(result) {
+  if (!result.data) {
+    throw new Error('query had no data, is not possible!!!11!!');
+  }
+
+  console.log('TCL: result', result);
+  return result.data;
+};
+
+$c95015e76b08a73d851b9682ba0eabe$exports.suspensefulHook = $c95015e76b08a73d851b9682ba0eabe$export$suspensefulHook;
+
+var $c95015e76b08a73d851b9682ba0eabe$export$suspensefulPollingHook = function suspensefulPollingHook(stopPoll, result) {
+  console.count('suspensefulPollingHook');
+
+  if (!result.data) {
+    throw new Error('query had no data, is not possible!!!11!!');
+  }
+
+  if (stopPoll) {
+    var stopPolling = result.stopPolling,
+        data = result.data;
+    var _data$insightsArtists = data.insightsArtists,
+        lifetime = _data$insightsArtists.lifetime,
+        thisMonth = _data$insightsArtists.thisMonth,
+        thisWeek = _data$insightsArtists.thisWeek,
+        today = _data$insightsArtists.today;
+    var lifetimeIsNotEmpty = lifetime.personal.length || lifetime.group.length;
+    var thisMonthIsNotEmpty = thisMonth.personal.length || thisMonth.group.length;
+    var thisWeekIsNotEmpty = thisWeek.personal.length || thisWeek.group.length;
+    var todayIsNotEmpty = today.personal.length || today.group.length;
+
+    if (lifetimeIsNotEmpty && thisMonthIsNotEmpty && thisWeekIsNotEmpty && todayIsNotEmpty) {
+      stopPolling();
+    }
+  }
+
+  console.log('TCL: result', result);
+  return result.data;
+};
+
+$c95015e76b08a73d851b9682ba0eabe$exports.suspensefulPollingHook = $c95015e76b08a73d851b9682ba0eabe$export$suspensefulPollingHook;

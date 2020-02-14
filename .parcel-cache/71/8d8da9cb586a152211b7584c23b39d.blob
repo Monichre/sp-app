@@ -1,0 +1,9 @@
+var $c34d02fa92f4330e72d7dcf46f08$exports = {};
+var $c34d02fa92f4330e72d7dcf46f08$var$freeGlobal = $parcel$require("0682c34d02fa92f4330e72d7dcf46f08", "./_freeGlobal");
+/** Detect free variable `self`. */
+
+var $c34d02fa92f4330e72d7dcf46f08$var$freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+/** Used as a reference to the global object. */
+
+var $c34d02fa92f4330e72d7dcf46f08$var$root = $c34d02fa92f4330e72d7dcf46f08$var$freeGlobal || $c34d02fa92f4330e72d7dcf46f08$var$freeSelf || Function('return this')();
+$c34d02fa92f4330e72d7dcf46f08$exports = $c34d02fa92f4330e72d7dcf46f08$var$root;

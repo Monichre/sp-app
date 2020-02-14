@@ -1,0 +1,9 @@
+var $b82b9352ff13b61e669759fd6eefbc2$exports = {};
+
+function $b82b9352ff13b61e669759fd6eefbc2$export$default(subClass, superClass) {
+  subClass.prototype = Object.create(superClass.prototype);
+  subClass.prototype.constructor = subClass;
+  subClass.__proto__ = superClass;
+}
+
+$b82b9352ff13b61e669759fd6eefbc2$exports.default = $b82b9352ff13b61e669759fd6eefbc2$export$default;

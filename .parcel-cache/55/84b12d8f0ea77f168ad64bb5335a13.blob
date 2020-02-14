@@ -1,0 +1,98 @@
+var $c73fcb0e36d0d1a59a199857f80$exports = {};
+$parcel$require("94011c73fcb0e36d0d1a59a199857f80", "react");
+$parcel$require("94011c73fcb0e36d0d1a59a199857f80", "reflexbox");
+
+function $c73fcb0e36d0d1a59a199857f80$var$_extends() {
+  $c73fcb0e36d0d1a59a199857f80$var$_extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return $c73fcb0e36d0d1a59a199857f80$var$_extends.apply(this, arguments);
+}
+
+$c73fcb0e36d0d1a59a199857f80$exports.Flex = $c73fcb0e36d0d1a59a199857f80$import$Flex;
+$c73fcb0e36d0d1a59a199857f80$exports.Box = $c73fcb0e36d0d1a59a199857f80$import$Box;
+var $c73fcb0e36d0d1a59a199857f80$export$Text = $c73fcb0e36d0d1a59a199857f80$import$forwardRef(function (props, ref) {
+  return $c73fcb0e36d0d1a59a199857f80$import$React.createElement($c73fcb0e36d0d1a59a199857f80$import$Box, $c73fcb0e36d0d1a59a199857f80$var$_extends({
+    ref: ref,
+    tx: "text"
+  }, props));
+});
+$c73fcb0e36d0d1a59a199857f80$exports.Text = $c73fcb0e36d0d1a59a199857f80$export$Text;
+var $c73fcb0e36d0d1a59a199857f80$export$Heading = $c73fcb0e36d0d1a59a199857f80$import$forwardRef(function (props, ref) {
+  return $c73fcb0e36d0d1a59a199857f80$import$React.createElement($c73fcb0e36d0d1a59a199857f80$import$Box, $c73fcb0e36d0d1a59a199857f80$var$_extends({
+    ref: ref,
+    as: "h2",
+    tx: "text",
+    variant: "heading"
+  }, props, {
+    __css: {
+      fontSize: 4,
+      fontFamily: 'heading',
+      fontWeight: 'heading',
+      lineHeight: 'heading'
+    }
+  }));
+});
+$c73fcb0e36d0d1a59a199857f80$exports.Heading = $c73fcb0e36d0d1a59a199857f80$export$Heading;
+var $c73fcb0e36d0d1a59a199857f80$export$Link = $c73fcb0e36d0d1a59a199857f80$import$forwardRef(function (props, ref) {
+  return $c73fcb0e36d0d1a59a199857f80$import$React.createElement($c73fcb0e36d0d1a59a199857f80$import$Box, $c73fcb0e36d0d1a59a199857f80$var$_extends({
+    ref: ref,
+    as: "a",
+    variant: "link"
+  }, props));
+});
+$c73fcb0e36d0d1a59a199857f80$exports.Link = $c73fcb0e36d0d1a59a199857f80$export$Link;
+var $c73fcb0e36d0d1a59a199857f80$export$Button = $c73fcb0e36d0d1a59a199857f80$import$forwardRef(function (props, ref) {
+  return $c73fcb0e36d0d1a59a199857f80$import$React.createElement($c73fcb0e36d0d1a59a199857f80$import$Box, $c73fcb0e36d0d1a59a199857f80$var$_extends({
+    ref: ref,
+    as: "button",
+    tx: "buttons",
+    variant: "primary"
+  }, props, {
+    __css: {
+      appearance: 'none',
+      display: 'inline-block',
+      textAlign: 'center',
+      lineHeight: 'inherit',
+      textDecoration: 'none',
+      fontSize: 'inherit',
+      px: 3,
+      py: 2,
+      color: 'white',
+      bg: 'primary',
+      border: 0,
+      borderRadius: 4
+    }
+  }));
+});
+$c73fcb0e36d0d1a59a199857f80$exports.Button = $c73fcb0e36d0d1a59a199857f80$export$Button;
+var $c73fcb0e36d0d1a59a199857f80$export$Image = $c73fcb0e36d0d1a59a199857f80$import$forwardRef(function (props, ref) {
+  return $c73fcb0e36d0d1a59a199857f80$import$React.createElement($c73fcb0e36d0d1a59a199857f80$import$Box, $c73fcb0e36d0d1a59a199857f80$var$_extends({
+    ref: ref,
+    as: "img"
+  }, props, {
+    __css: {
+      maxWidth: '100%',
+      height: 'auto'
+    }
+  }));
+});
+$c73fcb0e36d0d1a59a199857f80$exports.Image = $c73fcb0e36d0d1a59a199857f80$export$Image;
+var $c73fcb0e36d0d1a59a199857f80$export$Card = $c73fcb0e36d0d1a59a199857f80$import$forwardRef(function (props, ref) {
+  return $c73fcb0e36d0d1a59a199857f80$import$React.createElement($c73fcb0e36d0d1a59a199857f80$import$Box, $c73fcb0e36d0d1a59a199857f80$var$_extends({
+    ref: ref,
+    variant: "card"
+  }, props));
+});
+$c73fcb0e36d0d1a59a199857f80$exports.Card = $c73fcb0e36d0d1a59a199857f80$export$Card;

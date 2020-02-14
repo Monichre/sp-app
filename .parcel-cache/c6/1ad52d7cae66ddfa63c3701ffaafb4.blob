@@ -1,0 +1,10 @@
+var $d8779e56edce43b7c591eb55be8c$exports = {};
+var $d8779e56edce43b7c591eb55be8c$var$classof = $parcel$require("8994d8779e56edce43b7c591eb55be8c", "../internals/classof");
+var $d8779e56edce43b7c591eb55be8c$var$TO_STRING_TAG = $parcel$require("8994d8779e56edce43b7c591eb55be8c", "../internals/well-known-symbol")('toStringTag');
+var $d8779e56edce43b7c591eb55be8c$var$test = {};
+$d8779e56edce43b7c591eb55be8c$var$test[$d8779e56edce43b7c591eb55be8c$var$TO_STRING_TAG] = 'z'; // `Object.prototype.toString` method implementation
+// https://tc39.github.io/ecma262/#sec-object.prototype.tostring
+
+$d8779e56edce43b7c591eb55be8c$exports = String($d8779e56edce43b7c591eb55be8c$var$test) !== '[object z]' ? function toString() {
+  return '[object ' + $d8779e56edce43b7c591eb55be8c$var$classof(this) + ']';
+} : $d8779e56edce43b7c591eb55be8c$var$test.toString;

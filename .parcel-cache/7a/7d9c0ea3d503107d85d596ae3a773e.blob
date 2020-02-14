@@ -1,0 +1,12 @@
+var $f1531f8ba5ac669ed248bf5d05ddbd73$exports = {};
+$f1531f8ba5ac669ed248bf5d05ddbd73$exports = $f1531f8ba5ac669ed248bf5d05ddbd73$var$alphabetical; // Check if the given character code, or the character code at the first
+// character, is alphabetical.
+
+function $f1531f8ba5ac669ed248bf5d05ddbd73$var$alphabetical(character) {
+  var code = typeof character === 'string' ? character.charCodeAt(0) : character;
+  return code >= 97 && code <= 122 ||
+  /* a-z */
+  code >= 65 && code <= 90
+  /* A-Z */
+  ;
+}

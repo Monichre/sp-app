@@ -1,0 +1,16 @@
+var $a1de96e6af5ac72e2c9be618b57f1bd$exports = {};
+var $a1de96e6af5ac72e2c9be618b57f1bd$var$visit = $parcel$require("5a1de96e6af5ac72e2c9be618b57f1bd", "unist-util-visit");
+$a1de96e6af5ac72e2c9be618b57f1bd$exports = $a1de96e6af5ac72e2c9be618b57f1bd$var$removePosition;
+
+function $a1de96e6af5ac72e2c9be618b57f1bd$var$removePosition(node, force) {
+  $a1de96e6af5ac72e2c9be618b57f1bd$var$visit(node, force ? $a1de96e6af5ac72e2c9be618b57f1bd$var$hard : $a1de96e6af5ac72e2c9be618b57f1bd$var$soft);
+  return node;
+}
+
+function $a1de96e6af5ac72e2c9be618b57f1bd$var$hard(node) {
+  delete node.position;
+}
+
+function $a1de96e6af5ac72e2c9be618b57f1bd$var$soft(node) {
+  node.position = undefined;
+}

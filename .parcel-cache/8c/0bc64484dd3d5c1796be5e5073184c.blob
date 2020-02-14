@@ -1,0 +1,13 @@
+var $dbb29ec73500ec6ae3bba6cf656b21b$exports = {};
+var $dbb29ec73500ec6ae3bba6cf656b21b$var$defineProperty = $parcel$require("2dbb29ec73500ec6ae3bba6cf656b21b", "../internals/object-define-property").f;
+var $dbb29ec73500ec6ae3bba6cf656b21b$var$has = $parcel$require("2dbb29ec73500ec6ae3bba6cf656b21b", "../internals/has");
+var $dbb29ec73500ec6ae3bba6cf656b21b$var$TO_STRING_TAG = $parcel$require("2dbb29ec73500ec6ae3bba6cf656b21b", "../internals/well-known-symbol")('toStringTag');
+
+$dbb29ec73500ec6ae3bba6cf656b21b$exports = function (it, TAG, STATIC) {
+  if (it && !$dbb29ec73500ec6ae3bba6cf656b21b$var$has(it = STATIC ? it : it.prototype, $dbb29ec73500ec6ae3bba6cf656b21b$var$TO_STRING_TAG)) {
+    $dbb29ec73500ec6ae3bba6cf656b21b$var$defineProperty(it, $dbb29ec73500ec6ae3bba6cf656b21b$var$TO_STRING_TAG, {
+      configurable: true,
+      value: TAG
+    });
+  }
+};

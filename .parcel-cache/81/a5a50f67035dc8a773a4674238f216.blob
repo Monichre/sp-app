@@ -1,0 +1,39 @@
+var $b97d10ad2ed48dea10f8fb$exports = {};
+var $b97d10ad2ed48dea10f8fb$var$locate = $parcel$require("9902920176b97d10ad2ed48dea10f8fb", "../locate/break");
+$b97d10ad2ed48dea10f8fb$exports = $b97d10ad2ed48dea10f8fb$var$hardBreak;
+$b97d10ad2ed48dea10f8fb$var$hardBreak.locator = $b97d10ad2ed48dea10f8fb$var$locate;
+var $b97d10ad2ed48dea10f8fb$var$MIN_BREAK_LENGTH = 2;
+
+function $b97d10ad2ed48dea10f8fb$var$hardBreak(eat, value, silent) {
+  var length = value.length;
+  var index = -1;
+  var queue = '';
+  var character;
+
+  while (++index < length) {
+    character = value.charAt(index);
+
+    if (character === '\n') {
+      if (index < $b97d10ad2ed48dea10f8fb$var$MIN_BREAK_LENGTH) {
+        return;
+      }
+      /* istanbul ignore if - never used (yet) */
+
+
+      if (silent) {
+        return true;
+      }
+
+      queue += character;
+      return eat(queue)({
+        type: 'break'
+      });
+    }
+
+    if (character !== ' ') {
+      return;
+    }
+
+    queue += character;
+  }
+}

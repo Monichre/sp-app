@@ -1,0 +1,48 @@
+var $f459b8abeb61f20fba3197ca052$exports = {};
+
+function $f459b8abeb61f20fba3197ca052$var$areInputsEqual(newInputs, lastInputs) {
+  if (newInputs.length !== lastInputs.length) {
+    return false;
+  }
+
+  for (var i = 0; i < newInputs.length; i++) {
+    if (newInputs[i] !== lastInputs[i]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function $f459b8abeb61f20fba3197ca052$export$default(resultFn, isEqual) {
+  if (isEqual === void 0) {
+    isEqual = $f459b8abeb61f20fba3197ca052$var$areInputsEqual;
+  }
+
+  var lastThis;
+  var lastArgs = [];
+  var lastResult;
+  var calledOnce = false;
+
+  function memoized() {
+    var newArgs = [];
+
+    for (var _i = 0; _i < arguments.length; _i++) {
+      newArgs[_i] = arguments[_i];
+    }
+
+    if (calledOnce && lastThis === this && isEqual(newArgs, lastArgs)) {
+      return lastResult;
+    }
+
+    lastResult = resultFn.apply(this, newArgs);
+    calledOnce = true;
+    lastThis = this;
+    lastArgs = newArgs;
+    return lastResult;
+  }
+
+  return memoized;
+}
+
+$f459b8abeb61f20fba3197ca052$exports.default = $f459b8abeb61f20fba3197ca052$export$default;

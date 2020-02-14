@@ -1,0 +1,122 @@
+var $eb47ec24303d5dde0d27cbd699a755$exports = {};
+var $eb47ec24303d5dde0d27cbd699a755$var$hasOwn = Object.prototype.hasOwnProperty;
+var $eb47ec24303d5dde0d27cbd699a755$var$toStr = Object.prototype.toString;
+var $eb47ec24303d5dde0d27cbd699a755$var$defineProperty = Object.defineProperty;
+var $eb47ec24303d5dde0d27cbd699a755$var$gOPD = Object.getOwnPropertyDescriptor;
+
+var $eb47ec24303d5dde0d27cbd699a755$var$isArray = function isArray(arr) {
+  if (typeof Array.isArray === 'function') {
+    return Array.isArray(arr);
+  }
+
+  return $eb47ec24303d5dde0d27cbd699a755$var$toStr.call(arr) === '[object Array]';
+};
+
+var $eb47ec24303d5dde0d27cbd699a755$var$isPlainObject = function isPlainObject(obj) {
+  if (!obj || $eb47ec24303d5dde0d27cbd699a755$var$toStr.call(obj) !== '[object Object]') {
+    return false;
+  }
+
+  var hasOwnConstructor = $eb47ec24303d5dde0d27cbd699a755$var$hasOwn.call(obj, 'constructor');
+  var hasIsPrototypeOf = obj.constructor && obj.constructor.prototype && $eb47ec24303d5dde0d27cbd699a755$var$hasOwn.call(obj.constructor.prototype, 'isPrototypeOf'); // Not own constructor property must be Object
+
+  if (obj.constructor && !hasOwnConstructor && !hasIsPrototypeOf) {
+    return false;
+  } // Own properties are enumerated firstly, so to speed up,
+  // if last one is own, then all properties are own.
+
+
+  var key;
+
+  for (key in obj) {
+    /**/
+  }
+
+  return typeof key === 'undefined' || $eb47ec24303d5dde0d27cbd699a755$var$hasOwn.call(obj, key);
+}; // If name is '__proto__', and Object.defineProperty is available, define __proto__ as an own property on target
+
+
+var $eb47ec24303d5dde0d27cbd699a755$var$setProperty = function setProperty(target, options) {
+  if ($eb47ec24303d5dde0d27cbd699a755$var$defineProperty && options.name === '__proto__') {
+    $eb47ec24303d5dde0d27cbd699a755$var$defineProperty(target, options.name, {
+      enumerable: true,
+      configurable: true,
+      value: options.newValue,
+      writable: true
+    });
+  } else {
+    target[options.name] = options.newValue;
+  }
+}; // Return undefined instead of __proto__ if '__proto__' is not an own property
+
+
+var $eb47ec24303d5dde0d27cbd699a755$var$getProperty = function getProperty(obj, name) {
+  if (name === '__proto__') {
+    if (!$eb47ec24303d5dde0d27cbd699a755$var$hasOwn.call(obj, name)) {
+      return void 0;
+    } else if ($eb47ec24303d5dde0d27cbd699a755$var$gOPD) {
+      // In early versions of node, obj['__proto__'] is buggy when obj has
+      // __proto__ as an own property. Object.getOwnPropertyDescriptor() works.
+      return $eb47ec24303d5dde0d27cbd699a755$var$gOPD(obj, name).value;
+    }
+  }
+
+  return obj[name];
+};
+
+$eb47ec24303d5dde0d27cbd699a755$exports = function extend() {
+  var options, name, src, copy, copyIsArray, clone;
+  var target = arguments[0];
+  var i = 1;
+  var length = arguments.length;
+  var deep = false; // Handle a deep copy situation
+
+  if (typeof target === 'boolean') {
+    deep = target;
+    target = arguments[1] || {}; // skip the boolean and the target
+
+    i = 2;
+  }
+
+  if (target == null || typeof target !== 'object' && typeof target !== 'function') {
+    target = {};
+  }
+
+  for (; i < length; ++i) {
+    options = arguments[i]; // Only deal with non-null/undefined values
+
+    if (options != null) {
+      // Extend the base object
+      for (name in options) {
+        src = $eb47ec24303d5dde0d27cbd699a755$var$getProperty(target, name);
+        copy = $eb47ec24303d5dde0d27cbd699a755$var$getProperty(options, name); // Prevent never-ending loop
+
+        if (target !== copy) {
+          // Recurse if we're merging plain objects or arrays
+          if (deep && copy && ($eb47ec24303d5dde0d27cbd699a755$var$isPlainObject(copy) || (copyIsArray = $eb47ec24303d5dde0d27cbd699a755$var$isArray(copy)))) {
+            if (copyIsArray) {
+              copyIsArray = false;
+              clone = src && $eb47ec24303d5dde0d27cbd699a755$var$isArray(src) ? src : [];
+            } else {
+              clone = src && $eb47ec24303d5dde0d27cbd699a755$var$isPlainObject(src) ? src : {};
+            } // Never move original objects, clone them
+
+
+            $eb47ec24303d5dde0d27cbd699a755$var$setProperty(target, {
+              name: name,
+              newValue: extend(deep, clone, copy)
+            }); // Don't bring in undefined values
+          } else if (typeof copy !== 'undefined') {
+            $eb47ec24303d5dde0d27cbd699a755$var$setProperty(target, {
+              name: name,
+              newValue: copy
+            });
+          }
+        }
+      }
+    }
+  } // Return the modified object
+
+
+  return target;
+};

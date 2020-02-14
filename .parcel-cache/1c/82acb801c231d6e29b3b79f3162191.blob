@@ -1,0 +1,8 @@
+var $e3de7d70ba81e0a9d8241e818b5819f$exports = {};
+var $e3de7d70ba81e0a9d8241e818b5819f$var$ceil = Math.ceil;
+var $e3de7d70ba81e0a9d8241e818b5819f$var$floor = Math.floor; // `ToInteger` abstract operation
+// https://tc39.github.io/ecma262/#sec-tointeger
+
+$e3de7d70ba81e0a9d8241e818b5819f$exports = function (argument) {
+  return isNaN(argument = +argument) ? 0 : (argument > 0 ? $e3de7d70ba81e0a9d8241e818b5819f$var$floor : $e3de7d70ba81e0a9d8241e818b5819f$var$ceil)(argument);
+};

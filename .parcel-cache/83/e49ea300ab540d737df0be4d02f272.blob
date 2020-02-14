@@ -1,0 +1,38 @@
+var $d78d8bfb0b9ba994c28a217a8cca586b$exports = {};
+var $d78d8bfb0b9ba994c28a217a8cca586b$var$xtend = $parcel$require("d78d8bfb0b9ba994c28a217a8cca586b", "xtend");
+var $d78d8bfb0b9ba994c28a217a8cca586b$var$escapes = $parcel$require("d78d8bfb0b9ba994c28a217a8cca586b", "markdown-escapes");
+var $d78d8bfb0b9ba994c28a217a8cca586b$var$defaults = $parcel$require("d78d8bfb0b9ba994c28a217a8cca586b", "./defaults");
+$d78d8bfb0b9ba994c28a217a8cca586b$exports = $d78d8bfb0b9ba994c28a217a8cca586b$var$setOptions;
+
+function $d78d8bfb0b9ba994c28a217a8cca586b$var$setOptions(options) {
+  var self = this;
+  var current = self.options;
+  var key;
+  var value;
+
+  if (options == null) {
+    options = {};
+  } else if (typeof options === 'object') {
+    options = $d78d8bfb0b9ba994c28a217a8cca586b$var$xtend(options);
+  } else {
+    throw new Error('Invalid value `' + options + '` ' + 'for setting `options`');
+  }
+
+  for (key in $d78d8bfb0b9ba994c28a217a8cca586b$var$defaults) {
+    value = options[key];
+
+    if (value == null) {
+      value = current[key];
+    }
+
+    if (key !== 'blocks' && typeof value !== 'boolean' || key === 'blocks' && typeof value !== 'object') {
+      throw new Error('Invalid value `' + value + '` for setting `options.' + key + '`');
+    }
+
+    options[key] = value;
+  }
+
+  self.options = options;
+  self.escape = $d78d8bfb0b9ba994c28a217a8cca586b$var$escapes(options);
+  return self;
+}

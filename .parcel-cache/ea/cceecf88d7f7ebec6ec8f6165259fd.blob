@@ -1,0 +1,43 @@
+var $e253685686df1264d6eed80426c3a58c$exports = {};
+$parcel$require("e253685686df1264d6eed80426c3a58c", "react");
+$parcel$require("e253685686df1264d6eed80426c3a58c", "styled-components");
+
+function $e253685686df1264d6eed80426c3a58c$var$_templateObject() {
+  var data = $e253685686df1264d6eed80426c3a58c$var$_taggedTemplateLiteral(["\n  // height: ", "rem;\n  width: ", "rem;\n"]);
+
+  $e253685686df1264d6eed80426c3a58c$var$_templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function $e253685686df1264d6eed80426c3a58c$var$_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var $e253685686df1264d6eed80426c3a58c$var$logo = $parcel$require("e253685686df1264d6eed80426c3a58c", "./sp-white-logo.png");
+var $e253685686df1264d6eed80426c3a58c$var$logoHorizontal = $parcel$require("e253685686df1264d6eed80426c3a58c", "./sp-white-logo-horizontal.png");
+var $e253685686df1264d6eed80426c3a58c$var$LogoImg = $e253685686df1264d6eed80426c3a58c$import$styled.img($e253685686df1264d6eed80426c3a58c$var$_templateObject(), function (props) {
+  return props.size;
+}, function (props) {
+  return props.size;
+});
+
+var $e253685686df1264d6eed80426c3a58c$export$Logo = function Logo(_ref) {
+  var size = _ref.size;
+  return $e253685686df1264d6eed80426c3a58c$import$React.createElement($e253685686df1264d6eed80426c3a58c$var$LogoImg, {
+    src: $e253685686df1264d6eed80426c3a58c$var$logo,
+    size: size
+  });
+};
+
+$e253685686df1264d6eed80426c3a58c$exports.Logo = $e253685686df1264d6eed80426c3a58c$export$Logo;
+
+var $e253685686df1264d6eed80426c3a58c$export$LogoHorizontal = function LogoHorizontal(_ref2) {
+  var size = _ref2.size;
+  return $e253685686df1264d6eed80426c3a58c$import$React.createElement($e253685686df1264d6eed80426c3a58c$var$LogoImg, {
+    src: $e253685686df1264d6eed80426c3a58c$var$logoHorizontal,
+    size: size
+  });
+};
+
+$e253685686df1264d6eed80426c3a58c$exports.LogoHorizontal = $e253685686df1264d6eed80426c3a58c$export$LogoHorizontal;

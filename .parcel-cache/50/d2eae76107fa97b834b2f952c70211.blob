@@ -1,0 +1,10 @@
+var $f1d9e5f8574f10ae264796b7dbcb$exports = {};
+var $f1d9e5f8574f10ae264796b7dbcb$var$isObject = $parcel$require("4809f1d9e5f8574f10ae264796b7dbcb", "../internals/is-object");
+
+$f1d9e5f8574f10ae264796b7dbcb$exports = function (it) {
+  if (!$f1d9e5f8574f10ae264796b7dbcb$var$isObject(it)) {
+    throw TypeError(String(it) + ' is not an object');
+  }
+
+  return it;
+};

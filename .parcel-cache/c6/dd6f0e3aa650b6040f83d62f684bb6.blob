@@ -1,0 +1,31 @@
+var $cf5f3f401d32e37a1423f9f1282ca49$exports = {};
+Object.defineProperty($cf5f3f401d32e37a1423f9f1282ca49$exports, "__esModule", {
+  value: true
+});
+var $cf5f3f401d32e37a1423f9f1282ca49$export$getLocation = $cf5f3f401d32e37a1423f9f1282ca49$var$getLocation;
+$cf5f3f401d32e37a1423f9f1282ca49$exports.getLocation = $cf5f3f401d32e37a1423f9f1282ca49$export$getLocation;
+/**
+ * Represents a location in a Source.
+ */
+
+/**
+ * Takes a Source and a UTF-8 character offset, and returns the corresponding
+ * line and column as a SourceLocation.
+ */
+
+function $cf5f3f401d32e37a1423f9f1282ca49$var$getLocation(source, position) {
+  var lineRegexp = /\r\n|[\n\r]/g;
+  var line = 1;
+  var column = position + 1;
+  var match;
+
+  while ((match = lineRegexp.exec(source.body)) && match.index < position) {
+    line += 1;
+    column = position + 1 - (match.index + match[0].length);
+  }
+
+  return {
+    line: line,
+    column: column
+  };
+}

@@ -1,0 +1,18 @@
+var $fe28708ab89b57fc365773f3ab50d9b$exports = {};
+$parcel$require("4fe28708ab89b57fc365773f3ab50d9b", "react");
+$parcel$require("4fe28708ab89b57fc365773f3ab50d9b", "../shared/Loading");
+$parcel$require("4fe28708ab89b57fc365773f3ab50d9b", "./AppMetaTags");
+$parcel$require("4fe28708ab89b57fc365773f3ab50d9b", "./GlobalStyle");
+$parcel$require("4fe28708ab89b57fc365773f3ab50d9b", "./AppRoutes");
+$parcel$require("4fe28708ab89b57fc365773f3ab50d9b", "./AppFirebaseProvider");
+$parcel$require("4fe28708ab89b57fc365773f3ab50d9b", "./AppApolloProvider");
+
+// react suspense isnt ready for async data loading in 16.8.x...
+// but somehow react-apollo-hooks supports it
+var $fe28708ab89b57fc365773f3ab50d9b$export$App = function App() {
+  return $fe28708ab89b57fc365773f3ab50d9b$import$React.createElement($fe28708ab89b57fc365773f3ab50d9b$import$AppFirebaseProvider, null, $fe28708ab89b57fc365773f3ab50d9b$import$React.createElement($fe28708ab89b57fc365773f3ab50d9b$import$AppApolloProvider, null, $fe28708ab89b57fc365773f3ab50d9b$import$React.createElement($fe28708ab89b57fc365773f3ab50d9b$import$GlobalStyle, null), $fe28708ab89b57fc365773f3ab50d9b$import$React.createElement($fe28708ab89b57fc365773f3ab50d9b$import$AppMetaTags, null), $fe28708ab89b57fc365773f3ab50d9b$import$React.createElement($fe28708ab89b57fc365773f3ab50d9b$import$React.Suspense, {
+    fallback: $fe28708ab89b57fc365773f3ab50d9b$import$React.createElement($fe28708ab89b57fc365773f3ab50d9b$import$Loading, null)
+  }, $fe28708ab89b57fc365773f3ab50d9b$import$React.createElement($fe28708ab89b57fc365773f3ab50d9b$import$AppRoutes, null))));
+};
+
+$fe28708ab89b57fc365773f3ab50d9b$exports.App = $fe28708ab89b57fc365773f3ab50d9b$export$App;

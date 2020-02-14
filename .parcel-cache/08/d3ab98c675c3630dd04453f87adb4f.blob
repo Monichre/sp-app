@@ -1,0 +1,205 @@
+var $d7501f280b51cda2a89703fa6d0e76bf$exports = {};
+var $d7501f280b51cda2a89703fa6d0e76bf$var$whitespace = $parcel$require("d7501f280b51cda2a89703fa6d0e76bf", "is-whitespace-character");
+var $d7501f280b51cda2a89703fa6d0e76bf$var$locate = $parcel$require("d7501f280b51cda2a89703fa6d0e76bf", "../locate/link");
+var $d7501f280b51cda2a89703fa6d0e76bf$var$normalize = $parcel$require("d7501f280b51cda2a89703fa6d0e76bf", "../util/normalize");
+$d7501f280b51cda2a89703fa6d0e76bf$exports = $d7501f280b51cda2a89703fa6d0e76bf$var$reference;
+$d7501f280b51cda2a89703fa6d0e76bf$var$reference.locator = $d7501f280b51cda2a89703fa6d0e76bf$var$locate;
+var $d7501f280b51cda2a89703fa6d0e76bf$var$T_LINK = 'link';
+var $d7501f280b51cda2a89703fa6d0e76bf$var$T_IMAGE = 'image';
+var $d7501f280b51cda2a89703fa6d0e76bf$var$T_FOOTNOTE = 'footnote';
+var $d7501f280b51cda2a89703fa6d0e76bf$var$REFERENCE_TYPE_SHORTCUT = 'shortcut';
+var $d7501f280b51cda2a89703fa6d0e76bf$var$REFERENCE_TYPE_COLLAPSED = 'collapsed';
+var $d7501f280b51cda2a89703fa6d0e76bf$var$REFERENCE_TYPE_FULL = 'full';
+var $d7501f280b51cda2a89703fa6d0e76bf$var$C_CARET = '^';
+var $d7501f280b51cda2a89703fa6d0e76bf$var$C_BACKSLASH = '\\';
+var $d7501f280b51cda2a89703fa6d0e76bf$var$C_BRACKET_OPEN = '[';
+var $d7501f280b51cda2a89703fa6d0e76bf$var$C_BRACKET_CLOSE = ']';
+
+function $d7501f280b51cda2a89703fa6d0e76bf$var$reference(eat, value, silent) {
+  var self = this;
+  var character = value.charAt(0);
+  var index = 0;
+  var length = value.length;
+  var subvalue = '';
+  var intro = '';
+  var type = $d7501f280b51cda2a89703fa6d0e76bf$var$T_LINK;
+  var referenceType = $d7501f280b51cda2a89703fa6d0e76bf$var$REFERENCE_TYPE_SHORTCUT;
+  var content;
+  var identifier;
+  var now;
+  var node;
+  var exit;
+  var queue;
+  var bracketed;
+  var depth;
+  /* Check whether we’re eating an image. */
+
+  if (character === '!') {
+    type = $d7501f280b51cda2a89703fa6d0e76bf$var$T_IMAGE;
+    intro = character;
+    character = value.charAt(++index);
+  }
+
+  if (character !== $d7501f280b51cda2a89703fa6d0e76bf$var$C_BRACKET_OPEN) {
+    return;
+  }
+
+  index++;
+  intro += character;
+  queue = '';
+  /* Check whether we’re eating a footnote. */
+
+  if (self.options.footnotes && value.charAt(index) === $d7501f280b51cda2a89703fa6d0e76bf$var$C_CARET) {
+    /* Exit if `![^` is found, so the `!` will be seen as text after this,
+     * and we’ll enter this function again when `[^` is found. */
+    if (type === $d7501f280b51cda2a89703fa6d0e76bf$var$T_IMAGE) {
+      return;
+    }
+
+    intro += $d7501f280b51cda2a89703fa6d0e76bf$var$C_CARET;
+    index++;
+    type = $d7501f280b51cda2a89703fa6d0e76bf$var$T_FOOTNOTE;
+  }
+  /* Eat the text. */
+
+
+  depth = 0;
+
+  while (index < length) {
+    character = value.charAt(index);
+
+    if (character === $d7501f280b51cda2a89703fa6d0e76bf$var$C_BRACKET_OPEN) {
+      bracketed = true;
+      depth++;
+    } else if (character === $d7501f280b51cda2a89703fa6d0e76bf$var$C_BRACKET_CLOSE) {
+      if (!depth) {
+        break;
+      }
+
+      depth--;
+    }
+
+    if (character === $d7501f280b51cda2a89703fa6d0e76bf$var$C_BACKSLASH) {
+      queue += $d7501f280b51cda2a89703fa6d0e76bf$var$C_BACKSLASH;
+      character = value.charAt(++index);
+    }
+
+    queue += character;
+    index++;
+  }
+
+  subvalue = queue;
+  content = queue;
+  character = value.charAt(index);
+
+  if (character !== $d7501f280b51cda2a89703fa6d0e76bf$var$C_BRACKET_CLOSE) {
+    return;
+  }
+
+  index++;
+  subvalue += character;
+  queue = '';
+
+  while (index < length) {
+    character = value.charAt(index);
+
+    if (!$d7501f280b51cda2a89703fa6d0e76bf$var$whitespace(character)) {
+      break;
+    }
+
+    queue += character;
+    index++;
+  }
+
+  character = value.charAt(index);
+  /* Inline footnotes cannot have an identifier. */
+
+  if (type !== $d7501f280b51cda2a89703fa6d0e76bf$var$T_FOOTNOTE && character === $d7501f280b51cda2a89703fa6d0e76bf$var$C_BRACKET_OPEN) {
+    identifier = '';
+    queue += character;
+    index++;
+
+    while (index < length) {
+      character = value.charAt(index);
+
+      if (character === $d7501f280b51cda2a89703fa6d0e76bf$var$C_BRACKET_OPEN || character === $d7501f280b51cda2a89703fa6d0e76bf$var$C_BRACKET_CLOSE) {
+        break;
+      }
+
+      if (character === $d7501f280b51cda2a89703fa6d0e76bf$var$C_BACKSLASH) {
+        identifier += $d7501f280b51cda2a89703fa6d0e76bf$var$C_BACKSLASH;
+        character = value.charAt(++index);
+      }
+
+      identifier += character;
+      index++;
+    }
+
+    character = value.charAt(index);
+
+    if (character === $d7501f280b51cda2a89703fa6d0e76bf$var$C_BRACKET_CLOSE) {
+      referenceType = identifier ? $d7501f280b51cda2a89703fa6d0e76bf$var$REFERENCE_TYPE_FULL : $d7501f280b51cda2a89703fa6d0e76bf$var$REFERENCE_TYPE_COLLAPSED;
+      queue += identifier + character;
+      index++;
+    } else {
+      identifier = '';
+    }
+
+    subvalue += queue;
+    queue = '';
+  } else {
+    if (!content) {
+      return;
+    }
+
+    identifier = content;
+  }
+  /* Brackets cannot be inside the identifier. */
+
+
+  if (referenceType !== $d7501f280b51cda2a89703fa6d0e76bf$var$REFERENCE_TYPE_FULL && bracketed) {
+    return;
+  }
+
+  subvalue = intro + subvalue;
+
+  if (type === $d7501f280b51cda2a89703fa6d0e76bf$var$T_LINK && self.inLink) {
+    return null;
+  }
+  /* istanbul ignore if - never used (yet) */
+
+
+  if (silent) {
+    return true;
+  }
+
+  if (type === $d7501f280b51cda2a89703fa6d0e76bf$var$T_FOOTNOTE && content.indexOf(' ') !== -1) {
+    return eat(subvalue)({
+      type: 'footnote',
+      children: this.tokenizeInline(content, eat.now())
+    });
+  }
+
+  now = eat.now();
+  now.column += intro.length;
+  now.offset += intro.length;
+  identifier = referenceType === $d7501f280b51cda2a89703fa6d0e76bf$var$REFERENCE_TYPE_FULL ? identifier : content;
+  node = {
+    type: type + 'Reference',
+    identifier: $d7501f280b51cda2a89703fa6d0e76bf$var$normalize(identifier)
+  };
+
+  if (type === $d7501f280b51cda2a89703fa6d0e76bf$var$T_LINK || type === $d7501f280b51cda2a89703fa6d0e76bf$var$T_IMAGE) {
+    node.referenceType = referenceType;
+  }
+
+  if (type === $d7501f280b51cda2a89703fa6d0e76bf$var$T_LINK) {
+    exit = self.enterLink();
+    node.children = self.tokenizeInline(content, now);
+    exit();
+  } else if (type === $d7501f280b51cda2a89703fa6d0e76bf$var$T_IMAGE) {
+    node.alt = self.decode.raw(self.unescape(content), now) || null;
+  }
+
+  return eat(subvalue)(node);
+}

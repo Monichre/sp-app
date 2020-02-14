@@ -1,0 +1,3 @@
+// `Symbol.isConcatSpreadable` well-known symbol
+// https://tc39.github.io/ecma262/#sec-symbol.isconcatspreadable
+$parcel$require("de1949745d4747fffbe5feac2df3b340", "../internals/define-well-known-symbol")('isConcatSpreadable');

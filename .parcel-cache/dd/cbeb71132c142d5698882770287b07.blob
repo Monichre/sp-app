@@ -1,0 +1,15 @@
+var $ef3b6c9cf67aff9f63ec4d4010d2d5f9$exports = {};
+Object.defineProperty($ef3b6c9cf67aff9f63ec4d4010d2d5f9$exports, "__esModule", {
+  value: true
+});
+var $ef3b6c9cf67aff9f63ec4d4010d2d5f9$export$syntaxError = $ef3b6c9cf67aff9f63ec4d4010d2d5f9$var$syntaxError;
+$ef3b6c9cf67aff9f63ec4d4010d2d5f9$exports.syntaxError = $ef3b6c9cf67aff9f63ec4d4010d2d5f9$export$syntaxError;
+var $ef3b6c9cf67aff9f63ec4d4010d2d5f9$var$_GraphQLError = $parcel$require("ef3b6c9cf67aff9f63ec4d4010d2d5f9", "./GraphQLError");
+/**
+ * Produces a GraphQLError representing a syntax error, containing useful
+ * descriptive information about the syntax error's position in the source.
+ */
+
+function $ef3b6c9cf67aff9f63ec4d4010d2d5f9$var$syntaxError(source, position, description) {
+  return new $ef3b6c9cf67aff9f63ec4d4010d2d5f9$var$_GraphQLError.GraphQLError("Syntax Error: ".concat(description), undefined, source, [position]);
+}

@@ -1,0 +1,127 @@
+var $af6944648ab7ba66a5be0d4048ee1fe$exports = {};
+var $af6944648ab7ba66a5be0d4048ee1fe$var$decode = $parcel$require("8af6944648ab7ba66a5be0d4048ee1fe", "parse-entities");
+var $af6944648ab7ba66a5be0d4048ee1fe$var$whitespace = $parcel$require("8af6944648ab7ba66a5be0d4048ee1fe", "is-whitespace-character");
+var $af6944648ab7ba66a5be0d4048ee1fe$var$locate = $parcel$require("8af6944648ab7ba66a5be0d4048ee1fe", "../locate/url");
+$af6944648ab7ba66a5be0d4048ee1fe$exports = $af6944648ab7ba66a5be0d4048ee1fe$var$url;
+$af6944648ab7ba66a5be0d4048ee1fe$var$url.locator = $af6944648ab7ba66a5be0d4048ee1fe$var$locate;
+$af6944648ab7ba66a5be0d4048ee1fe$var$url.notInLink = true;
+var $af6944648ab7ba66a5be0d4048ee1fe$var$C_BRACKET_OPEN = '[';
+var $af6944648ab7ba66a5be0d4048ee1fe$var$C_BRACKET_CLOSE = ']';
+var $af6944648ab7ba66a5be0d4048ee1fe$var$C_PAREN_OPEN = '(';
+var $af6944648ab7ba66a5be0d4048ee1fe$var$C_PAREN_CLOSE = ')';
+var $af6944648ab7ba66a5be0d4048ee1fe$var$C_LT = '<';
+var $af6944648ab7ba66a5be0d4048ee1fe$var$C_AT_SIGN = '@';
+var $af6944648ab7ba66a5be0d4048ee1fe$var$HTTP_PROTOCOL = 'http://';
+var $af6944648ab7ba66a5be0d4048ee1fe$var$HTTPS_PROTOCOL = 'https://';
+var $af6944648ab7ba66a5be0d4048ee1fe$var$MAILTO_PROTOCOL = 'mailto:';
+var $af6944648ab7ba66a5be0d4048ee1fe$var$PROTOCOLS = [$af6944648ab7ba66a5be0d4048ee1fe$var$HTTP_PROTOCOL, $af6944648ab7ba66a5be0d4048ee1fe$var$HTTPS_PROTOCOL, $af6944648ab7ba66a5be0d4048ee1fe$var$MAILTO_PROTOCOL];
+var $af6944648ab7ba66a5be0d4048ee1fe$var$PROTOCOLS_LENGTH = $af6944648ab7ba66a5be0d4048ee1fe$var$PROTOCOLS.length;
+
+function $af6944648ab7ba66a5be0d4048ee1fe$var$url(eat, value, silent) {
+  var self = this;
+  var subvalue;
+  var content;
+  var character;
+  var index;
+  var position;
+  var protocol;
+  var match;
+  var length;
+  var queue;
+  var parenCount;
+  var nextCharacter;
+  var exit;
+
+  if (!self.options.gfm) {
+    return;
+  }
+
+  subvalue = '';
+  index = -1;
+  length = $af6944648ab7ba66a5be0d4048ee1fe$var$PROTOCOLS_LENGTH;
+
+  while (++index < length) {
+    protocol = $af6944648ab7ba66a5be0d4048ee1fe$var$PROTOCOLS[index];
+    match = value.slice(0, protocol.length);
+
+    if (match.toLowerCase() === protocol) {
+      subvalue = match;
+      break;
+    }
+  }
+
+  if (!subvalue) {
+    return;
+  }
+
+  index = subvalue.length;
+  length = value.length;
+  queue = '';
+  parenCount = 0;
+
+  while (index < length) {
+    character = value.charAt(index);
+
+    if ($af6944648ab7ba66a5be0d4048ee1fe$var$whitespace(character) || character === $af6944648ab7ba66a5be0d4048ee1fe$var$C_LT) {
+      break;
+    }
+
+    if (character === '.' || character === ',' || character === ':' || character === ';' || character === '"' || character === '\'' || character === ')' || character === ']') {
+      nextCharacter = value.charAt(index + 1);
+
+      if (!nextCharacter || $af6944648ab7ba66a5be0d4048ee1fe$var$whitespace(nextCharacter)) {
+        break;
+      }
+    }
+
+    if (character === $af6944648ab7ba66a5be0d4048ee1fe$var$C_PAREN_OPEN || character === $af6944648ab7ba66a5be0d4048ee1fe$var$C_BRACKET_OPEN) {
+      parenCount++;
+    }
+
+    if (character === $af6944648ab7ba66a5be0d4048ee1fe$var$C_PAREN_CLOSE || character === $af6944648ab7ba66a5be0d4048ee1fe$var$C_BRACKET_CLOSE) {
+      parenCount--;
+
+      if (parenCount < 0) {
+        break;
+      }
+    }
+
+    queue += character;
+    index++;
+  }
+
+  if (!queue) {
+    return;
+  }
+
+  subvalue += queue;
+  content = subvalue;
+
+  if (protocol === $af6944648ab7ba66a5be0d4048ee1fe$var$MAILTO_PROTOCOL) {
+    position = queue.indexOf($af6944648ab7ba66a5be0d4048ee1fe$var$C_AT_SIGN);
+
+    if (position === -1 || position === length - 1) {
+      return;
+    }
+
+    content = content.substr($af6944648ab7ba66a5be0d4048ee1fe$var$MAILTO_PROTOCOL.length);
+  }
+  /* istanbul ignore if - never used (yet) */
+
+
+  if (silent) {
+    return true;
+  }
+
+  exit = self.enterLink();
+  content = self.tokenizeInline(content, eat.now());
+  exit();
+  return eat(subvalue)({
+    type: 'link',
+    title: null,
+    url: $af6944648ab7ba66a5be0d4048ee1fe$var$decode(subvalue, {
+      nonTerminated: false
+    }),
+    children: content
+  });
+}

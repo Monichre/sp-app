@@ -1,0 +1,12 @@
+var $b11e9cbd03685c1a710762a885c765$exports = {};
+var $b11e9cbd03685c1a710762a885c765$var$path = $parcel$require("73b11e9cbd03685c1a710762a885c765", "../internals/path");
+var $b11e9cbd03685c1a710762a885c765$var$has = $parcel$require("73b11e9cbd03685c1a710762a885c765", "../internals/has");
+var $b11e9cbd03685c1a710762a885c765$var$wrappedWellKnownSymbolModule = $parcel$require("73b11e9cbd03685c1a710762a885c765", "../internals/wrapped-well-known-symbol");
+var $b11e9cbd03685c1a710762a885c765$var$defineProperty = $parcel$require("73b11e9cbd03685c1a710762a885c765", "../internals/object-define-property").f;
+
+$b11e9cbd03685c1a710762a885c765$exports = function (NAME) {
+  var Symbol = $b11e9cbd03685c1a710762a885c765$var$path.Symbol || ($b11e9cbd03685c1a710762a885c765$var$path.Symbol = {});
+  if (!$b11e9cbd03685c1a710762a885c765$var$has(Symbol, NAME)) $b11e9cbd03685c1a710762a885c765$var$defineProperty(Symbol, NAME, {
+    value: $b11e9cbd03685c1a710762a885c765$var$wrappedWellKnownSymbolModule.f(NAME)
+  });
+};

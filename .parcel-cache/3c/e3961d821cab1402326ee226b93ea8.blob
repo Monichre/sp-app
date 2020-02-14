@@ -1,0 +1,45 @@
+var $fc623884e748828b083bc4a8c59$exports = {};
+var $fc623884e748828b083bc4a8c59$var$VMessage = $parcel$require("05785fc623884e748828b083bc4a8c59", "vfile-message");
+var $fc623884e748828b083bc4a8c59$var$VFile = $parcel$require("05785fc623884e748828b083bc4a8c59", "./core.js");
+$fc623884e748828b083bc4a8c59$exports = $fc623884e748828b083bc4a8c59$var$VFile;
+var $fc623884e748828b083bc4a8c59$var$proto = $fc623884e748828b083bc4a8c59$var$VFile.prototype;
+$fc623884e748828b083bc4a8c59$var$proto.message = $fc623884e748828b083bc4a8c59$var$message;
+$fc623884e748828b083bc4a8c59$var$proto.info = $fc623884e748828b083bc4a8c59$var$info;
+$fc623884e748828b083bc4a8c59$var$proto.fail = $fc623884e748828b083bc4a8c59$var$fail;
+/* Slight backwards compatibility.  Remove in the future. */
+
+$fc623884e748828b083bc4a8c59$var$proto.warn = $fc623884e748828b083bc4a8c59$var$message;
+/* Create a message with `reason` at `position`.
+ * When an error is passed in as `reason`, copies the stack. */
+
+function $fc623884e748828b083bc4a8c59$var$message(reason, position, origin) {
+  var filePath = this.path;
+  var message = new $fc623884e748828b083bc4a8c59$var$VMessage(reason, position, origin);
+
+  if (filePath) {
+    message.name = filePath + ':' + message.name;
+    message.file = filePath;
+  }
+
+  message.fatal = false;
+  this.messages.push(message);
+  return message;
+}
+/* Fail. Creates a vmessage, associates it with the file,
+ * and throws it. */
+
+
+function $fc623884e748828b083bc4a8c59$var$fail() {
+  var message = this.message.apply(this, arguments);
+  message.fatal = true;
+  throw message;
+}
+/* Info. Creates a vmessage, associates it with the file,
+ * and marks the fatality as null. */
+
+
+function $fc623884e748828b083bc4a8c59$var$info() {
+  var message = this.message.apply(this, arguments);
+  message.fatal = null;
+  return message;
+}

@@ -1,0 +1,37 @@
+
+var $b8114c10fca830661c197eaa1720c8f$exports = {};
+var $b8114c10fca830661c197eaa1720c8f$var$global = $parcel$require("7b8114c10fca830661c197eaa1720c8f", "../internals/global");
+var $b8114c10fca830661c197eaa1720c8f$var$hide = $parcel$require("7b8114c10fca830661c197eaa1720c8f", "../internals/hide");
+var $b8114c10fca830661c197eaa1720c8f$var$has = $parcel$require("7b8114c10fca830661c197eaa1720c8f", "../internals/has");
+var $b8114c10fca830661c197eaa1720c8f$var$setGlobal = $parcel$require("7b8114c10fca830661c197eaa1720c8f", "../internals/set-global");
+var $b8114c10fca830661c197eaa1720c8f$var$nativeFunctionToString = $parcel$require("7b8114c10fca830661c197eaa1720c8f", "../internals/function-to-string");
+var $b8114c10fca830661c197eaa1720c8f$var$InternalStateModule = $parcel$require("7b8114c10fca830661c197eaa1720c8f", "../internals/internal-state");
+var $b8114c10fca830661c197eaa1720c8f$var$getInternalState = $b8114c10fca830661c197eaa1720c8f$var$InternalStateModule.get;
+var $b8114c10fca830661c197eaa1720c8f$var$enforceInternalState = $b8114c10fca830661c197eaa1720c8f$var$InternalStateModule.enforce;
+var $b8114c10fca830661c197eaa1720c8f$var$TEMPLATE = String($b8114c10fca830661c197eaa1720c8f$var$nativeFunctionToString).split('toString');
+$parcel$require("7b8114c10fca830661c197eaa1720c8f", "../internals/shared")('inspectSource', function (it) {
+  return $b8114c10fca830661c197eaa1720c8f$var$nativeFunctionToString.call(it);
+});
+($b8114c10fca830661c197eaa1720c8f$exports = function (O, key, value, options) {
+  var unsafe = options ? !!options.unsafe : false;
+  var simple = options ? !!options.enumerable : false;
+  var noTargetGet = options ? !!options.noTargetGet : false;
+
+  if (typeof value == 'function') {
+    if (typeof key == 'string' && !$b8114c10fca830661c197eaa1720c8f$var$has(value, 'name')) $b8114c10fca830661c197eaa1720c8f$var$hide(value, 'name', key);
+    $b8114c10fca830661c197eaa1720c8f$var$enforceInternalState(value).source = $b8114c10fca830661c197eaa1720c8f$var$TEMPLATE.join(typeof key == 'string' ? key : '');
+  }
+
+  if (O === $b8114c10fca830661c197eaa1720c8f$var$global) {
+    if (simple) O[key] = value;else $b8114c10fca830661c197eaa1720c8f$var$setGlobal(key, value);
+    return;
+  } else if (!unsafe) {
+    delete O[key];
+  } else if (!noTargetGet && O[key]) {
+    simple = true;
+  }
+
+  if (simple) O[key] = value;else $b8114c10fca830661c197eaa1720c8f$var$hide(O, key, value); // add fake Function#toString for correct work wrapped methods / constructors with methods like LoDash isNative
+})(Function.prototype, 'toString', function toString() {
+  return typeof this == 'function' && $b8114c10fca830661c197eaa1720c8f$var$getInternalState(this).source || $b8114c10fca830661c197eaa1720c8f$var$nativeFunctionToString.call(this);
+});

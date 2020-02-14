@@ -1,0 +1,79 @@
+var $cafd398454491ba764a1c85103d5f5a$exports = {};
+$parcel$require("4cafd398454491ba764a1c85103d5f5a", "react");
+$parcel$require("4cafd398454491ba764a1c85103d5f5a", "react-router");
+$parcel$require("4cafd398454491ba764a1c85103d5f5a", "./Main/Main");
+$parcel$require("4cafd398454491ba764a1c85103d5f5a", "./Artist");
+$parcel$require("4cafd398454491ba764a1c85103d5f5a", "./Genre");
+
+function $cafd398454491ba764a1c85103d5f5a$var$ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function $cafd398454491ba764a1c85103d5f5a$var$_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { $cafd398454491ba764a1c85103d5f5a$var$ownKeys(Object(source), true).forEach(function (key) { $cafd398454491ba764a1c85103d5f5a$var$_defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { $cafd398454491ba764a1c85103d5f5a$var$ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function $cafd398454491ba764a1c85103d5f5a$var$_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function $cafd398454491ba764a1c85103d5f5a$var$_objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = $cafd398454491ba764a1c85103d5f5a$var$_objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function $cafd398454491ba764a1c85103d5f5a$var$_objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
+/**
+ *
+ * // cc: Insights Component; Uses routing to configure which insights are queried...
+ *
+ */
+var $cafd398454491ba764a1c85103d5f5a$export$Insights = function Insights(_ref) {
+  var uid = _ref.uid,
+      user = _ref.user,
+      pathname = _ref.history.location.pathname,
+      _ref$match = _ref.match,
+      path = _ref$match.path,
+      params = _ref$match.params,
+      rest = $cafd398454491ba764a1c85103d5f5a$var$_objectWithoutProperties(_ref, ["uid", "user", "history", "match"]);
+  var focus = pathname.split('/').slice(5, 99).join('/');
+  var pathParams = $cafd398454491ba764a1c85103d5f5a$var$_objectSpread({
+    focus: focus
+  }, params);
+  $cafd398454491ba764a1c85103d5f5a$import$useEffect(function () {
+    //@ts-ignore
+    window.Intercom('trackEvent', 'page-navigation', {
+      name: user.displayName || 'N/A',
+      // Full name
+      email: user.email || 'N/A',
+      // Email address
+      user_id: user.uid,
+      avatar: {
+        "type": "avatar",
+        "image_url": user.photoURL
+      },
+      // current_user_id
+      page: pathname
+    });
+  });
+  return $cafd398454491ba764a1c85103d5f5a$import$React.createElement($cafd398454491ba764a1c85103d5f5a$import$Switch, null, $cafd398454491ba764a1c85103d5f5a$import$React.createElement($cafd398454491ba764a1c85103d5f5a$import$Route, {
+    path: "".concat(path, "/artists/:artistId"),
+    render: function render(props) {
+      console.log('TCL: Insights Route props', props);
+      return $cafd398454491ba764a1c85103d5f5a$import$React.createElement($cafd398454491ba764a1c85103d5f5a$import$Artist, $cafd398454491ba764a1c85103d5f5a$var$_objectSpread({
+        uid: uid,
+        pathParams: pathParams
+      }, props, {}, rest));
+    }
+  }), $cafd398454491ba764a1c85103d5f5a$import$React.createElement($cafd398454491ba764a1c85103d5f5a$import$Route, {
+    path: "".concat(path, "/genres/:genre"),
+    render: function render(props) {
+      return $cafd398454491ba764a1c85103d5f5a$import$React.createElement($cafd398454491ba764a1c85103d5f5a$import$Genre, $cafd398454491ba764a1c85103d5f5a$var$_objectSpread({
+        uid: uid,
+        pathParams: pathParams
+      }, props));
+    }
+  }), $cafd398454491ba764a1c85103d5f5a$import$React.createElement($cafd398454491ba764a1c85103d5f5a$import$Route, {
+    path: path,
+    render: function render(props) {
+      return $cafd398454491ba764a1c85103d5f5a$import$React.createElement($cafd398454491ba764a1c85103d5f5a$import$Main, $cafd398454491ba764a1c85103d5f5a$var$_objectSpread({
+        uid: uid,
+        pathParams: pathParams
+      }, props, {}, rest));
+    }
+  }));
+};
+
+$cafd398454491ba764a1c85103d5f5a$exports.Insights = $cafd398454491ba764a1c85103d5f5a$export$Insights;

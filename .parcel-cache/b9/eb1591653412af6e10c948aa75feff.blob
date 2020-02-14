@@ -1,0 +1,284 @@
+/**
+ * @this {Promise}
+ */
+function $a6edd94444a00e2cfe5a8e1895e2ff48$var$finallyConstructor(callback) {
+  var constructor = this.constructor;
+  return this.then(function (value) {
+    return constructor.resolve(callback()).then(function () {
+      return value;
+    });
+  }, function (reason) {
+    return constructor.resolve(callback()).then(function () {
+      return constructor.reject(reason);
+    });
+  });
+} // Store setTimeout reference so promise-polyfill will be unaffected by
+// other code modifying setTimeout (like sinon.useFakeTimers())
+
+
+var $a6edd94444a00e2cfe5a8e1895e2ff48$var$setTimeoutFunc = setTimeout;
+
+function $a6edd94444a00e2cfe5a8e1895e2ff48$var$noop() {} // Polyfill for Function.prototype.bind
+
+
+function $a6edd94444a00e2cfe5a8e1895e2ff48$var$bind(fn, thisArg) {
+  return function () {
+    fn.apply(thisArg, arguments);
+  };
+}
+/**
+ * @constructor
+ * @param {Function} fn
+ */
+
+
+function $a6edd94444a00e2cfe5a8e1895e2ff48$var$Promise(fn) {
+  if (!(this instanceof $a6edd94444a00e2cfe5a8e1895e2ff48$var$Promise)) throw new TypeError('Promises must be constructed via new');
+  if (typeof fn !== 'function') throw new TypeError('not a function');
+  /** @type {!number} */
+
+  this._state = 0;
+  /** @type {!boolean} */
+
+  this._handled = false;
+  /** @type {Promise|undefined} */
+
+  this._value = undefined;
+  /** @type {!Array<!Function>} */
+
+  this._deferreds = [];
+  $a6edd94444a00e2cfe5a8e1895e2ff48$var$doResolve(fn, this);
+}
+
+function $a6edd94444a00e2cfe5a8e1895e2ff48$var$handle(self, deferred) {
+  while (self._state === 3) {
+    self = self._value;
+  }
+
+  if (self._state === 0) {
+    self._deferreds.push(deferred);
+
+    return;
+  }
+
+  self._handled = true;
+
+  $a6edd94444a00e2cfe5a8e1895e2ff48$var$Promise._immediateFn(function () {
+    var cb = self._state === 1 ? deferred.onFulfilled : deferred.onRejected;
+
+    if (cb === null) {
+      (self._state === 1 ? $a6edd94444a00e2cfe5a8e1895e2ff48$var$resolve : $a6edd94444a00e2cfe5a8e1895e2ff48$var$reject)(deferred.promise, self._value);
+      return;
+    }
+
+    var ret;
+
+    try {
+      ret = cb(self._value);
+    } catch (e) {
+      $a6edd94444a00e2cfe5a8e1895e2ff48$var$reject(deferred.promise, e);
+      return;
+    }
+
+    $a6edd94444a00e2cfe5a8e1895e2ff48$var$resolve(deferred.promise, ret);
+  });
+}
+
+function $a6edd94444a00e2cfe5a8e1895e2ff48$var$resolve(self, newValue) {
+  try {
+    // Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
+    if (newValue === self) throw new TypeError('A promise cannot be resolved with itself.');
+
+    if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
+      var then = newValue.then;
+
+      if (newValue instanceof $a6edd94444a00e2cfe5a8e1895e2ff48$var$Promise) {
+        self._state = 3;
+        self._value = newValue;
+        $a6edd94444a00e2cfe5a8e1895e2ff48$var$finale(self);
+        return;
+      } else if (typeof then === 'function') {
+        $a6edd94444a00e2cfe5a8e1895e2ff48$var$doResolve($a6edd94444a00e2cfe5a8e1895e2ff48$var$bind(then, newValue), self);
+        return;
+      }
+    }
+
+    self._state = 1;
+    self._value = newValue;
+    $a6edd94444a00e2cfe5a8e1895e2ff48$var$finale(self);
+  } catch (e) {
+    $a6edd94444a00e2cfe5a8e1895e2ff48$var$reject(self, e);
+  }
+}
+
+function $a6edd94444a00e2cfe5a8e1895e2ff48$var$reject(self, newValue) {
+  self._state = 2;
+  self._value = newValue;
+  $a6edd94444a00e2cfe5a8e1895e2ff48$var$finale(self);
+}
+
+function $a6edd94444a00e2cfe5a8e1895e2ff48$var$finale(self) {
+  if (self._state === 2 && self._deferreds.length === 0) {
+    $a6edd94444a00e2cfe5a8e1895e2ff48$var$Promise._immediateFn(function () {
+      if (!self._handled) {
+        $a6edd94444a00e2cfe5a8e1895e2ff48$var$Promise._unhandledRejectionFn(self._value);
+      }
+    });
+  }
+
+  for (var i = 0, len = self._deferreds.length; i < len; i++) {
+    $a6edd94444a00e2cfe5a8e1895e2ff48$var$handle(self, self._deferreds[i]);
+  }
+
+  self._deferreds = null;
+}
+/**
+ * @constructor
+ */
+
+
+function $a6edd94444a00e2cfe5a8e1895e2ff48$var$Handler(onFulfilled, onRejected, promise) {
+  this.onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null;
+  this.onRejected = typeof onRejected === 'function' ? onRejected : null;
+  this.promise = promise;
+}
+/**
+ * Take a potentially misbehaving resolver function and make sure
+ * onFulfilled and onRejected are only called once.
+ *
+ * Makes no guarantees about asynchrony.
+ */
+
+
+function $a6edd94444a00e2cfe5a8e1895e2ff48$var$doResolve(fn, self) {
+  var done = false;
+
+  try {
+    fn(function (value) {
+      if (done) return;
+      done = true;
+      $a6edd94444a00e2cfe5a8e1895e2ff48$var$resolve(self, value);
+    }, function (reason) {
+      if (done) return;
+      done = true;
+      $a6edd94444a00e2cfe5a8e1895e2ff48$var$reject(self, reason);
+    });
+  } catch (ex) {
+    if (done) return;
+    done = true;
+    $a6edd94444a00e2cfe5a8e1895e2ff48$var$reject(self, ex);
+  }
+}
+
+$a6edd94444a00e2cfe5a8e1895e2ff48$var$Promise.prototype['catch'] = function (onRejected) {
+  return this.then(null, onRejected);
+};
+
+$a6edd94444a00e2cfe5a8e1895e2ff48$var$Promise.prototype.then = function (onFulfilled, onRejected) {
+  // @ts-ignore
+  var prom = new this.constructor($a6edd94444a00e2cfe5a8e1895e2ff48$var$noop);
+  $a6edd94444a00e2cfe5a8e1895e2ff48$var$handle(this, new $a6edd94444a00e2cfe5a8e1895e2ff48$var$Handler(onFulfilled, onRejected, prom));
+  return prom;
+};
+
+$a6edd94444a00e2cfe5a8e1895e2ff48$var$Promise.prototype['finally'] = $a6edd94444a00e2cfe5a8e1895e2ff48$var$finallyConstructor;
+
+$a6edd94444a00e2cfe5a8e1895e2ff48$var$Promise.all = function (arr) {
+  return new $a6edd94444a00e2cfe5a8e1895e2ff48$var$Promise(function (resolve, reject) {
+    if (!arr || typeof arr.length === 'undefined') throw new TypeError('Promise.all accepts an array');
+    var args = Array.prototype.slice.call(arr);
+    if (args.length === 0) return resolve([]);
+    var remaining = args.length;
+
+    function res(i, val) {
+      try {
+        if (val && (typeof val === 'object' || typeof val === 'function')) {
+          var then = val.then;
+
+          if (typeof then === 'function') {
+            then.call(val, function (val) {
+              res(i, val);
+            }, reject);
+            return;
+          }
+        }
+
+        args[i] = val;
+
+        if (--remaining === 0) {
+          resolve(args);
+        }
+      } catch (ex) {
+        reject(ex);
+      }
+    }
+
+    for (var i = 0; i < args.length; i++) {
+      res(i, args[i]);
+    }
+  });
+};
+
+$a6edd94444a00e2cfe5a8e1895e2ff48$var$Promise.resolve = function (value) {
+  if (value && typeof value === 'object' && value.constructor === $a6edd94444a00e2cfe5a8e1895e2ff48$var$Promise) {
+    return value;
+  }
+
+  return new $a6edd94444a00e2cfe5a8e1895e2ff48$var$Promise(function (resolve) {
+    resolve(value);
+  });
+};
+
+$a6edd94444a00e2cfe5a8e1895e2ff48$var$Promise.reject = function (value) {
+  return new $a6edd94444a00e2cfe5a8e1895e2ff48$var$Promise(function (resolve, reject) {
+    reject(value);
+  });
+};
+
+$a6edd94444a00e2cfe5a8e1895e2ff48$var$Promise.race = function (values) {
+  return new $a6edd94444a00e2cfe5a8e1895e2ff48$var$Promise(function (resolve, reject) {
+    for (var i = 0, len = values.length; i < len; i++) {
+      values[i].then(resolve, reject);
+    }
+  });
+}; // Use polyfill for setImmediate for performance gains
+
+
+$a6edd94444a00e2cfe5a8e1895e2ff48$var$Promise._immediateFn = typeof setImmediate === 'function' && function (fn) {
+  setImmediate(fn);
+} || function (fn) {
+  $a6edd94444a00e2cfe5a8e1895e2ff48$var$setTimeoutFunc(fn, 0);
+};
+
+$a6edd94444a00e2cfe5a8e1895e2ff48$var$Promise._unhandledRejectionFn = function _unhandledRejectionFn(err) {
+  if (typeof console !== 'undefined' && console) {
+    console.warn('Possible Unhandled Promise Rejection:', err); // eslint-disable-line no-console
+  }
+};
+/** @suppress {undefinedVars} */
+
+
+var $a6edd94444a00e2cfe5a8e1895e2ff48$var$globalNS = function () {
+  // the only reliable means to get the global object is
+  // `Function('return this')()`
+  // However, this causes CSP violations in Chrome apps.
+  if (typeof self !== 'undefined') {
+    return self;
+  }
+
+  if (typeof window !== 'undefined') {
+    return window;
+  }
+
+  if (typeof $parcel$global !== 'undefined') {
+    return $parcel$global;
+  }
+
+  throw new Error('unable to locate global object');
+}();
+
+if (!('Promise' in $a6edd94444a00e2cfe5a8e1895e2ff48$var$globalNS)) {
+  $a6edd94444a00e2cfe5a8e1895e2ff48$var$globalNS['Promise'] = $a6edd94444a00e2cfe5a8e1895e2ff48$var$Promise;
+} else if (!$a6edd94444a00e2cfe5a8e1895e2ff48$var$globalNS.Promise.prototype['finally']) {
+  $a6edd94444a00e2cfe5a8e1895e2ff48$var$globalNS.Promise.prototype['finally'] = $a6edd94444a00e2cfe5a8e1895e2ff48$var$finallyConstructor;
+}

@@ -1,0 +1,7 @@
+var $c60ee3fe446d45e080cf668ce92c8b56$exports = {};
+var $c60ee3fe446d45e080cf668ce92c8b56$var$toString = Object.prototype.toString;
+$c60ee3fe446d45e080cf668ce92c8b56$exports = $c60ee3fe446d45e080cf668ce92c8b56$var$isString;
+
+function $c60ee3fe446d45e080cf668ce92c8b56$var$isString(obj) {
+  return $c60ee3fe446d45e080cf668ce92c8b56$var$toString.call(obj) === "[object String]";
+}

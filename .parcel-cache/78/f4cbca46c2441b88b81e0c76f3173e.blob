@@ -1,0 +1,3 @@
+// `Symbol.toStringTag` well-known symbol
+// https://tc39.github.io/ecma262/#sec-symbol.tostringtag
+$parcel$require("0ff41eda3062599555a6b34c3aad8b6f", "../internals/define-well-known-symbol")('toStringTag');

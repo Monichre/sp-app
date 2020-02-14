@@ -1,0 +1,13 @@
+var $d0f187882f7f9f68e376224230b5b$exports = {};
+// 7.1.1 ToPrimitive(input [, PreferredType])
+var $d0f187882f7f9f68e376224230b5b$var$isObject = $parcel$require("934d0f187882f7f9f68e376224230b5b", "../internals/is-object"); // instead of the ES6 spec version, we didn't implement @@toPrimitive case
+// and the second argument - flag - preferred type is a string
+
+$d0f187882f7f9f68e376224230b5b$exports = function (it, S) {
+  if (!$d0f187882f7f9f68e376224230b5b$var$isObject(it)) return it;
+  var fn, val;
+  if (S && typeof (fn = it.toString) == 'function' && !$d0f187882f7f9f68e376224230b5b$var$isObject(val = fn.call(it))) return val;
+  if (typeof (fn = it.valueOf) == 'function' && !$d0f187882f7f9f68e376224230b5b$var$isObject(val = fn.call(it))) return val;
+  if (!S && typeof (fn = it.toString) == 'function' && !$d0f187882f7f9f68e376224230b5b$var$isObject(val = fn.call(it))) return val;
+  throw TypeError("Can't convert object to primitive value");
+};

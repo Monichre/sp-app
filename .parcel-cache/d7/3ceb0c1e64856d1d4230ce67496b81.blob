@@ -1,0 +1,14 @@
+var $bb70a24586285fda5a3a02e04a7efeab$exports = {};
+$parcel$require("bb70a24586285fda5a3a02e04a7efeab", "react");
+$parcel$require("bb70a24586285fda5a3a02e04a7efeab", "./internal/SSRContext");
+
+function $bb70a24586285fda5a3a02e04a7efeab$export$unstable_SuspenseSSR(_ref) {
+  var children = _ref.children,
+      fallback = _ref.fallback;
+  var ssrManager = $bb70a24586285fda5a3a02e04a7efeab$import$useContext($bb70a24586285fda5a3a02e04a7efeab$import$SSRContext);
+  return ssrManager ? $bb70a24586285fda5a3a02e04a7efeab$import$React.createElement($bb70a24586285fda5a3a02e04a7efeab$import$React.Fragment, null, children) : $bb70a24586285fda5a3a02e04a7efeab$import$React.createElement($bb70a24586285fda5a3a02e04a7efeab$import$Suspense, {
+    fallback: fallback
+  }, children);
+}
+
+$bb70a24586285fda5a3a02e04a7efeab$exports.unstable_SuspenseSSR = $bb70a24586285fda5a3a02e04a7efeab$export$unstable_SuspenseSSR;

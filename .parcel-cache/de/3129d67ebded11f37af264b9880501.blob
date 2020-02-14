@@ -1,0 +1,74 @@
+var $f7f59e5ee52a11ffe3abc28d3dab6cb1$exports = {};
+var $f7f59e5ee52a11ffe3abc28d3dab6cb1$var$trim = $parcel$require("f7f59e5ee52a11ffe3abc28d3dab6cb1", "trim");
+var $f7f59e5ee52a11ffe3abc28d3dab6cb1$var$whitespace = $parcel$require("f7f59e5ee52a11ffe3abc28d3dab6cb1", "is-whitespace-character");
+var $f7f59e5ee52a11ffe3abc28d3dab6cb1$var$locate = $parcel$require("f7f59e5ee52a11ffe3abc28d3dab6cb1", "../locate/strong");
+$f7f59e5ee52a11ffe3abc28d3dab6cb1$exports = $f7f59e5ee52a11ffe3abc28d3dab6cb1$var$strong;
+$f7f59e5ee52a11ffe3abc28d3dab6cb1$var$strong.locator = $f7f59e5ee52a11ffe3abc28d3dab6cb1$var$locate;
+var $f7f59e5ee52a11ffe3abc28d3dab6cb1$var$C_ASTERISK = '*';
+var $f7f59e5ee52a11ffe3abc28d3dab6cb1$var$C_UNDERSCORE = '_';
+
+function $f7f59e5ee52a11ffe3abc28d3dab6cb1$var$strong(eat, value, silent) {
+  var self = this;
+  var index = 0;
+  var character = value.charAt(index);
+  var now;
+  var pedantic;
+  var marker;
+  var queue;
+  var subvalue;
+  var length;
+  var prev;
+
+  if (character !== $f7f59e5ee52a11ffe3abc28d3dab6cb1$var$C_ASTERISK && character !== $f7f59e5ee52a11ffe3abc28d3dab6cb1$var$C_UNDERSCORE || value.charAt(++index) !== character) {
+    return;
+  }
+
+  pedantic = self.options.pedantic;
+  marker = character;
+  subvalue = marker + marker;
+  length = value.length;
+  index++;
+  queue = '';
+  character = '';
+
+  if (pedantic && $f7f59e5ee52a11ffe3abc28d3dab6cb1$var$whitespace(value.charAt(index))) {
+    return;
+  }
+
+  while (index < length) {
+    prev = character;
+    character = value.charAt(index);
+
+    if (character === marker && value.charAt(index + 1) === marker && (!pedantic || !$f7f59e5ee52a11ffe3abc28d3dab6cb1$var$whitespace(prev))) {
+      character = value.charAt(index + 2);
+
+      if (character !== marker) {
+        if (!$f7f59e5ee52a11ffe3abc28d3dab6cb1$var$trim(queue)) {
+          return;
+        }
+        /* istanbul ignore if - never used (yet) */
+
+
+        if (silent) {
+          return true;
+        }
+
+        now = eat.now();
+        now.column += 2;
+        now.offset += 2;
+        return eat(subvalue + queue + subvalue)({
+          type: 'strong',
+          children: self.tokenizeInline(queue, now)
+        });
+      }
+    }
+
+    if (!pedantic && character === '\\') {
+      queue += character;
+      character = value.charAt(++index);
+    }
+
+    queue += character;
+    index++;
+  }
+}

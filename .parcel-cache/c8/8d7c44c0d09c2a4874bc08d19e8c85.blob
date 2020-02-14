@@ -1,0 +1,22 @@
+var $e74887f9f7ab55c2bd4f6135917263de$exports = {};
+
+function $e74887f9f7ab55c2bd4f6135917263de$var$_extends() {
+  $e74887f9f7ab55c2bd4f6135917263de$var$_extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return $e74887f9f7ab55c2bd4f6135917263de$var$_extends.apply(this, arguments);
+}
+
+var $e74887f9f7ab55c2bd4f6135917263de$export$default = $e74887f9f7ab55c2bd4f6135917263de$var$_extends;
+$e74887f9f7ab55c2bd4f6135917263de$exports.default = $e74887f9f7ab55c2bd4f6135917263de$export$default;

@@ -1,0 +1,88 @@
+var $ac650aab392a3c8c7b963a5d1ab0$exports = {};
+var $ac650aab392a3c8c7b963a5d1ab0$var$repeat = $parcel$require("9160ac650aab392a3c8c7b963a5d1ab0", "repeat-string");
+var $ac650aab392a3c8c7b963a5d1ab0$var$trim = $parcel$require("9160ac650aab392a3c8c7b963a5d1ab0", "trim-trailing-lines");
+$ac650aab392a3c8c7b963a5d1ab0$exports = $ac650aab392a3c8c7b963a5d1ab0$var$indentedCode;
+var $ac650aab392a3c8c7b963a5d1ab0$var$C_NEWLINE = '\n';
+var $ac650aab392a3c8c7b963a5d1ab0$var$C_TAB = '\t';
+var $ac650aab392a3c8c7b963a5d1ab0$var$C_SPACE = ' ';
+var $ac650aab392a3c8c7b963a5d1ab0$var$CODE_INDENT_COUNT = 4;
+var $ac650aab392a3c8c7b963a5d1ab0$var$CODE_INDENT = $ac650aab392a3c8c7b963a5d1ab0$var$repeat($ac650aab392a3c8c7b963a5d1ab0$var$C_SPACE, $ac650aab392a3c8c7b963a5d1ab0$var$CODE_INDENT_COUNT);
+/* Tokenise indented code. */
+
+function $ac650aab392a3c8c7b963a5d1ab0$var$indentedCode(eat, value, silent) {
+  var index = -1;
+  var length = value.length;
+  var subvalue = '';
+  var content = '';
+  var subvalueQueue = '';
+  var contentQueue = '';
+  var character;
+  var blankQueue;
+  var indent;
+
+  while (++index < length) {
+    character = value.charAt(index);
+
+    if (indent) {
+      indent = false;
+      subvalue += subvalueQueue;
+      content += contentQueue;
+      subvalueQueue = '';
+      contentQueue = '';
+
+      if (character === $ac650aab392a3c8c7b963a5d1ab0$var$C_NEWLINE) {
+        subvalueQueue = character;
+        contentQueue = character;
+      } else {
+        subvalue += character;
+        content += character;
+
+        while (++index < length) {
+          character = value.charAt(index);
+
+          if (!character || character === $ac650aab392a3c8c7b963a5d1ab0$var$C_NEWLINE) {
+            contentQueue = character;
+            subvalueQueue = character;
+            break;
+          }
+
+          subvalue += character;
+          content += character;
+        }
+      }
+    } else if (character === $ac650aab392a3c8c7b963a5d1ab0$var$C_SPACE && value.charAt(index + 1) === character && value.charAt(index + 2) === character && value.charAt(index + 3) === character) {
+      subvalueQueue += $ac650aab392a3c8c7b963a5d1ab0$var$CODE_INDENT;
+      index += 3;
+      indent = true;
+    } else if (character === $ac650aab392a3c8c7b963a5d1ab0$var$C_TAB) {
+      subvalueQueue += character;
+      indent = true;
+    } else {
+      blankQueue = '';
+
+      while (character === $ac650aab392a3c8c7b963a5d1ab0$var$C_TAB || character === $ac650aab392a3c8c7b963a5d1ab0$var$C_SPACE) {
+        blankQueue += character;
+        character = value.charAt(++index);
+      }
+
+      if (character !== $ac650aab392a3c8c7b963a5d1ab0$var$C_NEWLINE) {
+        break;
+      }
+
+      subvalueQueue += blankQueue + character;
+      contentQueue += character;
+    }
+  }
+
+  if (content) {
+    if (silent) {
+      return true;
+    }
+
+    return eat(subvalue)({
+      type: 'code',
+      lang: null,
+      value: $ac650aab392a3c8c7b963a5d1ab0$var$trim(content)
+    });
+  }
+}

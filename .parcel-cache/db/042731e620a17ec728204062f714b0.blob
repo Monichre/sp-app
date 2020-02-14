@@ -1,0 +1,3 @@
+// JSON[@@toStringTag] property
+// https://tc39.github.io/ecma262/#sec-json-@@tostringtag
+$parcel$require("3ff702ee7798b53010277d1a4003e709", "../internals/set-to-string-tag")($parcel$require("3ff702ee7798b53010277d1a4003e709", "../internals/global").JSON, 'JSON', true);

@@ -1,0 +1,9 @@
+var $f4ed687baa7f2e1f191d7e175a1835$exports = {};
+var $f4ed687baa7f2e1f191d7e175a1835$var$collapseWhiteSpace = $parcel$require("35f4ed687baa7f2e1f191d7e175a1835", "collapse-white-space");
+$f4ed687baa7f2e1f191d7e175a1835$exports = $f4ed687baa7f2e1f191d7e175a1835$var$normalize;
+/* Normalize an identifier.  Collapses multiple white space
+ * characters into a single space, and removes casing. */
+
+function $f4ed687baa7f2e1f191d7e175a1835$var$normalize(value) {
+  return $f4ed687baa7f2e1f191d7e175a1835$var$collapseWhiteSpace(value).toLowerCase();
+}

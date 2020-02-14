@@ -1,0 +1,11 @@
+var $a78c7b35df284bc347f1d43a9591012$exports = {};
+
+function $a78c7b35df284bc347f1d43a9591012$export$default(fn) {
+  var cache = {};
+  return function (arg) {
+    if (cache[arg] === undefined) cache[arg] = fn(arg);
+    return cache[arg];
+  };
+}
+
+$a78c7b35df284bc347f1d43a9591012$exports.default = $a78c7b35df284bc347f1d43a9591012$export$default;

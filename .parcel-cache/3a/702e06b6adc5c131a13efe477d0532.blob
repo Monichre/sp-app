@@ -1,0 +1,28 @@
+var $db6ed2453777bd1bd08bc9a103cb$exports = {};
+Object.defineProperty($db6ed2453777bd1bd08bc9a103cb$exports, "__esModule", {
+  value: true
+});
+var $db6ed2453777bd1bd08bc9a103cb$export$default = $db6ed2453777bd1bd08bc9a103cb$var$defineToJSON;
+$db6ed2453777bd1bd08bc9a103cb$exports.default = $db6ed2453777bd1bd08bc9a103cb$export$default;
+var $db6ed2453777bd1bd08bc9a103cb$var$_nodejsCustomInspectSymbol = $db6ed2453777bd1bd08bc9a103cb$var$_interopRequireDefault($parcel$require("3572db6ed2453777bd1bd08bc9a103cb", "./nodejsCustomInspectSymbol"));
+
+function $db6ed2453777bd1bd08bc9a103cb$var$_interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}
+/**
+ * The `defineToJSON()` function defines toJSON() and inspect() prototype
+ * methods, if no function provided they become aliases for toString().
+ */
+
+
+function $db6ed2453777bd1bd08bc9a103cb$var$defineToJSON(classObject) {
+  var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : classObject.prototype.toString;
+  classObject.prototype.toJSON = fn;
+  classObject.prototype.inspect = fn;
+
+  if ($db6ed2453777bd1bd08bc9a103cb$var$_nodejsCustomInspectSymbol.default) {
+    classObject.prototype[$db6ed2453777bd1bd08bc9a103cb$var$_nodejsCustomInspectSymbol.default] = fn;
+  }
+}

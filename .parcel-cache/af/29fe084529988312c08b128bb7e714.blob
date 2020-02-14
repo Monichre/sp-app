@@ -1,0 +1,7 @@
+var $c8c6477be323c87e1a0c54d33d24b90c$exports = {};
+var $c8c6477be323c87e1a0c54d33d24b90c$var$id = 0;
+var $c8c6477be323c87e1a0c54d33d24b90c$var$postfix = Math.random();
+
+$c8c6477be323c87e1a0c54d33d24b90c$exports = function (key) {
+  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++$c8c6477be323c87e1a0c54d33d24b90c$var$id + $c8c6477be323c87e1a0c54d33d24b90c$var$postfix).toString(36));
+};

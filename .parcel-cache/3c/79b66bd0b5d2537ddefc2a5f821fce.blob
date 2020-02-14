@@ -1,0 +1,51 @@
+var $c9fcb346b9d2a5beeedd98691a$exports = {};
+$parcel$require("117640c9fcb346b9d2a5beeedd98691a", "react");
+$parcel$require("117640c9fcb346b9d2a5beeedd98691a", "styled-components");
+$parcel$require("117640c9fcb346b9d2a5beeedd98691a", "../../../../shared/ui");
+$parcel$require("117640c9fcb346b9d2a5beeedd98691a", "./ProfileCard");
+$parcel$require("117640c9fcb346b9d2a5beeedd98691a", "rebass");
+
+function $c9fcb346b9d2a5beeedd98691a$var$_templateObject() {
+  var data = $c9fcb346b9d2a5beeedd98691a$var$_taggedTemplateLiteral(["\nposition: absolute;\ntop: 30px;\nright: 30px;\n\n\n@media screen and (max-width: 1000px) {\n  position: static;\n}\n\n"]);
+
+  $c9fcb346b9d2a5beeedd98691a$var$_templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function $c9fcb346b9d2a5beeedd98691a$var$_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var $c9fcb346b9d2a5beeedd98691a$var$Placement = $c9fcb346b9d2a5beeedd98691a$import$styled.div($c9fcb346b9d2a5beeedd98691a$var$_templateObject());
+
+var $c9fcb346b9d2a5beeedd98691a$export$Profile = function Profile(_ref) {
+  var user = _ref.user;
+  //@ts-ignore
+  window.Intercom('trackEvent', 'page-navigation', {
+    name: user.displayName || 'N/A',
+    // Full name
+    email: user.email || 'N/A',
+    // Email address
+    user_id: user.uid,
+    avatar: {
+      "type": "avatar",
+      "image_url": user.photoURL
+    },
+    // current_user_id
+    page: 'Profile'
+  });
+  return $c9fcb346b9d2a5beeedd98691a$import$React.createElement($c9fcb346b9d2a5beeedd98691a$import$Container, {
+    padded: true
+  }, $c9fcb346b9d2a5beeedd98691a$import$React.createElement($c9fcb346b9d2a5beeedd98691a$import$Flex, {
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    sx: {
+      minHeight: '100vh'
+    }
+  }, $c9fcb346b9d2a5beeedd98691a$import$React.createElement($c9fcb346b9d2a5beeedd98691a$import$Box, null, $c9fcb346b9d2a5beeedd98691a$import$React.createElement($c9fcb346b9d2a5beeedd98691a$import$ProfileCard, {
+    user: user
+  })), $c9fcb346b9d2a5beeedd98691a$import$React.createElement($c9fcb346b9d2a5beeedd98691a$import$Box, null, $c9fcb346b9d2a5beeedd98691a$import$React.createElement($c9fcb346b9d2a5beeedd98691a$var$Placement, null, $c9fcb346b9d2a5beeedd98691a$import$React.createElement($c9fcb346b9d2a5beeedd98691a$import$ButtonSignout, null)))));
+};
+
+$c9fcb346b9d2a5beeedd98691a$exports.Profile = $c9fcb346b9d2a5beeedd98691a$export$Profile;

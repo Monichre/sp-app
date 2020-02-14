@@ -1,0 +1,20 @@
+var $ba6d9f82d2f51623d51c496807747bbc$exports = {};
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+if ("production" !== 'production') {
+  var $ba6d9f82d2f51623d51c496807747bbc$var$ReactIs = require('react-is'); // By explicitly using `prop-types` you are opting into new development behavior.
+  // http://fb.me/prop-types-in-prod
+
+
+  var $ba6d9f82d2f51623d51c496807747bbc$var$throwOnDirectAccess = true;
+  $ba6d9f82d2f51623d51c496807747bbc$exports = require('./factoryWithTypeCheckers')($ba6d9f82d2f51623d51c496807747bbc$var$ReactIs.isElement, $ba6d9f82d2f51623d51c496807747bbc$var$throwOnDirectAccess);
+} else {
+  // By explicitly using `prop-types` you are opting into new production behavior.
+  // http://fb.me/prop-types-in-prod
+  $ba6d9f82d2f51623d51c496807747bbc$exports = $parcel$require("ba6d9f82d2f51623d51c496807747bbc", "./factoryWithThrowingShims")();
+}

@@ -1,0 +1,3 @@
+var $a8d2f3223f5deadd743963d340a823a$exports = {};
+
+$a8d2f3223f5deadd743963d340a823a$exports = str => encodeURIComponent(str).replace(/[!'()*]/g, x => `%${x.charCodeAt(0).toString(16).toUpperCase()}`);

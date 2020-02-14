@@ -1,0 +1,9 @@
+var $cf509aed330700fbc8f4ba66ac80d87$exports = {};
+var $cf509aed330700fbc8f4ba66ac80d87$var$definePropertyModule = $parcel$require("6cf509aed330700fbc8f4ba66ac80d87", "../internals/object-define-property");
+var $cf509aed330700fbc8f4ba66ac80d87$var$createPropertyDescriptor = $parcel$require("6cf509aed330700fbc8f4ba66ac80d87", "../internals/create-property-descriptor");
+$cf509aed330700fbc8f4ba66ac80d87$exports = $parcel$require("6cf509aed330700fbc8f4ba66ac80d87", "../internals/descriptors") ? function (object, key, value) {
+  return $cf509aed330700fbc8f4ba66ac80d87$var$definePropertyModule.f(object, key, $cf509aed330700fbc8f4ba66ac80d87$var$createPropertyDescriptor(1, value));
+} : function (object, key, value) {
+  object[key] = value;
+  return object;
+};

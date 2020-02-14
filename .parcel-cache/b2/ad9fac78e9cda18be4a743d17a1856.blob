@@ -1,0 +1,11 @@
+var $a0a20ce2b41f30c4715fb02a683d525a$exports = {};
+var $a0a20ce2b41f30c4715fb02a683d525a$var$toInteger = $parcel$require("a0a20ce2b41f30c4715fb02a683d525a", "../internals/to-integer");
+var $a0a20ce2b41f30c4715fb02a683d525a$var$max = Math.max;
+var $a0a20ce2b41f30c4715fb02a683d525a$var$min = Math.min; // Helper for a popular repeating case of the spec:
+// Let integer be ? ToInteger(index).
+// If integer < 0, let result be max((length + integer), 0); else let result be min(length, length).
+
+$a0a20ce2b41f30c4715fb02a683d525a$exports = function (index, length) {
+  var integer = $a0a20ce2b41f30c4715fb02a683d525a$var$toInteger(index);
+  return integer < 0 ? $a0a20ce2b41f30c4715fb02a683d525a$var$max(integer + length, 0) : $a0a20ce2b41f30c4715fb02a683d525a$var$min(integer, length);
+};

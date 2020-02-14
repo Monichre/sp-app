@@ -1,0 +1,150 @@
+var $e4cb1cc5352e7fdcef22c3e64896123a$exports = {};
+$parcel$require("e4cb1cc5352e7fdcef22c3e64896123a", "tslib");
+$parcel$require("e4cb1cc5352e7fdcef22c3e64896123a", "graphql/language/printer");
+$parcel$require("e4cb1cc5352e7fdcef22c3e64896123a", "ts-invariant");
+var $e4cb1cc5352e7fdcef22c3e64896123a$var$defaultHttpOptions = {
+  includeQuery: true,
+  includeExtensions: false
+};
+var $e4cb1cc5352e7fdcef22c3e64896123a$var$defaultHeaders = {
+  accept: '*/*',
+  'content-type': 'application/json'
+};
+var $e4cb1cc5352e7fdcef22c3e64896123a$var$defaultOptions = {
+  method: 'POST'
+};
+var $e4cb1cc5352e7fdcef22c3e64896123a$export$fallbackHttpConfig = {
+  http: $e4cb1cc5352e7fdcef22c3e64896123a$var$defaultHttpOptions,
+  headers: $e4cb1cc5352e7fdcef22c3e64896123a$var$defaultHeaders,
+  options: $e4cb1cc5352e7fdcef22c3e64896123a$var$defaultOptions
+};
+
+var $e4cb1cc5352e7fdcef22c3e64896123a$export$throwServerError = function (response, result, message) {
+  var error = new Error(message);
+  error.name = 'ServerError';
+  error.response = response;
+  error.statusCode = response.status;
+  error.result = result;
+  throw error;
+};
+
+var $e4cb1cc5352e7fdcef22c3e64896123a$export$parseAndCheckHttpResponse = function (operations) {
+  return function (response) {
+    return response.text().then(function (bodyText) {
+      try {
+        return JSON.parse(bodyText);
+      } catch (err) {
+        var parseError = err;
+        parseError.name = 'ServerParseError';
+        parseError.response = response;
+        parseError.statusCode = response.status;
+        parseError.bodyText = bodyText;
+        return Promise.reject(parseError);
+      }
+    }).then(function (result) {
+      if (response.status >= 300) {
+        $e4cb1cc5352e7fdcef22c3e64896123a$export$throwServerError(response, result, "Response not successful: Received status code " + response.status);
+      }
+
+      if (!Array.isArray(result) && !result.hasOwnProperty('data') && !result.hasOwnProperty('errors')) {
+        $e4cb1cc5352e7fdcef22c3e64896123a$export$throwServerError(response, result, "Server response was missing for query '" + (Array.isArray(operations) ? operations.map(function (op) {
+          return op.operationName;
+        }) : operations.operationName) + "'.");
+      }
+
+      return result;
+    });
+  };
+};
+
+var $e4cb1cc5352e7fdcef22c3e64896123a$export$checkFetcher = function (fetcher) {
+  if (!fetcher && typeof fetch === 'undefined') {
+    var library = 'unfetch';
+    if (typeof window === 'undefined') library = 'node-fetch';
+    throw "production" === "production" ? new $e4cb1cc5352e7fdcef22c3e64896123a$import$InvariantError(1) : new $e4cb1cc5352e7fdcef22c3e64896123a$import$InvariantError("\nfetch is not found globally and no fetcher passed, to fix pass a fetch for\nyour environment like https://www.npmjs.com/package/" + library + ".\n\nFor example:\nimport fetch from '" + library + "';\nimport { createHttpLink } from 'apollo-link-http';\n\nconst link = createHttpLink({ uri: '/graphql', fetch: fetch });");
+  }
+};
+
+var $e4cb1cc5352e7fdcef22c3e64896123a$export$createSignalIfSupported = function () {
+  if (typeof AbortController === 'undefined') return {
+    controller: false,
+    signal: false
+  };
+  var controller = new AbortController();
+  var signal = controller.signal;
+  return {
+    controller: controller,
+    signal: signal
+  };
+};
+
+var $e4cb1cc5352e7fdcef22c3e64896123a$export$selectHttpOptionsAndBody = function (operation, fallbackConfig) {
+  var configs = [];
+
+  for (var _i = 2; _i < arguments.length; _i++) {
+    configs[_i - 2] = arguments[_i];
+  }
+
+  var options = $e4cb1cc5352e7fdcef22c3e64896123a$import$__assign({}, fallbackConfig.options, {
+    headers: fallbackConfig.headers,
+    credentials: fallbackConfig.credentials
+  });
+  var http = fallbackConfig.http;
+  configs.forEach(function (config) {
+    options = $e4cb1cc5352e7fdcef22c3e64896123a$import$__assign({}, options, config.options, {
+      headers: $e4cb1cc5352e7fdcef22c3e64896123a$import$__assign({}, options.headers, config.headers)
+    });
+    if (config.credentials) options.credentials = config.credentials;
+    http = $e4cb1cc5352e7fdcef22c3e64896123a$import$__assign({}, http, config.http);
+  });
+  var operationName = operation.operationName,
+      extensions = operation.extensions,
+      variables = operation.variables,
+      query = operation.query;
+  var body = {
+    operationName: operationName,
+    variables: variables
+  };
+  if (http.includeExtensions) body.extensions = extensions;
+  if (http.includeQuery) body.query = $e4cb1cc5352e7fdcef22c3e64896123a$import$print(query);
+  return {
+    options: options,
+    body: body
+  };
+};
+
+var $e4cb1cc5352e7fdcef22c3e64896123a$export$serializeFetchParameter = function (p, label) {
+  var serialized;
+
+  try {
+    serialized = JSON.stringify(p);
+  } catch (e) {
+    var parseError = "production" === "production" ? new $e4cb1cc5352e7fdcef22c3e64896123a$import$InvariantError(2) : new $e4cb1cc5352e7fdcef22c3e64896123a$import$InvariantError("Network request failed. " + label + " is not serializable: " + e.message);
+    parseError.parseError = e;
+    throw parseError;
+  }
+
+  return serialized;
+};
+
+var $e4cb1cc5352e7fdcef22c3e64896123a$export$selectURI = function (operation, fallbackURI) {
+  var context = operation.getContext();
+  var contextURI = context.uri;
+
+  if (contextURI) {
+    return contextURI;
+  } else if (typeof fallbackURI === 'function') {
+    return fallbackURI(operation);
+  } else {
+    return fallbackURI || '/graphql';
+  }
+};
+
+$e4cb1cc5352e7fdcef22c3e64896123a$exports.throwServerError = $e4cb1cc5352e7fdcef22c3e64896123a$export$throwServerError;
+$e4cb1cc5352e7fdcef22c3e64896123a$exports.serializeFetchParameter = $e4cb1cc5352e7fdcef22c3e64896123a$export$serializeFetchParameter;
+$e4cb1cc5352e7fdcef22c3e64896123a$exports.selectURI = $e4cb1cc5352e7fdcef22c3e64896123a$export$selectURI;
+$e4cb1cc5352e7fdcef22c3e64896123a$exports.selectHttpOptionsAndBody = $e4cb1cc5352e7fdcef22c3e64896123a$export$selectHttpOptionsAndBody;
+$e4cb1cc5352e7fdcef22c3e64896123a$exports.parseAndCheckHttpResponse = $e4cb1cc5352e7fdcef22c3e64896123a$export$parseAndCheckHttpResponse;
+$e4cb1cc5352e7fdcef22c3e64896123a$exports.fallbackHttpConfig = $e4cb1cc5352e7fdcef22c3e64896123a$export$fallbackHttpConfig;
+$e4cb1cc5352e7fdcef22c3e64896123a$exports.createSignalIfSupported = $e4cb1cc5352e7fdcef22c3e64896123a$export$createSignalIfSupported;
+$e4cb1cc5352e7fdcef22c3e64896123a$exports.checkFetcher = $e4cb1cc5352e7fdcef22c3e64896123a$export$checkFetcher;

@@ -1,0 +1,31 @@
+var $c6a68e62633a2e5f5c28afa7ed00128c$var$codePointAt = $parcel$require("c6a68e62633a2e5f5c28afa7ed00128c", "../internals/string-at");
+var $c6a68e62633a2e5f5c28afa7ed00128c$var$InternalStateModule = $parcel$require("c6a68e62633a2e5f5c28afa7ed00128c", "../internals/internal-state");
+var $c6a68e62633a2e5f5c28afa7ed00128c$var$defineIterator = $parcel$require("c6a68e62633a2e5f5c28afa7ed00128c", "../internals/define-iterator");
+var $c6a68e62633a2e5f5c28afa7ed00128c$var$STRING_ITERATOR = 'String Iterator';
+var $c6a68e62633a2e5f5c28afa7ed00128c$var$setInternalState = $c6a68e62633a2e5f5c28afa7ed00128c$var$InternalStateModule.set;
+var $c6a68e62633a2e5f5c28afa7ed00128c$var$getInternalState = $c6a68e62633a2e5f5c28afa7ed00128c$var$InternalStateModule.getterFor($c6a68e62633a2e5f5c28afa7ed00128c$var$STRING_ITERATOR); // `String.prototype[@@iterator]` method
+// https://tc39.github.io/ecma262/#sec-string.prototype-@@iterator
+
+$c6a68e62633a2e5f5c28afa7ed00128c$var$defineIterator(String, 'String', function (iterated) {
+  $c6a68e62633a2e5f5c28afa7ed00128c$var$setInternalState(this, {
+    type: $c6a68e62633a2e5f5c28afa7ed00128c$var$STRING_ITERATOR,
+    string: String(iterated),
+    index: 0
+  }); // `%StringIteratorPrototype%.next` method
+  // https://tc39.github.io/ecma262/#sec-%stringiteratorprototype%.next
+}, function next() {
+  var state = $c6a68e62633a2e5f5c28afa7ed00128c$var$getInternalState(this);
+  var string = state.string;
+  var index = state.index;
+  var point;
+  if (index >= string.length) return {
+    value: undefined,
+    done: true
+  };
+  point = $c6a68e62633a2e5f5c28afa7ed00128c$var$codePointAt(string, index, true);
+  state.index += point.length;
+  return {
+    value: point,
+    done: false
+  };
+});

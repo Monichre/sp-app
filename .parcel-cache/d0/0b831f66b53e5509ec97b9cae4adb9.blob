@@ -1,0 +1,24 @@
+var $ae6c53d6d40db19fb0843b24e62bf719$exports = {};
+
+/** Used for built-in method references. */
+var $ae6c53d6d40db19fb0843b24e62bf719$var$objectProto = Object.prototype;
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+
+var $ae6c53d6d40db19fb0843b24e62bf719$var$nativeObjectToString = $ae6c53d6d40db19fb0843b24e62bf719$var$objectProto.toString;
+/**
+ * Converts `value` to a string using `Object.prototype.toString`.
+ *
+ * @private
+ * @param {*} value The value to convert.
+ * @returns {string} Returns the converted string.
+ */
+
+function $ae6c53d6d40db19fb0843b24e62bf719$var$objectToString(value) {
+  return $ae6c53d6d40db19fb0843b24e62bf719$var$nativeObjectToString.call(value);
+}
+
+$ae6c53d6d40db19fb0843b24e62bf719$exports = $ae6c53d6d40db19fb0843b24e62bf719$var$objectToString;

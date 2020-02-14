@@ -1,0 +1,148 @@
+var $f3b81f22aedd49f64933aebff89afe3$exports = {};
+$parcel$require("9f3b81f22aedd49f64933aebff89afe3", "react");
+$parcel$require("9f3b81f22aedd49f64933aebff89afe3", "styled-components");
+$parcel$require("9f3b81f22aedd49f64933aebff89afe3", "react-responsive");
+
+function $f3b81f22aedd49f64933aebff89afe3$var$_extends() { $f3b81f22aedd49f64933aebff89afe3$var$_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return $f3b81f22aedd49f64933aebff89afe3$var$_extends.apply(this, arguments); }
+
+function $f3b81f22aedd49f64933aebff89afe3$var$_templateObject4() {
+  var data = $f3b81f22aedd49f64933aebff89afe3$var$_taggedTemplateLiteral(["\n  @media (max-width: ", "px) {\n    ", "\n  }\n"]);
+
+  $f3b81f22aedd49f64933aebff89afe3$var$_templateObject4 = function _templateObject4() {
+    return data;
+  };
+
+  return data;
+}
+
+function $f3b81f22aedd49f64933aebff89afe3$var$_templateObject3() {
+  var data = $f3b81f22aedd49f64933aebff89afe3$var$_taggedTemplateLiteral(["\n  @media (min-width: ", "px) {\n    ", "\n  }\n"]);
+
+  $f3b81f22aedd49f64933aebff89afe3$var$_templateObject3 = function _templateObject3() {
+    return data;
+  };
+
+  return data;
+}
+
+function $f3b81f22aedd49f64933aebff89afe3$var$_templateObject2() {
+  var data = $f3b81f22aedd49f64933aebff89afe3$var$_taggedTemplateLiteral(["\n  @media (min-width: ", "px) and (max-width: ", "px) {\n    ", "\n  }\n"]);
+
+  $f3b81f22aedd49f64933aebff89afe3$var$_templateObject2 = function _templateObject2() {
+    return data;
+  };
+
+  return data;
+}
+
+function $f3b81f22aedd49f64933aebff89afe3$var$_templateObject() {
+  var data = $f3b81f22aedd49f64933aebff89afe3$var$_taggedTemplateLiteral(["\n@media (min-width: ", "px) {\n  ", "\n}\n"]);
+
+  $f3b81f22aedd49f64933aebff89afe3$var$_templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function $f3b81f22aedd49f64933aebff89afe3$var$_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var $f3b81f22aedd49f64933aebff89afe3$var$BP_SMALL_MEDIUM = 500;
+var $f3b81f22aedd49f64933aebff89afe3$var$BP_MEDIUM_LARGE = 1000;
+var $f3b81f22aedd49f64933aebff89afe3$var$BP_LARGE_XLARGE = 1300;
+
+var $f3b81f22aedd49f64933aebff89afe3$export$xLargeQuery = function xLargeQuery(first) {
+  for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    args[_key - 1] = arguments[_key];
+  }
+
+  return $f3b81f22aedd49f64933aebff89afe3$import$css($f3b81f22aedd49f64933aebff89afe3$var$_templateObject(), $f3b81f22aedd49f64933aebff89afe3$var$BP_LARGE_XLARGE + 1, $f3b81f22aedd49f64933aebff89afe3$import$css.apply(void 0, [first].concat(args)));
+};
+
+$f3b81f22aedd49f64933aebff89afe3$exports.xLargeQuery = $f3b81f22aedd49f64933aebff89afe3$export$xLargeQuery;
+
+var $f3b81f22aedd49f64933aebff89afe3$export$largeNotXLargeQuery = function largeNotXLargeQuery(first) {
+  for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+    args[_key2 - 1] = arguments[_key2];
+  }
+
+  return $f3b81f22aedd49f64933aebff89afe3$import$css($f3b81f22aedd49f64933aebff89afe3$var$_templateObject2(), $f3b81f22aedd49f64933aebff89afe3$var$BP_MEDIUM_LARGE + 1, $f3b81f22aedd49f64933aebff89afe3$var$BP_LARGE_XLARGE, $f3b81f22aedd49f64933aebff89afe3$import$css.apply(void 0, [first].concat(args)));
+};
+
+$f3b81f22aedd49f64933aebff89afe3$exports.largeNotXLargeQuery = $f3b81f22aedd49f64933aebff89afe3$export$largeNotXLargeQuery;
+
+var $f3b81f22aedd49f64933aebff89afe3$export$largeQuery = function largeQuery(first) {
+  for (var _len3 = arguments.length, args = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+    args[_key3 - 1] = arguments[_key3];
+  }
+
+  return $f3b81f22aedd49f64933aebff89afe3$import$css($f3b81f22aedd49f64933aebff89afe3$var$_templateObject3(), $f3b81f22aedd49f64933aebff89afe3$var$BP_MEDIUM_LARGE + 1, $f3b81f22aedd49f64933aebff89afe3$import$css.apply(void 0, [first].concat(args)));
+};
+
+$f3b81f22aedd49f64933aebff89afe3$exports.largeQuery = $f3b81f22aedd49f64933aebff89afe3$export$largeQuery;
+
+var $f3b81f22aedd49f64933aebff89afe3$export$notLargeQuery = function notLargeQuery(first) {
+  for (var _len4 = arguments.length, args = new Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
+    args[_key4 - 1] = arguments[_key4];
+  }
+
+  return $f3b81f22aedd49f64933aebff89afe3$import$css($f3b81f22aedd49f64933aebff89afe3$var$_templateObject4(), $f3b81f22aedd49f64933aebff89afe3$var$BP_MEDIUM_LARGE, $f3b81f22aedd49f64933aebff89afe3$import$css.apply(void 0, [first].concat(args)));
+};
+
+$f3b81f22aedd49f64933aebff89afe3$exports.notLargeQuery = $f3b81f22aedd49f64933aebff89afe3$export$notLargeQuery;
+
+var $f3b81f22aedd49f64933aebff89afe3$export$Large = function Large(props) {
+  return $f3b81f22aedd49f64933aebff89afe3$import$React.createElement($f3b81f22aedd49f64933aebff89afe3$import$Responsive, $f3b81f22aedd49f64933aebff89afe3$var$_extends({}, props, {
+    minWidth: $f3b81f22aedd49f64933aebff89afe3$var$BP_MEDIUM_LARGE + 1
+  }));
+};
+
+$f3b81f22aedd49f64933aebff89afe3$exports.Large = $f3b81f22aedd49f64933aebff89afe3$export$Large;
+
+var $f3b81f22aedd49f64933aebff89afe3$export$Medium = function Medium(props) {
+  return $f3b81f22aedd49f64933aebff89afe3$import$React.createElement($f3b81f22aedd49f64933aebff89afe3$import$Responsive, $f3b81f22aedd49f64933aebff89afe3$var$_extends({}, props, {
+    minWidth: $f3b81f22aedd49f64933aebff89afe3$var$BP_SMALL_MEDIUM + 1,
+    maxWidth: $f3b81f22aedd49f64933aebff89afe3$var$BP_MEDIUM_LARGE
+  }));
+};
+
+$f3b81f22aedd49f64933aebff89afe3$exports.Medium = $f3b81f22aedd49f64933aebff89afe3$export$Medium;
+
+var $f3b81f22aedd49f64933aebff89afe3$export$Small = function Small(props) {
+  return $f3b81f22aedd49f64933aebff89afe3$import$React.createElement($f3b81f22aedd49f64933aebff89afe3$import$Responsive, $f3b81f22aedd49f64933aebff89afe3$var$_extends({}, props, {
+    maxWidth: $f3b81f22aedd49f64933aebff89afe3$var$BP_SMALL_MEDIUM
+  }));
+};
+
+$f3b81f22aedd49f64933aebff89afe3$exports.Small = $f3b81f22aedd49f64933aebff89afe3$export$Small;
+
+var $f3b81f22aedd49f64933aebff89afe3$export$NotLarge = function NotLarge(props) {
+  return $f3b81f22aedd49f64933aebff89afe3$import$React.createElement($f3b81f22aedd49f64933aebff89afe3$import$Responsive, $f3b81f22aedd49f64933aebff89afe3$var$_extends({}, props, {
+    maxWidth: $f3b81f22aedd49f64933aebff89afe3$var$BP_MEDIUM_LARGE
+  }));
+};
+
+$f3b81f22aedd49f64933aebff89afe3$exports.NotLarge = $f3b81f22aedd49f64933aebff89afe3$export$NotLarge;
+var $f3b81f22aedd49f64933aebff89afe3$export$BRAND_COLOR = '#64d6ee'; // #64d6ee
+
+$f3b81f22aedd49f64933aebff89afe3$exports.BRAND_COLOR = $f3b81f22aedd49f64933aebff89afe3$export$BRAND_COLOR;
+var $f3b81f22aedd49f64933aebff89afe3$export$BRAND_PERSONAL_COLOR = 'rgba(100, 214, 238, 1)';
+$f3b81f22aedd49f64933aebff89afe3$exports.BRAND_PERSONAL_COLOR = $f3b81f22aedd49f64933aebff89afe3$export$BRAND_PERSONAL_COLOR;
+var $f3b81f22aedd49f64933aebff89afe3$export$BRAND_PERSONAL_COLOR_BACKGROUND = '#50E3C2';
+$f3b81f22aedd49f64933aebff89afe3$exports.BRAND_PERSONAL_COLOR_BACKGROUND = $f3b81f22aedd49f64933aebff89afe3$export$BRAND_PERSONAL_COLOR_BACKGROUND;
+var $f3b81f22aedd49f64933aebff89afe3$export$BRAND_PERSONAL_COLOR_BACKGROUND_INACTIVE = 'rgb(122, 172, 183)'; // #67BF72
+
+$f3b81f22aedd49f64933aebff89afe3$exports.BRAND_PERSONAL_COLOR_BACKGROUND_INACTIVE = $f3b81f22aedd49f64933aebff89afe3$export$BRAND_PERSONAL_COLOR_BACKGROUND_INACTIVE;
+var $f3b81f22aedd49f64933aebff89afe3$export$BRAND_GLOBAL_COLOR = '#C036D0';
+$f3b81f22aedd49f64933aebff89afe3$exports.BRAND_GLOBAL_COLOR = $f3b81f22aedd49f64933aebff89afe3$export$BRAND_GLOBAL_COLOR;
+var $f3b81f22aedd49f64933aebff89afe3$export$BRAND_GLOBAL_COLOR_BACKGROUND = 'rgba(192, 54, 208, 1)';
+$f3b81f22aedd49f64933aebff89afe3$exports.BRAND_GLOBAL_COLOR_BACKGROUND = $f3b81f22aedd49f64933aebff89afe3$export$BRAND_GLOBAL_COLOR_BACKGROUND;
+var $f3b81f22aedd49f64933aebff89afe3$export$BRAND_GLOBAL_COLOR_BACKGROUND_INACTIVE = 'rgba(192, 54, 208, .5)'; // export const BRAND_GLOBAL_COLOR_BACKGROUND = 'linear-gradient(134deg, #C036D0 0 %, #E33C7A 52 %, #FFBF99 100 %)'
+// export const BRAND_GLOBAL_COLOR_BACKGROUND_INACTIVE = 'rgba(0, 0, 0, .05)'
+
+$f3b81f22aedd49f64933aebff89afe3$exports.BRAND_GLOBAL_COLOR_BACKGROUND_INACTIVE = $f3b81f22aedd49f64933aebff89afe3$export$BRAND_GLOBAL_COLOR_BACKGROUND_INACTIVE;
+var $f3b81f22aedd49f64933aebff89afe3$export$BODY_FONT = 'Source Sans Pro';
+$f3b81f22aedd49f64933aebff89afe3$exports.BODY_FONT = $f3b81f22aedd49f64933aebff89afe3$export$BODY_FONT;
+var $f3b81f22aedd49f64933aebff89afe3$export$TITLE_FONT = 'Open Sans Condensed'; // background - image: linear-gradient(134deg, #C036D0 0 %, #E33C7A 52 %, #FFBF99 100 %);
+
+$f3b81f22aedd49f64933aebff89afe3$exports.TITLE_FONT = $f3b81f22aedd49f64933aebff89afe3$export$TITLE_FONT;

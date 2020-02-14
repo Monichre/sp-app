@@ -1,0 +1,5 @@
+var $e5f982102a9281f6401ce3399a1bb06$exports = {};
+
+$e5f982102a9281f6401ce3399a1bb06$exports = function (it) {
+  return typeof it === 'object' ? it !== null : typeof it === 'function';
+};

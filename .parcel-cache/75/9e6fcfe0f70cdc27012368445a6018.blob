@@ -1,0 +1,32 @@
+
+var $ddbf47227c62aeb9090d13f565037d14$var$DOMIterables = $parcel$require("ddbf47227c62aeb9090d13f565037d14", "../internals/dom-iterables");
+var $ddbf47227c62aeb9090d13f565037d14$var$ArrayIteratorMethods = $parcel$require("ddbf47227c62aeb9090d13f565037d14", "../modules/es.array.iterator");
+var $ddbf47227c62aeb9090d13f565037d14$var$global = $parcel$require("ddbf47227c62aeb9090d13f565037d14", "../internals/global");
+var $ddbf47227c62aeb9090d13f565037d14$var$hide = $parcel$require("ddbf47227c62aeb9090d13f565037d14", "../internals/hide");
+var $ddbf47227c62aeb9090d13f565037d14$var$wellKnownSymbol = $parcel$require("ddbf47227c62aeb9090d13f565037d14", "../internals/well-known-symbol");
+var $ddbf47227c62aeb9090d13f565037d14$var$ITERATOR = $ddbf47227c62aeb9090d13f565037d14$var$wellKnownSymbol('iterator');
+var $ddbf47227c62aeb9090d13f565037d14$var$TO_STRING_TAG = $ddbf47227c62aeb9090d13f565037d14$var$wellKnownSymbol('toStringTag');
+var $ddbf47227c62aeb9090d13f565037d14$var$ArrayValues = $ddbf47227c62aeb9090d13f565037d14$var$ArrayIteratorMethods.values;
+
+for (var $ddbf47227c62aeb9090d13f565037d14$var$COLLECTION_NAME in $ddbf47227c62aeb9090d13f565037d14$var$DOMIterables) {
+  var $ddbf47227c62aeb9090d13f565037d14$var$Collection = $ddbf47227c62aeb9090d13f565037d14$var$global[$ddbf47227c62aeb9090d13f565037d14$var$COLLECTION_NAME];
+  var $ddbf47227c62aeb9090d13f565037d14$var$CollectionPrototype = $ddbf47227c62aeb9090d13f565037d14$var$Collection && $ddbf47227c62aeb9090d13f565037d14$var$Collection.prototype;
+
+  if ($ddbf47227c62aeb9090d13f565037d14$var$CollectionPrototype) {
+    // some Chrome versions have non-configurable methods on DOMTokenList
+    if ($ddbf47227c62aeb9090d13f565037d14$var$CollectionPrototype[$ddbf47227c62aeb9090d13f565037d14$var$ITERATOR] !== $ddbf47227c62aeb9090d13f565037d14$var$ArrayValues) try {
+      $ddbf47227c62aeb9090d13f565037d14$var$hide($ddbf47227c62aeb9090d13f565037d14$var$CollectionPrototype, $ddbf47227c62aeb9090d13f565037d14$var$ITERATOR, $ddbf47227c62aeb9090d13f565037d14$var$ArrayValues);
+    } catch (error) {
+      $ddbf47227c62aeb9090d13f565037d14$var$CollectionPrototype[$ddbf47227c62aeb9090d13f565037d14$var$ITERATOR] = $ddbf47227c62aeb9090d13f565037d14$var$ArrayValues;
+    }
+    if (!$ddbf47227c62aeb9090d13f565037d14$var$CollectionPrototype[$ddbf47227c62aeb9090d13f565037d14$var$TO_STRING_TAG]) $ddbf47227c62aeb9090d13f565037d14$var$hide($ddbf47227c62aeb9090d13f565037d14$var$CollectionPrototype, $ddbf47227c62aeb9090d13f565037d14$var$TO_STRING_TAG, $ddbf47227c62aeb9090d13f565037d14$var$COLLECTION_NAME);
+    if ($ddbf47227c62aeb9090d13f565037d14$var$DOMIterables[$ddbf47227c62aeb9090d13f565037d14$var$COLLECTION_NAME]) for (var $ddbf47227c62aeb9090d13f565037d14$var$METHOD_NAME in $ddbf47227c62aeb9090d13f565037d14$var$ArrayIteratorMethods) {
+      // some Chrome versions have non-configurable methods on DOMTokenList
+      if ($ddbf47227c62aeb9090d13f565037d14$var$CollectionPrototype[$ddbf47227c62aeb9090d13f565037d14$var$METHOD_NAME] !== $ddbf47227c62aeb9090d13f565037d14$var$ArrayIteratorMethods[$ddbf47227c62aeb9090d13f565037d14$var$METHOD_NAME]) try {
+        $ddbf47227c62aeb9090d13f565037d14$var$hide($ddbf47227c62aeb9090d13f565037d14$var$CollectionPrototype, $ddbf47227c62aeb9090d13f565037d14$var$METHOD_NAME, $ddbf47227c62aeb9090d13f565037d14$var$ArrayIteratorMethods[$ddbf47227c62aeb9090d13f565037d14$var$METHOD_NAME]);
+      } catch (error) {
+        $ddbf47227c62aeb9090d13f565037d14$var$CollectionPrototype[$ddbf47227c62aeb9090d13f565037d14$var$METHOD_NAME] = $ddbf47227c62aeb9090d13f565037d14$var$ArrayIteratorMethods[$ddbf47227c62aeb9090d13f565037d14$var$METHOD_NAME];
+      }
+    }
+  }
+}

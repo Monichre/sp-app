@@ -1,0 +1,14 @@
+
+var $aaaa182ad68ebe9b5818b89820510082$exports = {};
+var $aaaa182ad68ebe9b5818b89820510082$var$global = $parcel$require("aaaa182ad68ebe9b5818b89820510082", "../internals/global");
+var $aaaa182ad68ebe9b5818b89820510082$var$hide = $parcel$require("aaaa182ad68ebe9b5818b89820510082", "../internals/hide");
+
+$aaaa182ad68ebe9b5818b89820510082$exports = function (key, value) {
+  try {
+    $aaaa182ad68ebe9b5818b89820510082$var$hide($aaaa182ad68ebe9b5818b89820510082$var$global, key, value);
+  } catch (error) {
+    $aaaa182ad68ebe9b5818b89820510082$var$global[key] = value;
+  }
+
+  return value;
+};

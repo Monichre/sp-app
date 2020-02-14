@@ -1,0 +1,3 @@
+// `Symbol.patternMatch` well-known symbol
+// https://github.com/tc39/proposal-using-statement
+$parcel$require("04a4e36afbbb2af199142bc3bd3a0b95", "../internals/define-well-known-symbol")('dispose');

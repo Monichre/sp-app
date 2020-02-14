@@ -1,0 +1,56 @@
+var $c0c9ba1c94b0df0673a6d17d4d35421a$var$isArray = $parcel$require("c0c9ba1c94b0df0673a6d17d4d35421a", "../internals/is-array");
+var $c0c9ba1c94b0df0673a6d17d4d35421a$var$isObject = $parcel$require("c0c9ba1c94b0df0673a6d17d4d35421a", "../internals/is-object");
+var $c0c9ba1c94b0df0673a6d17d4d35421a$var$toObject = $parcel$require("c0c9ba1c94b0df0673a6d17d4d35421a", "../internals/to-object");
+var $c0c9ba1c94b0df0673a6d17d4d35421a$var$toLength = $parcel$require("c0c9ba1c94b0df0673a6d17d4d35421a", "../internals/to-length");
+var $c0c9ba1c94b0df0673a6d17d4d35421a$var$createProperty = $parcel$require("c0c9ba1c94b0df0673a6d17d4d35421a", "../internals/create-property");
+var $c0c9ba1c94b0df0673a6d17d4d35421a$var$arraySpeciesCreate = $parcel$require("c0c9ba1c94b0df0673a6d17d4d35421a", "../internals/array-species-create");
+var $c0c9ba1c94b0df0673a6d17d4d35421a$var$IS_CONCAT_SPREADABLE = $parcel$require("c0c9ba1c94b0df0673a6d17d4d35421a", "../internals/well-known-symbol")('isConcatSpreadable');
+var $c0c9ba1c94b0df0673a6d17d4d35421a$var$MAX_SAFE_INTEGER = 0x1FFFFFFFFFFFFF;
+var $c0c9ba1c94b0df0673a6d17d4d35421a$var$MAXIMUM_ALLOWED_INDEX_EXCEEDED = 'Maximum allowed index exceeded';
+var $c0c9ba1c94b0df0673a6d17d4d35421a$var$IS_CONCAT_SPREADABLE_SUPPORT = !$parcel$require("c0c9ba1c94b0df0673a6d17d4d35421a", "../internals/fails")(function () {
+  var array = [];
+  array[$c0c9ba1c94b0df0673a6d17d4d35421a$var$IS_CONCAT_SPREADABLE] = false;
+  return array.concat()[0] !== array;
+});
+var $c0c9ba1c94b0df0673a6d17d4d35421a$var$SPECIES_SUPPORT = $parcel$require("c0c9ba1c94b0df0673a6d17d4d35421a", "../internals/array-method-has-species-support")('concat');
+
+var $c0c9ba1c94b0df0673a6d17d4d35421a$var$isConcatSpreadable = function (O) {
+  if (!$c0c9ba1c94b0df0673a6d17d4d35421a$var$isObject(O)) return false;
+  var spreadable = O[$c0c9ba1c94b0df0673a6d17d4d35421a$var$IS_CONCAT_SPREADABLE];
+  return spreadable !== undefined ? !!spreadable : $c0c9ba1c94b0df0673a6d17d4d35421a$var$isArray(O);
+};
+
+var $c0c9ba1c94b0df0673a6d17d4d35421a$var$FORCED = !$c0c9ba1c94b0df0673a6d17d4d35421a$var$IS_CONCAT_SPREADABLE_SUPPORT || !$c0c9ba1c94b0df0673a6d17d4d35421a$var$SPECIES_SUPPORT; // `Array.prototype.concat` method
+// https://tc39.github.io/ecma262/#sec-array.prototype.concat
+// with adding support of @@isConcatSpreadable and @@species
+
+$parcel$require("c0c9ba1c94b0df0673a6d17d4d35421a", "../internals/export")({
+  target: 'Array',
+  proto: true,
+  forced: $c0c9ba1c94b0df0673a6d17d4d35421a$var$FORCED
+}, {
+  concat: function concat(arg) {
+    // eslint-disable-line no-unused-vars
+    var O = $c0c9ba1c94b0df0673a6d17d4d35421a$var$toObject(this);
+    var A = $c0c9ba1c94b0df0673a6d17d4d35421a$var$arraySpeciesCreate(O, 0);
+    var n = 0;
+    var i, k, length, len, E;
+
+    for (i = -1, length = arguments.length; i < length; i++) {
+      E = i === -1 ? O : arguments[i];
+
+      if ($c0c9ba1c94b0df0673a6d17d4d35421a$var$isConcatSpreadable(E)) {
+        len = $c0c9ba1c94b0df0673a6d17d4d35421a$var$toLength(E.length);
+        if (n + len > $c0c9ba1c94b0df0673a6d17d4d35421a$var$MAX_SAFE_INTEGER) throw TypeError($c0c9ba1c94b0df0673a6d17d4d35421a$var$MAXIMUM_ALLOWED_INDEX_EXCEEDED);
+
+        for (k = 0; k < len; k++, n++) if (k in E) $c0c9ba1c94b0df0673a6d17d4d35421a$var$createProperty(A, n, E[k]);
+      } else {
+        if (n >= $c0c9ba1c94b0df0673a6d17d4d35421a$var$MAX_SAFE_INTEGER) throw TypeError($c0c9ba1c94b0df0673a6d17d4d35421a$var$MAXIMUM_ALLOWED_INDEX_EXCEEDED);
+        $c0c9ba1c94b0df0673a6d17d4d35421a$var$createProperty(A, n++, E);
+      }
+    }
+
+    A.length = n;
+    return A;
+  }
+});

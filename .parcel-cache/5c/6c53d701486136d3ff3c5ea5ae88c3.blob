@@ -1,0 +1,9 @@
+var $e3f42a80eeba0903ad394990a6f1a3$exports = {};
+
+$e3f42a80eeba0903ad394990a6f1a3$exports = function (it) {
+  if (typeof it != 'function') {
+    throw TypeError(String(it) + ' is not a function');
+  }
+
+  return it;
+};

@@ -1,0 +1,23 @@
+var $ca11403d35af9e20b0e58196c6e9$exports = {};
+$parcel$require("6434ca11403d35af9e20b0e58196c6e9", "react");
+$parcel$require("6434ca11403d35af9e20b0e58196c6e9", "../FirebaseContext");
+$parcel$require("6434ca11403d35af9e20b0e58196c6e9", "../../shared/Loading");
+$parcel$require("6434ca11403d35af9e20b0e58196c6e9", "./ErrorBoundary");
+$parcel$require("6434ca11403d35af9e20b0e58196c6e9", "./Public/Public");
+$parcel$require("6434ca11403d35af9e20b0e58196c6e9", "./Authed/Authed");
+$parcel$require("6434ca11403d35af9e20b0e58196c6e9", "../../shared/ui");
+
+function $ca11403d35af9e20b0e58196c6e9$var$_extends() { $ca11403d35af9e20b0e58196c6e9$var$_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return $ca11403d35af9e20b0e58196c6e9$var$_extends.apply(this, arguments); }
+
+var $ca11403d35af9e20b0e58196c6e9$export$Home = function Home(props) {
+  var _useUser = $ca11403d35af9e20b0e58196c6e9$import$useUser(),
+      user = _useUser.user,
+      isLoading = _useUser.isLoading;
+
+  if (isLoading) return $ca11403d35af9e20b0e58196c6e9$import$React.createElement($ca11403d35af9e20b0e58196c6e9$import$Loading, null);
+  return $ca11403d35af9e20b0e58196c6e9$import$React.createElement($ca11403d35af9e20b0e58196c6e9$import$ErrorBoundary, null, user ? $ca11403d35af9e20b0e58196c6e9$import$React.createElement($ca11403d35af9e20b0e58196c6e9$import$Container, null, $ca11403d35af9e20b0e58196c6e9$import$React.createElement($ca11403d35af9e20b0e58196c6e9$import$Authed, $ca11403d35af9e20b0e58196c6e9$var$_extends({
+    user: user
+  }, props))) : $ca11403d35af9e20b0e58196c6e9$import$React.createElement($ca11403d35af9e20b0e58196c6e9$import$Public, null));
+};
+
+$ca11403d35af9e20b0e58196c6e9$exports.Home = $ca11403d35af9e20b0e58196c6e9$export$Home;

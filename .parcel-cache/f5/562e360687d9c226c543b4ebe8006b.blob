@@ -1,0 +1,3 @@
+// `Symbol.search` well-known symbol
+// https://tc39.github.io/ecma262/#sec-symbol.search
+$parcel$require("d23aa547f835b8715cdb7814fc521a03", "../internals/define-well-known-symbol")('search');

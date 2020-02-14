@@ -1,0 +1,29 @@
+var $ed59b09ce91116dd1128d7d8a30868$exports = {};
+Object.defineProperty($ed59b09ce91116dd1128d7d8a30868$exports, "__esModule", {
+  value: true
+});
+var $ed59b09ce91116dd1128d7d8a30868$export$default = $ed59b09ce91116dd1128d7d8a30868$var$isObjectLike;
+$ed59b09ce91116dd1128d7d8a30868$exports.default = $ed59b09ce91116dd1128d7d8a30868$export$default;
+
+function $ed59b09ce91116dd1128d7d8a30868$var$_typeof(obj) {
+  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+    $ed59b09ce91116dd1128d7d8a30868$var$_typeof = function _typeof(obj) {
+      return typeof obj;
+    };
+  } else {
+    $ed59b09ce91116dd1128d7d8a30868$var$_typeof = function _typeof(obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    };
+  }
+
+  return $ed59b09ce91116dd1128d7d8a30868$var$_typeof(obj);
+}
+/**
+ * Return true if `value` is object-like. A value is object-like if it's not
+ * `null` and has a `typeof` result of "object".
+ */
+
+
+function $ed59b09ce91116dd1128d7d8a30868$var$isObjectLike(value) {
+  return $ed59b09ce91116dd1128d7d8a30868$var$_typeof(value) == 'object' && value !== null;
+}

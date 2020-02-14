@@ -1,0 +1,17 @@
+var $a3a0b061f4c8f08c00886134e2a5f3f9$exports = {};
+var $a3a0b061f4c8f08c00886134e2a5f3f9$var$attributeName = '[a-zA-Z_:][a-zA-Z0-9:._-]*';
+var $a3a0b061f4c8f08c00886134e2a5f3f9$var$unquoted = '[^"\'=<>`\\u0000-\\u0020]+';
+var $a3a0b061f4c8f08c00886134e2a5f3f9$var$singleQuoted = '\'[^\']*\'';
+var $a3a0b061f4c8f08c00886134e2a5f3f9$var$doubleQuoted = '"[^"]*"';
+var $a3a0b061f4c8f08c00886134e2a5f3f9$var$attributeValue = '(?:' + $a3a0b061f4c8f08c00886134e2a5f3f9$var$unquoted + '|' + $a3a0b061f4c8f08c00886134e2a5f3f9$var$singleQuoted + '|' + $a3a0b061f4c8f08c00886134e2a5f3f9$var$doubleQuoted + ')';
+var $a3a0b061f4c8f08c00886134e2a5f3f9$var$attribute = '(?:\\s+' + $a3a0b061f4c8f08c00886134e2a5f3f9$var$attributeName + '(?:\\s*=\\s*' + $a3a0b061f4c8f08c00886134e2a5f3f9$var$attributeValue + ')?)';
+var $a3a0b061f4c8f08c00886134e2a5f3f9$var$openTag = '<[A-Za-z][A-Za-z0-9\\-]*' + $a3a0b061f4c8f08c00886134e2a5f3f9$var$attribute + '*\\s*\\/?>';
+var $a3a0b061f4c8f08c00886134e2a5f3f9$var$closeTag = '<\\/[A-Za-z][A-Za-z0-9\\-]*\\s*>';
+var $a3a0b061f4c8f08c00886134e2a5f3f9$var$comment = '<!---->|<!--(?:-?[^>-])(?:-?[^-])*-->';
+var $a3a0b061f4c8f08c00886134e2a5f3f9$var$processing = '<[?].*?[?]>';
+var $a3a0b061f4c8f08c00886134e2a5f3f9$var$declaration = '<![A-Za-z]+\\s+[^>]*>';
+var $a3a0b061f4c8f08c00886134e2a5f3f9$var$cdata = '<!\\[CDATA\\[[\\s\\S]*?\\]\\]>';
+var $a3a0b061f4c8f08c00886134e2a5f3f9$export$openCloseTag = new RegExp('^(?:' + $a3a0b061f4c8f08c00886134e2a5f3f9$var$openTag + '|' + $a3a0b061f4c8f08c00886134e2a5f3f9$var$closeTag + ')');
+$a3a0b061f4c8f08c00886134e2a5f3f9$exports.openCloseTag = $a3a0b061f4c8f08c00886134e2a5f3f9$export$openCloseTag;
+var $a3a0b061f4c8f08c00886134e2a5f3f9$export$tag = new RegExp('^(?:' + $a3a0b061f4c8f08c00886134e2a5f3f9$var$openTag + '|' + $a3a0b061f4c8f08c00886134e2a5f3f9$var$closeTag + '|' + $a3a0b061f4c8f08c00886134e2a5f3f9$var$comment + '|' + $a3a0b061f4c8f08c00886134e2a5f3f9$var$processing + '|' + $a3a0b061f4c8f08c00886134e2a5f3f9$var$declaration + '|' + $a3a0b061f4c8f08c00886134e2a5f3f9$var$cdata + ')');
+$a3a0b061f4c8f08c00886134e2a5f3f9$exports.tag = $a3a0b061f4c8f08c00886134e2a5f3f9$export$tag;

@@ -1,0 +1,147 @@
+var $f42d8e4fff20205922a86148b16440$exports = {};
+$parcel$require("46f42d8e4fff20205922a86148b16440", "react");
+$parcel$require("46f42d8e4fff20205922a86148b16440", "../../../../types");
+$parcel$require("46f42d8e4fff20205922a86148b16440", "styled-components");
+$parcel$require("46f42d8e4fff20205922a86148b16440", "./Play");
+$parcel$require("46f42d8e4fff20205922a86148b16440", "../../../../shared/ui");
+
+function $f42d8e4fff20205922a86148b16440$var$_slicedToArray(arr, i) { return $f42d8e4fff20205922a86148b16440$var$_arrayWithHoles(arr) || $f42d8e4fff20205922a86148b16440$var$_iterableToArrayLimit(arr, i) || $f42d8e4fff20205922a86148b16440$var$_nonIterableRest(); }
+
+function $f42d8e4fff20205922a86148b16440$var$_nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function $f42d8e4fff20205922a86148b16440$var$_iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function $f42d8e4fff20205922a86148b16440$var$_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function $f42d8e4fff20205922a86148b16440$var$_templateObject5() {
+  var data = $f42d8e4fff20205922a86148b16440$var$_taggedTemplateLiteral(["\n  // display: flex;\n  // flex-direction: row;\n  // display: grid;\n  // grid-template-columns: 1fr;\n  width: 100%;\n  // align-items: center;\n  @media (max-width: 759px) {\n    display: flex;\n    flex-direction: row;  \n    justify-content: center;\n  }\n  @media (min-width: 760px) {\n    display: grid;\n    grid-template-columns: 1fr;\n      background-image: radial-gradient(circle, rgb(100,214,238,1) 1%, rgb(0,0,0,0) 1%);\n    background-position: 0 0rem;\n  }\n"]);
+
+  $f42d8e4fff20205922a86148b16440$var$_templateObject5 = function _templateObject5() {
+    return data;
+  };
+
+  return data;
+}
+
+function $f42d8e4fff20205922a86148b16440$var$_templateObject4() {
+  var data = $f42d8e4fff20205922a86148b16440$var$_taggedTemplateLiteral(["\n  display: grid;\n  margin: auto;\n  // margin-top: 2rem;\n  // align-items: center;\n  max-width: 760px;\n  width: 100%;\n  grid-template-columns: 1fr;\n\n  @media (max-width: 760px) {\n    grid-gap: 100px;\n  }\n\n\n  @media (min-width: 760px) {\n    background-image: linear-gradient(to right, rgba(0,0,0,0) 49.99%, rgba(100,214,238,1) 50%, rgba(0,0,0,0) 50.2%);\n    background-position: 0 8rem;\n    \n\n    & > *:nth-child(odd) > * {\n      margin-bottom: -6rem;\n      // background: red;\n      justify-self: start;\n      // border: 1px solid blue;\n    }\n  \n    & > *:nth-child(even) > * {\n      margin-bottom: -6rem;\n      // background: blue;\n      justify-self: end;\n      // border: 1px solid red;\n    }  \n  }\n"]);
+
+  $f42d8e4fff20205922a86148b16440$var$_templateObject4 = function _templateObject4() {
+    return data;
+  };
+
+  return data;
+}
+
+function $f42d8e4fff20205922a86148b16440$var$_templateObject3() {
+  var data = $f42d8e4fff20205922a86148b16440$var$_taggedTemplateLiteral(["\n  padding: 0 1.5rem;\n  font-size: 0.75rem;\n  font-weight: 300;\n  color: #AAA !important;\n"]);
+
+  $f42d8e4fff20205922a86148b16440$var$_templateObject3 = function _templateObject3() {
+    return data;
+  };
+
+  return data;
+}
+
+function $f42d8e4fff20205922a86148b16440$var$_templateObject2() {
+  var data = $f42d8e4fff20205922a86148b16440$var$_taggedTemplateLiteral(["\n  background-color: rgba(216, 216, 216, .05);\n"]);
+
+  $f42d8e4fff20205922a86148b16440$var$_templateObject2 = function _templateObject2() {
+    return data;
+  };
+
+  return data;
+}
+
+function $f42d8e4fff20205922a86148b16440$var$_templateObject() {
+  var data = $f42d8e4fff20205922a86148b16440$var$_taggedTemplateLiteral(["\n  padding: 1rem;\n  margin: 0 0.5rem 0.25rem 0.5rem;\n"]);
+
+  $f42d8e4fff20205922a86148b16440$var$_templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function $f42d8e4fff20205922a86148b16440$var$_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var $f42d8e4fff20205922a86148b16440$var$Card = $f42d8e4fff20205922a86148b16440$import$styled.div($f42d8e4fff20205922a86148b16440$var$_templateObject());
+var $f42d8e4fff20205922a86148b16440$var$CardAlert = $f42d8e4fff20205922a86148b16440$import$styled($f42d8e4fff20205922a86148b16440$var$Card)($f42d8e4fff20205922a86148b16440$var$_templateObject2());
+var $f42d8e4fff20205922a86148b16440$var$Note = $f42d8e4fff20205922a86148b16440$import$styled.div($f42d8e4fff20205922a86148b16440$var$_templateObject3());
+var $f42d8e4fff20205922a86148b16440$var$HistoryGrid = $f42d8e4fff20205922a86148b16440$import$styled.div($f42d8e4fff20205922a86148b16440$var$_templateObject4());
+var $f42d8e4fff20205922a86148b16440$var$HistoryRow = $f42d8e4fff20205922a86148b16440$import$styled.div($f42d8e4fff20205922a86148b16440$var$_templateObject5());
+
+var $f42d8e4fff20205922a86148b16440$export$History = function History(_ref) {
+  var uid = _ref.uid,
+      user = _ref.user;
+
+  if (user) {
+    //@ts-ignore
+    window.Intercom('trackEvent', 'page-navigation', {
+      name: user.displayName || 'N/A',
+      // Full name
+      email: user.email || 'N/A',
+      // Email address
+      user_id: user.uid,
+      avatar: {
+        "type": "avatar",
+        "image_url": user.photoURL
+      },
+      // current_user_id
+      page: 'history'
+    });
+  }
+
+  var _useState = $f42d8e4fff20205922a86148b16440$import$useState(2000),
+      _useState2 = $f42d8e4fff20205922a86148b16440$var$_slicedToArray(_useState, 2),
+      pollInterval = _useState2[0],
+      setPollInterval = _useState2[1];
+
+  var _useRecentPlays = $f42d8e4fff20205922a86148b16440$import$useRecentPlays({
+    variables: {
+      uid: uid
+    },
+    suspend: true,
+    pollInterval: pollInterval
+  }),
+      data = _useRecentPlays.data,
+      error = _useRecentPlays.error,
+      errors = _useRecentPlays.errors;
+
+  if (error) {
+    throw new Error(JSON.stringify(error));
+  }
+
+  if (errors) {
+    throw new Error(JSON.stringify(errors));
+  }
+
+  console.log('data', data);
+  var recentPlays = data && data.recentPlays && data.recentPlays.plays || [];
+  var lastUpdate = data && data.recentPlays && data.recentPlays.lastUpdate;
+  $f42d8e4fff20205922a86148b16440$import$useEffect(function () {
+    return setPollInterval(lastUpdate ? 10000 : 3000);
+  }, [lastUpdate]);
+
+  if (!lastUpdate) {
+    return $f42d8e4fff20205922a86148b16440$import$React.createElement($f42d8e4fff20205922a86148b16440$var$CardAlert, null, "Interrogating Spotify about your listening...");
+  }
+
+  if (lastUpdate && recentPlays.length === 0) {
+    return $f42d8e4fff20205922a86148b16440$import$React.createElement($f42d8e4fff20205922a86148b16440$var$CardAlert, {
+      "data-test": "alert-no-history"
+    }, "You don't seem to have any history in spotify.  Go listen to something!");
+  }
+
+  return $f42d8e4fff20205922a86148b16440$import$React.createElement($f42d8e4fff20205922a86148b16440$import$Container, null, $f42d8e4fff20205922a86148b16440$import$React.createElement($f42d8e4fff20205922a86148b16440$var$HistoryGrid, {
+    "data-test": "play-timeline"
+  }, recentPlays.map(function (play, key) {
+    return $f42d8e4fff20205922a86148b16440$import$React.createElement($f42d8e4fff20205922a86148b16440$var$HistoryRow, {
+      key: key
+    }, $f42d8e4fff20205922a86148b16440$import$React.createElement($f42d8e4fff20205922a86148b16440$import$Play, {
+      play: play
+    }));
+  })), $f42d8e4fff20205922a86148b16440$import$React.createElement($f42d8e4fff20205922a86148b16440$var$Note, null, "Last Update: ", lastUpdate || 'never'));
+};
+
+$f42d8e4fff20205922a86148b16440$exports.History = $f42d8e4fff20205922a86148b16440$export$History;

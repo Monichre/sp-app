@@ -1,0 +1,7 @@
+var $b67628bc94edcbadb43c6c50bfebdd4$exports = {};
+var $b67628bc94edcbadb43c6c50bfebdd4$var$classof = $parcel$require("3b67628bc94edcbadb43c6c50bfebdd4", "../internals/classof-raw"); // `IsArray` abstract operation
+// https://tc39.github.io/ecma262/#sec-isarray
+
+$b67628bc94edcbadb43c6c50bfebdd4$exports = Array.isArray || function isArray(arg) {
+  return $b67628bc94edcbadb43c6c50bfebdd4$var$classof(arg) == 'Array';
+};

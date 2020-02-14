@@ -1,0 +1,447 @@
+var $c131fdef5d104bf6b86afcea9b3af4$exports = {};
+
+/* eslint-disable max-params */
+var $c131fdef5d104bf6b86afcea9b3af4$var$trim = $parcel$require("62c131fdef5d104bf6b86afcea9b3af4", "trim");
+var $c131fdef5d104bf6b86afcea9b3af4$var$repeat = $parcel$require("62c131fdef5d104bf6b86afcea9b3af4", "repeat-string");
+var $c131fdef5d104bf6b86afcea9b3af4$var$decimal = $parcel$require("62c131fdef5d104bf6b86afcea9b3af4", "is-decimal");
+var $c131fdef5d104bf6b86afcea9b3af4$var$getIndent = $parcel$require("62c131fdef5d104bf6b86afcea9b3af4", "../util/get-indentation");
+var $c131fdef5d104bf6b86afcea9b3af4$var$removeIndent = $parcel$require("62c131fdef5d104bf6b86afcea9b3af4", "../util/remove-indentation");
+var $c131fdef5d104bf6b86afcea9b3af4$var$interrupt = $parcel$require("62c131fdef5d104bf6b86afcea9b3af4", "../util/interrupt");
+$c131fdef5d104bf6b86afcea9b3af4$exports = $c131fdef5d104bf6b86afcea9b3af4$var$list;
+var $c131fdef5d104bf6b86afcea9b3af4$var$C_ASTERISK = '*';
+var $c131fdef5d104bf6b86afcea9b3af4$var$C_UNDERSCORE = '_';
+var $c131fdef5d104bf6b86afcea9b3af4$var$C_PLUS = '+';
+var $c131fdef5d104bf6b86afcea9b3af4$var$C_DASH = '-';
+var $c131fdef5d104bf6b86afcea9b3af4$var$C_DOT = '.';
+var $c131fdef5d104bf6b86afcea9b3af4$var$C_SPACE = ' ';
+var $c131fdef5d104bf6b86afcea9b3af4$var$C_NEWLINE = '\n';
+var $c131fdef5d104bf6b86afcea9b3af4$var$C_TAB = '\t';
+var $c131fdef5d104bf6b86afcea9b3af4$var$C_PAREN_CLOSE = ')';
+var $c131fdef5d104bf6b86afcea9b3af4$var$C_X_LOWER = 'x';
+var $c131fdef5d104bf6b86afcea9b3af4$var$TAB_SIZE = 4;
+var $c131fdef5d104bf6b86afcea9b3af4$var$EXPRESSION_LOOSE_LIST_ITEM = /\n\n(?!\s*$)/;
+var $c131fdef5d104bf6b86afcea9b3af4$var$EXPRESSION_TASK_ITEM = /^\[([ \t]|x|X)][ \t]/;
+var $c131fdef5d104bf6b86afcea9b3af4$var$EXPRESSION_BULLET = /^([ \t]*)([*+-]|\d+[.)])( {1,4}(?! )| |\t|$|(?=\n))([^\n]*)/;
+var $c131fdef5d104bf6b86afcea9b3af4$var$EXPRESSION_PEDANTIC_BULLET = /^([ \t]*)([*+-]|\d+[.)])([ \t]+)/;
+var $c131fdef5d104bf6b86afcea9b3af4$var$EXPRESSION_INITIAL_INDENT = /^( {1,4}|\t)?/gm;
+/* Map of characters which can be used to mark
+ * list-items. */
+
+var $c131fdef5d104bf6b86afcea9b3af4$var$LIST_UNORDERED_MARKERS = {};
+$c131fdef5d104bf6b86afcea9b3af4$var$LIST_UNORDERED_MARKERS[$c131fdef5d104bf6b86afcea9b3af4$var$C_ASTERISK] = true;
+$c131fdef5d104bf6b86afcea9b3af4$var$LIST_UNORDERED_MARKERS[$c131fdef5d104bf6b86afcea9b3af4$var$C_PLUS] = true;
+$c131fdef5d104bf6b86afcea9b3af4$var$LIST_UNORDERED_MARKERS[$c131fdef5d104bf6b86afcea9b3af4$var$C_DASH] = true;
+/* Map of characters which can be used to mark
+ * list-items after a digit. */
+
+var $c131fdef5d104bf6b86afcea9b3af4$var$LIST_ORDERED_MARKERS = {};
+$c131fdef5d104bf6b86afcea9b3af4$var$LIST_ORDERED_MARKERS[$c131fdef5d104bf6b86afcea9b3af4$var$C_DOT] = true;
+/* Map of characters which can be used to mark
+ * list-items after a digit. */
+
+var $c131fdef5d104bf6b86afcea9b3af4$var$LIST_ORDERED_COMMONMARK_MARKERS = {};
+$c131fdef5d104bf6b86afcea9b3af4$var$LIST_ORDERED_COMMONMARK_MARKERS[$c131fdef5d104bf6b86afcea9b3af4$var$C_DOT] = true;
+$c131fdef5d104bf6b86afcea9b3af4$var$LIST_ORDERED_COMMONMARK_MARKERS[$c131fdef5d104bf6b86afcea9b3af4$var$C_PAREN_CLOSE] = true;
+
+function $c131fdef5d104bf6b86afcea9b3af4$var$list(eat, value, silent) {
+  var self = this;
+  var commonmark = self.options.commonmark;
+  var pedantic = self.options.pedantic;
+  var tokenizers = self.blockTokenizers;
+  var interuptors = self.interruptList;
+  var markers;
+  var index = 0;
+  var length = value.length;
+  var start = null;
+  var size = 0;
+  var queue;
+  var ordered;
+  var character;
+  var marker;
+  var nextIndex;
+  var startIndex;
+  var prefixed;
+  var currentMarker;
+  var content;
+  var line;
+  var prevEmpty;
+  var empty;
+  var items;
+  var allLines;
+  var emptyLines;
+  var item;
+  var enterTop;
+  var exitBlockquote;
+  var isLoose;
+  var node;
+  var now;
+  var end;
+  var indented;
+
+  while (index < length) {
+    character = value.charAt(index);
+
+    if (character === $c131fdef5d104bf6b86afcea9b3af4$var$C_TAB) {
+      size += $c131fdef5d104bf6b86afcea9b3af4$var$TAB_SIZE - size % $c131fdef5d104bf6b86afcea9b3af4$var$TAB_SIZE;
+    } else if (character === $c131fdef5d104bf6b86afcea9b3af4$var$C_SPACE) {
+      size++;
+    } else {
+      break;
+    }
+
+    index++;
+  }
+
+  if (size >= $c131fdef5d104bf6b86afcea9b3af4$var$TAB_SIZE) {
+    return;
+  }
+
+  character = value.charAt(index);
+  markers = commonmark ? $c131fdef5d104bf6b86afcea9b3af4$var$LIST_ORDERED_COMMONMARK_MARKERS : $c131fdef5d104bf6b86afcea9b3af4$var$LIST_ORDERED_MARKERS;
+
+  if ($c131fdef5d104bf6b86afcea9b3af4$var$LIST_UNORDERED_MARKERS[character] === true) {
+    marker = character;
+    ordered = false;
+  } else {
+    ordered = true;
+    queue = '';
+
+    while (index < length) {
+      character = value.charAt(index);
+
+      if (!$c131fdef5d104bf6b86afcea9b3af4$var$decimal(character)) {
+        break;
+      }
+
+      queue += character;
+      index++;
+    }
+
+    character = value.charAt(index);
+
+    if (!queue || markers[character] !== true) {
+      return;
+    }
+
+    start = parseInt(queue, 10);
+    marker = character;
+  }
+
+  character = value.charAt(++index);
+
+  if (character !== $c131fdef5d104bf6b86afcea9b3af4$var$C_SPACE && character !== $c131fdef5d104bf6b86afcea9b3af4$var$C_TAB) {
+    return;
+  }
+
+  if (silent) {
+    return true;
+  }
+
+  index = 0;
+  items = [];
+  allLines = [];
+  emptyLines = [];
+
+  while (index < length) {
+    nextIndex = value.indexOf($c131fdef5d104bf6b86afcea9b3af4$var$C_NEWLINE, index);
+    startIndex = index;
+    prefixed = false;
+    indented = false;
+
+    if (nextIndex === -1) {
+      nextIndex = length;
+    }
+
+    end = index + $c131fdef5d104bf6b86afcea9b3af4$var$TAB_SIZE;
+    size = 0;
+
+    while (index < length) {
+      character = value.charAt(index);
+
+      if (character === $c131fdef5d104bf6b86afcea9b3af4$var$C_TAB) {
+        size += $c131fdef5d104bf6b86afcea9b3af4$var$TAB_SIZE - size % $c131fdef5d104bf6b86afcea9b3af4$var$TAB_SIZE;
+      } else if (character === $c131fdef5d104bf6b86afcea9b3af4$var$C_SPACE) {
+        size++;
+      } else {
+        break;
+      }
+
+      index++;
+    }
+
+    if (size >= $c131fdef5d104bf6b86afcea9b3af4$var$TAB_SIZE) {
+      indented = true;
+    }
+
+    if (item && size >= item.indent) {
+      indented = true;
+    }
+
+    character = value.charAt(index);
+    currentMarker = null;
+
+    if (!indented) {
+      if ($c131fdef5d104bf6b86afcea9b3af4$var$LIST_UNORDERED_MARKERS[character] === true) {
+        currentMarker = character;
+        index++;
+        size++;
+      } else {
+        queue = '';
+
+        while (index < length) {
+          character = value.charAt(index);
+
+          if (!$c131fdef5d104bf6b86afcea9b3af4$var$decimal(character)) {
+            break;
+          }
+
+          queue += character;
+          index++;
+        }
+
+        character = value.charAt(index);
+        index++;
+
+        if (queue && markers[character] === true) {
+          currentMarker = character;
+          size += queue.length + 1;
+        }
+      }
+
+      if (currentMarker) {
+        character = value.charAt(index);
+
+        if (character === $c131fdef5d104bf6b86afcea9b3af4$var$C_TAB) {
+          size += $c131fdef5d104bf6b86afcea9b3af4$var$TAB_SIZE - size % $c131fdef5d104bf6b86afcea9b3af4$var$TAB_SIZE;
+          index++;
+        } else if (character === $c131fdef5d104bf6b86afcea9b3af4$var$C_SPACE) {
+          end = index + $c131fdef5d104bf6b86afcea9b3af4$var$TAB_SIZE;
+
+          while (index < end) {
+            if (value.charAt(index) !== $c131fdef5d104bf6b86afcea9b3af4$var$C_SPACE) {
+              break;
+            }
+
+            index++;
+            size++;
+          }
+
+          if (index === end && value.charAt(index) === $c131fdef5d104bf6b86afcea9b3af4$var$C_SPACE) {
+            index -= $c131fdef5d104bf6b86afcea9b3af4$var$TAB_SIZE - 1;
+            size -= $c131fdef5d104bf6b86afcea9b3af4$var$TAB_SIZE - 1;
+          }
+        } else if (character !== $c131fdef5d104bf6b86afcea9b3af4$var$C_NEWLINE && character !== '') {
+          currentMarker = null;
+        }
+      }
+    }
+
+    if (currentMarker) {
+      if (!pedantic && marker !== currentMarker) {
+        break;
+      }
+
+      prefixed = true;
+    } else {
+      if (!commonmark && !indented && value.charAt(startIndex) === $c131fdef5d104bf6b86afcea9b3af4$var$C_SPACE) {
+        indented = true;
+      } else if (commonmark && item) {
+        indented = size >= item.indent || size > $c131fdef5d104bf6b86afcea9b3af4$var$TAB_SIZE;
+      }
+
+      prefixed = false;
+      index = startIndex;
+    }
+
+    line = value.slice(startIndex, nextIndex);
+    content = startIndex === index ? line : value.slice(index, nextIndex);
+
+    if (currentMarker === $c131fdef5d104bf6b86afcea9b3af4$var$C_ASTERISK || currentMarker === $c131fdef5d104bf6b86afcea9b3af4$var$C_UNDERSCORE || currentMarker === $c131fdef5d104bf6b86afcea9b3af4$var$C_DASH) {
+      if (tokenizers.thematicBreak.call(self, eat, line, true)) {
+        break;
+      }
+    }
+
+    prevEmpty = empty;
+    empty = !$c131fdef5d104bf6b86afcea9b3af4$var$trim(content).length;
+
+    if (indented && item) {
+      item.value = item.value.concat(emptyLines, line);
+      allLines = allLines.concat(emptyLines, line);
+      emptyLines = [];
+    } else if (prefixed) {
+      if (emptyLines.length !== 0) {
+        item.value.push('');
+        item.trail = emptyLines.concat();
+      }
+
+      item = {
+        value: [line],
+        indent: size,
+        trail: []
+      };
+      items.push(item);
+      allLines = allLines.concat(emptyLines, line);
+      emptyLines = [];
+    } else if (empty) {
+      if (prevEmpty) {
+        break;
+      }
+
+      emptyLines.push(line);
+    } else {
+      if (prevEmpty) {
+        break;
+      }
+
+      if ($c131fdef5d104bf6b86afcea9b3af4$var$interrupt(interuptors, tokenizers, self, [eat, line, true])) {
+        break;
+      }
+
+      item.value = item.value.concat(emptyLines, line);
+      allLines = allLines.concat(emptyLines, line);
+      emptyLines = [];
+    }
+
+    index = nextIndex + 1;
+  }
+
+  node = eat(allLines.join($c131fdef5d104bf6b86afcea9b3af4$var$C_NEWLINE)).reset({
+    type: 'list',
+    ordered: ordered,
+    start: start,
+    loose: null,
+    children: []
+  });
+  enterTop = self.enterList();
+  exitBlockquote = self.enterBlock();
+  isLoose = false;
+  index = -1;
+  length = items.length;
+
+  while (++index < length) {
+    item = items[index].value.join($c131fdef5d104bf6b86afcea9b3af4$var$C_NEWLINE);
+    now = eat.now();
+    item = eat(item)($c131fdef5d104bf6b86afcea9b3af4$var$listItem(self, item, now), node);
+
+    if (item.loose) {
+      isLoose = true;
+    }
+
+    item = items[index].trail.join($c131fdef5d104bf6b86afcea9b3af4$var$C_NEWLINE);
+
+    if (index !== length - 1) {
+      item += $c131fdef5d104bf6b86afcea9b3af4$var$C_NEWLINE;
+    }
+
+    eat(item);
+  }
+
+  enterTop();
+  exitBlockquote();
+  node.loose = isLoose;
+  return node;
+}
+
+function $c131fdef5d104bf6b86afcea9b3af4$var$listItem(ctx, value, position) {
+  var offsets = ctx.offset;
+  var fn = ctx.options.pedantic ? $c131fdef5d104bf6b86afcea9b3af4$var$pedanticListItem : $c131fdef5d104bf6b86afcea9b3af4$var$normalListItem;
+  var checked = null;
+  var task;
+  var indent;
+  value = fn.apply(null, arguments);
+
+  if (ctx.options.gfm) {
+    task = value.match($c131fdef5d104bf6b86afcea9b3af4$var$EXPRESSION_TASK_ITEM);
+
+    if (task) {
+      indent = task[0].length;
+      checked = task[1].toLowerCase() === $c131fdef5d104bf6b86afcea9b3af4$var$C_X_LOWER;
+      offsets[position.line] += indent;
+      value = value.slice(indent);
+    }
+  }
+
+  return {
+    type: 'listItem',
+    loose: $c131fdef5d104bf6b86afcea9b3af4$var$EXPRESSION_LOOSE_LIST_ITEM.test(value) || value.charAt(value.length - 1) === $c131fdef5d104bf6b86afcea9b3af4$var$C_NEWLINE,
+    checked: checked,
+    children: ctx.tokenizeBlock(value, position)
+  };
+}
+/* Create a list-item using overly simple mechanics. */
+
+
+function $c131fdef5d104bf6b86afcea9b3af4$var$pedanticListItem(ctx, value, position) {
+  var offsets = ctx.offset;
+  var line = position.line;
+  /* Remove the list-item’s bullet. */
+
+  value = value.replace($c131fdef5d104bf6b86afcea9b3af4$var$EXPRESSION_PEDANTIC_BULLET, replacer);
+  /* The initial line was also matched by the below, so
+   * we reset the `line`. */
+
+  line = position.line;
+  return value.replace($c131fdef5d104bf6b86afcea9b3af4$var$EXPRESSION_INITIAL_INDENT, replacer);
+  /* A simple replacer which removed all matches,
+   * and adds their length to `offset`. */
+
+  function replacer($0) {
+    offsets[line] = (offsets[line] || 0) + $0.length;
+    line++;
+    return '';
+  }
+}
+/* Create a list-item using sane mechanics. */
+
+
+function $c131fdef5d104bf6b86afcea9b3af4$var$normalListItem(ctx, value, position) {
+  var offsets = ctx.offset;
+  var line = position.line;
+  var max;
+  var bullet;
+  var rest;
+  var lines;
+  var trimmedLines;
+  var index;
+  var length;
+  /* Remove the list-item’s bullet. */
+
+  value = value.replace($c131fdef5d104bf6b86afcea9b3af4$var$EXPRESSION_BULLET, replacer);
+  lines = value.split($c131fdef5d104bf6b86afcea9b3af4$var$C_NEWLINE);
+  trimmedLines = $c131fdef5d104bf6b86afcea9b3af4$var$removeIndent(value, $c131fdef5d104bf6b86afcea9b3af4$var$getIndent(max).indent).split($c131fdef5d104bf6b86afcea9b3af4$var$C_NEWLINE);
+  /* We replaced the initial bullet with something
+   * else above, which was used to trick
+   * `removeIndentation` into removing some more
+   * characters when possible.  However, that could
+   * result in the initial line to be stripped more
+   * than it should be. */
+
+  trimmedLines[0] = rest;
+  offsets[line] = (offsets[line] || 0) + bullet.length;
+  line++;
+  index = 0;
+  length = lines.length;
+
+  while (++index < length) {
+    offsets[line] = (offsets[line] || 0) + lines[index].length - trimmedLines[index].length;
+    line++;
+  }
+
+  return trimmedLines.join($c131fdef5d104bf6b86afcea9b3af4$var$C_NEWLINE);
+
+  function replacer($0, $1, $2, $3, $4) {
+    bullet = $1 + $2 + $3;
+    rest = $4;
+    /* Make sure that the first nine numbered list items
+     * can indent with an extra space.  That is, when
+     * the bullet did not receive an extra final space. */
+
+    if (Number($2) < 10 && bullet.length % 2 === 1) {
+      $2 = $c131fdef5d104bf6b86afcea9b3af4$var$C_SPACE + $2;
+    }
+
+    max = $1 + $c131fdef5d104bf6b86afcea9b3af4$var$repeat($c131fdef5d104bf6b86afcea9b3af4$var$C_SPACE, $2.length) + $3;
+    return max + rest;
+  }
+}

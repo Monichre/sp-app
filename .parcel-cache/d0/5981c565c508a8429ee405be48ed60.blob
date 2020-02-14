@@ -1,0 +1,6 @@
+var $a080d87d9a21730d0f4a1643eebf$exports = {};
+$a080d87d9a21730d0f4a1643eebf$exports = $a080d87d9a21730d0f4a1643eebf$var$locate;
+
+function $a080d87d9a21730d0f4a1643eebf$var$locate(value, fromIndex) {
+  return value.indexOf('<', fromIndex);
+}

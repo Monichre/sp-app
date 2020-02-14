@@ -1,0 +1,45 @@
+var $a911529bb9c0a6ed0ff6e279b1d024d8$exports = {};
+var $a911529bb9c0a6ed0ff6e279b1d024d8$var$xtend = $parcel$require("a911529bb9c0a6ed0ff6e279b1d024d8", "xtend");
+var $a911529bb9c0a6ed0ff6e279b1d024d8$var$removePosition = $parcel$require("a911529bb9c0a6ed0ff6e279b1d024d8", "unist-util-remove-position");
+$a911529bb9c0a6ed0ff6e279b1d024d8$exports = $a911529bb9c0a6ed0ff6e279b1d024d8$var$parse;
+var $a911529bb9c0a6ed0ff6e279b1d024d8$var$C_NEWLINE = '\n';
+var $a911529bb9c0a6ed0ff6e279b1d024d8$var$EXPRESSION_LINE_BREAKS = /\r\n|\r/g;
+/* Parse the bound file. */
+
+function $a911529bb9c0a6ed0ff6e279b1d024d8$var$parse() {
+  var self = this;
+  var value = String(self.file);
+  var start = {
+    line: 1,
+    column: 1,
+    offset: 0
+  };
+  var content = $a911529bb9c0a6ed0ff6e279b1d024d8$var$xtend(start);
+  var node;
+  /* Clean non-unix newlines: `\r\n` and `\r` are all
+   * changed to `\n`.  This should not affect positional
+   * information. */
+
+  value = value.replace($a911529bb9c0a6ed0ff6e279b1d024d8$var$EXPRESSION_LINE_BREAKS, $a911529bb9c0a6ed0ff6e279b1d024d8$var$C_NEWLINE);
+
+  if (value.charCodeAt(0) === 0xFEFF) {
+    value = value.slice(1);
+    content.column++;
+    content.offset++;
+  }
+
+  node = {
+    type: 'root',
+    children: self.tokenizeBlock(value, content),
+    position: {
+      start: start,
+      end: self.eof || $a911529bb9c0a6ed0ff6e279b1d024d8$var$xtend(start)
+    }
+  };
+
+  if (!self.options.position) {
+    $a911529bb9c0a6ed0ff6e279b1d024d8$var$removePosition(node, true);
+  }
+
+  return node;
+}

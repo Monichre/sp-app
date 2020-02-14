@@ -1,0 +1,25 @@
+var $cefad10ff4d553617bd6121dd168c11d$exports = function () {
+  var exports = this;
+  var module = {
+    exports: this
+  };
+  exports.__esModule = true;
+  $parcel$require("cefad10ff4d553617bd6121dd168c11d", "./ponyfill.js");
+  var root;
+
+  if (typeof self !== 'undefined') {
+    root = self;
+  } else if (typeof window !== 'undefined') {
+    root = window;
+  } else if (typeof $parcel$global !== 'undefined') {
+    root = $parcel$global;
+  } else if (typeof module !== 'undefined') {
+    root = module;
+  } else {
+    root = Function('return this')();
+  }
+
+  var $cefad10ff4d553617bd6121dd168c11d$export$default = $cefad10ff4d553617bd6121dd168c11d$import$ponyfill(root);
+  exports.default = $cefad10ff4d553617bd6121dd168c11d$export$default;
+  return module.exports;
+}.call({});

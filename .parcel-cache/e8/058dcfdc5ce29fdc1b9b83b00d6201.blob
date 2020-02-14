@@ -1,0 +1,134 @@
+var $d74821ed0b513ecfd95be32e5b904922$exports = {};
+var $d74821ed0b513ecfd95be32e5b904922$var$whitespace = $parcel$require("d74821ed0b513ecfd95be32e5b904922", "is-whitespace-character");
+var $d74821ed0b513ecfd95be32e5b904922$var$decode = $parcel$require("d74821ed0b513ecfd95be32e5b904922", "parse-entities");
+var $d74821ed0b513ecfd95be32e5b904922$var$locate = $parcel$require("d74821ed0b513ecfd95be32e5b904922", "../locate/tag");
+$d74821ed0b513ecfd95be32e5b904922$exports = $d74821ed0b513ecfd95be32e5b904922$var$autoLink;
+$d74821ed0b513ecfd95be32e5b904922$var$autoLink.locator = $d74821ed0b513ecfd95be32e5b904922$var$locate;
+$d74821ed0b513ecfd95be32e5b904922$var$autoLink.notInLink = true;
+var $d74821ed0b513ecfd95be32e5b904922$var$C_LT = '<';
+var $d74821ed0b513ecfd95be32e5b904922$var$C_GT = '>';
+var $d74821ed0b513ecfd95be32e5b904922$var$C_AT_SIGN = '@';
+var $d74821ed0b513ecfd95be32e5b904922$var$C_SLASH = '/';
+var $d74821ed0b513ecfd95be32e5b904922$var$MAILTO = 'mailto:';
+var $d74821ed0b513ecfd95be32e5b904922$var$MAILTO_LENGTH = $d74821ed0b513ecfd95be32e5b904922$var$MAILTO.length;
+/* Tokenise a link. */
+
+function $d74821ed0b513ecfd95be32e5b904922$var$autoLink(eat, value, silent) {
+  var self;
+  var subvalue;
+  var length;
+  var index;
+  var queue;
+  var character;
+  var hasAtCharacter;
+  var link;
+  var now;
+  var content;
+  var tokenizers;
+  var exit;
+
+  if (value.charAt(0) !== $d74821ed0b513ecfd95be32e5b904922$var$C_LT) {
+    return;
+  }
+
+  self = this;
+  subvalue = '';
+  length = value.length;
+  index = 0;
+  queue = '';
+  hasAtCharacter = false;
+  link = '';
+  index++;
+  subvalue = $d74821ed0b513ecfd95be32e5b904922$var$C_LT;
+
+  while (index < length) {
+    character = value.charAt(index);
+
+    if ($d74821ed0b513ecfd95be32e5b904922$var$whitespace(character) || character === $d74821ed0b513ecfd95be32e5b904922$var$C_GT || character === $d74821ed0b513ecfd95be32e5b904922$var$C_AT_SIGN || character === ':' && value.charAt(index + 1) === $d74821ed0b513ecfd95be32e5b904922$var$C_SLASH) {
+      break;
+    }
+
+    queue += character;
+    index++;
+  }
+
+  if (!queue) {
+    return;
+  }
+
+  link += queue;
+  queue = '';
+  character = value.charAt(index);
+  link += character;
+  index++;
+
+  if (character === $d74821ed0b513ecfd95be32e5b904922$var$C_AT_SIGN) {
+    hasAtCharacter = true;
+  } else {
+    if (character !== ':' || value.charAt(index + 1) !== $d74821ed0b513ecfd95be32e5b904922$var$C_SLASH) {
+      return;
+    }
+
+    link += $d74821ed0b513ecfd95be32e5b904922$var$C_SLASH;
+    index++;
+  }
+
+  while (index < length) {
+    character = value.charAt(index);
+
+    if ($d74821ed0b513ecfd95be32e5b904922$var$whitespace(character) || character === $d74821ed0b513ecfd95be32e5b904922$var$C_GT) {
+      break;
+    }
+
+    queue += character;
+    index++;
+  }
+
+  character = value.charAt(index);
+
+  if (!queue || character !== $d74821ed0b513ecfd95be32e5b904922$var$C_GT) {
+    return;
+  }
+  /* istanbul ignore if - never used (yet) */
+
+
+  if (silent) {
+    return true;
+  }
+
+  link += queue;
+  content = link;
+  subvalue += link + character;
+  now = eat.now();
+  now.column++;
+  now.offset++;
+
+  if (hasAtCharacter) {
+    if (link.slice(0, $d74821ed0b513ecfd95be32e5b904922$var$MAILTO_LENGTH).toLowerCase() === $d74821ed0b513ecfd95be32e5b904922$var$MAILTO) {
+      content = content.substr($d74821ed0b513ecfd95be32e5b904922$var$MAILTO_LENGTH);
+      now.column += $d74821ed0b513ecfd95be32e5b904922$var$MAILTO_LENGTH;
+      now.offset += $d74821ed0b513ecfd95be32e5b904922$var$MAILTO_LENGTH;
+    } else {
+      link = $d74821ed0b513ecfd95be32e5b904922$var$MAILTO + link;
+    }
+  }
+  /* Temporarily remove all tokenizers except text in autolinks. */
+
+
+  tokenizers = self.inlineTokenizers;
+  self.inlineTokenizers = {
+    text: tokenizers.text
+  };
+  exit = self.enterLink();
+  content = self.tokenizeInline(content, now);
+  self.inlineTokenizers = tokenizers;
+  exit();
+  return eat(subvalue)({
+    type: 'link',
+    title: null,
+    url: $d74821ed0b513ecfd95be32e5b904922$var$decode(link, {
+      nonTerminated: false
+    }),
+    children: content
+  });
+}

@@ -1,0 +1,412 @@
+var $f658ae6da311f499eeae854c9994be$exports = {};
+var $f658ae6da311f499eeae854c9994be$var$legacy = $parcel$require("89f658ae6da311f499eeae854c9994be", "character-entities-legacy");
+var $f658ae6da311f499eeae854c9994be$var$invalid = $parcel$require("89f658ae6da311f499eeae854c9994be", "character-reference-invalid");
+var $f658ae6da311f499eeae854c9994be$var$decimal = $parcel$require("89f658ae6da311f499eeae854c9994be", "is-decimal");
+var $f658ae6da311f499eeae854c9994be$var$hexadecimal = $parcel$require("89f658ae6da311f499eeae854c9994be", "is-hexadecimal");
+var $f658ae6da311f499eeae854c9994be$var$alphanumerical = $parcel$require("89f658ae6da311f499eeae854c9994be", "is-alphanumerical");
+var $f658ae6da311f499eeae854c9994be$var$decodeEntity = $parcel$require("89f658ae6da311f499eeae854c9994be", "./decode-entity");
+$f658ae6da311f499eeae854c9994be$exports = $f658ae6da311f499eeae854c9994be$var$parseEntities;
+var $f658ae6da311f499eeae854c9994be$var$own = {}.hasOwnProperty;
+var $f658ae6da311f499eeae854c9994be$var$fromCharCode = String.fromCharCode;
+var $f658ae6da311f499eeae854c9994be$var$noop = Function.prototype; // Default settings.
+
+var $f658ae6da311f499eeae854c9994be$var$defaults = {
+  warning: null,
+  reference: null,
+  text: null,
+  warningContext: null,
+  referenceContext: null,
+  textContext: null,
+  position: {},
+  additional: null,
+  attribute: false,
+  nonTerminated: true
+}; // Characters.
+
+var $f658ae6da311f499eeae854c9994be$var$tab = 9; // '\t'
+
+var $f658ae6da311f499eeae854c9994be$var$lineFeed = 10; // '\n'
+
+var $f658ae6da311f499eeae854c9994be$var$formFeed = 12; //  '\f'
+
+var $f658ae6da311f499eeae854c9994be$var$space = 32; // ' '
+
+var $f658ae6da311f499eeae854c9994be$var$ampersand = 38; //  '&'
+
+var $f658ae6da311f499eeae854c9994be$var$semicolon = 59; //  ';'
+
+var $f658ae6da311f499eeae854c9994be$var$lessThan = 60; //  '<'
+
+var $f658ae6da311f499eeae854c9994be$var$equalsTo = 61; //  '='
+
+var $f658ae6da311f499eeae854c9994be$var$numberSign = 35; //  '#'
+
+var $f658ae6da311f499eeae854c9994be$var$uppercaseX = 88; //  'X'
+
+var $f658ae6da311f499eeae854c9994be$var$lowercaseX = 120; //  'x'
+
+var $f658ae6da311f499eeae854c9994be$var$replacementCharacter = 65533; // '�'
+// Reference types.
+
+var $f658ae6da311f499eeae854c9994be$var$name = 'named';
+var $f658ae6da311f499eeae854c9994be$var$hexa = 'hexadecimal';
+var $f658ae6da311f499eeae854c9994be$var$deci = 'decimal'; // Map of bases.
+
+var $f658ae6da311f499eeae854c9994be$var$bases = {};
+$f658ae6da311f499eeae854c9994be$var$bases[$f658ae6da311f499eeae854c9994be$var$hexa] = 16;
+$f658ae6da311f499eeae854c9994be$var$bases[$f658ae6da311f499eeae854c9994be$var$deci] = 10; // Map of types to tests.
+// Each type of character reference accepts different characters.
+// This test is used to detect whether a reference has ended (as the semicolon
+// is not strictly needed).
+
+var $f658ae6da311f499eeae854c9994be$var$tests = {};
+$f658ae6da311f499eeae854c9994be$var$tests[$f658ae6da311f499eeae854c9994be$var$name] = $f658ae6da311f499eeae854c9994be$var$alphanumerical;
+$f658ae6da311f499eeae854c9994be$var$tests[$f658ae6da311f499eeae854c9994be$var$deci] = $f658ae6da311f499eeae854c9994be$var$decimal;
+$f658ae6da311f499eeae854c9994be$var$tests[$f658ae6da311f499eeae854c9994be$var$hexa] = $f658ae6da311f499eeae854c9994be$var$hexadecimal; // Warning types.
+
+var $f658ae6da311f499eeae854c9994be$var$namedNotTerminated = 1;
+var $f658ae6da311f499eeae854c9994be$var$numericNotTerminated = 2;
+var $f658ae6da311f499eeae854c9994be$var$namedEmpty = 3;
+var $f658ae6da311f499eeae854c9994be$var$numericEmpty = 4;
+var $f658ae6da311f499eeae854c9994be$var$namedUnknown = 5;
+var $f658ae6da311f499eeae854c9994be$var$numericDisallowed = 6;
+var $f658ae6da311f499eeae854c9994be$var$numericProhibited = 7; // Warning messages.
+
+var $f658ae6da311f499eeae854c9994be$var$messages = {};
+$f658ae6da311f499eeae854c9994be$var$messages[$f658ae6da311f499eeae854c9994be$var$namedNotTerminated] = 'Named character references must be terminated by a semicolon';
+$f658ae6da311f499eeae854c9994be$var$messages[$f658ae6da311f499eeae854c9994be$var$numericNotTerminated] = 'Numeric character references must be terminated by a semicolon';
+$f658ae6da311f499eeae854c9994be$var$messages[$f658ae6da311f499eeae854c9994be$var$namedEmpty] = 'Named character references cannot be empty';
+$f658ae6da311f499eeae854c9994be$var$messages[$f658ae6da311f499eeae854c9994be$var$numericEmpty] = 'Numeric character references cannot be empty';
+$f658ae6da311f499eeae854c9994be$var$messages[$f658ae6da311f499eeae854c9994be$var$namedUnknown] = 'Named character references must be known';
+$f658ae6da311f499eeae854c9994be$var$messages[$f658ae6da311f499eeae854c9994be$var$numericDisallowed] = 'Numeric character references cannot be disallowed';
+$f658ae6da311f499eeae854c9994be$var$messages[$f658ae6da311f499eeae854c9994be$var$numericProhibited] = 'Numeric character references cannot be outside the permissible Unicode range'; // Wrap to ensure clean parameters are given to `parse`.
+
+function $f658ae6da311f499eeae854c9994be$var$parseEntities(value, options) {
+  var settings = {};
+  var option;
+  var key;
+
+  if (!options) {
+    options = {};
+  }
+
+  for (key in $f658ae6da311f499eeae854c9994be$var$defaults) {
+    option = options[key];
+    settings[key] = option === null || option === undefined ? $f658ae6da311f499eeae854c9994be$var$defaults[key] : option;
+  }
+
+  if (settings.position.indent || settings.position.start) {
+    settings.indent = settings.position.indent || [];
+    settings.position = settings.position.start;
+  }
+
+  return $f658ae6da311f499eeae854c9994be$var$parse(value, settings);
+} // Parse entities.
+// eslint-disable-next-line complexity
+
+
+function $f658ae6da311f499eeae854c9994be$var$parse(value, settings) {
+  var additional = settings.additional;
+  var nonTerminated = settings.nonTerminated;
+  var handleText = settings.text;
+  var handleReference = settings.reference;
+  var handleWarning = settings.warning;
+  var textContext = settings.textContext;
+  var referenceContext = settings.referenceContext;
+  var warningContext = settings.warningContext;
+  var pos = settings.position;
+  var indent = settings.indent || [];
+  var length = value.length;
+  var index = 0;
+  var lines = -1;
+  var column = pos.column || 1;
+  var line = pos.line || 1;
+  var queue = '';
+  var result = [];
+  var entityCharacters;
+  var namedEntity;
+  var terminated;
+  var characters;
+  var character;
+  var reference;
+  var following;
+  var warning;
+  var reason;
+  var output;
+  var entity;
+  var begin;
+  var start;
+  var type;
+  var test;
+  var prev;
+  var next;
+  var diff;
+  var end;
+
+  if (typeof additional === 'string') {
+    additional = additional.charCodeAt(0);
+  } // Cache the current point.
+
+
+  prev = now(); // Wrap `handleWarning`.
+
+  warning = handleWarning ? parseError : $f658ae6da311f499eeae854c9994be$var$noop; // Ensure the algorithm walks over the first character and the end (inclusive).
+
+  index--;
+  length++;
+
+  while (++index < length) {
+    // If the previous character was a newline.
+    if (character === $f658ae6da311f499eeae854c9994be$var$lineFeed) {
+      column = indent[lines] || 1;
+    }
+
+    character = value.charCodeAt(index);
+
+    if (character === $f658ae6da311f499eeae854c9994be$var$ampersand) {
+      following = value.charCodeAt(index + 1); // The behaviour depends on the identity of the next character.
+
+      if (following === $f658ae6da311f499eeae854c9994be$var$tab || following === $f658ae6da311f499eeae854c9994be$var$lineFeed || following === $f658ae6da311f499eeae854c9994be$var$formFeed || following === $f658ae6da311f499eeae854c9994be$var$space || following === $f658ae6da311f499eeae854c9994be$var$ampersand || following === $f658ae6da311f499eeae854c9994be$var$lessThan || following !== following || additional && following === additional) {
+        // Not a character reference.
+        // No characters are consumed, and nothing is returned.
+        // This is not an error, either.
+        queue += $f658ae6da311f499eeae854c9994be$var$fromCharCode(character);
+        column++;
+        continue;
+      }
+
+      start = index + 1;
+      begin = start;
+      end = start;
+
+      if (following === $f658ae6da311f499eeae854c9994be$var$numberSign) {
+        // Numerical entity.
+        end = ++begin; // The behaviour further depends on the next character.
+
+        following = value.charCodeAt(end);
+
+        if (following === $f658ae6da311f499eeae854c9994be$var$uppercaseX || following === $f658ae6da311f499eeae854c9994be$var$lowercaseX) {
+          // ASCII hex digits.
+          type = $f658ae6da311f499eeae854c9994be$var$hexa;
+          end = ++begin;
+        } else {
+          // ASCII digits.
+          type = $f658ae6da311f499eeae854c9994be$var$deci;
+        }
+      } else {
+        // Named entity.
+        type = $f658ae6da311f499eeae854c9994be$var$name;
+      }
+
+      entityCharacters = '';
+      entity = '';
+      characters = '';
+      test = $f658ae6da311f499eeae854c9994be$var$tests[type];
+      end--;
+
+      while (++end < length) {
+        following = value.charCodeAt(end);
+
+        if (!test(following)) {
+          break;
+        }
+
+        characters += $f658ae6da311f499eeae854c9994be$var$fromCharCode(following); // Check if we can match a legacy named reference.
+        // If so, we cache that as the last viable named reference.
+        // This ensures we do not need to walk backwards later.
+
+        if (type === $f658ae6da311f499eeae854c9994be$var$name && $f658ae6da311f499eeae854c9994be$var$own.call($f658ae6da311f499eeae854c9994be$var$legacy, characters)) {
+          entityCharacters = characters;
+          entity = $f658ae6da311f499eeae854c9994be$var$legacy[characters];
+        }
+      }
+
+      terminated = value.charCodeAt(end) === $f658ae6da311f499eeae854c9994be$var$semicolon;
+
+      if (terminated) {
+        end++;
+        namedEntity = type === $f658ae6da311f499eeae854c9994be$var$name ? $f658ae6da311f499eeae854c9994be$var$decodeEntity(characters) : false;
+
+        if (namedEntity) {
+          entityCharacters = characters;
+          entity = namedEntity;
+        }
+      }
+
+      diff = 1 + end - start;
+
+      if (!terminated && !nonTerminated) {// Empty.
+      } else if (!characters) {
+        // An empty (possible) entity is valid, unless it’s numeric (thus an
+        // ampersand followed by an octothorp).
+        if (type !== $f658ae6da311f499eeae854c9994be$var$name) {
+          warning($f658ae6da311f499eeae854c9994be$var$numericEmpty, diff);
+        }
+      } else if (type === $f658ae6da311f499eeae854c9994be$var$name) {
+        // An ampersand followed by anything unknown, and not terminated, is
+        // invalid.
+        if (terminated && !entity) {
+          warning($f658ae6da311f499eeae854c9994be$var$namedUnknown, 1);
+        } else {
+          // If theres something after an entity name which is not known, cap
+          // the reference.
+          if (entityCharacters !== characters) {
+            end = begin + entityCharacters.length;
+            diff = 1 + end - begin;
+            terminated = false;
+          } // If the reference is not terminated, warn.
+
+
+          if (!terminated) {
+            reason = entityCharacters ? $f658ae6da311f499eeae854c9994be$var$namedNotTerminated : $f658ae6da311f499eeae854c9994be$var$namedEmpty;
+
+            if (settings.attribute) {
+              following = value.charCodeAt(end);
+
+              if (following === $f658ae6da311f499eeae854c9994be$var$equalsTo) {
+                warning(reason, diff);
+                entity = null;
+              } else if ($f658ae6da311f499eeae854c9994be$var$alphanumerical(following)) {
+                entity = null;
+              } else {
+                warning(reason, diff);
+              }
+            } else {
+              warning(reason, diff);
+            }
+          }
+        }
+
+        reference = entity;
+      } else {
+        if (!terminated) {
+          // All non-terminated numeric entities are not rendered, and trigger a
+          // warning.
+          warning($f658ae6da311f499eeae854c9994be$var$numericNotTerminated, diff);
+        } // When terminated and number, parse as either hexadecimal or decimal.
+
+
+        reference = parseInt(characters, $f658ae6da311f499eeae854c9994be$var$bases[type]); // Trigger a warning when the parsed number is prohibited, and replace
+        // with replacement character.
+
+        if ($f658ae6da311f499eeae854c9994be$var$prohibited(reference)) {
+          warning($f658ae6da311f499eeae854c9994be$var$numericProhibited, diff);
+          reference = $f658ae6da311f499eeae854c9994be$var$fromCharCode($f658ae6da311f499eeae854c9994be$var$replacementCharacter);
+        } else if (reference in $f658ae6da311f499eeae854c9994be$var$invalid) {
+          // Trigger a warning when the parsed number is disallowed, and replace
+          // by an alternative.
+          warning($f658ae6da311f499eeae854c9994be$var$numericDisallowed, diff);
+          reference = $f658ae6da311f499eeae854c9994be$var$invalid[reference];
+        } else {
+          // Parse the number.
+          output = ''; // Trigger a warning when the parsed number should not be used.
+
+          if ($f658ae6da311f499eeae854c9994be$var$disallowed(reference)) {
+            warning($f658ae6da311f499eeae854c9994be$var$numericDisallowed, diff);
+          } // Stringify the number.
+
+
+          if (reference > 0xffff) {
+            reference -= 0x10000;
+            output += $f658ae6da311f499eeae854c9994be$var$fromCharCode(reference >>> (10 & 0x3ff) | 0xd800);
+            reference = 0xdc00 | reference & 0x3ff;
+          }
+
+          reference = output + $f658ae6da311f499eeae854c9994be$var$fromCharCode(reference);
+        }
+      } // Found it!
+      // First eat the queued characters as normal text, then eat an entity.
+
+
+      if (reference) {
+        flush();
+        prev = now();
+        index = end - 1;
+        column += end - start + 1;
+        result.push(reference);
+        next = now();
+        next.offset++;
+
+        if (handleReference) {
+          handleReference.call(referenceContext, reference, {
+            start: prev,
+            end: next
+          }, value.slice(start - 1, end));
+        }
+
+        prev = next;
+      } else {
+        // If we could not find a reference, queue the checked characters (as
+        // normal characters), and move the pointer to their end.
+        // This is possible because we can be certain neither newlines nor
+        // ampersands are included.
+        characters = value.slice(start - 1, end);
+        queue += characters;
+        column += characters.length;
+        index = end - 1;
+      }
+    } else {
+      // Handle anything other than an ampersand, including newlines and EOF.
+      if (character === 10 // Line feed
+      ) {
+          line++;
+          lines++;
+          column = 0;
+        }
+
+      if (character === character) {
+        queue += $f658ae6da311f499eeae854c9994be$var$fromCharCode(character);
+        column++;
+      } else {
+        flush();
+      }
+    }
+  } // Return the reduced nodes, and any possible warnings.
+
+
+  return result.join(''); // Get current position.
+
+  function now() {
+    return {
+      line: line,
+      column: column,
+      offset: index + (pos.offset || 0)
+    };
+  } // “Throw” a parse-error: a warning.
+
+
+  function parseError(code, offset) {
+    var position = now();
+    position.column += offset;
+    position.offset += offset;
+    handleWarning.call(warningContext, $f658ae6da311f499eeae854c9994be$var$messages[code], position, code);
+  } // Flush `queue` (normal text).
+  // Macro invoked before each entity and at the end of `value`.
+  // Does nothing when `queue` is empty.
+
+
+  function flush() {
+    if (queue) {
+      result.push(queue);
+
+      if (handleText) {
+        handleText.call(textContext, queue, {
+          start: prev,
+          end: now()
+        });
+      }
+
+      queue = '';
+    }
+  }
+} // Check if `character` is outside the permissible unicode range.
+
+
+function $f658ae6da311f499eeae854c9994be$var$prohibited(code) {
+  return code >= 0xd800 && code <= 0xdfff || code > 0x10ffff;
+} // Check if `character` is disallowed.
+
+
+function $f658ae6da311f499eeae854c9994be$var$disallowed(code) {
+  return code >= 0x0001 && code <= 0x0008 || code === 0x000b || code >= 0x000d && code <= 0x001f || code >= 0x007f && code <= 0x009f || code >= 0xfdd0 && code <= 0xfdef || (code & 0xffff) === 0xffff || (code & 0xffff) === 0xfffe;
+}

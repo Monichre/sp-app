@@ -1,0 +1,3 @@
+var $f58296b3023c7e70657930a33137b011$exports = {};
+var $f58296b3023c7e70657930a33137b011$var$document = $parcel$require("f58296b3023c7e70657930a33137b011", "../internals/global").document;
+$f58296b3023c7e70657930a33137b011$exports = $f58296b3023c7e70657930a33137b011$var$document && $f58296b3023c7e70657930a33137b011$var$document.documentElement;

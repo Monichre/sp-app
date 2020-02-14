@@ -1,0 +1,25 @@
+var $b6a6ed6e1e6b38bf5e3b95a5aadc7ca1$exports = {};
+$b6a6ed6e1e6b38bf5e3b95a5aadc7ca1$exports = $b6a6ed6e1e6b38bf5e3b95a5aadc7ca1$var$visit;
+var $b6a6ed6e1e6b38bf5e3b95a5aadc7ca1$var$visitParents = $parcel$require("b6a6ed6e1e6b38bf5e3b95a5aadc7ca1", "unist-util-visit-parents");
+var $b6a6ed6e1e6b38bf5e3b95a5aadc7ca1$var$CONTINUE = $b6a6ed6e1e6b38bf5e3b95a5aadc7ca1$var$visitParents.CONTINUE;
+var $b6a6ed6e1e6b38bf5e3b95a5aadc7ca1$var$SKIP = $b6a6ed6e1e6b38bf5e3b95a5aadc7ca1$var$visitParents.SKIP;
+var $b6a6ed6e1e6b38bf5e3b95a5aadc7ca1$var$EXIT = $b6a6ed6e1e6b38bf5e3b95a5aadc7ca1$var$visitParents.EXIT;
+$b6a6ed6e1e6b38bf5e3b95a5aadc7ca1$var$visit.CONTINUE = $b6a6ed6e1e6b38bf5e3b95a5aadc7ca1$var$CONTINUE;
+$b6a6ed6e1e6b38bf5e3b95a5aadc7ca1$var$visit.SKIP = $b6a6ed6e1e6b38bf5e3b95a5aadc7ca1$var$SKIP;
+$b6a6ed6e1e6b38bf5e3b95a5aadc7ca1$var$visit.EXIT = $b6a6ed6e1e6b38bf5e3b95a5aadc7ca1$var$EXIT;
+
+function $b6a6ed6e1e6b38bf5e3b95a5aadc7ca1$var$visit(tree, test, visitor, reverse) {
+  if (typeof test === 'function' && typeof visitor !== 'function') {
+    reverse = visitor;
+    visitor = test;
+    test = null;
+  }
+
+  $b6a6ed6e1e6b38bf5e3b95a5aadc7ca1$var$visitParents(tree, test, overload, reverse);
+
+  function overload(node, parents) {
+    var parent = parents[parents.length - 1];
+    var index = parent ? parent.children.indexOf(node) : null;
+    return visitor(node, index, parent);
+  }
+}

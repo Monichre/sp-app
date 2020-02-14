@@ -1,0 +1,19 @@
+var $ccb7f86108f48bede7b20974f$exports = {};
+var $ccb7f86108f48bede7b20974f$var$MATCH = $parcel$require("4570783ccb7f86108f48bede7b20974f", "../internals/well-known-symbol")('match');
+
+$ccb7f86108f48bede7b20974f$exports = function (METHOD_NAME) {
+  var regexp = /./;
+
+  try {
+    '/./'[METHOD_NAME](regexp);
+  } catch (e) {
+    try {
+      regexp[$ccb7f86108f48bede7b20974f$var$MATCH] = false;
+      return '/./'[METHOD_NAME](regexp);
+    } catch (f) {
+      /* empty */
+    }
+  }
+
+  return false;
+};

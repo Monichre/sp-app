@@ -1,0 +1,9 @@
+var $c987dc45f231bf3001a4f1b464345d$exports = {};
+$c987dc45f231bf3001a4f1b464345d$exports = $c987dc45f231bf3001a4f1b464345d$var$wordCharacter;
+var $c987dc45f231bf3001a4f1b464345d$var$fromCode = String.fromCharCode;
+var $c987dc45f231bf3001a4f1b464345d$var$re = /\w/; // Check if the given character code, or the character code at the first
+// character, is a word character.
+
+function $c987dc45f231bf3001a4f1b464345d$var$wordCharacter(character) {
+  return $c987dc45f231bf3001a4f1b464345d$var$re.test(typeof character === 'number' ? $c987dc45f231bf3001a4f1b464345d$var$fromCode(character) : character.charAt(0));
+}

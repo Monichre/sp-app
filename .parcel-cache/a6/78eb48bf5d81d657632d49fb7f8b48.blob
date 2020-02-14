@@ -1,0 +1,5 @@
+var $c85a772061d4aca7302643700a78$exports = {};
+
+$c85a772061d4aca7302643700a78$exports = Array.isArray || function (arr) {
+  return Object.prototype.toString.call(arr) == '[object Array]';
+};

@@ -1,0 +1,766 @@
+var $e42d037c3b8752334b8b534dd85f4cb6$exports = {};
+$parcel$require("e42d037c3b8752334b8b534dd85f4cb6", "@babel/runtime/helpers/esm/inheritsLoose");
+$parcel$require("e42d037c3b8752334b8b534dd85f4cb6", "react");
+$parcel$require("e42d037c3b8752334b8b534dd85f4cb6", "prop-types");
+$parcel$require("e42d037c3b8752334b8b534dd85f4cb6", "history");
+$parcel$require("e42d037c3b8752334b8b534dd85f4cb6", "tiny-warning");
+$parcel$require("e42d037c3b8752334b8b534dd85f4cb6", "mini-create-react-context");
+$parcel$require("e42d037c3b8752334b8b534dd85f4cb6", "tiny-invariant");
+$parcel$require("e42d037c3b8752334b8b534dd85f4cb6", "@babel/runtime/helpers/esm/extends");
+$parcel$require("e42d037c3b8752334b8b534dd85f4cb6", "path-to-regexp");
+$parcel$require("e42d037c3b8752334b8b534dd85f4cb6", "react-is");
+$parcel$require("e42d037c3b8752334b8b534dd85f4cb6", "@babel/runtime/helpers/esm/objectWithoutPropertiesLoose");
+$parcel$require("e42d037c3b8752334b8b534dd85f4cb6", "hoist-non-react-statics");
+
+// TODO: Replace with React.createContext once we can assume React 16+
+var $e42d037c3b8752334b8b534dd85f4cb6$var$createNamedContext = function createNamedContext(name) {
+  var context = $e42d037c3b8752334b8b534dd85f4cb6$import$createContext();
+  context.displayName = name;
+  return context;
+};
+
+var $e42d037c3b8752334b8b534dd85f4cb6$export$__RouterContext =
+/*#__PURE__*/
+$e42d037c3b8752334b8b534dd85f4cb6$var$createNamedContext("Router");
+/**
+ * The public API for putting history on context.
+ */
+
+var $e42d037c3b8752334b8b534dd85f4cb6$export$Router =
+/*#__PURE__*/
+function (_React$Component) {
+  $e42d037c3b8752334b8b534dd85f4cb6$import$_inheritsLoose(Router, _React$Component);
+
+  Router.computeRootMatch = function computeRootMatch(pathname) {
+    return {
+      path: "/",
+      url: "/",
+      params: {},
+      isExact: pathname === "/"
+    };
+  };
+
+  function Router(props) {
+    var _this;
+
+    _this = _React$Component.call(this, props) || this;
+    _this.state = {
+      location: props.history.location
+    }; // This is a bit of a hack. We have to start listening for location
+    // changes here in the constructor in case there are any <Redirect>s
+    // on the initial render. If there are, they will replace/push when
+    // they mount and since cDM fires in children before parents, we may
+    // get a new location before the <Router> is mounted.
+
+    _this._isMounted = false;
+    _this._pendingLocation = null;
+
+    if (!props.staticContext) {
+      _this.unlisten = props.history.listen(function (location) {
+        if (_this._isMounted) {
+          _this.setState({
+            location: location
+          });
+        } else {
+          _this._pendingLocation = location;
+        }
+      });
+    }
+
+    return _this;
+  }
+
+  var _proto = Router.prototype;
+
+  _proto.componentDidMount = function componentDidMount() {
+    this._isMounted = true;
+
+    if (this._pendingLocation) {
+      this.setState({
+        location: this._pendingLocation
+      });
+    }
+  };
+
+  _proto.componentWillUnmount = function componentWillUnmount() {
+    if (this.unlisten) this.unlisten();
+  };
+
+  _proto.render = function render() {
+    return $e42d037c3b8752334b8b534dd85f4cb6$import$React.createElement($e42d037c3b8752334b8b534dd85f4cb6$export$__RouterContext.Provider, {
+      children: this.props.children || null,
+      value: {
+        history: this.props.history,
+        location: this.state.location,
+        match: Router.computeRootMatch(this.state.location.pathname),
+        staticContext: this.props.staticContext
+      }
+    });
+  };
+
+  return Router;
+}($e42d037c3b8752334b8b534dd85f4cb6$import$React.Component);
+
+if ("production" !== "production") {
+  $e42d037c3b8752334b8b534dd85f4cb6$export$Router.propTypes = {
+    children: $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.node,
+    history: $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.object.isRequired,
+    staticContext: $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.object
+  };
+
+  $e42d037c3b8752334b8b534dd85f4cb6$export$Router.prototype.componentDidUpdate = function (prevProps) {
+    "production" !== "production" ? $e42d037c3b8752334b8b534dd85f4cb6$import$warning(prevProps.history === this.props.history, "You cannot change <Router history>") : void 0;
+  };
+}
+/**
+ * The public API for a <Router> that stores location in memory.
+ */
+
+
+var $e42d037c3b8752334b8b534dd85f4cb6$export$MemoryRouter =
+/*#__PURE__*/
+function (_React$Component) {
+  $e42d037c3b8752334b8b534dd85f4cb6$import$_inheritsLoose(MemoryRouter, _React$Component);
+
+  function MemoryRouter() {
+    var _this;
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _React$Component.call.apply(_React$Component, [this].concat(args)) || this;
+    _this.history = $e42d037c3b8752334b8b534dd85f4cb6$import$createMemoryHistory(_this.props);
+    return _this;
+  }
+
+  var _proto = MemoryRouter.prototype;
+
+  _proto.render = function render() {
+    return $e42d037c3b8752334b8b534dd85f4cb6$import$React.createElement($e42d037c3b8752334b8b534dd85f4cb6$export$Router, {
+      history: this.history,
+      children: this.props.children
+    });
+  };
+
+  return MemoryRouter;
+}($e42d037c3b8752334b8b534dd85f4cb6$import$React.Component);
+
+if ("production" !== "production") {
+  $e42d037c3b8752334b8b534dd85f4cb6$export$MemoryRouter.propTypes = {
+    initialEntries: $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.array,
+    initialIndex: $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.number,
+    getUserConfirmation: $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.func,
+    keyLength: $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.number,
+    children: $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.node
+  };
+
+  $e42d037c3b8752334b8b534dd85f4cb6$export$MemoryRouter.prototype.componentDidMount = function () {
+    "production" !== "production" ? $e42d037c3b8752334b8b534dd85f4cb6$import$warning(!this.props.history, "<MemoryRouter> ignores the history prop. To use a custom history, " + "use `import { Router }` instead of `import { MemoryRouter as Router }`.") : void 0;
+  };
+}
+
+var $e42d037c3b8752334b8b534dd85f4cb6$var$Lifecycle =
+/*#__PURE__*/
+function (_React$Component) {
+  $e42d037c3b8752334b8b534dd85f4cb6$import$_inheritsLoose(Lifecycle, _React$Component);
+
+  function Lifecycle() {
+    return _React$Component.apply(this, arguments) || this;
+  }
+
+  var _proto = Lifecycle.prototype;
+
+  _proto.componentDidMount = function componentDidMount() {
+    if (this.props.onMount) this.props.onMount.call(this, this);
+  };
+
+  _proto.componentDidUpdate = function componentDidUpdate(prevProps) {
+    if (this.props.onUpdate) this.props.onUpdate.call(this, this, prevProps);
+  };
+
+  _proto.componentWillUnmount = function componentWillUnmount() {
+    if (this.props.onUnmount) this.props.onUnmount.call(this, this);
+  };
+
+  _proto.render = function render() {
+    return null;
+  };
+
+  return Lifecycle;
+}($e42d037c3b8752334b8b534dd85f4cb6$import$React.Component);
+/**
+ * The public API for prompting the user before navigating away from a screen.
+ */
+
+
+function $e42d037c3b8752334b8b534dd85f4cb6$export$Prompt(_ref) {
+  var message = _ref.message,
+      _ref$when = _ref.when,
+      when = _ref$when === void 0 ? true : _ref$when;
+  return $e42d037c3b8752334b8b534dd85f4cb6$import$React.createElement($e42d037c3b8752334b8b534dd85f4cb6$export$__RouterContext.Consumer, null, function (context) {
+    !context ? "production" !== "production" ? $e42d037c3b8752334b8b534dd85f4cb6$import$invariant(false, "You should not use <Prompt> outside a <Router>") : $e42d037c3b8752334b8b534dd85f4cb6$import$invariant(false) : void 0;
+    if (!when || context.staticContext) return null;
+    var method = context.history.block;
+    return $e42d037c3b8752334b8b534dd85f4cb6$import$React.createElement($e42d037c3b8752334b8b534dd85f4cb6$var$Lifecycle, {
+      onMount: function onMount(self) {
+        self.release = method(message);
+      },
+      onUpdate: function onUpdate(self, prevProps) {
+        if (prevProps.message !== message) {
+          self.release();
+          self.release = method(message);
+        }
+      },
+      onUnmount: function onUnmount(self) {
+        self.release();
+      },
+      message: message
+    });
+  });
+}
+
+if ("production" !== "production") {
+  var $e42d037c3b8752334b8b534dd85f4cb6$var$messageType = $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.oneOfType([$e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.func, $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.string]);
+  $e42d037c3b8752334b8b534dd85f4cb6$export$Prompt.propTypes = {
+    when: $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.bool,
+    message: $e42d037c3b8752334b8b534dd85f4cb6$var$messageType.isRequired
+  };
+}
+
+var $e42d037c3b8752334b8b534dd85f4cb6$var$cache = {};
+var $e42d037c3b8752334b8b534dd85f4cb6$var$cacheLimit = 10000;
+var $e42d037c3b8752334b8b534dd85f4cb6$var$cacheCount = 0;
+
+function $e42d037c3b8752334b8b534dd85f4cb6$var$compilePath(path) {
+  if ($e42d037c3b8752334b8b534dd85f4cb6$var$cache[path]) return $e42d037c3b8752334b8b534dd85f4cb6$var$cache[path];
+  var generator = $e42d037c3b8752334b8b534dd85f4cb6$import$pathToRegexp.compile(path);
+
+  if ($e42d037c3b8752334b8b534dd85f4cb6$var$cacheCount < $e42d037c3b8752334b8b534dd85f4cb6$var$cacheLimit) {
+    $e42d037c3b8752334b8b534dd85f4cb6$var$cache[path] = generator;
+    $e42d037c3b8752334b8b534dd85f4cb6$var$cacheCount++;
+  }
+
+  return generator;
+}
+/**
+ * Public API for generating a URL pathname from a path and parameters.
+ */
+
+
+function $e42d037c3b8752334b8b534dd85f4cb6$export$generatePath(path, params) {
+  if (path === void 0) {
+    path = "/";
+  }
+
+  if (params === void 0) {
+    params = {};
+  }
+
+  return path === "/" ? path : $e42d037c3b8752334b8b534dd85f4cb6$var$compilePath(path)(params, {
+    pretty: true
+  });
+}
+/**
+ * The public API for navigating programmatically with a component.
+ */
+
+
+function $e42d037c3b8752334b8b534dd85f4cb6$export$Redirect(_ref) {
+  var computedMatch = _ref.computedMatch,
+      to = _ref.to,
+      _ref$push = _ref.push,
+      push = _ref$push === void 0 ? false : _ref$push;
+  return $e42d037c3b8752334b8b534dd85f4cb6$import$React.createElement($e42d037c3b8752334b8b534dd85f4cb6$export$__RouterContext.Consumer, null, function (context) {
+    !context ? "production" !== "production" ? $e42d037c3b8752334b8b534dd85f4cb6$import$invariant(false, "You should not use <Redirect> outside a <Router>") : $e42d037c3b8752334b8b534dd85f4cb6$import$invariant(false) : void 0;
+    var history = context.history,
+        staticContext = context.staticContext;
+    var method = push ? history.push : history.replace;
+    var location = $e42d037c3b8752334b8b534dd85f4cb6$import$createLocation(computedMatch ? typeof to === "string" ? $e42d037c3b8752334b8b534dd85f4cb6$export$generatePath(to, computedMatch.params) : $e42d037c3b8752334b8b534dd85f4cb6$import$_extends({}, to, {
+      pathname: $e42d037c3b8752334b8b534dd85f4cb6$export$generatePath(to.pathname, computedMatch.params)
+    }) : to); // When rendering in a static context,
+    // set the new location immediately.
+
+    if (staticContext) {
+      method(location);
+      return null;
+    }
+
+    return $e42d037c3b8752334b8b534dd85f4cb6$import$React.createElement($e42d037c3b8752334b8b534dd85f4cb6$var$Lifecycle, {
+      onMount: function onMount() {
+        method(location);
+      },
+      onUpdate: function onUpdate(self, prevProps) {
+        var prevLocation = $e42d037c3b8752334b8b534dd85f4cb6$import$createLocation(prevProps.to);
+
+        if (!$e42d037c3b8752334b8b534dd85f4cb6$import$locationsAreEqual(prevLocation, $e42d037c3b8752334b8b534dd85f4cb6$import$_extends({}, location, {
+          key: prevLocation.key
+        }))) {
+          method(location);
+        }
+      },
+      to: to
+    });
+  });
+}
+
+if ("production" !== "production") {
+  $e42d037c3b8752334b8b534dd85f4cb6$export$Redirect.propTypes = {
+    push: $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.bool,
+    from: $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.string,
+    to: $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.oneOfType([$e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.string, $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.object]).isRequired
+  };
+}
+
+var $e42d037c3b8752334b8b534dd85f4cb6$var$cache$1 = {};
+var $e42d037c3b8752334b8b534dd85f4cb6$var$cacheLimit$1 = 10000;
+var $e42d037c3b8752334b8b534dd85f4cb6$var$cacheCount$1 = 0;
+
+function $e42d037c3b8752334b8b534dd85f4cb6$var$compilePath$1(path, options) {
+  var cacheKey = "" + options.end + options.strict + options.sensitive;
+  var pathCache = $e42d037c3b8752334b8b534dd85f4cb6$var$cache$1[cacheKey] || ($e42d037c3b8752334b8b534dd85f4cb6$var$cache$1[cacheKey] = {});
+  if (pathCache[path]) return pathCache[path];
+  var keys = [];
+  var regexp = $e42d037c3b8752334b8b534dd85f4cb6$import$pathToRegexp(path, keys, options);
+  var result = {
+    regexp: regexp,
+    keys: keys
+  };
+
+  if ($e42d037c3b8752334b8b534dd85f4cb6$var$cacheCount$1 < $e42d037c3b8752334b8b534dd85f4cb6$var$cacheLimit$1) {
+    pathCache[path] = result;
+    $e42d037c3b8752334b8b534dd85f4cb6$var$cacheCount$1++;
+  }
+
+  return result;
+}
+/**
+ * Public API for matching a URL pathname to a path.
+ */
+
+
+function $e42d037c3b8752334b8b534dd85f4cb6$export$matchPath(pathname, options) {
+  if (options === void 0) {
+    options = {};
+  }
+
+  if (typeof options === "string" || Array.isArray(options)) {
+    options = {
+      path: options
+    };
+  }
+
+  var _options = options,
+      path = _options.path,
+      _options$exact = _options.exact,
+      exact = _options$exact === void 0 ? false : _options$exact,
+      _options$strict = _options.strict,
+      strict = _options$strict === void 0 ? false : _options$strict,
+      _options$sensitive = _options.sensitive,
+      sensitive = _options$sensitive === void 0 ? false : _options$sensitive;
+  var paths = [].concat(path);
+  return paths.reduce(function (matched, path) {
+    if (!path && path !== "") return null;
+    if (matched) return matched;
+
+    var _compilePath = $e42d037c3b8752334b8b534dd85f4cb6$var$compilePath$1(path, {
+      end: exact,
+      strict: strict,
+      sensitive: sensitive
+    }),
+        regexp = _compilePath.regexp,
+        keys = _compilePath.keys;
+
+    var match = regexp.exec(pathname);
+    if (!match) return null;
+    var url = match[0],
+        values = match.slice(1);
+    var isExact = pathname === url;
+    if (exact && !isExact) return null;
+    return {
+      path: path,
+      // the path used to match
+      url: path === "/" && url === "" ? "/" : url,
+      // the matched portion of the URL
+      isExact: isExact,
+      // whether or not we matched exactly
+      params: keys.reduce(function (memo, key, index) {
+        memo[key.name] = values[index];
+        return memo;
+      }, {})
+    };
+  }, null);
+}
+
+function $e42d037c3b8752334b8b534dd85f4cb6$var$isEmptyChildren(children) {
+  return $e42d037c3b8752334b8b534dd85f4cb6$import$React.Children.count(children) === 0;
+}
+
+function $e42d037c3b8752334b8b534dd85f4cb6$var$evalChildrenDev(children, props, path) {
+  var value = children(props);
+  "production" !== "production" ? $e42d037c3b8752334b8b534dd85f4cb6$import$warning(value !== undefined, "You returned `undefined` from the `children` function of " + ("<Route" + (path ? " path=\"" + path + "\"" : "") + ">, but you ") + "should have returned a React element or `null`") : void 0;
+  return value || null;
+}
+/**
+ * The public API for matching a single path and rendering.
+ */
+
+
+var $e42d037c3b8752334b8b534dd85f4cb6$export$Route =
+/*#__PURE__*/
+function (_React$Component) {
+  $e42d037c3b8752334b8b534dd85f4cb6$import$_inheritsLoose(Route, _React$Component);
+
+  function Route() {
+    return _React$Component.apply(this, arguments) || this;
+  }
+
+  var _proto = Route.prototype;
+
+  _proto.render = function render() {
+    var _this = this;
+
+    return $e42d037c3b8752334b8b534dd85f4cb6$import$React.createElement($e42d037c3b8752334b8b534dd85f4cb6$export$__RouterContext.Consumer, null, function (context$1) {
+      !context$1 ? "production" !== "production" ? $e42d037c3b8752334b8b534dd85f4cb6$import$invariant(false, "You should not use <Route> outside a <Router>") : $e42d037c3b8752334b8b534dd85f4cb6$import$invariant(false) : void 0;
+      var location = _this.props.location || context$1.location;
+      var match = _this.props.computedMatch ? _this.props.computedMatch // <Switch> already computed the match for us
+      : _this.props.path ? $e42d037c3b8752334b8b534dd85f4cb6$export$matchPath(location.pathname, _this.props) : context$1.match;
+      var props = $e42d037c3b8752334b8b534dd85f4cb6$import$_extends({}, context$1, {
+        location: location,
+        match: match
+      });
+      var _this$props = _this.props,
+          children = _this$props.children,
+          component = _this$props.component,
+          render = _this$props.render; // Preact uses an empty array as children by
+      // default, so use null if that's the case.
+
+      if (Array.isArray(children) && children.length === 0) {
+        children = null;
+      }
+
+      return $e42d037c3b8752334b8b534dd85f4cb6$import$React.createElement($e42d037c3b8752334b8b534dd85f4cb6$export$__RouterContext.Provider, {
+        value: props
+      }, props.match ? children ? typeof children === "function" ? "production" !== "production" ? $e42d037c3b8752334b8b534dd85f4cb6$var$evalChildrenDev(children, props, _this.props.path) : children(props) : children : component ? $e42d037c3b8752334b8b534dd85f4cb6$import$React.createElement(component, props) : render ? render(props) : null : typeof children === "function" ? "production" !== "production" ? $e42d037c3b8752334b8b534dd85f4cb6$var$evalChildrenDev(children, props, _this.props.path) : children(props) : null);
+    });
+  };
+
+  return Route;
+}($e42d037c3b8752334b8b534dd85f4cb6$import$React.Component);
+
+if ("production" !== "production") {
+  $e42d037c3b8752334b8b534dd85f4cb6$export$Route.propTypes = {
+    children: $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.oneOfType([$e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.func, $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.node]),
+    component: function component(props, propName) {
+      if (props[propName] && !$e42d037c3b8752334b8b534dd85f4cb6$import$isValidElementType(props[propName])) {
+        return new Error("Invalid prop 'component' supplied to 'Route': the prop is not a valid React component");
+      }
+    },
+    exact: $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.bool,
+    location: $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.object,
+    path: $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.oneOfType([$e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.string, $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.arrayOf($e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.string)]),
+    render: $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.func,
+    sensitive: $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.bool,
+    strict: $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.bool
+  };
+
+  $e42d037c3b8752334b8b534dd85f4cb6$export$Route.prototype.componentDidMount = function () {
+    "production" !== "production" ? $e42d037c3b8752334b8b534dd85f4cb6$import$warning(!(this.props.children && !$e42d037c3b8752334b8b534dd85f4cb6$var$isEmptyChildren(this.props.children) && this.props.component), "You should not use <Route component> and <Route children> in the same route; <Route component> will be ignored") : void 0;
+    "production" !== "production" ? $e42d037c3b8752334b8b534dd85f4cb6$import$warning(!(this.props.children && !$e42d037c3b8752334b8b534dd85f4cb6$var$isEmptyChildren(this.props.children) && this.props.render), "You should not use <Route render> and <Route children> in the same route; <Route render> will be ignored") : void 0;
+    "production" !== "production" ? $e42d037c3b8752334b8b534dd85f4cb6$import$warning(!(this.props.component && this.props.render), "You should not use <Route component> and <Route render> in the same route; <Route render> will be ignored") : void 0;
+  };
+
+  $e42d037c3b8752334b8b534dd85f4cb6$export$Route.prototype.componentDidUpdate = function (prevProps) {
+    "production" !== "production" ? $e42d037c3b8752334b8b534dd85f4cb6$import$warning(!(this.props.location && !prevProps.location), '<Route> elements should not change from uncontrolled to controlled (or vice versa). You initially used no "location" prop and then provided one on a subsequent render.') : void 0;
+    "production" !== "production" ? $e42d037c3b8752334b8b534dd85f4cb6$import$warning(!(!this.props.location && prevProps.location), '<Route> elements should not change from controlled to uncontrolled (or vice versa). You provided a "location" prop initially but omitted it on a subsequent render.') : void 0;
+  };
+}
+
+function $e42d037c3b8752334b8b534dd85f4cb6$var$addLeadingSlash(path) {
+  return path.charAt(0) === "/" ? path : "/" + path;
+}
+
+function $e42d037c3b8752334b8b534dd85f4cb6$var$addBasename(basename, location) {
+  if (!basename) return location;
+  return $e42d037c3b8752334b8b534dd85f4cb6$import$_extends({}, location, {
+    pathname: $e42d037c3b8752334b8b534dd85f4cb6$var$addLeadingSlash(basename) + location.pathname
+  });
+}
+
+function $e42d037c3b8752334b8b534dd85f4cb6$var$stripBasename(basename, location) {
+  if (!basename) return location;
+  var base = $e42d037c3b8752334b8b534dd85f4cb6$var$addLeadingSlash(basename);
+  if (location.pathname.indexOf(base) !== 0) return location;
+  return $e42d037c3b8752334b8b534dd85f4cb6$import$_extends({}, location, {
+    pathname: location.pathname.substr(base.length)
+  });
+}
+
+function $e42d037c3b8752334b8b534dd85f4cb6$var$createURL(location) {
+  return typeof location === "string" ? location : $e42d037c3b8752334b8b534dd85f4cb6$import$createPath(location);
+}
+
+function $e42d037c3b8752334b8b534dd85f4cb6$var$staticHandler(methodName) {
+  return function () {
+    "production" !== "production" ? $e42d037c3b8752334b8b534dd85f4cb6$import$invariant(false, "You cannot %s with <StaticRouter>", methodName) : $e42d037c3b8752334b8b534dd85f4cb6$import$invariant(false);
+  };
+}
+
+function $e42d037c3b8752334b8b534dd85f4cb6$var$noop() {}
+/**
+ * The public top-level API for a "static" <Router>, so-called because it
+ * can't actually change the current location. Instead, it just records
+ * location changes in a context object. Useful mainly in testing and
+ * server-rendering scenarios.
+ */
+
+
+var $e42d037c3b8752334b8b534dd85f4cb6$export$StaticRouter =
+/*#__PURE__*/
+function (_React$Component) {
+  $e42d037c3b8752334b8b534dd85f4cb6$import$_inheritsLoose(StaticRouter, _React$Component);
+
+  function StaticRouter() {
+    var _this;
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _React$Component.call.apply(_React$Component, [this].concat(args)) || this;
+
+    _this.handlePush = function (location) {
+      return _this.navigateTo(location, "PUSH");
+    };
+
+    _this.handleReplace = function (location) {
+      return _this.navigateTo(location, "REPLACE");
+    };
+
+    _this.handleListen = function () {
+      return $e42d037c3b8752334b8b534dd85f4cb6$var$noop;
+    };
+
+    _this.handleBlock = function () {
+      return $e42d037c3b8752334b8b534dd85f4cb6$var$noop;
+    };
+
+    return _this;
+  }
+
+  var _proto = StaticRouter.prototype;
+
+  _proto.navigateTo = function navigateTo(location, action) {
+    var _this$props = this.props,
+        _this$props$basename = _this$props.basename,
+        basename = _this$props$basename === void 0 ? "" : _this$props$basename,
+        _this$props$context = _this$props.context,
+        context = _this$props$context === void 0 ? {} : _this$props$context;
+    context.action = action;
+    context.location = $e42d037c3b8752334b8b534dd85f4cb6$var$addBasename(basename, $e42d037c3b8752334b8b534dd85f4cb6$import$createLocation(location));
+    context.url = $e42d037c3b8752334b8b534dd85f4cb6$var$createURL(context.location);
+  };
+
+  _proto.render = function render() {
+    var _this$props2 = this.props,
+        _this$props2$basename = _this$props2.basename,
+        basename = _this$props2$basename === void 0 ? "" : _this$props2$basename,
+        _this$props2$context = _this$props2.context,
+        context = _this$props2$context === void 0 ? {} : _this$props2$context,
+        _this$props2$location = _this$props2.location,
+        location = _this$props2$location === void 0 ? "/" : _this$props2$location,
+        rest = $e42d037c3b8752334b8b534dd85f4cb6$import$_objectWithoutPropertiesLoose(_this$props2, ["basename", "context", "location"]);
+    var history = {
+      createHref: function createHref(path) {
+        return $e42d037c3b8752334b8b534dd85f4cb6$var$addLeadingSlash(basename + $e42d037c3b8752334b8b534dd85f4cb6$var$createURL(path));
+      },
+      action: "POP",
+      location: $e42d037c3b8752334b8b534dd85f4cb6$var$stripBasename(basename, $e42d037c3b8752334b8b534dd85f4cb6$import$createLocation(location)),
+      push: this.handlePush,
+      replace: this.handleReplace,
+      go: $e42d037c3b8752334b8b534dd85f4cb6$var$staticHandler("go"),
+      goBack: $e42d037c3b8752334b8b534dd85f4cb6$var$staticHandler("goBack"),
+      goForward: $e42d037c3b8752334b8b534dd85f4cb6$var$staticHandler("goForward"),
+      listen: this.handleListen,
+      block: this.handleBlock
+    };
+    return $e42d037c3b8752334b8b534dd85f4cb6$import$React.createElement($e42d037c3b8752334b8b534dd85f4cb6$export$Router, $e42d037c3b8752334b8b534dd85f4cb6$import$_extends({}, rest, {
+      history: history,
+      staticContext: context
+    }));
+  };
+
+  return StaticRouter;
+}($e42d037c3b8752334b8b534dd85f4cb6$import$React.Component);
+
+if ("production" !== "production") {
+  $e42d037c3b8752334b8b534dd85f4cb6$export$StaticRouter.propTypes = {
+    basename: $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.string,
+    context: $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.object,
+    location: $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.oneOfType([$e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.string, $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.object])
+  };
+
+  $e42d037c3b8752334b8b534dd85f4cb6$export$StaticRouter.prototype.componentDidMount = function () {
+    "production" !== "production" ? $e42d037c3b8752334b8b534dd85f4cb6$import$warning(!this.props.history, "<StaticRouter> ignores the history prop. To use a custom history, " + "use `import { Router }` instead of `import { StaticRouter as Router }`.") : void 0;
+  };
+}
+/**
+ * The public API for rendering the first <Route> that matches.
+ */
+
+
+var $e42d037c3b8752334b8b534dd85f4cb6$export$Switch =
+/*#__PURE__*/
+function (_React$Component) {
+  $e42d037c3b8752334b8b534dd85f4cb6$import$_inheritsLoose(Switch, _React$Component);
+
+  function Switch() {
+    return _React$Component.apply(this, arguments) || this;
+  }
+
+  var _proto = Switch.prototype;
+
+  _proto.render = function render() {
+    var _this = this;
+
+    return $e42d037c3b8752334b8b534dd85f4cb6$import$React.createElement($e42d037c3b8752334b8b534dd85f4cb6$export$__RouterContext.Consumer, null, function (context) {
+      !context ? "production" !== "production" ? $e42d037c3b8752334b8b534dd85f4cb6$import$invariant(false, "You should not use <Switch> outside a <Router>") : $e42d037c3b8752334b8b534dd85f4cb6$import$invariant(false) : void 0;
+      var location = _this.props.location || context.location;
+      var element, match; // We use React.Children.forEach instead of React.Children.toArray().find()
+      // here because toArray adds keys to all child elements and we do not want
+      // to trigger an unmount/remount for two <Route>s that render the same
+      // component at different URLs.
+
+      $e42d037c3b8752334b8b534dd85f4cb6$import$React.Children.forEach(_this.props.children, function (child) {
+        if (match == null && $e42d037c3b8752334b8b534dd85f4cb6$import$React.isValidElement(child)) {
+          element = child;
+          var path = child.props.path || child.props.from;
+          match = path ? $e42d037c3b8752334b8b534dd85f4cb6$export$matchPath(location.pathname, $e42d037c3b8752334b8b534dd85f4cb6$import$_extends({}, child.props, {
+            path: path
+          })) : context.match;
+        }
+      });
+      return match ? $e42d037c3b8752334b8b534dd85f4cb6$import$React.cloneElement(element, {
+        location: location,
+        computedMatch: match
+      }) : null;
+    });
+  };
+
+  return Switch;
+}($e42d037c3b8752334b8b534dd85f4cb6$import$React.Component);
+
+if ("production" !== "production") {
+  $e42d037c3b8752334b8b534dd85f4cb6$export$Switch.propTypes = {
+    children: $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.node,
+    location: $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.object
+  };
+
+  $e42d037c3b8752334b8b534dd85f4cb6$export$Switch.prototype.componentDidUpdate = function (prevProps) {
+    "production" !== "production" ? $e42d037c3b8752334b8b534dd85f4cb6$import$warning(!(this.props.location && !prevProps.location), '<Switch> elements should not change from uncontrolled to controlled (or vice versa). You initially used no "location" prop and then provided one on a subsequent render.') : void 0;
+    "production" !== "production" ? $e42d037c3b8752334b8b534dd85f4cb6$import$warning(!(!this.props.location && prevProps.location), '<Switch> elements should not change from controlled to uncontrolled (or vice versa). You provided a "location" prop initially but omitted it on a subsequent render.') : void 0;
+  };
+}
+/**
+ * A public higher-order component to access the imperative API
+ */
+
+
+function $e42d037c3b8752334b8b534dd85f4cb6$export$withRouter(Component) {
+  var displayName = "withRouter(" + (Component.displayName || Component.name) + ")";
+
+  var C = function C(props) {
+    var wrappedComponentRef = props.wrappedComponentRef,
+        remainingProps = $e42d037c3b8752334b8b534dd85f4cb6$import$_objectWithoutPropertiesLoose(props, ["wrappedComponentRef"]);
+    return $e42d037c3b8752334b8b534dd85f4cb6$import$React.createElement($e42d037c3b8752334b8b534dd85f4cb6$export$__RouterContext.Consumer, null, function (context) {
+      !context ? "production" !== "production" ? $e42d037c3b8752334b8b534dd85f4cb6$import$invariant(false, "You should not use <" + displayName + " /> outside a <Router>") : $e42d037c3b8752334b8b534dd85f4cb6$import$invariant(false) : void 0;
+      return $e42d037c3b8752334b8b534dd85f4cb6$import$React.createElement(Component, $e42d037c3b8752334b8b534dd85f4cb6$import$_extends({}, remainingProps, context, {
+        ref: wrappedComponentRef
+      }));
+    });
+  };
+
+  C.displayName = displayName;
+  C.WrappedComponent = Component;
+
+  if ("production" !== "production") {
+    C.propTypes = {
+      wrappedComponentRef: $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.oneOfType([$e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.string, $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.func, $e42d037c3b8752334b8b534dd85f4cb6$import$PropTypes.object])
+    };
+  }
+
+  return $e42d037c3b8752334b8b534dd85f4cb6$import$hoistStatics(C, Component);
+}
+
+var $e42d037c3b8752334b8b534dd85f4cb6$var$useContext = $e42d037c3b8752334b8b534dd85f4cb6$import$React.useContext;
+
+function $e42d037c3b8752334b8b534dd85f4cb6$export$useHistory() {
+  if ("production" !== "production") {
+    !(typeof $e42d037c3b8752334b8b534dd85f4cb6$var$useContext === "function") ? "production" !== "production" ? $e42d037c3b8752334b8b534dd85f4cb6$import$invariant(false, "You must use React >= 16.8 in order to use useHistory()") : $e42d037c3b8752334b8b534dd85f4cb6$import$invariant(false) : void 0;
+  }
+
+  return $e42d037c3b8752334b8b534dd85f4cb6$var$useContext($e42d037c3b8752334b8b534dd85f4cb6$export$__RouterContext).history;
+}
+
+function $e42d037c3b8752334b8b534dd85f4cb6$export$useLocation() {
+  if ("production" !== "production") {
+    !(typeof $e42d037c3b8752334b8b534dd85f4cb6$var$useContext === "function") ? "production" !== "production" ? $e42d037c3b8752334b8b534dd85f4cb6$import$invariant(false, "You must use React >= 16.8 in order to use useLocation()") : $e42d037c3b8752334b8b534dd85f4cb6$import$invariant(false) : void 0;
+  }
+
+  return $e42d037c3b8752334b8b534dd85f4cb6$var$useContext($e42d037c3b8752334b8b534dd85f4cb6$export$__RouterContext).location;
+}
+
+function $e42d037c3b8752334b8b534dd85f4cb6$export$useParams() {
+  if ("production" !== "production") {
+    !(typeof $e42d037c3b8752334b8b534dd85f4cb6$var$useContext === "function") ? "production" !== "production" ? $e42d037c3b8752334b8b534dd85f4cb6$import$invariant(false, "You must use React >= 16.8 in order to use useParams()") : $e42d037c3b8752334b8b534dd85f4cb6$import$invariant(false) : void 0;
+  }
+
+  var match = $e42d037c3b8752334b8b534dd85f4cb6$var$useContext($e42d037c3b8752334b8b534dd85f4cb6$export$__RouterContext).match;
+  return match ? match.params : {};
+}
+
+function $e42d037c3b8752334b8b534dd85f4cb6$export$useRouteMatch(path) {
+  if ("production" !== "production") {
+    !(typeof $e42d037c3b8752334b8b534dd85f4cb6$var$useContext === "function") ? "production" !== "production" ? $e42d037c3b8752334b8b534dd85f4cb6$import$invariant(false, "You must use React >= 16.8 in order to use useRouteMatch()") : $e42d037c3b8752334b8b534dd85f4cb6$import$invariant(false) : void 0;
+  }
+
+  return path ? $e42d037c3b8752334b8b534dd85f4cb6$export$matchPath($e42d037c3b8752334b8b534dd85f4cb6$export$useLocation().pathname, path) : $e42d037c3b8752334b8b534dd85f4cb6$var$useContext($e42d037c3b8752334b8b534dd85f4cb6$export$__RouterContext).match;
+}
+
+if ("production" !== "production") {
+  if (typeof window !== "undefined") {
+    var $e42d037c3b8752334b8b534dd85f4cb6$var$global = window;
+    var $e42d037c3b8752334b8b534dd85f4cb6$var$key = "__react_router_build__";
+    var $e42d037c3b8752334b8b534dd85f4cb6$var$buildNames = {
+      cjs: "CommonJS",
+      esm: "ES modules",
+      umd: "UMD"
+    };
+
+    if ($e42d037c3b8752334b8b534dd85f4cb6$var$global[$e42d037c3b8752334b8b534dd85f4cb6$var$key] && $e42d037c3b8752334b8b534dd85f4cb6$var$global[$e42d037c3b8752334b8b534dd85f4cb6$var$key] !== "esm") {
+      var $e42d037c3b8752334b8b534dd85f4cb6$var$initialBuildName = $e42d037c3b8752334b8b534dd85f4cb6$var$buildNames[$e42d037c3b8752334b8b534dd85f4cb6$var$global[$e42d037c3b8752334b8b534dd85f4cb6$var$key]];
+      var $e42d037c3b8752334b8b534dd85f4cb6$var$secondaryBuildName = $e42d037c3b8752334b8b534dd85f4cb6$var$buildNames["esm"]; // TODO: Add link to article that explains in detail how to avoid
+      // loading 2 different builds.
+
+      throw new Error("You are loading the " + $e42d037c3b8752334b8b534dd85f4cb6$var$secondaryBuildName + " build of React Router " + ("on a page that is already running the " + $e42d037c3b8752334b8b534dd85f4cb6$var$initialBuildName + " ") + "build, so things won't work right.");
+    }
+
+    $e42d037c3b8752334b8b534dd85f4cb6$var$global[$e42d037c3b8752334b8b534dd85f4cb6$var$key] = "esm";
+  }
+}
+
+$e42d037c3b8752334b8b534dd85f4cb6$exports.withRouter = $e42d037c3b8752334b8b534dd85f4cb6$export$withRouter;
+$e42d037c3b8752334b8b534dd85f4cb6$exports.useRouteMatch = $e42d037c3b8752334b8b534dd85f4cb6$export$useRouteMatch;
+$e42d037c3b8752334b8b534dd85f4cb6$exports.useParams = $e42d037c3b8752334b8b534dd85f4cb6$export$useParams;
+$e42d037c3b8752334b8b534dd85f4cb6$exports.useLocation = $e42d037c3b8752334b8b534dd85f4cb6$export$useLocation;
+$e42d037c3b8752334b8b534dd85f4cb6$exports.useHistory = $e42d037c3b8752334b8b534dd85f4cb6$export$useHistory;
+$e42d037c3b8752334b8b534dd85f4cb6$exports.matchPath = $e42d037c3b8752334b8b534dd85f4cb6$export$matchPath;
+$e42d037c3b8752334b8b534dd85f4cb6$exports.generatePath = $e42d037c3b8752334b8b534dd85f4cb6$export$generatePath;
+$e42d037c3b8752334b8b534dd85f4cb6$exports.__RouterContext = $e42d037c3b8752334b8b534dd85f4cb6$export$__RouterContext;
+$e42d037c3b8752334b8b534dd85f4cb6$exports.Switch = $e42d037c3b8752334b8b534dd85f4cb6$export$Switch;
+$e42d037c3b8752334b8b534dd85f4cb6$exports.StaticRouter = $e42d037c3b8752334b8b534dd85f4cb6$export$StaticRouter;
+$e42d037c3b8752334b8b534dd85f4cb6$exports.Router = $e42d037c3b8752334b8b534dd85f4cb6$export$Router;
+$e42d037c3b8752334b8b534dd85f4cb6$exports.Route = $e42d037c3b8752334b8b534dd85f4cb6$export$Route;
+$e42d037c3b8752334b8b534dd85f4cb6$exports.Redirect = $e42d037c3b8752334b8b534dd85f4cb6$export$Redirect;
+$e42d037c3b8752334b8b534dd85f4cb6$exports.Prompt = $e42d037c3b8752334b8b534dd85f4cb6$export$Prompt;
+$e42d037c3b8752334b8b534dd85f4cb6$exports.MemoryRouter = $e42d037c3b8752334b8b534dd85f4cb6$export$MemoryRouter;

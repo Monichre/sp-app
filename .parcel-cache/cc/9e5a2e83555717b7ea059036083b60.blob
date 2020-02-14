@@ -1,0 +1,75 @@
+var $ad6fab374b64d6a16d9a4baad87e484$exports = {};
+var $ad6fab374b64d6a16d9a4baad87e484$var$conversions = $parcel$require("7ad6fab374b64d6a16d9a4baad87e484", "./conversions");
+var $ad6fab374b64d6a16d9a4baad87e484$var$route = $parcel$require("7ad6fab374b64d6a16d9a4baad87e484", "./route");
+var $ad6fab374b64d6a16d9a4baad87e484$var$convert = {};
+var $ad6fab374b64d6a16d9a4baad87e484$var$models = Object.keys($ad6fab374b64d6a16d9a4baad87e484$var$conversions);
+
+function $ad6fab374b64d6a16d9a4baad87e484$var$wrapRaw(fn) {
+  var wrappedFn = function (args) {
+    if (args === undefined || args === null) {
+      return args;
+    }
+
+    if (arguments.length > 1) {
+      args = Array.prototype.slice.call(arguments);
+    }
+
+    return fn(args);
+  }; // preserve .conversion property if there is one
+
+
+  if ('conversion' in fn) {
+    wrappedFn.conversion = fn.conversion;
+  }
+
+  return wrappedFn;
+}
+
+function $ad6fab374b64d6a16d9a4baad87e484$var$wrapRounded(fn) {
+  var wrappedFn = function (args) {
+    if (args === undefined || args === null) {
+      return args;
+    }
+
+    if (arguments.length > 1) {
+      args = Array.prototype.slice.call(arguments);
+    }
+
+    var result = fn(args); // we're assuming the result is an array here.
+    // see notice in conversions.js; don't use box types
+    // in conversion functions.
+
+    if (typeof result === 'object') {
+      for (var len = result.length, i = 0; i < len; i++) {
+        result[i] = Math.round(result[i]);
+      }
+    }
+
+    return result;
+  }; // preserve .conversion property if there is one
+
+
+  if ('conversion' in fn) {
+    wrappedFn.conversion = fn.conversion;
+  }
+
+  return wrappedFn;
+}
+
+$ad6fab374b64d6a16d9a4baad87e484$var$models.forEach(function (fromModel) {
+  $ad6fab374b64d6a16d9a4baad87e484$var$convert[fromModel] = {};
+  Object.defineProperty($ad6fab374b64d6a16d9a4baad87e484$var$convert[fromModel], 'channels', {
+    value: $ad6fab374b64d6a16d9a4baad87e484$var$conversions[fromModel].channels
+  });
+  Object.defineProperty($ad6fab374b64d6a16d9a4baad87e484$var$convert[fromModel], 'labels', {
+    value: $ad6fab374b64d6a16d9a4baad87e484$var$conversions[fromModel].labels
+  });
+  var routes = $ad6fab374b64d6a16d9a4baad87e484$var$route(fromModel);
+  var routeModels = Object.keys(routes);
+  routeModels.forEach(function (toModel) {
+    var fn = routes[toModel];
+    $ad6fab374b64d6a16d9a4baad87e484$var$convert[fromModel][toModel] = $ad6fab374b64d6a16d9a4baad87e484$var$wrapRounded(fn);
+    $ad6fab374b64d6a16d9a4baad87e484$var$convert[fromModel][toModel].raw = $ad6fab374b64d6a16d9a4baad87e484$var$wrapRaw(fn);
+  });
+});
+$ad6fab374b64d6a16d9a4baad87e484$exports = $ad6fab374b64d6a16d9a4baad87e484$var$convert;

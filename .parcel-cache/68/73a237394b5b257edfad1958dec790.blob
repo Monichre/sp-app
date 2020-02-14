@@ -1,0 +1,50 @@
+var $cde4ca486e8a36addce312be96498092$exports = {};
+var $cde4ca486e8a36addce312be96498092$var$alphabetical = $parcel$require("cde4ca486e8a36addce312be96498092", "is-alphabetical");
+var $cde4ca486e8a36addce312be96498092$var$locate = $parcel$require("cde4ca486e8a36addce312be96498092", "../locate/tag");
+var $cde4ca486e8a36addce312be96498092$var$tag = $parcel$require("cde4ca486e8a36addce312be96498092", "../util/html").tag;
+$cde4ca486e8a36addce312be96498092$exports = $cde4ca486e8a36addce312be96498092$var$inlineHTML;
+$cde4ca486e8a36addce312be96498092$var$inlineHTML.locator = $cde4ca486e8a36addce312be96498092$var$locate;
+var $cde4ca486e8a36addce312be96498092$var$EXPRESSION_HTML_LINK_OPEN = /^<a /i;
+var $cde4ca486e8a36addce312be96498092$var$EXPRESSION_HTML_LINK_CLOSE = /^<\/a>/i;
+
+function $cde4ca486e8a36addce312be96498092$var$inlineHTML(eat, value, silent) {
+  var self = this;
+  var length = value.length;
+  var character;
+  var subvalue;
+
+  if (value.charAt(0) !== '<' || length < 3) {
+    return;
+  }
+
+  character = value.charAt(1);
+
+  if (!$cde4ca486e8a36addce312be96498092$var$alphabetical(character) && character !== '?' && character !== '!' && character !== '/') {
+    return;
+  }
+
+  subvalue = value.match($cde4ca486e8a36addce312be96498092$var$tag);
+
+  if (!subvalue) {
+    return;
+  }
+  /* istanbul ignore if - not used yet. */
+
+
+  if (silent) {
+    return true;
+  }
+
+  subvalue = subvalue[0];
+
+  if (!self.inLink && $cde4ca486e8a36addce312be96498092$var$EXPRESSION_HTML_LINK_OPEN.test(subvalue)) {
+    self.inLink = true;
+  } else if (self.inLink && $cde4ca486e8a36addce312be96498092$var$EXPRESSION_HTML_LINK_CLOSE.test(subvalue)) {
+    self.inLink = false;
+  }
+
+  return eat(subvalue)({
+    type: 'html',
+    value: subvalue
+  });
+}

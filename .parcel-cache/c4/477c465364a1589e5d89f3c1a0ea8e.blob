@@ -1,0 +1,3 @@
+var $ab31a7c4d71ef66fd2c18079ed84fee$exports = {};
+$parcel$require("0ab31a7c4d71ef66fd2c18079ed84fee", "../../modules/es.string.starts-with");
+$ab31a7c4d71ef66fd2c18079ed84fee$exports = $parcel$require("0ab31a7c4d71ef66fd2c18079ed84fee", "../../internals/entry-unbind")('String', 'startsWith');

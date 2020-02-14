@@ -1,0 +1,13 @@
+var $dfb439cd6ece0229c4b1438930e6b64$exports = {};
+$parcel$require("2dfb439cd6ece0229c4b1438930e6b64", "./utils");
+$parcel$require("2dfb439cd6ece0229c4b1438930e6b64", "./themes");
+var $dfb439cd6ece0229c4b1438930e6b64$export$defaultProps = {
+  theme: $dfb439cd6ece0229c4b1438930e6b64$import$base
+};
+$dfb439cd6ece0229c4b1438930e6b64$exports.defaultProps = $dfb439cd6ece0229c4b1438930e6b64$export$defaultProps;
+
+var $dfb439cd6ece0229c4b1438930e6b64$export$extendDefaultTheme = function extendDefaultTheme(theme) {
+  $dfb439cd6ece0229c4b1438930e6b64$export$defaultProps.theme = $dfb439cd6ece0229c4b1438930e6b64$import$deepMerge($dfb439cd6ece0229c4b1438930e6b64$import$base, theme);
+};
+
+$dfb439cd6ece0229c4b1438930e6b64$exports.extendDefaultTheme = $dfb439cd6ece0229c4b1438930e6b64$export$extendDefaultTheme;

@@ -1,0 +1,6 @@
+var $de9d0b700ba8d7a7a09cb2cf1ad7fec$exports = {};
+$de9d0b700ba8d7a7a09cb2cf1ad7fec$exports = $de9d0b700ba8d7a7a09cb2cf1ad7fec$var$locate;
+
+function $de9d0b700ba8d7a7a09cb2cf1ad7fec$var$locate(value, fromIndex) {
+  return value.indexOf('~~', fromIndex);
+}

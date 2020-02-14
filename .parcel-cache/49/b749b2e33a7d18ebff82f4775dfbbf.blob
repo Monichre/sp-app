@@ -1,0 +1,7 @@
+var $eaee9001995687b54c6a2f4e760072$exports = {};
+var $eaee9001995687b54c6a2f4e760072$var$requireObjectCoercible = $parcel$require("09eaee9001995687b54c6a2f4e760072", "../internals/require-object-coercible"); // `ToObject` abstract operation
+// https://tc39.github.io/ecma262/#sec-toobject
+
+$eaee9001995687b54c6a2f4e760072$exports = function (argument) {
+  return Object($eaee9001995687b54c6a2f4e760072$var$requireObjectCoercible(argument));
+};

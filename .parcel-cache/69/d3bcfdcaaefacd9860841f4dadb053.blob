@@ -1,0 +1,9 @@
+var $a152fc74d7382102da450046eab0a795$exports = {};
+
+function $a152fc74d7382102da450046eab0a795$var$_inheritsLoose(subClass, superClass) {
+  subClass.prototype = Object.create(superClass.prototype);
+  subClass.prototype.constructor = subClass;
+  subClass.__proto__ = superClass;
+}
+
+$a152fc74d7382102da450046eab0a795$exports = $a152fc74d7382102da450046eab0a795$var$_inheritsLoose;

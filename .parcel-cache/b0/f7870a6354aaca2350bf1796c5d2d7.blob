@@ -1,0 +1,10 @@
+var $a60ed1a308b40831239c2733c2eb594$var$assign = $parcel$require("9a60ed1a308b40831239c2733c2eb594", "../internals/object-assign"); // `Object.assign` method
+// https://tc39.github.io/ecma262/#sec-object.assign
+
+$parcel$require("9a60ed1a308b40831239c2733c2eb594", "../internals/export")({
+  target: 'Object',
+  stat: true,
+  forced: Object.assign !== $a60ed1a308b40831239c2733c2eb594$var$assign
+}, {
+  assign: $a60ed1a308b40831239c2733c2eb594$var$assign
+});

@@ -1,0 +1,62 @@
+
+var $f3cc5deee448a3468ca8d2cf2474$exports = {};
+var $f3cc5deee448a3468ca8d2cf2474$var$global = $parcel$require("5772f3cc5deee448a3468ca8d2cf2474", "../internals/global");
+var $f3cc5deee448a3468ca8d2cf2474$var$getOwnPropertyDescriptor = $parcel$require("5772f3cc5deee448a3468ca8d2cf2474", "../internals/object-get-own-property-descriptor").f;
+var $f3cc5deee448a3468ca8d2cf2474$var$hide = $parcel$require("5772f3cc5deee448a3468ca8d2cf2474", "../internals/hide");
+var $f3cc5deee448a3468ca8d2cf2474$var$redefine = $parcel$require("5772f3cc5deee448a3468ca8d2cf2474", "../internals/redefine");
+var $f3cc5deee448a3468ca8d2cf2474$var$setGlobal = $parcel$require("5772f3cc5deee448a3468ca8d2cf2474", "../internals/set-global");
+var $f3cc5deee448a3468ca8d2cf2474$var$copyConstructorProperties = $parcel$require("5772f3cc5deee448a3468ca8d2cf2474", "../internals/copy-constructor-properties");
+var $f3cc5deee448a3468ca8d2cf2474$var$isForced = $parcel$require("5772f3cc5deee448a3468ca8d2cf2474", "../internals/is-forced");
+/*
+  options.target      - name of the target object
+  options.global      - target is the global object
+  options.stat        - export as static methods of target
+  options.proto       - export as prototype methods of target
+  options.real        - real prototype method for the `pure` version
+  options.forced      - export even if the native feature is available
+  options.bind        - bind methods to the target, required for the `pure` version
+  options.wrap        - wrap constructors to preventing global pollution, required for the `pure` version
+  options.unsafe      - use the simple assignment of property instead of delete + defineProperty
+  options.sham        - add a flag to not completely full polyfills
+  options.enumerable  - export as enumerable property
+  options.noTargetGet - prevent calling a getter on target
+*/
+
+$f3cc5deee448a3468ca8d2cf2474$exports = function (options, source) {
+  var TARGET = options.target;
+  var GLOBAL = options.global;
+  var STATIC = options.stat;
+  var FORCED, target, key, targetProperty, sourceProperty, descriptor;
+
+  if (GLOBAL) {
+    target = $f3cc5deee448a3468ca8d2cf2474$var$global;
+  } else if (STATIC) {
+    target = $f3cc5deee448a3468ca8d2cf2474$var$global[TARGET] || $f3cc5deee448a3468ca8d2cf2474$var$setGlobal(TARGET, {});
+  } else {
+    target = ($f3cc5deee448a3468ca8d2cf2474$var$global[TARGET] || {}).prototype;
+  }
+
+  if (target) for (key in source) {
+    sourceProperty = source[key];
+
+    if (options.noTargetGet) {
+      descriptor = $f3cc5deee448a3468ca8d2cf2474$var$getOwnPropertyDescriptor(target, key);
+      targetProperty = descriptor && descriptor.value;
+    } else targetProperty = target[key];
+
+    FORCED = $f3cc5deee448a3468ca8d2cf2474$var$isForced(GLOBAL ? key : TARGET + (STATIC ? '.' : '#') + key, options.forced); // contained in target
+
+    if (!FORCED && targetProperty !== undefined) {
+      if (typeof sourceProperty === typeof targetProperty) continue;
+      $f3cc5deee448a3468ca8d2cf2474$var$copyConstructorProperties(sourceProperty, targetProperty);
+    } // add a flag to not completely full polyfills
+
+
+    if (options.sham || targetProperty && targetProperty.sham) {
+      $f3cc5deee448a3468ca8d2cf2474$var$hide(sourceProperty, 'sham', true);
+    } // extend global
+
+
+    $f3cc5deee448a3468ca8d2cf2474$var$redefine(target, key, sourceProperty, options);
+  }
+};

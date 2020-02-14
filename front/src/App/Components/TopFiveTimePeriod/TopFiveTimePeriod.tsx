@@ -1,5 +1,5 @@
-import * as React from "react";
-import { ArtistListElement } from "./ArtistListElement";
+import * as React from 'react'
+import { ArtistListElement } from './ArtistListElement'
 import {
   OpaqueBackground,
   TopFiveParentDiv,
@@ -13,22 +13,28 @@ import {
   ModalWrapper,
   Hx,
   Vx
-} from "./TopFiveTimePeriod.styles";
+} from './TopFiveTimePeriod.styles'
+import { Artist } from '../../../../../back/src/shared/SharedTypes'
+import { PerspectiveDashArtists } from '../../../types'
 
 export interface TopFiveTimePeriodProps {
-  artistArray: any;
+  artists: PerspectiveDashArtists[]
+  period: string
+  timeScope: string
 }
 
 export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
-  artistArray
+  artists,
+  period,
+  timeScope
 }) => {
   return (
     <OpaqueBackground>
       <ModalWrapper>
         <CloseButton
-          className="test"
+          className='test'
           onClick={() => {
-            console.log("clicked");
+            console.log('clicked')
           }}
         >
           <Hx />
@@ -36,19 +42,27 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
         </CloseButton>
         <TopFiveParentDiv>
           <TopFiveHeader>
-            <Headline>My Week In Music</Headline>
+            <Headline>My {timeScope.replace('this', '')} In Music</Headline>
             <TitleHr />
-            <DateRange>Feb 2 - Feb 9</DateRange>
+            <DateRange>{period}</DateRange>
           </TopFiveHeader>
-          {artistArray.map((artist: any) => {
-            return <ArtistListElement artist={artist} />;
-          })}
+          {artists.map(
+            ({ artist, personal: totalTimeListened }: any, index: number) => {
+              return (
+                <ArtistListElement
+                  place={index + 1}
+                  artist={artist}
+                  totalTimeListened={totalTimeListened}
+                />
+              )
+            }
+          )}
           <LogoDiv
-            src="http://live.soundpruf.com/static/media/sp-white-logo-horizontal.99cc2d83.png"
-            alt=""
+            src='http://live.soundpruf.com/static/media/sp-white-logo-horizontal.99cc2d83.png'
+            alt=''
           />
         </TopFiveParentDiv>
       </ModalWrapper>
     </OpaqueBackground>
-  );
-};
+  )
+}

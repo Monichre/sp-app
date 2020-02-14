@@ -1,0 +1,20 @@
+var $f6183881d723f96b5ed71f78fbcc4a$exports = {};
+$parcel$require("75f6183881d723f96b5ed71f78fbcc4a", "react");
+$parcel$require("75f6183881d723f96b5ed71f78fbcc4a", "./FirebaseContext");
+$parcel$require("75f6183881d723f96b5ed71f78fbcc4a", "firebase");
+var $f6183881d723f96b5ed71f78fbcc4a$var$fbApp = $f6183881d723f96b5ed71f78fbcc4a$import$firebase.initializeApp({
+  apiKey: undefined,
+  authDomain: undefined,
+  databaseURL: undefined,
+  projectId: undefined
+}); // react suspense isnt ready for async data loading in 16.8.x...
+// but somehow react-apollo-hooks supports it
+
+var $f6183881d723f96b5ed71f78fbcc4a$export$AppFirebaseProvider = function AppFirebaseProvider(_ref) {
+  var children = _ref.children;
+  return $f6183881d723f96b5ed71f78fbcc4a$import$React.createElement($f6183881d723f96b5ed71f78fbcc4a$import$FirebaseContext.Provider, {
+    value: $f6183881d723f96b5ed71f78fbcc4a$var$fbApp
+  }, children);
+};
+
+$f6183881d723f96b5ed71f78fbcc4a$exports.AppFirebaseProvider = $f6183881d723f96b5ed71f78fbcc4a$export$AppFirebaseProvider;

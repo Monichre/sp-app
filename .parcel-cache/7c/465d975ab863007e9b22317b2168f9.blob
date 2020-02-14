@@ -1,0 +1,54 @@
+var $d91ded4bce8667013a1a1ec6221bc327$exports = {};
+$parcel$require("d91ded4bce8667013a1a1ec6221bc327", "react");
+$parcel$require("d91ded4bce8667013a1a1ec6221bc327", "styled-components");
+
+function $d91ded4bce8667013a1a1ec6221bc327$var$_templateObject() {
+  var data = $d91ded4bce8667013a1a1ec6221bc327$var$_taggedTemplateLiteral(["\ntop: 0;\nleft: 0;\nposition: fixed;\nheight: 100vh;\nwidth: 100%;\ndisplay: flex;\nflex-direction: column;\njustify-content: center;\n\n.small {\n  position: relative;\n  height: 100%;\n  width: 100%;\n}\n\n.infinity {\n  width: 120px;\n  height: 60px;\n  position: relative;\n  div,\n  span {\n    position: absolute;\n  }\n  div {\n    top: 0;\n    left: 50%;\n    width: 60px;\n    height: 60px;\n    animation: rotate 6.9s linear infinite;\n    span {\n      left: -8px;\n      top: 50%;\n      margin: -8px 0 0 0;\n      width: 16px;\n      height: 16px;\n      display: block;\n      background: ", ";\n      box-shadow: 2px 2px 8px rgba(", ", 0.09);\n      border-radius: 50%;\n      transform: rotate(90deg);\n      animation: move 6.9s linear infinite;\n      &:before,\n      &:after {\n        content: \"\";\n        position: absolute;\n        display: block;\n        border-radius: 50%;\n        width: 14px;\n        height: 14px;\n        background: inherit;\n        top: 50%;\n        left: 50%;\n        margin: -7px 0 0 -7px;\n        box-shadow: inherit;\n      }\n      &:before {\n        animation: drop1 0.8s linear infinite;\n      }\n      &:after {\n        animation: drop2 0.8s linear infinite 0.4s;\n      }\n    }\n    &:nth-child(2) {\n      animation-delay: -2.3s;\n      span {\n        animation-delay: -2.3s;\n      }\n    }\n    &:nth-child(3) {\n      animation-delay: -4.6s;\n      span {\n        animation-delay: -4.6s;\n      }\n    }\n  }\n}\n\n.infinityChrome {\n  width: 128px;\n  height: 60px;\n  margin: auto;\n  div {\n    position: absolute;\n    width: 16px;\n    height: 16px;\n    background: ", ";\n    box-shadow: 2px 2px 8px rgba(", ", 0.09);\n    border-radius: 50%;\n    animation: moveSvg 6.9s linear infinite;\n    -webkit-filter: url(#goo);\n    filter: url(#goo);\n    transform: scaleX(-1);\n    offset-path: path(\n      \"M64.3636364,29.4064278 C77.8909091,43.5203348 84.4363636,56 98.5454545,56 C112.654545,56 124,44.4117395 124,30.0006975 C124,15.5896556 112.654545,3.85282763 98.5454545,4.00139508 C84.4363636,4.14996252 79.2,14.6982509 66.4,29.4064278 C53.4545455,42.4803627 43.5636364,56 29.4545455,56 C15.3454545,56 4,44.4117395 4,30.0006975 C4,15.5896556 15.3454545,4.00139508 29.4545455,4.00139508 C43.5636364,4.00139508 53.1636364,17.8181672 64.3636364,29.4064278 Z\"\n    );\n    &:before,\n    &:after {\n      content: \"\";\n      position: absolute;\n      display: block;\n      border-radius: 50%;\n      width: 14px;\n      height: 14px;\n      background: inherit;\n      top: 50%;\n      left: 50%;\n      margin: -7px 0 0 -7px;\n      box-shadow: inherit;\n    }\n    &:before {\n      animation: drop1 0.8s linear infinite;\n    }\n    &:after {\n      animation: drop2 0.8s linear infinite 0.4s;\n    }\n    &:nth-child(2) {\n      animation-delay: -2.3s;\n    }\n    &:nth-child(3) {\n      animation-delay: -4.6s;\n    }\n  }\n}\n\n@keyframes moveSvg {\n  0% {\n    offset-distance: 0%;\n  }\n  25% {\n    background: ", ";\n  }\n  75% {\n    background: ", ";\n  }\n  100% {\n    offset-distance: 100%;\n  }\n}\n\n@keyframes rotate {\n  50% {\n    transform: rotate(360deg);\n    margin-left: 0;\n  }\n  50.0001%,\n  100% {\n    margin-left: -60px;\n  }\n}\n\n@keyframes move {\n  0%,\n  50% {\n    left: -8px;\n  }\n  25% {\n    background: ", ";\n  }\n  75% {\n    background: ", ";\n  }\n  50.0001%,\n  100% {\n    left: auto;\n    right: -8px;\n  }\n}\n\n@keyframes drop1 {\n  100% {\n    transform: translate(32px, 8px) scale(0);\n  }\n}\n\n@keyframes drop2 {\n  0% {\n    transform: translate(0, 0) scale(0.9);\n  }\n  100% {\n    transform: translate(32px, -8px) scale(0);\n  }\n}\n\n// Demo\n\n.infinity {\n  display: none;\n}\n"]);
+
+  $d91ded4bce8667013a1a1ec6221bc327$var$_templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function $d91ded4bce8667013a1a1ec6221bc327$var$_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var $d91ded4bce8667013a1a1ec6221bc327$var$Blob = function Blob() {
+  return $d91ded4bce8667013a1a1ec6221bc327$import$React.createElement("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    version: "1.1",
+    style: {
+      display: "none"
+    }
+  }, $d91ded4bce8667013a1a1ec6221bc327$import$React.createElement("defs", null, $d91ded4bce8667013a1a1ec6221bc327$import$React.createElement("filter", {
+    id: "goo"
+  }, $d91ded4bce8667013a1a1ec6221bc327$import$React.createElement("feGaussianBlur", {
+    in: "SourceGraphic",
+    stdDeviation: "6",
+    result: "blur"
+  }), $d91ded4bce8667013a1a1ec6221bc327$import$React.createElement("feColorMatrix", {
+    in: "blur",
+    mode: "matrix",
+    values: "1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7",
+    result: "goo"
+  }), $d91ded4bce8667013a1a1ec6221bc327$import$React.createElement("feBlend", {
+    in: "SourceGraphic",
+    in2: "goo"
+  }))));
+};
+
+var $d91ded4bce8667013a1a1ec6221bc327$var$color = '#8c6ff0';
+var $d91ded4bce8667013a1a1ec6221bc327$var$colorRight = '#5628ee';
+var $d91ded4bce8667013a1a1ec6221bc327$var$colorLeft = '#23c4f8';
+var $d91ded4bce8667013a1a1ec6221bc327$var$Loader = $d91ded4bce8667013a1a1ec6221bc327$import$styled.div($d91ded4bce8667013a1a1ec6221bc327$var$_templateObject(), $d91ded4bce8667013a1a1ec6221bc327$var$color, $d91ded4bce8667013a1a1ec6221bc327$var$color, $d91ded4bce8667013a1a1ec6221bc327$var$color, $d91ded4bce8667013a1a1ec6221bc327$var$color, $d91ded4bce8667013a1a1ec6221bc327$var$colorRight, $d91ded4bce8667013a1a1ec6221bc327$var$colorLeft, $d91ded4bce8667013a1a1ec6221bc327$var$colorRight, $d91ded4bce8667013a1a1ec6221bc327$var$colorLeft);
+
+var $d91ded4bce8667013a1a1ec6221bc327$export$Loading = function Loading() {
+  return $d91ded4bce8667013a1a1ec6221bc327$import$React.createElement($d91ded4bce8667013a1a1ec6221bc327$var$Loader, null, $d91ded4bce8667013a1a1ec6221bc327$import$React.createElement("div", {
+    className: "infinityChrome"
+  }, $d91ded4bce8667013a1a1ec6221bc327$import$React.createElement("div", null), $d91ded4bce8667013a1a1ec6221bc327$import$React.createElement("div", null), $d91ded4bce8667013a1a1ec6221bc327$import$React.createElement("div", null)), $d91ded4bce8667013a1a1ec6221bc327$import$React.createElement("div", {
+    className: "infinity"
+  }, $d91ded4bce8667013a1a1ec6221bc327$import$React.createElement("div", null, $d91ded4bce8667013a1a1ec6221bc327$import$React.createElement("span", null)), $d91ded4bce8667013a1a1ec6221bc327$import$React.createElement("div", null, $d91ded4bce8667013a1a1ec6221bc327$import$React.createElement("span", null)), $d91ded4bce8667013a1a1ec6221bc327$import$React.createElement("div", null, $d91ded4bce8667013a1a1ec6221bc327$import$React.createElement("span", null))), $d91ded4bce8667013a1a1ec6221bc327$import$React.createElement($d91ded4bce8667013a1a1ec6221bc327$var$Blob, null));
+};
+
+$d91ded4bce8667013a1a1ec6221bc327$exports.Loading = $d91ded4bce8667013a1a1ec6221bc327$export$Loading;

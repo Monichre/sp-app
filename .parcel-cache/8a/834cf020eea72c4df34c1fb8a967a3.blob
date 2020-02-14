@@ -1,0 +1,13 @@
+
+var $a7a88895ed00390f9dd7e3e993$exports = {};
+var $a7a88895ed00390f9dd7e3e993$var$global = $parcel$require("555546a7a88895ed00390f9dd7e3e993", "../internals/global");
+var $a7a88895ed00390f9dd7e3e993$var$setGlobal = $parcel$require("555546a7a88895ed00390f9dd7e3e993", "../internals/set-global");
+var $a7a88895ed00390f9dd7e3e993$var$SHARED = '__core-js_shared__';
+var $a7a88895ed00390f9dd7e3e993$var$store = $a7a88895ed00390f9dd7e3e993$var$global[$a7a88895ed00390f9dd7e3e993$var$SHARED] || $a7a88895ed00390f9dd7e3e993$var$setGlobal($a7a88895ed00390f9dd7e3e993$var$SHARED, {});
+($a7a88895ed00390f9dd7e3e993$exports = function (key, value) {
+  return $a7a88895ed00390f9dd7e3e993$var$store[key] || ($a7a88895ed00390f9dd7e3e993$var$store[key] = value !== undefined ? value : {});
+})('versions', []).push({
+  version: '3.0.1',
+  mode: $parcel$require("555546a7a88895ed00390f9dd7e3e993", "../internals/is-pure") ? 'pure' : 'global',
+  copyright: '© 2019 Denis Pushkarev (zloirock.ru)'
+});

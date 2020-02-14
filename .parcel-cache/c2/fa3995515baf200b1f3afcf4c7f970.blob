@@ -1,0 +1,17 @@
+var $e7d8c2df449916bdae472bf4beeb$exports = {};
+var $e7d8c2df449916bdae472bf4beeb$export$base = {
+  global: {
+    colors: {
+      icon: '#666666'
+    }
+  },
+  icon: {
+    size: {
+      small: '12px',
+      medium: '24px',
+      large: '48px',
+      xlarge: '96px'
+    }
+  }
+};
+$e7d8c2df449916bdae472bf4beeb$exports.base = $e7d8c2df449916bdae472bf4beeb$export$base;

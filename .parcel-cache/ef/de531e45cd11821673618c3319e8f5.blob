@@ -1,0 +1,342 @@
+var $fdc425058fabff5c1cc7f50417f941e$exports = {};
+var $fdc425058fabff5c1cc7f50417f941e$export$__esModule = true;
+$fdc425058fabff5c1cc7f50417f941e$exports.__esModule = $fdc425058fabff5c1cc7f50417f941e$export$__esModule;
+var $fdc425058fabff5c1cc7f50417f941e$export$Helmet = undefined;
+$fdc425058fabff5c1cc7f50417f941e$exports.Helmet = $fdc425058fabff5c1cc7f50417f941e$export$Helmet;
+
+var $fdc425058fabff5c1cc7f50417f941e$var$_extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+var $fdc425058fabff5c1cc7f50417f941e$var$_createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+var $fdc425058fabff5c1cc7f50417f941e$var$_react = $parcel$require("8fdc425058fabff5c1cc7f50417f941e", "react");
+var $fdc425058fabff5c1cc7f50417f941e$var$_react2 = $fdc425058fabff5c1cc7f50417f941e$var$_interopRequireDefault($fdc425058fabff5c1cc7f50417f941e$var$_react);
+var $fdc425058fabff5c1cc7f50417f941e$var$_propTypes = $parcel$require("8fdc425058fabff5c1cc7f50417f941e", "prop-types");
+var $fdc425058fabff5c1cc7f50417f941e$var$_propTypes2 = $fdc425058fabff5c1cc7f50417f941e$var$_interopRequireDefault($fdc425058fabff5c1cc7f50417f941e$var$_propTypes);
+var $fdc425058fabff5c1cc7f50417f941e$var$_reactSideEffect = $parcel$require("8fdc425058fabff5c1cc7f50417f941e", "react-side-effect");
+var $fdc425058fabff5c1cc7f50417f941e$var$_reactSideEffect2 = $fdc425058fabff5c1cc7f50417f941e$var$_interopRequireDefault($fdc425058fabff5c1cc7f50417f941e$var$_reactSideEffect);
+var $fdc425058fabff5c1cc7f50417f941e$var$_reactFastCompare = $parcel$require("8fdc425058fabff5c1cc7f50417f941e", "react-fast-compare");
+var $fdc425058fabff5c1cc7f50417f941e$var$_reactFastCompare2 = $fdc425058fabff5c1cc7f50417f941e$var$_interopRequireDefault($fdc425058fabff5c1cc7f50417f941e$var$_reactFastCompare);
+var $fdc425058fabff5c1cc7f50417f941e$var$_HelmetUtils = $parcel$require("8fdc425058fabff5c1cc7f50417f941e", "./HelmetUtils.js");
+var $fdc425058fabff5c1cc7f50417f941e$var$_HelmetConstants = $parcel$require("8fdc425058fabff5c1cc7f50417f941e", "./HelmetConstants.js");
+
+function $fdc425058fabff5c1cc7f50417f941e$var$_interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}
+
+function $fdc425058fabff5c1cc7f50417f941e$var$_objectWithoutProperties(obj, keys) {
+  var target = {};
+
+  for (var i in obj) {
+    if (keys.indexOf(i) >= 0) continue;
+    if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
+    target[i] = obj[i];
+  }
+
+  return target;
+}
+
+function $fdc425058fabff5c1cc7f50417f941e$var$_classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function $fdc425058fabff5c1cc7f50417f941e$var$_possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function $fdc425058fabff5c1cc7f50417f941e$var$_inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var $fdc425058fabff5c1cc7f50417f941e$var$Helmet = function Helmet(Component) {
+  var _class, _temp;
+
+  return _temp = _class = function (_React$Component) {
+    $fdc425058fabff5c1cc7f50417f941e$var$_inherits(HelmetWrapper, _React$Component);
+
+    function HelmetWrapper() {
+      $fdc425058fabff5c1cc7f50417f941e$var$_classCallCheck(this, HelmetWrapper);
+      return $fdc425058fabff5c1cc7f50417f941e$var$_possibleConstructorReturn(this, _React$Component.apply(this, arguments));
+    }
+
+    HelmetWrapper.prototype.shouldComponentUpdate = function shouldComponentUpdate(nextProps) {
+      return !(0, $fdc425058fabff5c1cc7f50417f941e$var$_reactFastCompare2.default)(this.props, nextProps);
+    };
+
+    HelmetWrapper.prototype.mapNestedChildrenToProps = function mapNestedChildrenToProps(child, nestedChildren) {
+      if (!nestedChildren) {
+        return null;
+      }
+
+      switch (child.type) {
+        case $fdc425058fabff5c1cc7f50417f941e$var$_HelmetConstants.TAG_NAMES.SCRIPT:
+        case $fdc425058fabff5c1cc7f50417f941e$var$_HelmetConstants.TAG_NAMES.NOSCRIPT:
+          return {
+            innerHTML: nestedChildren
+          };
+
+        case $fdc425058fabff5c1cc7f50417f941e$var$_HelmetConstants.TAG_NAMES.STYLE:
+          return {
+            cssText: nestedChildren
+          };
+      }
+
+      throw new Error("<" + child.type + " /> elements are self-closing and can not contain children. Refer to our API for more information.");
+    };
+
+    HelmetWrapper.prototype.flattenArrayTypeChildren = function flattenArrayTypeChildren(_ref) {
+      var _extends2;
+
+      var child = _ref.child,
+          arrayTypeChildren = _ref.arrayTypeChildren,
+          newChildProps = _ref.newChildProps,
+          nestedChildren = _ref.nestedChildren;
+      return $fdc425058fabff5c1cc7f50417f941e$var$_extends({}, arrayTypeChildren, (_extends2 = {}, _extends2[child.type] = [].concat(arrayTypeChildren[child.type] || [], [$fdc425058fabff5c1cc7f50417f941e$var$_extends({}, newChildProps, this.mapNestedChildrenToProps(child, nestedChildren))]), _extends2));
+    };
+
+    HelmetWrapper.prototype.mapObjectTypeChildren = function mapObjectTypeChildren(_ref2) {
+      var _extends3, _extends4;
+
+      var child = _ref2.child,
+          newProps = _ref2.newProps,
+          newChildProps = _ref2.newChildProps,
+          nestedChildren = _ref2.nestedChildren;
+
+      switch (child.type) {
+        case $fdc425058fabff5c1cc7f50417f941e$var$_HelmetConstants.TAG_NAMES.TITLE:
+          return $fdc425058fabff5c1cc7f50417f941e$var$_extends({}, newProps, (_extends3 = {}, _extends3[child.type] = nestedChildren, _extends3.titleAttributes = $fdc425058fabff5c1cc7f50417f941e$var$_extends({}, newChildProps), _extends3));
+
+        case $fdc425058fabff5c1cc7f50417f941e$var$_HelmetConstants.TAG_NAMES.BODY:
+          return $fdc425058fabff5c1cc7f50417f941e$var$_extends({}, newProps, {
+            bodyAttributes: $fdc425058fabff5c1cc7f50417f941e$var$_extends({}, newChildProps)
+          });
+
+        case $fdc425058fabff5c1cc7f50417f941e$var$_HelmetConstants.TAG_NAMES.HTML:
+          return $fdc425058fabff5c1cc7f50417f941e$var$_extends({}, newProps, {
+            htmlAttributes: $fdc425058fabff5c1cc7f50417f941e$var$_extends({}, newChildProps)
+          });
+      }
+
+      return $fdc425058fabff5c1cc7f50417f941e$var$_extends({}, newProps, (_extends4 = {}, _extends4[child.type] = $fdc425058fabff5c1cc7f50417f941e$var$_extends({}, newChildProps), _extends4));
+    };
+
+    HelmetWrapper.prototype.mapArrayTypeChildrenToProps = function mapArrayTypeChildrenToProps(arrayTypeChildren, newProps) {
+      var newFlattenedProps = $fdc425058fabff5c1cc7f50417f941e$var$_extends({}, newProps);
+      Object.keys(arrayTypeChildren).forEach(function (arrayChildName) {
+        var _extends5;
+
+        newFlattenedProps = $fdc425058fabff5c1cc7f50417f941e$var$_extends({}, newFlattenedProps, (_extends5 = {}, _extends5[arrayChildName] = arrayTypeChildren[arrayChildName], _extends5));
+      });
+      return newFlattenedProps;
+    };
+
+    HelmetWrapper.prototype.warnOnInvalidChildren = function warnOnInvalidChildren(child, nestedChildren) {
+      if ("production" !== "production") {
+        if (!$fdc425058fabff5c1cc7f50417f941e$var$_HelmetConstants.VALID_TAG_NAMES.some(function (name) {
+          return child.type === name;
+        })) {
+          if (typeof child.type === "function") {
+            return (0, $fdc425058fabff5c1cc7f50417f941e$var$_HelmetUtils.warn)("You may be attempting to nest <Helmet> components within each other, which is not allowed. Refer to our API for more information.");
+          }
+
+          return (0, $fdc425058fabff5c1cc7f50417f941e$var$_HelmetUtils.warn)("Only elements types " + $fdc425058fabff5c1cc7f50417f941e$var$_HelmetConstants.VALID_TAG_NAMES.join(", ") + " are allowed. Helmet does not support rendering <" + child.type + "> elements. Refer to our API for more information.");
+        }
+
+        if (nestedChildren && typeof nestedChildren !== "string" && (!Array.isArray(nestedChildren) || nestedChildren.some(function (nestedChild) {
+          return typeof nestedChild !== "string";
+        }))) {
+          throw new Error("Helmet expects a string as a child of <" + child.type + ">. Did you forget to wrap your children in braces? ( <" + child.type + ">{``}</" + child.type + "> ) Refer to our API for more information.");
+        }
+      }
+
+      return true;
+    };
+
+    HelmetWrapper.prototype.mapChildrenToProps = function mapChildrenToProps(children, newProps) {
+      var _this2 = this;
+
+      var arrayTypeChildren = {};
+      $fdc425058fabff5c1cc7f50417f941e$var$_react2.default.Children.forEach(children, function (child) {
+        if (!child || !child.props) {
+          return;
+        }
+
+        var _child$props = child.props,
+            nestedChildren = _child$props.children,
+            childProps = $fdc425058fabff5c1cc7f50417f941e$var$_objectWithoutProperties(_child$props, ["children"]);
+        var newChildProps = (0, $fdc425058fabff5c1cc7f50417f941e$var$_HelmetUtils.convertReactPropstoHtmlAttributes)(childProps);
+
+        _this2.warnOnInvalidChildren(child, nestedChildren);
+
+        switch (child.type) {
+          case $fdc425058fabff5c1cc7f50417f941e$var$_HelmetConstants.TAG_NAMES.LINK:
+          case $fdc425058fabff5c1cc7f50417f941e$var$_HelmetConstants.TAG_NAMES.META:
+          case $fdc425058fabff5c1cc7f50417f941e$var$_HelmetConstants.TAG_NAMES.NOSCRIPT:
+          case $fdc425058fabff5c1cc7f50417f941e$var$_HelmetConstants.TAG_NAMES.SCRIPT:
+          case $fdc425058fabff5c1cc7f50417f941e$var$_HelmetConstants.TAG_NAMES.STYLE:
+            arrayTypeChildren = _this2.flattenArrayTypeChildren({
+              child: child,
+              arrayTypeChildren: arrayTypeChildren,
+              newChildProps: newChildProps,
+              nestedChildren: nestedChildren
+            });
+            break;
+
+          default:
+            newProps = _this2.mapObjectTypeChildren({
+              child: child,
+              newProps: newProps,
+              newChildProps: newChildProps,
+              nestedChildren: nestedChildren
+            });
+            break;
+        }
+      });
+      newProps = this.mapArrayTypeChildrenToProps(arrayTypeChildren, newProps);
+      return newProps;
+    };
+
+    HelmetWrapper.prototype.render = function render() {
+      var _props = this.props,
+          children = _props.children,
+          props = $fdc425058fabff5c1cc7f50417f941e$var$_objectWithoutProperties(_props, ["children"]);
+      var newProps = $fdc425058fabff5c1cc7f50417f941e$var$_extends({}, props);
+
+      if (children) {
+        newProps = this.mapChildrenToProps(children, newProps);
+      }
+
+      return $fdc425058fabff5c1cc7f50417f941e$var$_react2.default.createElement(Component, newProps);
+    };
+
+    $fdc425058fabff5c1cc7f50417f941e$var$_createClass(HelmetWrapper, null, [{
+      key: "canUseDOM",
+      // Component.peek comes from react-side-effect:
+      // For testing, you may use a static peek() method available on the returned component.
+      // It lets you get the current state without resetting the mounted instance stack.
+      // Don’t use it for anything other than testing.
+
+      /**
+       * @param {Object} base: {"target": "_blank", "href": "http://mysite.com/"}
+       * @param {Object} bodyAttributes: {"className": "root"}
+       * @param {String} defaultTitle: "Default Title"
+       * @param {Boolean} defer: true
+       * @param {Boolean} encodeSpecialCharacters: true
+       * @param {Object} htmlAttributes: {"lang": "en", "amp": undefined}
+       * @param {Array} link: [{"rel": "canonical", "href": "http://mysite.com/example"}]
+       * @param {Array} meta: [{"name": "description", "content": "Test description"}]
+       * @param {Array} noscript: [{"innerHTML": "<img src='http://mysite.com/js/test.js'"}]
+       * @param {Function} onChangeClientState: "(newState) => console.log(newState)"
+       * @param {Array} script: [{"type": "text/javascript", "src": "http://mysite.com/js/test.js"}]
+       * @param {Array} style: [{"type": "text/css", "cssText": "div { display: block; color: blue; }"}]
+       * @param {String} title: "Title"
+       * @param {Object} titleAttributes: {"itemprop": "name"}
+       * @param {String} titleTemplate: "MySite.com - %s"
+       */
+      set: function set(canUseDOM) {
+        Component.canUseDOM = canUseDOM;
+      }
+    }]);
+    return HelmetWrapper;
+  }($fdc425058fabff5c1cc7f50417f941e$var$_react2.default.Component), _class.propTypes = {
+    base: $fdc425058fabff5c1cc7f50417f941e$var$_propTypes2.default.object,
+    bodyAttributes: $fdc425058fabff5c1cc7f50417f941e$var$_propTypes2.default.object,
+    children: $fdc425058fabff5c1cc7f50417f941e$var$_propTypes2.default.oneOfType([$fdc425058fabff5c1cc7f50417f941e$var$_propTypes2.default.arrayOf($fdc425058fabff5c1cc7f50417f941e$var$_propTypes2.default.node), $fdc425058fabff5c1cc7f50417f941e$var$_propTypes2.default.node]),
+    defaultTitle: $fdc425058fabff5c1cc7f50417f941e$var$_propTypes2.default.string,
+    defer: $fdc425058fabff5c1cc7f50417f941e$var$_propTypes2.default.bool,
+    encodeSpecialCharacters: $fdc425058fabff5c1cc7f50417f941e$var$_propTypes2.default.bool,
+    htmlAttributes: $fdc425058fabff5c1cc7f50417f941e$var$_propTypes2.default.object,
+    link: $fdc425058fabff5c1cc7f50417f941e$var$_propTypes2.default.arrayOf($fdc425058fabff5c1cc7f50417f941e$var$_propTypes2.default.object),
+    meta: $fdc425058fabff5c1cc7f50417f941e$var$_propTypes2.default.arrayOf($fdc425058fabff5c1cc7f50417f941e$var$_propTypes2.default.object),
+    noscript: $fdc425058fabff5c1cc7f50417f941e$var$_propTypes2.default.arrayOf($fdc425058fabff5c1cc7f50417f941e$var$_propTypes2.default.object),
+    onChangeClientState: $fdc425058fabff5c1cc7f50417f941e$var$_propTypes2.default.func,
+    script: $fdc425058fabff5c1cc7f50417f941e$var$_propTypes2.default.arrayOf($fdc425058fabff5c1cc7f50417f941e$var$_propTypes2.default.object),
+    style: $fdc425058fabff5c1cc7f50417f941e$var$_propTypes2.default.arrayOf($fdc425058fabff5c1cc7f50417f941e$var$_propTypes2.default.object),
+    title: $fdc425058fabff5c1cc7f50417f941e$var$_propTypes2.default.string,
+    titleAttributes: $fdc425058fabff5c1cc7f50417f941e$var$_propTypes2.default.object,
+    titleTemplate: $fdc425058fabff5c1cc7f50417f941e$var$_propTypes2.default.string
+  }, _class.defaultProps = {
+    defer: true,
+    encodeSpecialCharacters: true
+  }, _class.peek = Component.peek, _class.rewind = function () {
+    var mappedState = Component.rewind();
+
+    if (!mappedState) {
+      // provide fallback if mappedState is undefined
+      mappedState = (0, $fdc425058fabff5c1cc7f50417f941e$var$_HelmetUtils.mapStateOnServer)({
+        baseTag: [],
+        bodyAttributes: {},
+        encodeSpecialCharacters: true,
+        htmlAttributes: {},
+        linkTags: [],
+        metaTags: [],
+        noscriptTags: [],
+        scriptTags: [],
+        styleTags: [],
+        title: "",
+        titleAttributes: {}
+      });
+    }
+
+    return mappedState;
+  }, _temp;
+};
+
+var $fdc425058fabff5c1cc7f50417f941e$var$NullComponent = function NullComponent() {
+  return null;
+};
+
+var $fdc425058fabff5c1cc7f50417f941e$var$HelmetSideEffects = (0, $fdc425058fabff5c1cc7f50417f941e$var$_reactSideEffect2.default)($fdc425058fabff5c1cc7f50417f941e$var$_HelmetUtils.reducePropsToState, $fdc425058fabff5c1cc7f50417f941e$var$_HelmetUtils.handleClientStateChange, $fdc425058fabff5c1cc7f50417f941e$var$_HelmetUtils.mapStateOnServer)($fdc425058fabff5c1cc7f50417f941e$var$NullComponent);
+var $fdc425058fabff5c1cc7f50417f941e$var$HelmetExport = $fdc425058fabff5c1cc7f50417f941e$var$Helmet($fdc425058fabff5c1cc7f50417f941e$var$HelmetSideEffects);
+$fdc425058fabff5c1cc7f50417f941e$var$HelmetExport.renderStatic = $fdc425058fabff5c1cc7f50417f941e$var$HelmetExport.rewind;
+$fdc425058fabff5c1cc7f50417f941e$export$Helmet = $fdc425058fabff5c1cc7f50417f941e$var$HelmetExport
+$fdc425058fabff5c1cc7f50417f941e$exports.Helmet = $fdc425058fabff5c1cc7f50417f941e$export$Helmet;
+var $fdc425058fabff5c1cc7f50417f941e$export$default = $fdc425058fabff5c1cc7f50417f941e$var$HelmetExport;
+$fdc425058fabff5c1cc7f50417f941e$exports.default = $fdc425058fabff5c1cc7f50417f941e$export$default;
