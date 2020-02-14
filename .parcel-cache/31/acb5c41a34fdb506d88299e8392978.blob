@@ -1,3 +1,0 @@
-// `Symbol.replace` well-known symbol
-// https://tc39.github.io/ecma262/#sec-symbol.replace
-$parcel$require("54dc51044ca6edd1224e89f9e74fa4e7", "../internals/define-well-known-symbol")('replace');

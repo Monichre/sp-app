@@ -1,9 +1,0 @@
-var $c2022bd00c5b27542d8ecc3f7c77dcb8$exports = {};
-var $c2022bd00c5b27542d8ecc3f7c77dcb8$var$store = $parcel$require("c2022bd00c5b27542d8ecc3f7c77dcb8", "../internals/shared")('wks');
-var $c2022bd00c5b27542d8ecc3f7c77dcb8$var$uid = $parcel$require("c2022bd00c5b27542d8ecc3f7c77dcb8", "../internals/uid");
-var $c2022bd00c5b27542d8ecc3f7c77dcb8$var$Symbol = $parcel$require("c2022bd00c5b27542d8ecc3f7c77dcb8", "../internals/global").Symbol;
-var $c2022bd00c5b27542d8ecc3f7c77dcb8$var$NATIVE_SYMBOL = $parcel$require("c2022bd00c5b27542d8ecc3f7c77dcb8", "../internals/native-symbol");
-
-$c2022bd00c5b27542d8ecc3f7c77dcb8$exports = function (name) {
-  return $c2022bd00c5b27542d8ecc3f7c77dcb8$var$store[name] || ($c2022bd00c5b27542d8ecc3f7c77dcb8$var$store[name] = $c2022bd00c5b27542d8ecc3f7c77dcb8$var$NATIVE_SYMBOL && $c2022bd00c5b27542d8ecc3f7c77dcb8$var$Symbol[name] || ($c2022bd00c5b27542d8ecc3f7c77dcb8$var$NATIVE_SYMBOL ? $c2022bd00c5b27542d8ecc3f7c77dcb8$var$Symbol : $c2022bd00c5b27542d8ecc3f7c77dcb8$var$uid)('Symbol.' + name));
-};

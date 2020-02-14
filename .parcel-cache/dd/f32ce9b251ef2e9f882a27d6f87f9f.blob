@@ -1,8 +1,0 @@
-var $efb71f71b6c3970f9ba9a87fcc4$exports = {};
-var $efb71f71b6c3970f9ba9a87fcc4$var$toInteger = $parcel$require("24554efb71f71b6c3970f9ba9a87fcc4", "../internals/to-integer");
-var $efb71f71b6c3970f9ba9a87fcc4$var$min = Math.min; // `ToLength` abstract operation
-// https://tc39.github.io/ecma262/#sec-tolength
-
-$efb71f71b6c3970f9ba9a87fcc4$exports = function (argument) {
-  return argument > 0 ? $efb71f71b6c3970f9ba9a87fcc4$var$min($efb71f71b6c3970f9ba9a87fcc4$var$toInteger(argument), 0x1FFFFFFFFFFFFF) : 0; // 2 ** 53 - 1 == 9007199254740991
-};

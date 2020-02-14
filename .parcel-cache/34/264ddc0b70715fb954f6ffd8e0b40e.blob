@@ -1,6 +1,0 @@
-var $f37fd73753486303aa11844feda4$exports = {};
-// Chrome 38 Symbol has incorrect toString conversion
-$f37fd73753486303aa11844feda4$exports = !$parcel$require("9238f37fd73753486303aa11844feda4", "../internals/fails")(function () {
-  // eslint-disable-next-line no-undef
-  return !String(Symbol());
-});

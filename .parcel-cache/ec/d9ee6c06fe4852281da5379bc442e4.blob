@@ -1,3 +1,0 @@
-var $c9d5bee0a0130f990bced45799f7686$exports = {};
-// IE8- don't enum bug keys
-$c9d5bee0a0130f990bced45799f7686$exports = ['constructor', 'hasOwnProperty', 'isPrototypeOf', 'propertyIsEnumerable', 'toLocaleString', 'toString', 'valueOf'];

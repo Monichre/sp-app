@@ -1,6 +1,0 @@
-var $ac04ae53b9b5e0a023781ead46b8f90c$exports = {};
-var $ac04ae53b9b5e0a023781ead46b8f90c$var$toString = {}.toString;
-
-$ac04ae53b9b5e0a023781ead46b8f90c$exports = function (it) {
-  return $ac04ae53b9b5e0a023781ead46b8f90c$var$toString.call(it).slice(8, -1);
-};

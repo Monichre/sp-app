@@ -1,3 +1,0 @@
-// `Symbol.iterator` well-known symbol
-// https://tc39.github.io/ecma262/#sec-symbol.iterator
-$parcel$require("e6d17ee9f5c9c33aea87ccbe9b3b6f1c", "../internals/define-well-known-symbol")('iterator');

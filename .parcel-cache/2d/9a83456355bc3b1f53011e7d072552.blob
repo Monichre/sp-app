@@ -1,9 +1,0 @@
-var $d9a81fdbd08535b48e7ef2f31$exports = {};
-// Thank's IE8 for his funny defineProperty
-$d9a81fdbd08535b48e7ef2f31$exports = !$parcel$require("5781297d9a81fdbd08535b48e7ef2f31", "../internals/descriptors") && !$parcel$require("5781297d9a81fdbd08535b48e7ef2f31", "../internals/fails")(function () {
-  return Object.defineProperty($parcel$require("5781297d9a81fdbd08535b48e7ef2f31", "../internals/document-create-element")('div'), 'a', {
-    get: function () {
-      return 7;
-    }
-  }).a != 7;
-});

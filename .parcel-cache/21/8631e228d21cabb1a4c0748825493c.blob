@@ -1,3 +1,0 @@
-// `Symbol.asyncIterator` well-known symbol
-// https://tc39.github.io/ecma262/#sec-symbol.asynciterator
-$parcel$require("5d5cb5cb23214dd408e896ca5bb59783", "../internals/define-well-known-symbol")('asyncIterator');

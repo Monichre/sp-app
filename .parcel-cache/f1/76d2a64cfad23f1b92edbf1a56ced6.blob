@@ -1,7 +1,0 @@
-var $dd08f2c339de2a8e8a36b1b4c5fd1$exports = {};
-var $dd08f2c339de2a8e8a36b1b4c5fd1$var$shared = $parcel$require("071dd08f2c339de2a8e8a36b1b4c5fd1", "../internals/shared")('keys');
-var $dd08f2c339de2a8e8a36b1b4c5fd1$var$uid = $parcel$require("071dd08f2c339de2a8e8a36b1b4c5fd1", "../internals/uid");
-
-$dd08f2c339de2a8e8a36b1b4c5fd1$exports = function (key) {
-  return $dd08f2c339de2a8e8a36b1b4c5fd1$var$shared[key] || ($dd08f2c339de2a8e8a36b1b4c5fd1$var$shared[key] = $dd08f2c339de2a8e8a36b1b4c5fd1$var$uid(key));
-};

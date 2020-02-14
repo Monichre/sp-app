@@ -1,3 +1,0 @@
-// `Symbol.patternMatch` well-known symbol
-// https://github.com/tc39/proposal-pattern-matching
-$parcel$require("463f2aae9b0c7a8af1d4bd6d04c03c3a", "../internals/define-well-known-symbol")('patternMatch');

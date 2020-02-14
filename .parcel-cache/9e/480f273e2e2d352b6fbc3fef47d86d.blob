@@ -1,4 +1,0 @@
-var $f4a87b3f1a1139338ca1effedadcb6b$exports = {};
-// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-$f4a87b3f1a1139338ca1effedadcb6b$exports = typeof window == 'object' && window && window.Math == Math ? window : typeof self == 'object' && self && self.Math == Math ? self // eslint-disable-next-line no-new-func
-: Function('return this')();

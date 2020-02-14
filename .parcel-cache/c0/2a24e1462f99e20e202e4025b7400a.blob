@@ -1,7 +1,0 @@
-var $b6ca9c9c87add97f27647de7e798$exports = {};
-$parcel$exportWildcard($b6ca9c9c87add97f27647de7e798$exports, $parcel$require("8329b6ca9c9c87add97f27647de7e798", "./useQuery"));
-$parcel$exportWildcard($b6ca9c9c87add97f27647de7e798$exports, $parcel$require("8329b6ca9c9c87add97f27647de7e798", "./useMutation"));
-$parcel$exportWildcard($b6ca9c9c87add97f27647de7e798$exports, $parcel$require("8329b6ca9c9c87add97f27647de7e798", "./ApolloContext"));
-$parcel$exportWildcard($b6ca9c9c87add97f27647de7e798$exports, $parcel$require("8329b6ca9c9c87add97f27647de7e798", "./SuspenseSSR"));
-$parcel$exportWildcard($b6ca9c9c87add97f27647de7e798$exports, $parcel$require("8329b6ca9c9c87add97f27647de7e798", "./getMarkupFromTree"));
-$parcel$exportWildcard($b6ca9c9c87add97f27647de7e798$exports, $parcel$require("8329b6ca9c9c87add97f27647de7e798", "./useSubscription"));

@@ -1,3 +1,0 @@
-// `Symbol.toPrimitive` well-known symbol
-// https://tc39.github.io/ecma262/#sec-symbol.toprimitive
-$parcel$require("8725072050509073e8c97a6dad0e5908", "../internals/define-well-known-symbol")('toPrimitive');

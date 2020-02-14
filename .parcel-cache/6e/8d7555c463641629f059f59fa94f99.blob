@@ -1,5 +1,0 @@
-var $b3c61938609f93201bada84f42352b00$exports = {};
-
-/** Detect free variable `global` from Node.js. */
-var $b3c61938609f93201bada84f42352b00$var$freeGlobal = typeof $parcel$global == 'object' && $parcel$global && $parcel$global.Object === Object && $parcel$global;
-$b3c61938609f93201bada84f42352b00$exports = $b3c61938609f93201bada84f42352b00$var$freeGlobal;

@@ -1,7 +1,0 @@
-var $a3765117da785d4e18babeb2978641a$exports = {};
-
-if ("production" === 'production') {
-  $a3765117da785d4e18babeb2978641a$exports = $parcel$require("3a3765117da785d4e18babeb2978641a", "./cjs/react-is.production.min.js");
-} else {
-  $a3765117da785d4e18babeb2978641a$exports = require('./cjs/react-is.development.js');
-}

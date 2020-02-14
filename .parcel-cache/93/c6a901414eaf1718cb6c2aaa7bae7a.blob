@@ -1,8 +1,0 @@
-var $d9f3b9116defea92388e9324db96857$exports = {};
-$d9f3b9116defea92388e9324db96857$exports = $d9f3b9116defea92388e9324db96857$var$bail;
-
-function $d9f3b9116defea92388e9324db96857$var$bail(err) {
-  if (err) {
-    throw err;
-  }
-}

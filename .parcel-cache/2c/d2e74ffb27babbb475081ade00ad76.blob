@@ -1,9 +1,0 @@
-var $d83ec4357dc1debcf41fce6e1cc67f8$exports = {};
-var $d83ec4357dc1debcf41fce6e1cc67f8$var$isObject = $parcel$require("2d83ec4357dc1debcf41fce6e1cc67f8", "../internals/is-object");
-var $d83ec4357dc1debcf41fce6e1cc67f8$var$document = $parcel$require("2d83ec4357dc1debcf41fce6e1cc67f8", "../internals/global").document; // typeof document.createElement is 'object' in old IE
-
-var $d83ec4357dc1debcf41fce6e1cc67f8$var$exist = $d83ec4357dc1debcf41fce6e1cc67f8$var$isObject($d83ec4357dc1debcf41fce6e1cc67f8$var$document) && $d83ec4357dc1debcf41fce6e1cc67f8$var$isObject($d83ec4357dc1debcf41fce6e1cc67f8$var$document.createElement);
-
-$d83ec4357dc1debcf41fce6e1cc67f8$exports = function (it) {
-  return $d83ec4357dc1debcf41fce6e1cc67f8$var$exist ? $d83ec4357dc1debcf41fce6e1cc67f8$var$document.createElement(it) : {};
-};

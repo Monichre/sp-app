@@ -1,9 +1,0 @@
-
-var $d7b43363aa69f9b983f53411da69f0$exports = {};
-var $d7b43363aa69f9b983f53411da69f0$var$global = $parcel$require("71d7b43363aa69f9b983f53411da69f0", "../internals/global");
-var $d7b43363aa69f9b983f53411da69f0$var$bind = $parcel$require("71d7b43363aa69f9b983f53411da69f0", "../internals/bind-context");
-var $d7b43363aa69f9b983f53411da69f0$var$call = Function.call;
-
-$d7b43363aa69f9b983f53411da69f0$exports = function (CONSTRUCTOR, METHOD, length) {
-  return $d7b43363aa69f9b983f53411da69f0$var$bind($d7b43363aa69f9b983f53411da69f0$var$call, $d7b43363aa69f9b983f53411da69f0$var$global[CONSTRUCTOR].prototype[METHOD], length);
-};

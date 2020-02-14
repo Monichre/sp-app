@@ -1,9 +1,0 @@
-var $c130f373f2208fe19d7dec9dc5ec87$exports = {};
-$c130f373f2208fe19d7dec9dc5ec87$exports = $c130f373f2208fe19d7dec9dc5ec87$var$whitespace;
-var $c130f373f2208fe19d7dec9dc5ec87$var$fromCode = String.fromCharCode;
-var $c130f373f2208fe19d7dec9dc5ec87$var$re = /\s/; // Check if the given character code, or the character code at the first
-// character, is a whitespace character.
-
-function $c130f373f2208fe19d7dec9dc5ec87$var$whitespace(character) {
-  return $c130f373f2208fe19d7dec9dc5ec87$var$re.test(typeof character === 'number' ? $c130f373f2208fe19d7dec9dc5ec87$var$fromCode(character) : character.charAt(0));
-}

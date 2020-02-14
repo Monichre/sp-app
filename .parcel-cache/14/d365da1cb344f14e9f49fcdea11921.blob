@@ -1,6 +1,0 @@
-var $b1f40e36375efbb5594abd6fed1bd76$exports = {};
-$b1f40e36375efbb5594abd6fed1bd76$exports = $b1f40e36375efbb5594abd6fed1bd76$var$collapse; // `collapse(' \t\nbar \nbaz\t') // ' bar baz '`
-
-function $b1f40e36375efbb5594abd6fed1bd76$var$collapse(value) {
-  return String(value).replace(/\s+/g, ' ');
-}

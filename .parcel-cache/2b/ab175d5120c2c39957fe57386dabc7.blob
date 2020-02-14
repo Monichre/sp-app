@@ -1,7 +1,0 @@
-var $c4bb1406aa977b65554cc7c737e66ee$exports = {};
-var $c4bb1406aa977b65554cc7c737e66ee$var$toString = Object.prototype.toString;
-
-$c4bb1406aa977b65554cc7c737e66ee$exports = function (x) {
-  var prototype;
-  return $c4bb1406aa977b65554cc7c737e66ee$var$toString.call(x) === '[object Object]' && (prototype = Object.getPrototypeOf(x), prototype === null || prototype === Object.getPrototypeOf({}));
-};

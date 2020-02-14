@@ -1,2 +1,0 @@
-// https://github.com/tc39/proposal-observable
-$parcel$require("58646a273bd6845f12b9eb86ff7433cf", "../internals/define-well-known-symbol")('observable');

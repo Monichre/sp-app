@@ -1,3 +1,0 @@
-// `Symbol.unscopables` well-known symbol
-// https://tc39.github.io/ecma262/#sec-symbol.unscopables
-$parcel$require("a9456492dec73d9cfda40d6acf261be7", "../internals/define-well-known-symbol")('unscopables');

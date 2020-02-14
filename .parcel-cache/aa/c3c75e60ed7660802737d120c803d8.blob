@@ -1,6 +1,0 @@
-var $b82c1f05a8a9edf4d38$exports = {};
-$b82c1f05a8a9edf4d38$exports = $b82c1f05a8a9edf4d38$var$locate;
-
-function $b82c1f05a8a9edf4d38$var$locate(value, fromIndex) {
-  return value.indexOf('`', fromIndex);
-}

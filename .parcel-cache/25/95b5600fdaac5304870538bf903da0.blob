@@ -1,2 +1,0 @@
-var $b8357bc4647638cfe406d62ca74b22e4$exports = {};
-$b8357bc4647638cfe406d62ca74b22e4$exports = $parcel$require("b8357bc4647638cfe406d62ca74b22e4", "../internals/shared")('native-function-to-string', Function.toString);

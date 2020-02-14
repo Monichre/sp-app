@@ -1,3 +1,0 @@
-var $f8c1e7f1e0bcdb99d967b4d4b917$exports = {};
-$parcel$require("3388f8c1e7f1e0bcdb99d967b4d4b917", "../../modules/es.object.assign");
-$f8c1e7f1e0bcdb99d967b4d4b917$exports = $parcel$require("3388f8c1e7f1e0bcdb99d967b4d4b917", "../../internals/path").Object.assign;

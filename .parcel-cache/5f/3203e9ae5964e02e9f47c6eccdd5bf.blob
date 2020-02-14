@@ -1,5 +1,0 @@
-var $c4988309e51b6b61ec86eb6c52f74f7$exports = {};
-$parcel$require("8c4988309e51b6b61ec86eb6c52f74f7", "zen-observable");
-var $c4988309e51b6b61ec86eb6c52f74f7$export$default = $c4988309e51b6b61ec86eb6c52f74f7$import$zenObservable;
-$c4988309e51b6b61ec86eb6c52f74f7$exports.default = $c4988309e51b6b61ec86eb6c52f74f7$export$default;
-$c4988309e51b6b61ec86eb6c52f74f7$exports.Observable = $c4988309e51b6b61ec86eb6c52f74f7$export$default;

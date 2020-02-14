@@ -1,6 +1,0 @@
-var $c8c05c9561f54b2c97d77af3761e5c4e$exports = {};
-var $c8c05c9561f54b2c97d77af3761e5c4e$var$key = '__global_unique_id__';
-
-$c8c05c9561f54b2c97d77af3761e5c4e$exports = function () {
-  return $parcel$global[$c8c05c9561f54b2c97d77af3761e5c4e$var$key] = ($parcel$global[$c8c05c9561f54b2c97d77af3761e5c4e$var$key] || 0) + 1;
-};

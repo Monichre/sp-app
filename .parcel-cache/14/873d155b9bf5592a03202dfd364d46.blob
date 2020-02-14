@@ -1,7 +1,0 @@
-var $aea7b09a4f00a6185706e4146507f$exports = {};
-
-function $aea7b09a4f00a6185706e4146507f$export$default(callback) {
-  callback();
-}
-
-$aea7b09a4f00a6185706e4146507f$exports.default = $aea7b09a4f00a6185706e4146507f$export$default;

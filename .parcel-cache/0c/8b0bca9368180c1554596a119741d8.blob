@@ -1,4 +1,0 @@
-var $f38f34d22742e7a3534bb521c8f5e2$exports = {};
-var $f38f34d22742e7a3534bb521c8f5e2$var$nativeFunctionToString = $parcel$require("68f38f34d22742e7a3534bb521c8f5e2", "../internals/function-to-string");
-var $f38f34d22742e7a3534bb521c8f5e2$var$WeakMap = $parcel$require("68f38f34d22742e7a3534bb521c8f5e2", "../internals/global").WeakMap;
-$f38f34d22742e7a3534bb521c8f5e2$exports = typeof $f38f34d22742e7a3534bb521c8f5e2$var$WeakMap === 'function' && /native code/.test($f38f34d22742e7a3534bb521c8f5e2$var$nativeFunctionToString.call($f38f34d22742e7a3534bb521c8f5e2$var$WeakMap));

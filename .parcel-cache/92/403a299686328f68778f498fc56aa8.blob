@@ -1,8 +1,0 @@
-var $ed302f960c1c0a0d148e4887092082$exports = {};
-// 19.1.2.14 / 15.2.3.14 Object.keys(O)
-var $ed302f960c1c0a0d148e4887092082$var$internalObjectKeys = $parcel$require("41ed302f960c1c0a0d148e4887092082", "../internals/object-keys-internal");
-var $ed302f960c1c0a0d148e4887092082$var$enumBugKeys = $parcel$require("41ed302f960c1c0a0d148e4887092082", "../internals/enum-bug-keys");
-
-$ed302f960c1c0a0d148e4887092082$exports = Object.keys || function keys(O) {
-  return $ed302f960c1c0a0d148e4887092082$var$internalObjectKeys(O, $ed302f960c1c0a0d148e4887092082$var$enumBugKeys);
-};

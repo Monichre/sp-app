@@ -1,6 +1,0 @@
-var $ebbd3e51ceac5de02b534ce7f7dd9440$exports = {};
-var $ebbd3e51ceac5de02b534ce7f7dd9440$var$root = $parcel$require("ebbd3e51ceac5de02b534ce7f7dd9440", "./_root");
-/** Built-in value references. */
-
-var $ebbd3e51ceac5de02b534ce7f7dd9440$var$Symbol = $ebbd3e51ceac5de02b534ce7f7dd9440$var$root.Symbol;
-$ebbd3e51ceac5de02b534ce7f7dd9440$exports = $ebbd3e51ceac5de02b534ce7f7dd9440$var$Symbol;

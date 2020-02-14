@@ -1,9 +1,0 @@
-var $c2ba0e15e01a7fd99f3c1e8273b122a$exports = {};
-var $c2ba0e15e01a7fd99f3c1e8273b122a$var$alphabetical = $parcel$require("4c2ba0e15e01a7fd99f3c1e8273b122a", "is-alphabetical");
-var $c2ba0e15e01a7fd99f3c1e8273b122a$var$decimal = $parcel$require("4c2ba0e15e01a7fd99f3c1e8273b122a", "is-decimal");
-$c2ba0e15e01a7fd99f3c1e8273b122a$exports = $c2ba0e15e01a7fd99f3c1e8273b122a$var$alphanumerical; // Check if the given character code, or the character code at the first
-// character, is alphanumerical.
-
-function $c2ba0e15e01a7fd99f3c1e8273b122a$var$alphanumerical(character) {
-  return $c2ba0e15e01a7fd99f3c1e8273b122a$var$alphabetical(character) || $c2ba0e15e01a7fd99f3c1e8273b122a$var$decimal(character);
-}

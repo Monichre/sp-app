@@ -1,3 +1,0 @@
-var $a01c63aacd97d434c8e4d509db01f0c$exports = {};
-$parcel$require("0a01c63aacd97d434c8e4d509db01f0c", "./UserAchievementsList");
-$a01c63aacd97d434c8e4d509db01f0c$exports.UserAchievementsList = $a01c63aacd97d434c8e4d509db01f0c$import$UserAchievementsList;

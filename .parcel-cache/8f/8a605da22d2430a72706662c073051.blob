@@ -1,9 +1,0 @@
-var $e9dd0884f8af6ba8ece15661bc41ccc1$exports = {};
-// Thank's IE8 for his funny defineProperty
-$e9dd0884f8af6ba8ece15661bc41ccc1$exports = !$parcel$require("e9dd0884f8af6ba8ece15661bc41ccc1", "../internals/fails")(function () {
-  return Object.defineProperty({}, 'a', {
-    get: function () {
-      return 7;
-    }
-  }).a != 7;
-});

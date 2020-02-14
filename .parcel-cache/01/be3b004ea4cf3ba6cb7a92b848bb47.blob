@@ -1,9 +1,0 @@
-var $cf7f07e5264cc62076c6e2f0f0e$exports = {};
-var $cf7f07e5264cc62076c6e2f0f0e$var$toPrimitive = $parcel$require("19748cf7f07e5264cc62076c6e2f0f0e", "../internals/to-primitive");
-var $cf7f07e5264cc62076c6e2f0f0e$var$definePropertyModule = $parcel$require("19748cf7f07e5264cc62076c6e2f0f0e", "../internals/object-define-property");
-var $cf7f07e5264cc62076c6e2f0f0e$var$createPropertyDescriptor = $parcel$require("19748cf7f07e5264cc62076c6e2f0f0e", "../internals/create-property-descriptor");
-
-$cf7f07e5264cc62076c6e2f0f0e$exports = function (object, key, value) {
-  var propertyKey = $cf7f07e5264cc62076c6e2f0f0e$var$toPrimitive(key);
-  if (propertyKey in object) $cf7f07e5264cc62076c6e2f0f0e$var$definePropertyModule.f(object, propertyKey, $cf7f07e5264cc62076c6e2f0f0e$var$createPropertyDescriptor(0, value));else object[propertyKey] = value;
-};

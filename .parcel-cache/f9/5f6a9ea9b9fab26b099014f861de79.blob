@@ -1,6 +1,0 @@
-var $f84cebcab73f8392edd3ca9d80a42581$exports = {};
-$f84cebcab73f8392edd3ca9d80a42581$exports = $f84cebcab73f8392edd3ca9d80a42581$var$locate;
-
-function $f84cebcab73f8392edd3ca9d80a42581$var$locate(value, fromIndex) {
-  return value.indexOf('\\', fromIndex);
-}

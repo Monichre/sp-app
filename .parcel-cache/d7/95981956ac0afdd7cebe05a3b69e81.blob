@@ -1,3 +1,0 @@
-// `Symbol.hasInstance` well-known symbol
-// https://tc39.github.io/ecma262/#sec-symbol.hasinstance
-$parcel$require("4841db2e77170d58433ed8224c4ed67b", "../internals/define-well-known-symbol")('hasInstance');

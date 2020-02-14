@@ -1,9 +1,0 @@
-var $de63c4eb0aea2ab7e4a6cf8f9ae3b31$exports = {};
-
-$de63c4eb0aea2ab7e4a6cf8f9ae3b31$exports = function (exec) {
-  try {
-    return !!exec();
-  } catch (error) {
-    return true;
-  }
-};
