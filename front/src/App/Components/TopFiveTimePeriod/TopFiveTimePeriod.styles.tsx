@@ -18,10 +18,11 @@ export const OpaqueBackground = styled.div`
 export const ModalWrapper = styled.div`
   padding: 0;
   margin: 0;
-  background: green;
+  // background: green;
   display: flex;
   flex-direction: column;
   width: 90%;
+  max-width: 414px;
 `;
 
 export const CloseButton = styled.div`
@@ -29,8 +30,26 @@ export const CloseButton = styled.div`
   height: 25px;
   padding: 0;
   margin: 0 0 0 auto;
-  background: blue;
+  // background: blue;
   display: flex;
+  position: relative;
+  transform: rotate(45deg);
+`;
+
+export const Hx = styled.div`
+  width: 2px;
+  height: 25px;
+  background: white;
+  position: absolute;
+  left: 11.5px;
+`;
+
+export const Vx = styled.div`
+  width: 25px;
+  height: 2px;
+  background: white;
+  position: absolute;
+  top: 11.5px;
 `;
 
 export const TopFiveParentDiv = styled.div`
@@ -81,6 +100,6 @@ export const TitleHr = styled.hr`
 export const HorizontalRule = styled.hr`
   border-top: 0.5px solid white;
   opacity: 0.3;
-  margin: 5px 0 8px 0;
+  margin: 7px 0 10px 0;
   // margin-bottom: 10px;
 `;

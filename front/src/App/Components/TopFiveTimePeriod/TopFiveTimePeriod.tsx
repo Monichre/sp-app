@@ -10,7 +10,9 @@ import {
   HorizontalRule,
   TitleHr,
   CloseButton,
-  ModalWrapper
+  ModalWrapper,
+  Hx,
+  Vx
 } from "./TopFiveTimePeriod.styles";
 
 export interface TopFiveTimePeriodProps {
@@ -23,7 +25,15 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
   return (
     <OpaqueBackground>
       <ModalWrapper>
-        <CloseButton />
+        <CloseButton
+          className="test"
+          onClick={() => {
+            console.log("clicked");
+          }}
+        >
+          <Hx />
+          <Vx />
+        </CloseButton>
         <TopFiveParentDiv>
           <TopFiveHeader>
             <Headline>My Week In Music</Headline>
