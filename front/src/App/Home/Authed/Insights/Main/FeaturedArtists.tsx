@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { SpotifyLogoLink } from "../../../../../shared/SpotifyLogoLink/SpotifyLogoLink";
+import { Link } from "react-router-dom";
 
 const bgSize = 24;
 

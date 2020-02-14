@@ -1,37 +1,39 @@
-import React, { useEffect, useContext, useCallback } from 'react'
-import { RouteComponentProps } from 'react-router'
-import { TPathParams, insightLink } from '../shared/functions'
+import React, { useEffect, useContext, useCallback } from "react";
+import { RouteComponentProps } from "react-router";
+import { TPathParams, insightLink } from "../shared/functions";
 import {
   useInsightsDash,
   useGetTopArtistAchievementHolders
-} from '../../../../../types'
-import { notLargeQuery, largeQuery } from '../../../../../shared/media'
-import styled from 'styled-components'
-import { VerticalSpacer } from '../../../../../shared/VerticalSpacer'
-import { ArtistsChartBlock } from '../shared/ArtistsChart'
+} from "../../../../../types";
+import { notLargeQuery, largeQuery } from "../../../../../shared/media";
+import styled from "styled-components";
+import { VerticalSpacer } from "../../../../../shared/VerticalSpacer";
+import { ArtistsChartBlock } from "../shared/ArtistsChart";
 import {
   BlockTitle,
   BlockTitleMore,
   SeeAllLink,
   SeeAllLinkInner,
   SeeAllIcon
-} from '../shared/BlockTitle'
-import { GenresChartBlock } from '../shared/GenresChart'
-import { TimeseriesChart } from '../shared/TimeseriesChart'
-import { suspensefulHook } from '../../../../../lib/suspensefulHook'
-import { FeaturedArtists } from './FeaturedArtists'
-import ReactTooltip from 'react-tooltip'
-import { AchievementHoverSummary } from '../../../../Components/AchievementHoverSummary.tsx'
-import { Tooltip } from 'antd'
+} from "../shared/BlockTitle";
+import { GenresChartBlock } from "../shared/GenresChart";
+import { TimeseriesChart } from "../shared/TimeseriesChart";
+import { suspensefulHook } from "../../../../../lib/suspensefulHook";
+import { FeaturedArtists } from "./FeaturedArtists";
+import ReactTooltip from "react-tooltip";
+import { AchievementHoverSummary } from "../../../../Components/AchievementHoverSummary.tsx";
+import { Tooltip } from "antd";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import { Box } from 'rebass'
-import { TopFiveTimePeriod } from '../../../../Components/TopFiveTimePeriod/TopFiveTimePeriod'
+import { Box } from "rebass";
+import { TopFiveTimePeriod } from "../../../../Components/TopFiveTimePeriod/TopFiveTimePeriod";
+import { Artists } from "./Artists";
 
 const TotalNumberOfUsers = styled.p`
   margin-top: 30px;
   margin-bottom: -51px;
   text-align: right;
-`
+`;
 
 const Row = styled.div`
   display: flex;
@@ -57,26 +59,33 @@ const Row = styled.div`
       margin-left: 0;
     }
   `}
-`
+`;
+
+export const ShareButton = styled.div`
+  background: pink;
+  height: 20px;
+  max-width: 124px;
+  position: relative;
+`;
 
 export const normalizeTimeScope = (pathParams: any) => {
   const normalizetimeScopeMap: any = {
-    thisWeek: 'This Week',
-    thisMonth: 'This Month',
-    thisYear: 'This Year',
-    life: 'Life Time',
-    lifetime: 'Life Time'
-  }
-  const { timeScope, perspective }: any = pathParams
+    thisWeek: "This Week",
+    thisMonth: "This Month",
+    thisYear: "This Year",
+    life: "Life Time",
+    lifetime: "Life Time"
+  };
+  const { timeScope, perspective }: any = pathParams;
 
-  const t = normalizetimeScopeMap[timeScope]
-  console.log('TCL: normalizeTimeScope -> t', t)
-  return t
-}
+  const t = normalizetimeScopeMap[timeScope];
+  console.log("TCL: normalizeTimeScope -> t", t);
+  return t;
+};
 
 export const Overview: React.SFC<RouteComponentProps & {
-  uid: string
-  pathParams: TPathParams
+  uid: string;
+  pathParams: TPathParams;
 }> = ({ uid, pathParams }) => {
   const {
     insightsDash: {
@@ -87,30 +96,46 @@ export const Overview: React.SFC<RouteComponentProps & {
     }
   } = suspensefulHook(
     useInsightsDash({ variables: { uid }, suspend: true, pollInterval: 10000 })
-  )
+  );
 
-  console.log('TCL: artists from Overview! ', artists)
-  const { timeScope, perspective }: any = pathParams
-  console.log(`TCL: timeScope`, timeScope)
+  const [modalOpen, setModalOpen] = React.useState(false);
+
+  const toggleModal = () => setModalOpen(modalOpen => !modalOpen);
+
+  console.log("TCL: artists from Overview! ", artists);
+  const { timeScope, perspective }: any = pathParams;
+  console.log(`TCL: timeScope`, timeScope);
   const translatedPerspective: string =
-    perspective === 'personal' ? 'Your' : 'Everyone'
-  const period = normalizeTimeScope(pathParams)
-  console.log(`TCL: period`, period)
+    perspective === "personal" ? "Your" : "Everyone";
+  const period = normalizeTimeScope(pathParams);
+  console.log(`TCL: period`, period);
 
-  const genreContentSummary = `We're currently building out new features for platform genre leaders`
+  const genreContentSummary = `We're currently building out new features for platform genre leaders`;
 
-  const artistContentSummary = `Introducing "Artist Leaders!" Think you're probably the biggest listener on Soundpruf to Tyler, The Creator? Or Lizzo? Maybe Yam Haus? Now you can prove it. If you are currently in 1st, 2nd or 3rd place for lifetime listening for an artist, you'll now see a badge indicating that to the right of the artist names in all Top lists. If you don't have a lifetime leader badge for that artist, you can see who does! You can also view your achievements per time perspective, including week and month, by clicking the links to the left and exploring the slide-out panel. Just remember, you never know when you might lose first place!`
+  const artistContentSummary = `Introducing "Artist Leaders!" Think you're probably the biggest listener on Soundpruf to Tyler, The Creator? Or Lizzo? Maybe Yam Haus? Now you can prove it. If you are currently in 1st, 2nd or 3rd place for lifetime listening for an artist, you'll now see a badge indicating that to the right of the artist names in all Top lists. If you don't have a lifetime leader badge for that artist, you can see who does! You can also view your achievements per time perspective, including week and month, by clicking the links to the left and exploring the slide-out panel. Just remember, you never know when you might lose first place!`;
 
-  console.count('Overview Render: ')
+  console.count("Overview Render: ");
 
-  const artistCount = artists.length === 3 ? 3 : null
+  const artistCount = artists.length === 3 ? 3 : null;
 
   return (
     <>
+      {modalOpen && artists && artists.length ? (
+        <TopFiveTimePeriod
+          artists={artists}
+          timeScope={timeScope}
+          period={period}
+          toggle={toggleModal}
+        />
+      ) : null}
       {/* Gets total users when perspective is Everyone. Currently Static Data */}
-      {translatedPerspective == 'Everyone' ? (
+      {translatedPerspective == "Everyone" ? (
         <TotalNumberOfUsers>Everyone: 460 people</TotalNumberOfUsers>
       ) : null}
+
+      <Row>
+        <ShareButton onClick={toggleModal} />
+      </Row>
 
       <Row>
         <AchievementHoverSummary
@@ -119,15 +144,7 @@ export const Overview: React.SFC<RouteComponentProps & {
           achievementsGraph
           period={period}
         >
-          {artists && artists.length && (
-            <TopFiveTimePeriod
-              artists={artists}
-              timeScope={timeScope}
-              period={period}
-            />
-          )}
-
-          <Tooltip title='See All' placement='topRight'>
+          <Tooltip title="See All" placement="topRight">
             <SeeAllLink to={`${insightLink(pathParams)}/artists`}>
               <SeeAllLinkInner>
                 <SeeAllIcon />
@@ -147,7 +164,7 @@ export const Overview: React.SFC<RouteComponentProps & {
           content={genreContentSummary}
           userId={uid}
         >
-          <Tooltip title='See All' placement='topRight'>
+          <Tooltip title="See All" placement="topRight">
             <SeeAllLink to={`${insightLink(pathParams)}/genres`}>
               <SeeAllLinkInner>
                 <SeeAllIcon />
@@ -164,10 +181,10 @@ export const Overview: React.SFC<RouteComponentProps & {
       </Row>
       <Box
         style={{
-          backgroundColor: 'rgba(216,216,216,.055)',
-          borderRadius: '12px',
-          padding: '2em',
-          margin: '30px auto'
+          backgroundColor: "rgba(216,216,216,.055)",
+          borderRadius: "12px",
+          padding: "2em",
+          margin: "30px auto"
         }}
       >
         <TimeseriesChart
@@ -176,10 +193,10 @@ export const Overview: React.SFC<RouteComponentProps & {
       </Box>
       <Box
         style={{
-          backgroundColor: 'rgba(216,216,216,.055)',
-          borderRadius: '12px',
-          padding: '2em',
-          margin: '30px auto'
+          backgroundColor: "rgba(216,216,216,.055)",
+          borderRadius: "12px",
+          padding: "2em",
+          margin: "30px auto"
         }}
       >
         <BlockTitle>Emerging Artists: Staff Picks</BlockTitle>
@@ -189,8 +206,8 @@ export const Overview: React.SFC<RouteComponentProps & {
         </Row>
       </Box>
 
-      <VerticalSpacer height='100px' />
-      <ReactTooltip place='top' type='dark' effect='float' />
+      <VerticalSpacer height="100px" />
+      <ReactTooltip place="top" type="dark" effect="float" />
     </>
-  )
-}
+  );
+};
