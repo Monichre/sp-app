@@ -1,47 +1,47 @@
-import * as React from 'react'
+import * as React from "react";
 import {
   ListElement,
   ArtistInfo,
   ArtistImage,
   OrderNumber,
   InfoText
-} from './ArtistListElement.styles'
-import { HorizontalRule } from './TopFiveTimePeriod.styles'
-import { Artist } from '../../../../../back/src/fns/graphql/types'
-import { hrsAndMins } from '../../../lib/durationFormats'
+} from "./ArtistListElement.styles";
+import { HorizontalRule } from "./TopFiveTimePeriod.styles";
+import { Artist } from "../../../../../back/src/fns/graphql/types";
+import { hrsAndMins } from "../../../lib/durationFormats";
 
 const formatListeningTime = (total: number) => {
-  const { hrs, mins } = hrsAndMins(total)
-  const hours = hrs ? `${hrs} hours & ` : ''
-  const minutes = mins ? `${mins} mins` : ''
+  const { hrs, mins } = hrsAndMins(total);
+  const hours = hrs ? `${hrs} hours & ` : "";
+  const minutes = mins ? `${mins} mins` : "";
 
-  return `${hours}${minutes}`
-}
+  return `${hours}${minutes}`;
+};
 
 export type ArtistListElementProps = {
-  artist: Artist
-  place: number
-  totalTimeListened: number
-}
+  artist: Artist;
+  place: number;
+  totalTimeListened: number;
+};
 
 export const ArtistListElement: React.SFC<ArtistListElementProps> = ({
   artist,
   place,
   totalTimeListened
 }) => {
-  const ttl = formatListeningTime(totalTimeListened)
+  const ttl = formatListeningTime(totalTimeListened);
 
   return (
     <div>
       <ListElement>
         <OrderNumber>{place}</OrderNumber>
         <ArtistInfo>
-          <InfoText className='artist-title'>{artist.name}</InfoText>
-          <InfoText className='time-played'>{ttl}</InfoText>
+          <InfoText className="artist-title">{artist.name}</InfoText>
+          <InfoText className="time-played">{ttl}</InfoText>
         </ArtistInfo>
-        <ArtistImage src={artist.images[0].url} alt='' />
+        <ArtistImage src={artist.images[0].url} alt="" />
       </ListElement>
       {place == 5 ? null : <HorizontalRule />}
     </div>
-  )
-}
+  );
+};

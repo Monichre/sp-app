@@ -2,6 +2,8 @@ import * as React from "react";
 import styled, { css } from "styled-components";
 
 export const OpaqueBackground = styled.div`
+  position: absolute;
+  z-index: 1000;
   width: 100%;
   height: 100vh;
   padding: 0;
@@ -80,6 +82,7 @@ export const Headline = styled.h1`
 `;
 
 export const DateRange = styled.h3`
+  color: white;
   margin: 0;
   font-size: 14px;
   font-weight: 400;

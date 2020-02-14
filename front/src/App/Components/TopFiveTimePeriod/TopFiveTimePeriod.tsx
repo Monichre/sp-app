@@ -1,5 +1,5 @@
-import * as React from 'react'
-import { ArtistListElement } from './ArtistListElement'
+import * as React from "react";
+import { ArtistListElement } from "./ArtistListElement";
 import {
   OpaqueBackground,
   TopFiveParentDiv,
@@ -13,36 +13,43 @@ import {
   ModalWrapper,
   Hx,
   Vx
-} from './TopFiveTimePeriod.styles'
-import { Artist } from '../../../../../back/src/shared/SharedTypes'
-import { PerspectiveDashArtists } from '../../../types'
+} from "./TopFiveTimePeriod.styles";
+import { Artist } from "../../../../../back/src/shared/SharedTypes";
+import { PerspectiveDashArtists } from "../../../types";
+import moment from "moment";
+
+const today = moment();
+const from_date = today.startOf("week");
+const to_date = today.endOf("week");
+console.log("ttl", {
+  from_date: from_date.toString(),
+  today: moment().toString(),
+  to_date: to_date.toString()
+});
 
 export interface TopFiveTimePeriodProps {
-  artists: PerspectiveDashArtists[]
-  period: string
-  timeScope: string
+  artists: PerspectiveDashArtists[];
+  period: string;
+  timeScope: string;
+  toggle: any;
 }
 
 export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
   artists,
   period,
-  timeScope
+  timeScope,
+  toggle
 }) => {
   return (
     <OpaqueBackground className="top-five-time-period">
       <ModalWrapper>
-        <CloseButton
-          className='test'
-          onClick={() => {
-            console.log('clicked')
-          }}
-        >
+        <CloseButton className="test" onClick={toggle}>
           <Hx />
           <Vx />
         </CloseButton>
         <TopFiveParentDiv>
           <TopFiveHeader>
-            <Headline>My {timeScope.replace('this', '')} In Music</Headline>
+            <Headline>My {timeScope.replace("this", "")} In Music</Headline>
             <TitleHr />
             <DateRange>{period}</DateRange>
           </TopFiveHeader>
@@ -54,15 +61,15 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
                   artist={artist}
                   totalTimeListened={totalTimeListened}
                 />
-              )
+              );
             }
           )}
           <LogoDiv
-            src='http://live.soundpruf.com/static/media/sp-white-logo-horizontal.99cc2d83.png'
-            alt=''
+            src="http://live.soundpruf.com/static/media/sp-white-logo-horizontal.99cc2d83.png"
+            alt=""
           />
         </TopFiveParentDiv>
       </ModalWrapper>
     </OpaqueBackground>
-  )
-}
+  );
+};
