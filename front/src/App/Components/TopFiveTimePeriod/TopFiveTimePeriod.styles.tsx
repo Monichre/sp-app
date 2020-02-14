@@ -4,7 +4,7 @@ import styled, { css } from "styled-components";
 export const OpaqueBackground = styled.div`
   position: absolute;
   z-index: 1000;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   padding: 0;
   margin: 0;

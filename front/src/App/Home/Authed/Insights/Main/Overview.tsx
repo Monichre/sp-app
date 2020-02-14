@@ -27,6 +27,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import { Box } from "rebass";
 import { TopFiveTimePeriod } from "../../../../Components/TopFiveTimePeriod/TopFiveTimePeriod";
+import { Artists } from "./Artists";
 
 const TotalNumberOfUsers = styled.p`
   margin-top: 30px;
