@@ -112,6 +112,5 @@ export const FeaturedArtists: React.SFC = () => (
     {featuredArtists.map((artist, key) => (
       <ArtistPromoItem key={key} {...artist} />
     ))}
-    <Link to="/insights/thisWeek/global/personal/topfive">top five</Link>
   </ThreeColumns>
 );
