@@ -23,11 +23,8 @@ import { FeaturedArtists } from "./FeaturedArtists";
 import ReactTooltip from "react-tooltip";
 import { AchievementHoverSummary } from "../../../../Components/AchievementHoverSummary.tsx";
 import { Tooltip } from "antd";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import { Box } from "rebass";
-import { TopFiveTimePeriod } from "../../../../Components/TopFiveTimePeriod/TopFiveTimePeriod";
-import { Artists } from "./Artists";
 
 const TotalNumberOfUsers = styled.p`
   margin-top: 30px;
@@ -98,10 +95,6 @@ export const Overview: React.SFC<RouteComponentProps & {
     useInsightsDash({ variables: { uid }, suspend: true, pollInterval: 10000 })
   );
 
-  const [modalOpen, setModalOpen] = React.useState(false);
-
-  const toggleModal = () => setModalOpen(modalOpen => !modalOpen);
-
   console.log("TCL: artists from Overview! ", artists);
   const { timeScope, perspective }: any = pathParams;
   console.log(`TCL: timeScope`, timeScope);
@@ -118,16 +111,11 @@ export const Overview: React.SFC<RouteComponentProps & {
 
   const artistCount = artists.length === 3 ? 3 : null;
 
+  // Access state defined in AUTHED for toggling modal
+  const toggleModal = () => console.log("doodie");
+
   return (
     <>
-      {modalOpen && artists && artists.length ? (
-        <TopFiveTimePeriod
-          artists={artists}
-          timeScope={timeScope}
-          period={period}
-          toggle={toggleModal}
-        />
-      ) : null}
       {/* Gets total users when perspective is Everyone. Currently Static Data */}
       {translatedPerspective == "Everyone" ? (
         <TotalNumberOfUsers>Everyone: 460 people</TotalNumberOfUsers>
@@ -205,7 +193,6 @@ export const Overview: React.SFC<RouteComponentProps & {
           <FeaturedArtists />
         </Row>
       </Box>
-
       <VerticalSpacer height="100px" />
       <ReactTooltip place="top" type="dark" effect="float" />
     </>

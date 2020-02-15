@@ -7,7 +7,6 @@ import {
   Headline,
   DateRange,
   LogoDiv,
-  HorizontalRule,
   TitleHr,
   CloseButton,
   ModalWrapper,
@@ -17,6 +16,7 @@ import {
 import { Artist } from "../../../../../back/src/shared/SharedTypes";
 import { PerspectiveDashArtists } from "../../../types";
 import moment from "moment";
+import { TPathParams } from "../../Home/Authed/Insights/shared/functions";
 
 const today = moment();
 const from_date = today.startOf("week");
@@ -28,18 +28,17 @@ console.log("ttl", {
 });
 
 export interface TopFiveTimePeriodProps {
-  artists: PerspectiveDashArtists[];
   period: string;
   timeScope: string;
   toggle: any;
 }
 
 export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
-  artists,
   period,
   timeScope,
   toggle
 }) => {
+  console.log();
   return (
     <OpaqueBackground className="top-five-time-period">
       <ModalWrapper>
@@ -53,7 +52,7 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
             <TitleHr />
             <DateRange>{period}</DateRange>
           </TopFiveHeader>
-          {artists.map(
+          {/* {achievements.map(
             ({ artist, personal: totalTimeListened }: any, index: number) => {
               return (
                 <ArtistListElement
@@ -63,7 +62,7 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
                 />
               );
             }
-          )}
+          )} */}
           <LogoDiv
             src="http://live.soundpruf.com/static/media/sp-white-logo-horizontal.99cc2d83.png"
             alt=""
