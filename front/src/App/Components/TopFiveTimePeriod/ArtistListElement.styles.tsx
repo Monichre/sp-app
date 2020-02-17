@@ -11,7 +11,7 @@ export const OrderNumber = styled.h2`
   opacity: 0.5;
   padding-right: 10px;
   margin: 0;
-  font-size: 43px;
+  font-size: 35px;
   font-weight: 600;
 `;
 
@@ -23,8 +23,8 @@ export const ArtistInfo = styled.div`
 export const ArtistImage = styled.img`
   border-radius: 5px;
   margin-left: auto;
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   object-fit: cover;
   object-position: 50% 50%;
 `;
@@ -32,14 +32,14 @@ export const ArtistImage = styled.img`
 export const ArtistName = styled.p`
   padding: 0;
   margin: 0;
-  font-size: 17px;
-  line-height: 17px;
+  font-size: 16px;
+  line-height: 16px;
 `;
 
 export const TimePlayed = styled.p`
   padding: 0;
   margin: 0;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 300;
   opacity: 0.6;
 `;
