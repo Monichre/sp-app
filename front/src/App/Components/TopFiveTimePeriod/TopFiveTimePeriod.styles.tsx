@@ -5,7 +5,7 @@ export const OpaqueBackground = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000;
+  z-index: 2147483001;
   width: 100vw;
   height: 100vh;
   padding: 0;
@@ -22,10 +22,18 @@ export const OpaqueBackground = styled.div`
 export const ModalWrapper = styled.div`
   padding: 0;
   margin: 0;
-  // background: green;
   display: flex;
   flex-direction: column;
   width: 90%;
+  max-width: 414px;
+`;
+
+export const TipAndCloseWrapper = styled.div`
+  padding: 10px 0 0 0;
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
   max-width: 414px;
 `;
 
@@ -33,7 +41,7 @@ export const ShareTip = styled.p`
   color: white;
   font-size: 16px;
   margin-bottom: 0;
-  padding-top: 5px;
+  padding-right: 10px;
 `;
 
 export const CloseButton = styled.div`
@@ -81,12 +89,12 @@ export const TopFiveParentDiv = styled.div`
 
 export const TopFiveHeader = styled.div`
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 `;
 
 export const Headline = styled.h1`
   margin: 0;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 600;
 `;
 
@@ -100,7 +108,7 @@ export const DateRange = styled.h3`
 export const LogoDiv = styled.img`
   width: 144px;
   margin: auto;
-  padding-top: 35px;
+  padding-top: 20px;
 `;
 
 export const TitleHr = styled.hr`
