@@ -29,8 +29,17 @@ export const ArtistImage = styled.img`
   object-position: 50% 50%;
 `;
 
-export const InfoText = styled.p`
+export const ArtistName = styled.p`
   padding: 0;
   margin: 0;
-  font-size: 18px;
+  font-size: 17px;
+  line-height: 17px;
+`;
+
+export const TimePlayed = styled.p`
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 300;
+  opacity: 0.6;
 `;

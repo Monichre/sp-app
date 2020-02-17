@@ -11,7 +11,8 @@ import {
   ModalWrapper,
   Hx,
   Vx,
-  ShareTip
+  ShareTip,
+  TipAndCloseWrapper
 } from "./TopFiveTimePeriod.styles";
 import moment from "moment";
 
@@ -41,15 +42,16 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
   return (
     <OpaqueBackground className="top-five-time-period">
       <ModalWrapper>
-        <CloseButton className="test" onClick={toggle}>
-          <Hx />
-          <Vx />
-        </CloseButton>
-        <ShareTip>Screenshot this image and share!</ShareTip>
+        <TipAndCloseWrapper>
+          <ShareTip>Screenshot this image and share!</ShareTip>
+          <CloseButton className="test" onClick={toggle}>
+            <Hx />
+            <Vx />
+          </CloseButton>
+        </TipAndCloseWrapper>
         <TopFiveParentDiv>
           <TopFiveHeader>
             <Headline>My {period} In Music</Headline>
-            <TitleHr />
             {/* <DateRange>{periodTitle}</DateRange> */}
           </TopFiveHeader>
           {artistArray.map(

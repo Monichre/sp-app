@@ -4,7 +4,8 @@ import {
   ArtistInfo,
   ArtistImage,
   OrderNumber,
-  InfoText
+  ArtistName,
+  TimePlayed
 } from "./ArtistListElement.styles";
 import { HorizontalRule } from "./TopFiveTimePeriod.styles";
 import { Artist } from "../../../../../back/src/fns/graphql/types";
@@ -35,11 +36,19 @@ export const ArtistListElement: React.SFC<ArtistListElementProps> = ({
 
   return (
     <div>
+      {/* Better method for this? */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+      body { overflow: hidden }
+    `
+        }}
+      />
       <ListElement>
         <OrderNumber>{place}</OrderNumber>
         <ArtistInfo>
-          <InfoText className="artist-title">{artist.name}</InfoText>
-          <InfoText className="time-played">{ttl}</InfoText>
+          <ArtistName>{artist.name}</ArtistName>
+          <TimePlayed>{ttl}</TimePlayed>
         </ArtistInfo>
         <ArtistImage src={artist.images[0].url} alt="" />
       </ListElement>
