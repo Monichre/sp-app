@@ -24,6 +24,7 @@ import { Tooltip } from "antd";
 
 import { Box } from "rebass";
 import { TopFiveTimePeriod } from "../../../../Components/TopFiveTimePeriod/TopFiveTimePeriod";
+import { UserAchievementContext } from "../../Authed";
 import { Button } from "../../../../Components/Button/Button";
 
 const TotalNumberOfUsers = styled.p`
@@ -105,6 +106,8 @@ export const Overview: React.SFC<RouteComponentProps & {
   const artistCount = artists.length === 3 ? 3 : null;
   const { openPortal, closePortal, isOpen, Portal } = usePortal();
 
+  const { achievements }: any = React.useContext(UserAchievementContext);
+
   return (
     <>
       {/* Gets total users when perspective is Everyone. Currently Static Data */}
@@ -114,9 +117,11 @@ export const Overview: React.SFC<RouteComponentProps & {
       {isOpen && (
         <Portal>
           <TopFiveTimePeriod
-            period={period.replace("This ", "")}
+            period={period.replace("This ", "").toLowerCase()}
+            periodString={period.replace("This ", "")}
             toggle={closePortal}
             artists={artists}
+            achievements={achievements}
           />
         </Portal>
       )}

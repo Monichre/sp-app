@@ -17,7 +17,6 @@ import {
 import { Artist } from "../../../../../back/src/shared/SharedTypes";
 import { PerspectiveDashArtists } from "../../../types";
 import moment from "moment";
-import { TPathParams } from "../../Home/Authed/Insights/shared/functions";
 
 const today = moment();
 const from_date = today.startOf("week");
@@ -30,27 +29,34 @@ console.log("ttl", {
 
 export interface TopFiveTimePeriodProps {
   period: string;
+  periodString: string;
   toggle: any;
   artists: any;
+  achievements: any;
 }
 
 export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
   period,
+  periodString,
   toggle,
-  artists
+  artists,
+  achievements
 }) => {
-  console.log();
+  const artistArray = achievements.period;
+  console.log("usrctxt", achievements);
+  console.log("usrctxt", artistArray);
+
   return (
     <OpaqueBackground className="top-five-time-period">
       <ModalWrapper>
-        <CloseButton onClick={toggle}>
+        <CloseButton className="test" onClick={toggle}>
           <Hx />
           <Vx />
         </CloseButton>
         <ShareTip>Screenshot this image and share!</ShareTip>
         <TopFiveParentDiv>
           <TopFiveHeader>
-            <Headline>My {period} In Music</Headline>
+            <Headline>My {periodString} In Music</Headline>
             <TitleHr />
             {/* <DateRange>{periodTitle}</DateRange> */}
           </TopFiveHeader>
