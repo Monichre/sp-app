@@ -17,7 +17,6 @@ import {
 import { Artist } from "../../../../../back/src/shared/SharedTypes";
 import { PerspectiveDashArtists } from "../../../types";
 import moment from "moment";
-import { TPathParams } from "../../Home/Authed/Insights/shared/functions";
 
 const today = moment();
 const from_date = today.startOf("week");
@@ -32,18 +31,28 @@ export interface TopFiveTimePeriodProps {
   period: string;
   toggle: any;
   artists: any;
+  achievements: any;
 }
+
+const placeMap: any = {
+  first: 1,
+  second: 2,
+  third: 3
+};
 
 export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
   period,
   toggle,
-  artists
+  artists,
+  achievements
 }) => {
-  console.log();
+  const periodLowerCase = period.toLowerCase();
+  const artistArray = achievements[periodLowerCase].slice(0, 5);
+
   return (
     <OpaqueBackground className="top-five-time-period">
       <ModalWrapper>
-        <CloseButton onClick={toggle}>
+        <CloseButton className="test" onClick={toggle}>
           <Hx />
           <Vx />
         </CloseButton>
@@ -54,13 +63,20 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
             <TitleHr />
             {/* <DateRange>{periodTitle}</DateRange> */}
           </TopFiveHeader>
-          {artists.map(
-            ({ artist, personal: totalTimeListened }: any, index: number) => {
+          {artistArray.map(
+            ({ artistData, achievement }: any, index: number) => {
+              const { artist } = artistData;
+              const { total, pk } = achievement;
+              console.log("xxxTOTAL", total);
+              console.log("xxxPK", pk);
+              // const calendarTime = split.pop();
+              // const periodType = split.pop();
+              // const achievementType = split.pop(); // artist or genre - (genre doesnt exist)
               return (
                 <ArtistListElement
                   place={index + 1}
                   artist={artist}
-                  totalTimeListened={totalTimeListened}
+                  totalTimeListened={total}
                 />
               );
             }
