@@ -24,8 +24,8 @@ export const ModalWrapper = styled.div`
   margin: 0;
   display: flex;
   flex-direction: column;
-  width: 90%;
-  max-width: 414px;
+  width: 85%;
+  max-width: 375px;
 `;
 
 export const TipAndCloseWrapper = styled.div`
@@ -81,7 +81,7 @@ export const TopFiveParentDiv = styled.div`
     rgba(246, 133, 31, 1) 0%,
     rgba(229, 76, 25, 1) 100%
   );
-  max-width: 414px;
+  max-width: 375px;
   padding: 20px;
   border-radius: 10px;
   margin-top: 10px;
@@ -106,7 +106,7 @@ export const DateRange = styled.h3`
 `;
 
 export const LogoDiv = styled.img`
-  width: 144px;
+  width: 110px;
   margin: auto;
   padding-top: 20px;
 `;
@@ -120,6 +120,5 @@ export const TitleHr = styled.hr`
 export const HorizontalRule = styled.hr`
   border-top: 0.5px solid white;
   opacity: 0.3;
-  margin: 7px 0 10px 0;
-  // margin-bottom: 10px;
+  margin: 5px 0 5px 0;
 `;
