@@ -117,8 +117,7 @@ export const Overview: React.SFC<RouteComponentProps & {
       {isOpen && (
         <Portal>
           <TopFiveTimePeriod
-            period={period.replace("This ", "").toLowerCase()}
-            periodString={period.replace("This ", "")}
+            period={period.replace("This ", "")}
             toggle={closePortal}
             artists={artists}
             achievements={achievements}

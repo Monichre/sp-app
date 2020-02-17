@@ -29,7 +29,6 @@ console.log("ttl", {
 
 export interface TopFiveTimePeriodProps {
   period: string;
-  periodString: string;
   toggle: any;
   artists: any;
   achievements: any;
@@ -37,14 +36,15 @@ export interface TopFiveTimePeriodProps {
 
 export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
   period,
-  periodString,
   toggle,
   artists,
   achievements
 }) => {
-  const artistArray = achievements.period;
+  const periodLowerCase = period.toLowerCase();
+  const artistArray = achievements[periodLowerCase].slice(0, 5);
   console.log("usrctxt", achievements);
   console.log("usrctxt", artistArray);
+  console.log("usrctxt", artists);
 
   return (
     <OpaqueBackground className="top-five-time-period">
@@ -56,7 +56,7 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
         <ShareTip>Screenshot this image and share!</ShareTip>
         <TopFiveParentDiv>
           <TopFiveHeader>
-            <Headline>My {periodString} In Music</Headline>
+            <Headline>My {period} In Music</Headline>
             <TitleHr />
             {/* <DateRange>{periodTitle}</DateRange> */}
           </TopFiveHeader>
