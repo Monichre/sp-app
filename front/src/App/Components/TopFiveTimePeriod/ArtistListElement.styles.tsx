@@ -23,10 +23,14 @@ export const ArtistInfo = styled.div`
 export const ArtistImage = styled.img`
   border-radius: 5px;
   margin-left: auto;
-  width: 43px;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  object-position: 50% 50%;
 `;
 
 export const InfoText = styled.p`
   padding: 0;
   margin: 0;
+  font-size: 18px;
 `;
