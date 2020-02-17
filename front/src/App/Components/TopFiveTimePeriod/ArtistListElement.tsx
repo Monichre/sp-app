@@ -30,6 +30,7 @@ export const ArtistListElement: React.SFC<ArtistListElementProps> = ({
   totalTimeListened
 }) => {
   const ttl = formatListeningTime(totalTimeListened);
+  console.log("xxxTTL", ttl);
 
   return (
     <div>
@@ -37,7 +38,7 @@ export const ArtistListElement: React.SFC<ArtistListElementProps> = ({
         <OrderNumber>{place}</OrderNumber>
         <ArtistInfo>
           <InfoText className="artist-title">{artist.name}</InfoText>
-          <InfoText className="time-played">{ttl}</InfoText>
+          <InfoText className="time-played">{totalTimeListened}</InfoText>
         </ArtistInfo>
         <ArtistImage src={artist.images[0].url} alt="" />
       </ListElement>

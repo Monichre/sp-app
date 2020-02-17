@@ -34,6 +34,12 @@ export interface TopFiveTimePeriodProps {
   achievements: any;
 }
 
+const placeMap: any = {
+  first: 1,
+  second: 2,
+  third: 3
+};
+
 export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
   period,
   toggle,
@@ -42,9 +48,6 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
 }) => {
   const periodLowerCase = period.toLowerCase();
   const artistArray = achievements[periodLowerCase].slice(0, 5);
-  console.log("usrctxt", achievements);
-  console.log("usrctxt", artistArray);
-  console.log("usrctxt", artists);
 
   return (
     <OpaqueBackground className="top-five-time-period">
@@ -60,33 +63,18 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
             <TitleHr />
             {/* <DateRange>{periodTitle}</DateRange> */}
           </TopFiveHeader>
-
-          {/* {artists.map(
-            ({ artist, personal: totalTimeListened }: any, index: number) => {
-              return (
-                <ArtistListElement
-                  place={index + 1}
-                  artist={artist}
-                  totalTimeListened={totalTimeListened}
-                />
-              );
-            }
-          )} */}
-
-          {achievements.map(
+          {artistArray.map(
             ({ artistData, achievement }: any, index: number) => {
               const { artist } = artistData;
               const { total, pk } = achievement;
-              const split = pk.split("#");
-              const calendarTime = split.pop();
-              const periodType = split.pop();
-              const achievementType = split.pop(); // artist or genre - (genre doesnt exist)
-              const placeStr = split.pop();
-              const place = placeMap[placeStr];
-
+              console.log("xxxTOTAL", total);
+              console.log("xxxPK", pk);
+              // const calendarTime = split.pop();
+              // const periodType = split.pop();
+              // const achievementType = split.pop(); // artist or genre - (genre doesnt exist)
               return (
                 <ArtistListElement
-                  place={place}
+                  place={index + 1}
                   artist={artist}
                   totalTimeListened={total}
                 />
