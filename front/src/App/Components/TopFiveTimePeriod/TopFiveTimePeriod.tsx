@@ -1,5 +1,5 @@
-import * as React from 'react'
-import { ArtistListElement } from './ArtistListElement'
+import * as React from "react";
+import { ArtistListElement } from "./ArtistListElement";
 import {
   OpaqueBackground,
   TopFiveParentDiv,
@@ -11,26 +11,27 @@ import {
   CloseButton,
   ModalWrapper,
   Hx,
-  Vx
-} from './TopFiveTimePeriod.styles'
-import { Artist } from '../../../../../back/src/shared/SharedTypes'
-import { PerspectiveDashArtists } from '../../../types'
-import moment from 'moment'
-import { TPathParams } from '../../Home/Authed/Insights/shared/functions'
+  Vx,
+  ShareTip
+} from "./TopFiveTimePeriod.styles";
+import { Artist } from "../../../../../back/src/shared/SharedTypes";
+import { PerspectiveDashArtists } from "../../../types";
+import moment from "moment";
+import { TPathParams } from "../../Home/Authed/Insights/shared/functions";
 
-const today = moment()
-const from_date = today.startOf('week')
-const to_date = today.endOf('week')
-console.log('ttl', {
+const today = moment();
+const from_date = today.startOf("week");
+const to_date = today.endOf("week");
+console.log("ttl", {
   from_date: from_date.toString(),
   today: moment().toString(),
   to_date: to_date.toString()
-})
+});
 
 export interface TopFiveTimePeriodProps {
-  period: string
-  toggle: any
-  artists: any
+  period: string;
+  toggle: any;
+  artists: any;
 }
 
 export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
@@ -38,14 +39,15 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
   toggle,
   artists
 }) => {
-  console.log()
+  console.log();
   return (
-    <OpaqueBackground className='top-five-time-period'>
+    <OpaqueBackground className="top-five-time-period">
       <ModalWrapper>
-        <CloseButton className='test' onClick={toggle}>
+        <CloseButton onClick={toggle}>
           <Hx />
           <Vx />
         </CloseButton>
+        <ShareTip>Screenshot this image and share!</ShareTip>
         <TopFiveParentDiv>
           <TopFiveHeader>
             <Headline>My {period} In Music</Headline>
@@ -60,15 +62,15 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
                   artist={artist}
                   totalTimeListened={totalTimeListened}
                 />
-              )
+              );
             }
           )}
           <LogoDiv
-            src='http://live.soundpruf.com/static/media/sp-white-logo-horizontal.99cc2d83.png'
-            alt=''
+            src="http://live.soundpruf.com/static/media/sp-white-logo-horizontal.99cc2d83.png"
+            alt=""
           />
         </TopFiveParentDiv>
       </ModalWrapper>
     </OpaqueBackground>
-  )
-}
+  );
+};

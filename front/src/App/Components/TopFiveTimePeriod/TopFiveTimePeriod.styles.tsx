@@ -1,5 +1,5 @@
-import * as React from 'react'
-import styled, { css } from 'styled-components'
+import * as React from "react";
+import styled, { css } from "styled-components";
 
 export const OpaqueBackground = styled.div`
   position: fixed;
@@ -15,9 +15,9 @@ export const OpaqueBackground = styled.div`
   justify-content: center;
   align-items: center;
   color: white;
-  font-family: 'Source Sans Pro', sans-serif;
+  font-family: "Source Sans Pro", sans-serif;
   overflow: hidden;
-`
+`;
 
 export const ModalWrapper = styled.div`
   padding: 0;
@@ -27,18 +27,25 @@ export const ModalWrapper = styled.div`
   flex-direction: column;
   width: 90%;
   max-width: 414px;
-`
+`;
+
+export const ShareTip = styled.p`
+  color: white;
+  font-size: 16px;
+  margin-bottom: 0;
+  padding-top: 5px;
+`;
 
 export const CloseButton = styled.div`
   width: 25px;
   height: 25px;
   padding: 0;
   margin: 0 0 0 auto;
-  // background: blue;
+  cursor: pointer;
   display: flex;
   position: relative;
   transform: rotate(45deg);
-`
+`;
 
 export const Hx = styled.div`
   width: 2px;
@@ -46,7 +53,7 @@ export const Hx = styled.div`
   background: white;
   position: absolute;
   left: 11.5px;
-`
+`;
 
 export const Vx = styled.div`
   width: 25px;
@@ -54,7 +61,7 @@ export const Vx = styled.div`
   background: white;
   position: absolute;
   top: 11.5px;
-`
+`;
 
 export const TopFiveParentDiv = styled.div`
   display: flex;
@@ -70,41 +77,41 @@ export const TopFiveParentDiv = styled.div`
   padding: 20px;
   border-radius: 10px;
   margin-top: 10px;
-`
+`;
 
 export const TopFiveHeader = styled.div`
   text-align: center;
   margin-bottom: 30px;
-`
+`;
 
 export const Headline = styled.h1`
   margin: 0;
   font-size: 24px;
   font-weight: 600;
-`
+`;
 
 export const DateRange = styled.h3`
   color: white;
   margin: 0;
   font-size: 14px;
   font-weight: 400;
-`
+`;
 
 export const LogoDiv = styled.img`
   width: 144px;
   margin: auto;
   padding-top: 35px;
-`
+`;
 
 export const TitleHr = styled.hr`
   border-top: 0.5px solid white;
   opacity: 0.3;
   margin: 5px 0;
-`
+`;
 
 export const HorizontalRule = styled.hr`
   border-top: 0.5px solid white;
   opacity: 0.3;
   margin: 7px 0 10px 0;
   // margin-bottom: 10px;
-`
+`;
