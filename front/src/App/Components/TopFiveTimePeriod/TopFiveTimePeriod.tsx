@@ -60,13 +60,35 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
             <TitleHr />
             {/* <DateRange>{periodTitle}</DateRange> */}
           </TopFiveHeader>
-          {artists.map(
+
+          {/* {artists.map(
             ({ artist, personal: totalTimeListened }: any, index: number) => {
               return (
                 <ArtistListElement
                   place={index + 1}
                   artist={artist}
                   totalTimeListened={totalTimeListened}
+                />
+              );
+            }
+          )} */}
+
+          {achievements.map(
+            ({ artistData, achievement }: any, index: number) => {
+              const { artist } = artistData;
+              const { total, pk } = achievement;
+              const split = pk.split("#");
+              const calendarTime = split.pop();
+              const periodType = split.pop();
+              const achievementType = split.pop(); // artist or genre - (genre doesnt exist)
+              const placeStr = split.pop();
+              const place = placeMap[placeStr];
+
+              return (
+                <ArtistListElement
+                  place={place}
+                  artist={artist}
+                  totalTimeListened={total}
                 />
               );
             }
