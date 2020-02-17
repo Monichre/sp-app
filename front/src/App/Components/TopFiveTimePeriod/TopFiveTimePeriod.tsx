@@ -5,7 +5,6 @@ import {
   TopFiveParentDiv,
   TopFiveHeader,
   Headline,
-  DateRange,
   LogoDiv,
   TitleHr,
   CloseButton,
@@ -14,8 +13,6 @@ import {
   Vx,
   ShareTip
 } from "./TopFiveTimePeriod.styles";
-import { Artist } from "../../../../../back/src/shared/SharedTypes";
-import { PerspectiveDashArtists } from "../../../types";
 import moment from "moment";
 
 const today = moment();
@@ -30,20 +27,12 @@ console.log("ttl", {
 export interface TopFiveTimePeriodProps {
   period: string;
   toggle: any;
-  artists: any;
   achievements: any;
 }
-
-const placeMap: any = {
-  first: 1,
-  second: 2,
-  third: 3
-};
 
 export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
   period,
   toggle,
-  artists,
   achievements
 }) => {
   const periodLowerCase = period.toLowerCase();
@@ -69,9 +58,6 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
               const { total, pk } = achievement;
               console.log("xxxTOTAL", total);
               console.log("xxxPK", pk);
-              // const calendarTime = split.pop();
-              // const periodType = split.pop();
-              // const achievementType = split.pop(); // artist or genre - (genre doesnt exist)
               return (
                 <ArtistListElement
                   place={index + 1}

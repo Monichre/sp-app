@@ -11,9 +11,10 @@ import { Artist } from "../../../../../back/src/fns/graphql/types";
 import { hrsAndMins } from "../../../lib/durationFormats";
 
 const formatListeningTime = (total: number) => {
-  const { hrs, mins } = hrsAndMins(total);
-  const hours = hrs ? `${hrs} hours & ` : "";
-  const minutes = mins ? `${mins} mins` : "";
+  const totalInMilliseconds = total * 3600000;
+  const { hrs, mins } = hrsAndMins(totalInMilliseconds);
+  const hours = hrs ? `${hrs}h ` : "";
+  const minutes = mins ? `${mins}m` : "";
 
   return `${hours}${minutes}`;
 };
@@ -38,7 +39,7 @@ export const ArtistListElement: React.SFC<ArtistListElementProps> = ({
         <OrderNumber>{place}</OrderNumber>
         <ArtistInfo>
           <InfoText className="artist-title">{artist.name}</InfoText>
-          <InfoText className="time-played">{totalTimeListened}</InfoText>
+          <InfoText className="time-played">{ttl}</InfoText>
         </ArtistInfo>
         <ArtistImage src={artist.images[0].url} alt="" />
       </ListElement>
