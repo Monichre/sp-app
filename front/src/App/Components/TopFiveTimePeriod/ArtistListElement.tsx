@@ -40,7 +40,9 @@ export const ArtistListElement: React.SFC<ArtistListElementProps> = ({
       <style
         dangerouslySetInnerHTML={{
           __html: `
-      body { overflow: hidden }
+      body { 
+        overflow: hidden;
+      }
     `
         }}
       />

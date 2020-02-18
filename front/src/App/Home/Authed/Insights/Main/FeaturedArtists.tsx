@@ -81,29 +81,30 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: "Ready",
-    hover: "410 monthly streamers on Spotify",
-    name: "Tongue Party",
+    hover: "7,289 monthly streamers on Spotify",
+    name: "Ajimal",
     href:
-      "https://open.spotify.com/artist/5ZN5lbKQ8D0uwWmDRLVmJG?si=h_5wzStRSayLF6ASpmUOUA",
-    src: "https://f4.bcbits.com/img/0013490120_10.jpg"
+      "https://open.spotify.com/artist/3j4ew45VN7knFiJvjqBobA?si=T5HUvQTNSbmlk-_fSRuPEQ",
+    src:
+      "https://www.tmrwmagazine.com/wp-content/uploads/2020/02/Screen-Shot-2020-02-04-at-3.19.57-PM-min.jpg"
   },
   {
     title: "Set",
-    hover: "386,959 monthly streamers on Spotify",
-    name: "Oneohtrix Point Never",
+    hover: "30,024 monthly streamers on Spotify",
+    name: "Miloe",
     href:
-      "https://open.spotify.com/artist/2wPDbhaGXCqROrVmwDdCrK?si=ZKjaB8cuSqa15UyN9cmXcg",
+      "https://open.spotify.com/artist/3HdQTgQSncptIPjDgskWbu?si=ZvDV47SRSRG8NbXn485uJQ",
     src:
-      "https://shorefire.com/images/uploads/gallery/OPN_5_AtibaJefferson_3000.jpg"
+      "https://walker-web.imgix.net/cms/m3.jpg?w=740&fit=clip&auto=format,compress&dpr=1.5"
   },
   {
     title: "Liftoff",
-    hover: "817,668 monthly streamers on Spotify",
-    name: "Leikeli47",
+    hover: "909,814 monthly streamers on Spotify",
+    name: "Tennis",
     href:
-      "https://open.spotify.com/artist/0DtXHIvJ8NWBg5pGvsgWnR?si=HUuaJ3okT6GncUfRh4p9-A",
+      "https://open.spotify.com/artist/1ybAN3utgdoUL1MUCtH4QM?si=ms7w5EL5Rym6etYxeE4dOA",
     src:
-      "https://media1.popsugar-assets.com/files/thumbor/QOZB5sCAuhoVezHXM-tE4Hz7jFQ/fit-in/2048xorig/filters:format_auto-!!-:strip_icc-!!-/2019/08/16/723/n/1922283/tmp_mEr4Im_9b4f8fe89af41965_051319-Skullcandy-Empowered-Pink-Leikeli474820.jpg"
+      "https://i1.wp.com/citysoundcheck.com/wp-content/uploads/2017/11/032217-tennis-band-embed-2.jpg?ssl=1"
   }
 ];
 
