@@ -1,23 +1,17 @@
-import { makeExecutableSchema } from 'graphql-tools'
+import { makeExecutableSchema } from "graphql-tools";
 import {
-	TableStat,
-	TTableStat,
-	PeriodType,
-	RelationType
-} from '../../../../shared/tables/TableStat'
-import * as moment from 'moment'
-import { TableUser } from '../../../../shared/tables/TableUser'
-import {
-	TableAchievement
-} from '../../../../shared/tables/TableAchievement'
-import { verifyEnv } from '../../../../shared/env'
-import {
-	TimescopeTops,
-	PerspectiveTops,
-	QueryResolvers
-} from '../../types'
-import { timeSeries } from './shared/timeSeries'
-import { TTableAchievement } from '../../../../shared/SharedTypes';
+  TableStat,
+  TTableStat,
+  PeriodType,
+  RelationType
+} from "../../../../shared/tables/TableStat";
+import * as moment from "moment";
+import { TableUser } from "../../../../shared/tables/TableUser";
+import { TableAchievement } from "../../../../shared/tables/TableAchievement";
+import { verifyEnv } from "../../../../shared/env";
+import { TimescopeTops, PerspectiveTops, QueryResolvers } from "../../types";
+import { timeSeries } from "./shared/timeSeries";
+import { TTableAchievement } from "../../../../shared/SharedTypes";
 
 const typeDefs = `
 type Query {
@@ -120,347 +114,338 @@ type TopGenreStat {
   genre: String!
 }
 
-`
-
+`;
 
 type EnrichedKeyMakerParams = {
-	relationType: 'artist'
-	periodType: PeriodType
-	periodValue: string
-	artistId: string
-	achievementType: 'topListener'
-	achievementValue: 'first' | 'second' | 'third'
-	uid?: string | null
-}
+  relationType: "artist";
+  periodType: PeriodType;
+  periodValue: string;
+  artistId: string;
+  achievementType: "topListener";
+  achievementValue: "first" | "second" | "third";
+  uid?: string | null;
+};
 
-const keyMaker = (args: any) => [...args].join('#')
+const keyMaker = (args: any) => [...args].join("#");
 const keyMakerPlaceAndDay = ({
-	relationType,
-	periodType,
-	periodValue,
-	artistId,
-	achievementType,
-	achievementValue,
-	uid=null
+  relationType,
+  periodType,
+  periodValue,
+  artistId,
+  achievementType,
+  achievementValue,
+  uid = null
 }: EnrichedKeyMakerParams) => {
+  const pk = keyMaker([
+    achievementType,
+    achievementValue,
+    periodType,
+    periodValue
+  ]);
+  const sk = keyMaker([
+    artistId,
+    periodType,
+    achievementType,
+    achievementValue
+  ]);
 
-	
-	const pk = keyMaker([
-		achievementType,
-		achievementValue,
-		periodType,
-		periodValue
-	])
-	const sk = keyMaker([
-		artistId,
-		periodType,
-		achievementType,
-		achievementValue
-	])
-
-	return {
-		sk,
-		pk
-	}
-}
-
+  return {
+    sk,
+    pk
+  };
+};
 
 const localizedMoment = (utcOffset: number, m: moment.Moment) =>
-	moment.utc(m).utcOffset(utcOffset, false)
+  moment.utc(m).utcOffset(utcOffset, false);
 
-const localizedISOString = (m: moment.Moment) => m.toISOString(true)
+const localizedISOString = (m: moment.Moment) => m.toISOString(true);
 
-type PerspectiveTypes = 'personal' | 'group'
+type PerspectiveTypes = "personal" | "group";
 
 type TPerspectiveTopKeys = {
-	perspectiveType: PerspectiveTypes
-	primaryId: string
-	secondaryId: string
-	periodType: PeriodType
-	periodValue: string
-}
+  perspectiveType: PerspectiveTypes;
+  primaryId: string;
+  secondaryId: string;
+  periodType: PeriodType;
+  periodValue: string;
+};
 
 const perspectiveTopGenres = async (
-	tableStat: TTableStat,
-	{
-		perspectiveType,
-		primaryId,
-		secondaryId,
-		periodType,
-		periodValue
-	}: TPerspectiveTopKeys
+  tableStat: TTableStat,
+  {
+    perspectiveType,
+    primaryId,
+    secondaryId,
+    periodType,
+    periodValue
+  }: TPerspectiveTopKeys
 ) => {
-	const genresPrimary = await tableStat.getTopGenres({
-		uid: primaryId,
-		periodType,
-		periodValue,
-		Limit: 3
-	})
-	return await Promise.all(
-		genresPrimary.map(async ({ genre, playDurationMs }) => {
-			const secondary = await tableStat.getGenreStat({
-				uid: secondaryId,
-				genre,
-				periodType,
-				periodValue
-			})
-			const personal =
-				perspectiveType === 'personal'
-					? playDurationMs / 3600000
-					: secondary / 3600000
-			const group =
-				perspectiveType === 'group'
-					? playDurationMs / 3600000
-					: secondary / 3600000
-			return {
-				genre,
-				personal,
-				group
-			}
-		})
-	)
-}
+  const genresPrimary = await tableStat.getTopGenres({
+    uid: primaryId,
+    periodType,
+    periodValue,
+    Limit: 3
+  });
+  return await Promise.all(
+    genresPrimary.map(async ({ genre, playDurationMs }) => {
+      const secondary = await tableStat.getGenreStat({
+        uid: secondaryId,
+        genre,
+        periodType,
+        periodValue
+      });
+      const personal =
+        perspectiveType === "personal"
+          ? playDurationMs / 3600000
+          : secondary / 3600000;
+      const group =
+        perspectiveType === "group"
+          ? playDurationMs / 3600000
+          : secondary / 3600000;
+      return {
+        genre,
+        personal,
+        group
+      };
+    })
+  );
+};
 
 const perspectiveTopArtists = async (
-	tableStat: TTableStat,
-	endDate: moment.Moment,
-	{
-		perspectiveType,
-		primaryId,
-		secondaryId,
-		periodType,
-		periodValue
-	}: TPerspectiveTopKeys
+  tableStat: TTableStat,
+  endDate: moment.Moment,
+  {
+    perspectiveType,
+    primaryId,
+    secondaryId,
+    periodType,
+    periodValue
+  }: TPerspectiveTopKeys
 ) => {
-	const artistsPrimary = await tableStat.getTopArtists({
-		uid: primaryId,
-		periodType,
-		periodValue,
-		Limit: 3
-	})
+  const artistsPrimary = await tableStat.getTopArtists({
+    uid: primaryId,
+    periodType,
+    periodValue,
+    Limit: 5
+  });
 
-	return await Promise.all(
-		artistsPrimary.map(async ({ artist, playDurationMs }) => {
-
-			const secondary = await tableStat.getArtistStat({
-				uid: secondaryId,
-				artistId: artist.id,
-				periodType,
-				periodValue
-			})
-			const personal =
-				perspectiveType === 'personal'
-					? playDurationMs / 3600000
-					: secondary / 3600000
-			const group =
-				perspectiveType === 'group'
-					? playDurationMs / 3600000
-					: secondary / 3600000
-			return {
-				artist,
-				personal,
-				group
-			}
-		})
-	)
-}
+  return await Promise.all(
+    artistsPrimary.map(async ({ artist, playDurationMs }) => {
+      const secondary = await tableStat.getArtistStat({
+        uid: secondaryId,
+        artistId: artist.id,
+        periodType,
+        periodValue
+      });
+      const personal =
+        perspectiveType === "personal"
+          ? playDurationMs / 3600000
+          : secondary / 3600000;
+      const group =
+        perspectiveType === "group"
+          ? playDurationMs / 3600000
+          : secondary / 3600000;
+      return {
+        artist,
+        personal,
+        group
+      };
+    })
+  );
+};
 
 const perspectiveTopArtistAndGenres = async (
-	tableStat: TTableStat,
-	endDate: moment.Moment,
-	perspectiveTopKeys: TPerspectiveTopKeys
+  tableStat: TTableStat,
+  endDate: moment.Moment,
+  perspectiveTopKeys: TPerspectiveTopKeys
 ): Promise<PerspectiveTops> => {
-	const artists: any = await perspectiveTopArtists(tableStat, endDate, perspectiveTopKeys)
-	
-	return {
-		artists: artists,
-		genres: await perspectiveTopGenres(tableStat, perspectiveTopKeys)
-	}
-}
+  const artists: any = await perspectiveTopArtists(
+    tableStat,
+    endDate,
+    perspectiveTopKeys
+  );
 
-type TMomentUnits = 'days' | 'weeks' | 'months'
+  return {
+    artists: artists,
+    genres: await perspectiveTopGenres(tableStat, perspectiveTopKeys)
+  };
+};
+
+type TMomentUnits = "days" | "weeks" | "months";
 
 type TTimescopeKeys = {
-	timeseriesLabel: string
-	timeseriesPeriodType: PeriodType
-	endDate: moment.Moment
-	unit: TMomentUnits
-	distance: number
-	uid: string
-	gid: string
-	periodType: PeriodType
-}
+  timeseriesLabel: string;
+  timeseriesPeriodType: PeriodType;
+  endDate: moment.Moment;
+  unit: TMomentUnits;
+  distance: number;
+  uid: string;
+  gid: string;
+  periodType: PeriodType;
+};
 
 const timescopeTopArtistAndGenres = async (
-	tableStat: TTableStat,
-	{
-		timeseriesLabel,
-		timeseriesPeriodType,
-		endDate,
-		unit,
-		distance,
-		uid,
-		gid,
-		periodType
-	}: TTimescopeKeys
+  tableStat: TTableStat,
+  {
+    timeseriesLabel,
+    timeseriesPeriodType,
+    endDate,
+    unit,
+    distance,
+    uid,
+    gid,
+    periodType
+  }: TTimescopeKeys
 ): Promise<TimescopeTops> => {
-	const { [periodType]: periodValue } = tableStat.periodsFor(
-		localizedISOString(endDate)
-	)
-	return {
-		timeSeries: await timeSeries(tableStat, timeseriesLabel, {
-			endDate,
-			unit,
-			distance,
-			uid,
-			gid,
-			periodType: timeseriesPeriodType,
-			relationType: 'total',
-			relationId: 'total'
-		}),
-		personal: await perspectiveTopArtistAndGenres(
-			tableStat,
-			endDate,
-			{
-				perspectiveType: 'personal',
-				primaryId: uid,
-				secondaryId: gid,
-				periodType,
-				periodValue
-			}
-		),
-		group: await perspectiveTopArtistAndGenres(
-			tableStat,
-			endDate,
-			{
-				perspectiveType: 'group',
-				primaryId: gid,
-				secondaryId: uid,
-				periodType,
-				periodValue
-			}
-		)
-	}
-}
+  const { [periodType]: periodValue } = tableStat.periodsFor(
+    localizedISOString(endDate)
+  );
+  return {
+    timeSeries: await timeSeries(tableStat, timeseriesLabel, {
+      endDate,
+      unit,
+      distance,
+      uid,
+      gid,
+      periodType: timeseriesPeriodType,
+      relationType: "total",
+      relationId: "total"
+    }),
+    personal: await perspectiveTopArtistAndGenres(tableStat, endDate, {
+      perspectiveType: "personal",
+      primaryId: uid,
+      secondaryId: gid,
+      periodType,
+      periodValue
+    }),
+    group: await perspectiveTopArtistAndGenres(tableStat, endDate, {
+      perspectiveType: "group",
+      primaryId: gid,
+      secondaryId: uid,
+      periodType,
+      periodValue
+    })
+  };
+};
 
 type TTopKeys = {
-	uid: string
-	gid: string
-	now: moment.Moment
-}
+  uid: string;
+  gid: string;
+  now: moment.Moment;
+};
 
 type PeriodKeys = {
-	timeseriesLabel: string
-	timeseriesPeriodType: PeriodType
-	unit: TMomentUnits
-	distance: number
-	periodType: PeriodType
-}
+  timeseriesLabel: string;
+  timeseriesPeriodType: PeriodType;
+  unit: TMomentUnits;
+  distance: number;
+  periodType: PeriodType;
+};
 type SpecificPeriodKeys = {
-	today: PeriodKeys
-}
+  today: PeriodKeys;
+};
 const PERIOD_KEYS: SpecificPeriodKeys = {
-	today: {
-		timeseriesLabel: 'past 7 days',
-		timeseriesPeriodType: 'day',
-		unit: 'days',
-		distance: 7,
-		periodType: 'day'
-	}
-}
+  today: {
+    timeseriesLabel: "past 7 days",
+    timeseriesPeriodType: "day",
+    unit: "days",
+    distance: 7,
+    periodType: "day"
+  }
+};
 const topArtistsAndGenres = async (
-	tableStat: TTableStat,
-	{ uid, gid, now }: TTopKeys
+  tableStat: TTableStat,
+  { uid, gid, now }: TTopKeys
 ) => {
-	const mainKeys = { uid, gid, endDate: now }
+  const mainKeys = { uid, gid, endDate: now };
 
-	return {
-		today: await timescopeTopArtistAndGenres(
-			tableStat,
-	
-			Object.assign({ periodType: 'day' }, mainKeys, PERIOD_KEYS.today)
-		),
-		thisWeek: await timescopeTopArtistAndGenres(tableStat, {
-			timeseriesLabel: 'past 7 days',
-			timeseriesPeriodType: 'day',
-			endDate: now,
-			unit: 'days',
-			distance: 7,
-			uid,
-			gid,
-			periodType: 'week'
-		}),
-		thisMonth: await timescopeTopArtistAndGenres(tableStat, {
-			timeseriesLabel: 'past 30 days',
-			timeseriesPeriodType: 'day',
-			endDate: now,
-			unit: 'days',
-			distance: 30,
-			uid,
-			gid,
-			periodType: 'month'
-		}),
-		lifetime: await timescopeTopArtistAndGenres(tableStat, {
-			timeseriesLabel: 'past 12 weeks',
-			timeseriesPeriodType: 'week',
-			endDate: now,
-			unit: 'weeks',
-			distance: 12,
-			uid,
-			gid,
-			periodType: 'life'
-		})
-	}
-}
+  return {
+    today: await timescopeTopArtistAndGenres(
+      tableStat,
+
+      Object.assign({ periodType: "day" }, mainKeys, PERIOD_KEYS.today)
+    ),
+    thisWeek: await timescopeTopArtistAndGenres(tableStat, {
+      timeseriesLabel: "past 7 days",
+      timeseriesPeriodType: "day",
+      endDate: now,
+      unit: "days",
+      distance: 7,
+      uid,
+      gid,
+      periodType: "week"
+    }),
+    thisMonth: await timescopeTopArtistAndGenres(tableStat, {
+      timeseriesLabel: "past 30 days",
+      timeseriesPeriodType: "day",
+      endDate: now,
+      unit: "days",
+      distance: 30,
+      uid,
+      gid,
+      periodType: "month"
+    }),
+    lifetime: await timescopeTopArtistAndGenres(tableStat, {
+      timeseriesLabel: "past 12 weeks",
+      timeseriesPeriodType: "week",
+      endDate: now,
+      unit: "weeks",
+      distance: 12,
+      uid,
+      gid,
+      periodType: "life"
+    })
+  };
+};
 
 const insightsDash: QueryResolvers.InsightsDashResolver = async (
-	_,
-	{ uid, gid },
-	context
+  _,
+  { uid, gid },
+  context
 ) => {
-	const log = context.log
-	console.log(
-		'TCL: insightsDash:QueryResolvers.InsightsDashResolver -> context',
-		context
-	)
-	log.info('called by', { uid })
-	const env = verifyEnv(
-		{
-			DYNAMO_ENDPOINT: process.env.DYNAMO_ENDPOINT,
-			TABLE_STAT: process.env.TABLE_STAT,
-			TABLE_ACHIEVEMENT: process.env.TABLE_ACHIEVEMENT
-		},
-		log
-	)
+  const log = context.log;
+  console.log(
+    "TCL: insightsDash:QueryResolvers.InsightsDashResolver -> context",
+    context
+  );
+  log.info("called by", { uid });
+  const env = verifyEnv(
+    {
+      DYNAMO_ENDPOINT: process.env.DYNAMO_ENDPOINT,
+      TABLE_STAT: process.env.TABLE_STAT,
+      TABLE_ACHIEVEMENT: process.env.TABLE_ACHIEVEMENT
+    },
+    log
+  );
 
-	const tableUser = TableUser(context.DYNAMO_ENDPOINT, context.TABLE_USER)
-	const tableStat = TableStat(context.DYNAMO_ENDPOINT, context.TABLE_STAT)
-	const tableAchievement = TableAchievement(
-		context.DYNAMO_ENDPOINT,
-		context.TABLE_ACHIEVEMENT
-	)
-	const { valid, invalid } = await tableUser.getUser(uid)
-	if (invalid) {
-		throw new Error(`user info invalid for uid ${uid}`)
-	}
+  const tableUser = TableUser(context.DYNAMO_ENDPOINT, context.TABLE_USER);
+  const tableStat = TableStat(context.DYNAMO_ENDPOINT, context.TABLE_STAT);
+  const tableAchievement = TableAchievement(
+    context.DYNAMO_ENDPOINT,
+    context.TABLE_ACHIEVEMENT
+  );
+  const { valid, invalid } = await tableUser.getUser(uid);
+  if (invalid) {
+    throw new Error(`user info invalid for uid ${uid}`);
+  }
 
-	const { utcOffset }: any = valid
-	// @ts-ignore
-	const now = localizedMoment(utcOffset, moment())
+  const { utcOffset }: any = valid;
+  // @ts-ignore
+  const now = localizedMoment(utcOffset, moment());
 
-	const ret = await topArtistsAndGenres(tableStat, {
-		uid,
-		gid,
-		now
-	})
-	console.log('ret', ret)
-	return ret
-}
+  const ret = await topArtistsAndGenres(tableStat, {
+    uid,
+    gid,
+    now
+  });
+  console.log("ret", ret);
+  return ret;
+};
 
 const resolvers = {
-	Query: {
-		insightsDash
-	}
-}
+  Query: {
+    insightsDash
+  }
+};
 
-export const insightsDashSchema = makeExecutableSchema({ typeDefs, resolvers })
+export const insightsDashSchema = makeExecutableSchema({ typeDefs, resolvers });

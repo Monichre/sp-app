@@ -106,8 +106,6 @@ export const Overview: React.SFC<RouteComponentProps & {
   const artistCount = artists.length === 3 ? 3 : null;
   const { openPortal, closePortal, isOpen, Portal } = usePortal();
 
-  const { achievements }: any = React.useContext(UserAchievementContext);
-
   return (
     <>
       {/* Gets total users when perspective is Everyone. Currently Static Data */}
@@ -119,7 +117,7 @@ export const Overview: React.SFC<RouteComponentProps & {
           <TopFiveTimePeriod
             period={period.replace("This ", "").replace(" Time", "")}
             toggle={closePortal}
-            achievements={achievements}
+            artists={artists}
           />
         </Portal>
       )}
@@ -143,14 +141,14 @@ export const Overview: React.SFC<RouteComponentProps & {
                 <p style={{ padding: "0 10px 0 0", margin: "0" }}>
                   {translatedPerspective} Top {artistCount} Artists {period}{" "}
                 </p>
-                {/* <Button
+                <Button
                   ghost
                   onClick={(e: any) => openPortal(e)}
                   shape="round"
                   style={{ marginLeft: "auto" }}
                 >
                   Share
-                </Button> */}
+                </Button>
               </BlockTitle>
             </ArtistsChartBlock>
           </Tooltip>

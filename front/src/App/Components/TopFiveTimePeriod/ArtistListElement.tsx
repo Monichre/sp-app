@@ -32,8 +32,6 @@ export const ArtistListElement: React.SFC<ArtistListElementProps> = ({
   totalTimeListened
 }) => {
   const ttl = formatListeningTime(totalTimeListened);
-  console.log("xxxTTL", ttl);
-
   return (
     <div>
       {/* Better method for this? */}

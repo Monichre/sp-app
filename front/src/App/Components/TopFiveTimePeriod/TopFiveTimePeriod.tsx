@@ -28,16 +28,15 @@ console.log("ttl", {
 export interface TopFiveTimePeriodProps {
   period: string;
   toggle: any;
-  achievements: any;
+  artists: any;
 }
 
 export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
   period,
   toggle,
-  achievements
+  artists
 }) => {
-  const periodLowerCase = period.toLowerCase();
-  const artistArray = achievements[periodLowerCase].slice(0, 5);
+  // const periodLowerCase = period.toLowerCase();
 
   return (
     <OpaqueBackground className="top-five-time-period">
@@ -54,21 +53,15 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
             <Headline>My {period} In Music</Headline>
             {/* <DateRange>{periodTitle}</DateRange> */}
           </TopFiveHeader>
-          {artistArray.map(
-            ({ artistData, achievement }: any, index: number) => {
-              const { artist } = artistData;
-              const { total, pk } = achievement;
-              console.log("xxxTOTAL", total);
-              console.log("xxxPK", pk);
-              return (
-                <ArtistListElement
-                  place={index + 1}
-                  artist={artist}
-                  totalTimeListened={total}
-                />
-              );
-            }
-          )}
+          {artists.map(({ artist, personal }: any, index: number) => {
+            return (
+              <ArtistListElement
+                place={index + 1}
+                artist={artist}
+                totalTimeListened={personal}
+              />
+            );
+          })}
           <LogoDiv
             src="http://live.soundpruf.com/static/media/sp-white-logo-horizontal.99cc2d83.png"
             alt=""
