@@ -96,8 +96,6 @@ const ArtistsChart: React.SFC<RouteComponentProps &
   const yAxisArtistWidth = isMobile ? 50 : 150;
   const yAxisAchievementsWidth = isMobile ? 50 : 75;
 
-  console.log("xxxTHREEARTISTS", threeArtists);
-
   return (
     <ResponsiveContainer width="100%" height={height * artists.length + 100}>
       <BarChart
