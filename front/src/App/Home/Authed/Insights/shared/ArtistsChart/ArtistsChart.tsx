@@ -92,15 +92,18 @@ const ArtistsChart: React.SFC<RouteComponentProps &
   // console.log('ArtistsChart: isMobile', isMobile)
   // console.count('Artist Chart Render')
 
-  const threeArtists = artists.slice(0, 3);
+  const artistSlice = artists.slice(0, 3);
   const yAxisArtistWidth = isMobile ? 50 : 150;
   const yAxisAchievementsWidth = isMobile ? 50 : 75;
 
   return (
-    <ResponsiveContainer width="100%" height={height * artists.length + 100}>
+    <ResponsiveContainer
+      width="100%"
+      height={height * artistSlice.length + 100}
+    >
       <BarChart
         layout="vertical"
-        data={threeArtists}
+        data={artistSlice}
         onClick={navigateToArtist(history, pathParams)}
       >
         <XAxis
