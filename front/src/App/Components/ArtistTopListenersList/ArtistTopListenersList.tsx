@@ -4,6 +4,7 @@ import { Box } from "rebass";
 import { badgeMap } from "../../Home/Authed/Insights/shared/ArtistsChart/TopListenerYAxis";
 import { AvatarBg } from "../Elements";
 import { TopListeners, Badge2 } from "./ArtistTopListenersList.styles";
+import fallbackAvatar from "../../../shared/images/fallback-avatar.svg";
 
 export interface ArtistTopListenersListProps {
   listeners: any;
@@ -22,11 +23,11 @@ export const ArtistTopListenersList: React.SFC<ArtistTopListenersListProps> = ({
         const minutes = mins ? `${mins} mins` : "";
         const ttl = `${hours}${minutes}`;
 
+        console.log(user);
+
         if (!user) {
           return <div></div>;
         }
-
-        console.log(`User: ${user}`);
 
         return (
           <Box className="boxguy" mt={45}>
@@ -51,7 +52,12 @@ export const ArtistTopListenersList: React.SFC<ArtistTopListenersListProps> = ({
                   marginTop: "0.5rem"
                 }}
               >
-                <img src={user.photoURL} />
+                <img
+                  src={user.photoURL}
+                  onError={e => {
+                    (e.target as HTMLImageElement).src = fallbackAvatar;
+                  }}
+                />
               </AvatarBg>
               <div className="texty">
                 <br />
