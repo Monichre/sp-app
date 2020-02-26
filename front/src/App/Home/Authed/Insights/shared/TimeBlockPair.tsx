@@ -1,13 +1,36 @@
-import React, { Fragment } from 'react';
-import styled from 'styled-components'
-import { NotLarge, Large, BRAND_COLOR, BRAND_GLOBAL_COLOR_BACKGROUND, BRAND_PERSONAL_COLOR_BACKGROUND, BRAND_PERSONAL_COLOR, BRAND_GLOBAL_COLOR, BRAND_GLOBAL_COLOR_BACKGROUND_INACTIVE, BRAND_PERSONAL_COLOR_BACKGROUND_INACTIVE, largeQuery, notLargeQuery, largeNotXLargeQuery, xLargeQuery } from '../../../../../shared/media';
-import { NavLink } from 'react-router-dom';
-import { insightLink, TPathParams } from './functions';
-import { InsightsStatsInsightsStats, InsightsStatsToday, InsightsStatsThisWeek, InsightsStatsThisMonth, InsightsStatsLifetime, InsightsStatsPersonal, InsightsStatsGroup, InsightsStatsDelta } from '../../../../../types';
+import React, { Fragment } from "react";
+import styled from "styled-components";
+import {
+  NotLarge,
+  Large,
+  BRAND_COLOR,
+  BRAND_GLOBAL_COLOR_BACKGROUND,
+  BRAND_PERSONAL_COLOR_BACKGROUND,
+  BRAND_PERSONAL_COLOR,
+  BRAND_GLOBAL_COLOR,
+  BRAND_GLOBAL_COLOR_BACKGROUND_INACTIVE,
+  BRAND_PERSONAL_COLOR_BACKGROUND_INACTIVE,
+  largeQuery,
+  notLargeQuery,
+  largeNotXLargeQuery,
+  xLargeQuery
+} from "../../../../../shared/media";
+import { NavLink } from "react-router-dom";
+import { insightLink, TPathParams } from "./functions";
+import {
+  InsightsStatsInsightsStats,
+  InsightsStatsToday,
+  InsightsStatsThisWeek,
+  InsightsStatsThisMonth,
+  InsightsStatsLifetime,
+  InsightsStatsPersonal,
+  InsightsStatsGroup,
+  InsightsStatsDelta
+} from "../../../../../types";
 
-import { Ascend, Descend } from 'grommet-icons';
-import { LineChart, History, User } from 'grommet-icons'
-import { Music } from '../../../../../shared/icons';
+import { Ascend, Descend } from "grommet-icons";
+import { LineChart, History, User } from "grommet-icons";
+import { Music } from "../../../../../shared/icons";
 
 const MajorValue = styled.div`
   font-weight: 500;
@@ -22,7 +45,7 @@ const MajorValue = styled.div`
   ${notLargeQuery`
     font-size: 2.5rem;
   `}
-`
+`;
 
 const NavTabLink = styled(NavLink)`
   display: block;
@@ -30,50 +53,52 @@ const NavTabLink = styled(NavLink)`
   flex: 1;
   padding: 1rem 2rem;
   &.active {
-    color: ${BRAND_COLOR}
+    color: ${BRAND_COLOR};
   }
-`
+`;
 
-
-type InsightsStats = InsightsStatsPersonal | InsightsStatsGroup
-type InsightsStatsTimescope = InsightsStatsToday | InsightsStatsThisWeek | InsightsStatsThisMonth | InsightsStatsLifetime
-
+type InsightsStats = InsightsStatsPersonal | InsightsStatsGroup;
+type InsightsStatsTimescope =
+  | InsightsStatsToday
+  | InsightsStatsThisWeek
+  | InsightsStatsThisMonth
+  | InsightsStatsLifetime;
 
 type TimeBlockColors = {
   active: {
-    color: string
-    backgroundColor: string
+    color: string;
+    backgroundColor: string;
     value: {
       color: string;
-    }
-  }
+    };
+  };
   inactive: {
-    color: string
-    backgroundColor: string
+    color: string;
+    backgroundColor: string;
     value: {
       color: string;
-    }
-  }
-}
+    };
+  };
+};
 
 type TimeBlockDefs = {
-  personal: TimeBlockColors
-  group: TimeBlockColors
-}
+  personal: TimeBlockColors;
+  group: TimeBlockColors;
+};
 const COLORS: TimeBlockDefs = {
   personal: {
     active: {
       color: BRAND_PERSONAL_COLOR,
-      backgroundColor: '#64d6ee',
+      backgroundColor: "#64d6ee",
       value: {
-        color: 'white'
+        color: "white"
       }
     },
     inactive: {
       color: BRAND_PERSONAL_COLOR,
       backgroundColor: BRAND_PERSONAL_COLOR_BACKGROUND_INACTIVE,
       value: {
-        color: '#000'
+        color: "#000"
       }
     }
   },
@@ -82,21 +107,20 @@ const COLORS: TimeBlockDefs = {
       color: BRAND_GLOBAL_COLOR,
       backgroundColor: BRAND_GLOBAL_COLOR_BACKGROUND,
       value: {
-        color: 'white'
+        color: "white"
       }
     },
     inactive: {
       color: BRAND_GLOBAL_COLOR,
       backgroundColor: BRAND_GLOBAL_COLOR_BACKGROUND_INACTIVE,
       value: {
-        color: '#000'
+        color: "#000"
       }
     }
   }
-}
+};
 
-const MinorValue = styled.div`
-`
+const MinorValue = styled.div``;
 const TimeBlockDeltaView = styled.span`
   margin-left: 10px;
 
@@ -105,16 +129,23 @@ const TimeBlockDeltaView = styled.span`
     width: 15px;
     margin-left: 10px;
   }
-`
-const TimeBlockDelta: React.SFC<{ delta: InsightsStatsDelta }> = ({ delta: { hrs, mins, direction } }) =>
+`;
+const TimeBlockDelta: React.SFC<{ delta: InsightsStatsDelta }> = ({
+  delta: { hrs, mins, direction }
+}) => (
   <TimeBlockDeltaView>
-    {mins ? `${hrs}:${mins.toString().padStart(2, '0')}` : hrs}
-    {direction == 'up' ? <img src='/icons/trending-up.svg' /> : <img src='/icons/trending-down.svg' />}
+    {mins ? `${hrs}:${mins.toString().padStart(2, "0")}` : hrs}
+    {direction == "up" ? (
+      <img src="/icons/trending-up.svg" />
+    ) : (
+      <img src="/icons/trending-down.svg" />
+    )}
   </TimeBlockDeltaView>
+);
 
-
-
-const TimeBlockLink = styled(({ colors, ...rest }) => <NavLink {...rest} />) <{ colors: TimeBlockColors }>`
+const TimeBlockLink = styled(({ colors, ...rest }) => <NavLink {...rest} />)<{
+  colors: TimeBlockColors;
+}>`
   ${xLargeQuery`
   height: 6.5rem;
   `}
@@ -154,15 +185,26 @@ const TimeBlockLink = styled(({ colors, ...rest }) => <NavLink {...rest} />) <{ 
       }
     }
   }
-`
+`;
 
-const TimeBlock: React.SFC<{ stats: InsightsStats, colors: TimeBlockColors, pathParams: TPathParams }> = ({ stats: { current: { hrs, mins }, delta }, colors, pathParams }) =>
+const TimeBlock: React.SFC<{
+  stats: InsightsStats;
+  colors: TimeBlockColors;
+  pathParams: TPathParams;
+}> = ({
+  stats: {
+    current: { hrs, mins },
+    delta
+  },
+  colors,
+  pathParams
+}) => (
   <TimeBlockLink {...{ colors, to: insightLink(pathParams) }}>
     <MajorValue>
-      {mins ? `${hrs}h ${mins.toString().padStart(2, '0')}m` : `${hrs}h`}
+      {mins ? `${hrs}h ${mins.toString().padStart(2, "0")}m` : `${hrs}h`}
     </MajorValue>
   </TimeBlockLink>
-
+);
 
 const TimeBlockPairView = styled.div`
   display: flex;
@@ -171,7 +213,7 @@ const TimeBlockPairView = styled.div`
   & > * {
     flex: 1;
   }
-`
+`;
 
 const TimeBlockHeaderWrap = styled.div`
   width: 50%;
@@ -179,19 +221,17 @@ const TimeBlockHeaderWrap = styled.div`
   height: max-content;
 
   h4 {
-
     margin: 0;
     width: max-content;
     background: #030616;
-    font-family: 'Source Sans Pro';
+    font-family: "Source Sans Pro";
     letter-spacing: 5px;
     text-transform: uppercase;
     color: #fff;
     font-weight: bolder;
     padding: 0 10px 10px;
   }
-
-`
+`;
 
 const TimeBlockTitleRow = styled.div`
   display: flex;
@@ -206,12 +246,8 @@ const TimeBlockTitleRow = styled.div`
   position: absolute;
 
   ${TimeBlockHeaderWrap} {
-
   }
-`
-
-
-
+`;
 
 /*
     h4 {
@@ -230,39 +266,55 @@ const TimeBlockTitleRow = styled.div`
 
 const MusicWrap: any = styled.span`
   margin-right: 10px;
-`
+`;
 
-export const TimeBlockPair: React.SFC<{ label?: string, pathParams: TPathParams, stats: InsightsStatsTimescope }> = ({ label, pathParams, stats }) => {
-  const { personal, group } = stats
-  const { delta } = personal
-  console.log('TCL: delta', delta)
+export const TimeBlockPair: React.SFC<{
+  label?: string;
+  pathParams: TPathParams;
+  stats: InsightsStatsTimescope;
+}> = ({ label, pathParams, stats }) => {
+  const { personal, group } = stats;
+  const { delta } = personal;
+  console.log("TCL: delta", delta);
 
   return (
     <Fragment>
-      {label ?
+      {label ? (
         <NavTabLink to={insightLink(pathParams)}>
           <MusicWrap>
             <Music />
           </MusicWrap>
-          {label}: {delta ? <TimeBlockDelta {...{ delta }} /> : ''}
+          {label}: {delta ? <TimeBlockDelta {...{ delta }} /> : ""}
         </NavTabLink>
-        : delta ? <TimeBlockDelta {...{ delta }} /> : ''
-      }
+      ) : delta ? (
+        <TimeBlockDelta {...{ delta }} />
+      ) : (
+        ""
+      )}
 
       <TimeBlockPairView>
         <TimeBlockTitleRow>
-          <TimeBlockHeaderWrap><h4>You</h4></TimeBlockHeaderWrap>
+          <TimeBlockHeaderWrap>
+            <h4>You</h4>
+          </TimeBlockHeaderWrap>
           <TimeBlockHeaderWrap>
             <h4>Everyone</h4>
           </TimeBlockHeaderWrap>
         </TimeBlockTitleRow>
-        <TimeBlock stats={personal} colors={COLORS.personal} pathParams={Object.assign({}, pathParams, { perspective: 'personal' })} />
+        <TimeBlock
+          stats={personal}
+          colors={COLORS.personal}
+          pathParams={Object.assign({}, pathParams, {
+            perspective: "personal"
+          })}
+        />
 
-        <TimeBlock stats={group} colors={COLORS.group} pathParams={Object.assign({}, pathParams, { perspective: 'group' })} />
-
+        <TimeBlock
+          stats={group}
+          colors={COLORS.group}
+          pathParams={Object.assign({}, pathParams, { perspective: "group" })}
+        />
       </TimeBlockPairView>
     </Fragment>
-  )
-}
-
-
+  );
+};

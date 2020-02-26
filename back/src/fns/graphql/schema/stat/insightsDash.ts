@@ -184,7 +184,7 @@ const perspectiveTopGenres = async (
     uid: primaryId,
     periodType,
     periodValue,
-    Limit: 3
+    Limit: 5
   });
   return await Promise.all(
     genresPrimary.map(async ({ genre, playDurationMs }) => {
