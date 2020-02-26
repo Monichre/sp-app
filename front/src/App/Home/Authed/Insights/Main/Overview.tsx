@@ -110,7 +110,7 @@ export const Overview: React.SFC<RouteComponentProps & {
     <>
       {/* Gets total users when perspective is Everyone. Currently Static Data */}
       {translatedPerspective == "Everyone" ? (
-        <TotalNumberOfUsers>Everyone: 460 people</TotalNumberOfUsers>
+        <TotalNumberOfUsers>Everyone: 468 people</TotalNumberOfUsers>
       ) : null}
       {isOpen && (
         <Portal>

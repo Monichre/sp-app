@@ -81,30 +81,29 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: "Ready",
-    hover: "7,289 monthly streamers on Spotify",
-    name: "Ajimal",
+    hover: "9,484 monthly streamers on Spotify",
+    name: "Marcus Yates",
     href:
-      "https://open.spotify.com/artist/3j4ew45VN7knFiJvjqBobA?si=T5HUvQTNSbmlk-_fSRuPEQ",
-    src:
-      "https://www.tmrwmagazine.com/wp-content/uploads/2020/02/Screen-Shot-2020-02-04-at-3.19.57-PM-min.jpg"
+      "https://open.spotify.com/artist/3Yhv9MAKkZA0k3PLTZXlZQ?si=sdwFZiBmRRmlEypln6SWfQ",
+    src: "https://pbs.twimg.com/profile_images/923245648043851776/fGgNhbvZ.jpg"
   },
   {
     title: "Set",
-    hover: "30,024 monthly streamers on Spotify",
-    name: "Miloe",
+    hover: "194,469monthly streamers on Spotify",
+    name: "TORRES",
     href:
-      "https://open.spotify.com/artist/3HdQTgQSncptIPjDgskWbu?si=ZvDV47SRSRG8NbXn485uJQ",
+      "https://open.spotify.com/artist/3lrDYjsghBMfUTiLziD9q9?si=Om9ZmcDzT8qeTYcH8AVq-w",
     src:
-      "https://walker-web.imgix.net/cms/m3.jpg?w=740&fit=clip&auto=format,compress&dpr=1.5"
+      "https://mediad.publicbroadcasting.net/p/wabe/files/styles/x_large/public/201506/Torres_062315.jpg"
   },
   {
     title: "Liftoff",
-    hover: "909,814 monthly streamers on Spotify",
-    name: "Tennis",
+    hover: "1,928,298 monthly streamers on Spotify",
+    name: "Whitney",
     href:
-      "https://open.spotify.com/artist/1ybAN3utgdoUL1MUCtH4QM?si=ms7w5EL5Rym6etYxeE4dOA",
+      "https://open.spotify.com/artist/32aUoW94mJ7xTJI7fG0V1G?si=SMONuKUMRWSJgjKytYjBuA",
     src:
-      "https://i1.wp.com/citysoundcheck.com/wp-content/uploads/2017/11/032217-tennis-band-embed-2.jpg?ssl=1"
+      "https://images.squarespace-cdn.com/content/57b314e846c3c465f615bdd6/1478723698886-A1XXD5L14IL2O7ZALYG3/SO+IT+GOES+X+WHITNEY-6.jpg?format=1500w&content-type=image%2Fjpeg"
   }
 ];
 

@@ -1,11 +1,6 @@
-import React, { useState, useRef } from "react";
-import { TPathParams, insightLink, artistLink, navigateTo } from "../functions";
-import {
-  Link,
-  withRouter,
-  BrowserRouter,
-  RouteComponentProps
-} from "react-router-dom";
+import React from "react";
+import { TPathParams, artistLink, navigateTo } from "../functions";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 import { History } from "history";
 import { PerspectiveDashArtists } from "../../../../../../types";
 import {
@@ -32,6 +27,7 @@ import { normalizeTimeScope } from "../../Main/Overview";
 import { mapSizesToProps } from "../../../../../../lib/mapSizes";
 import withSizes from "react-sizes";
 
+// Not sure what this is -- Michael
 export type TickProps = {
   x?: number;
   y?: number;
@@ -52,6 +48,7 @@ type UserIdProp = {
   userId: string;
 };
 
+// Is this transplantable? Nice to have everywhere an artist appears -- Michael
 const navigateToArtist = (history: History, pathParams: TPathParams) => (
   obj: any
 ) => {
@@ -63,6 +60,7 @@ const navigateToArtist = (history: History, pathParams: TPathParams) => (
   navigateTo(history, artistLink(pathParams, artistId));
 };
 
+// What is this doing? -- Michael
 const domainMaxBuilder: (
   values: PerspectiveDashArtists[]
 ) => (maxValue: number) => number = (values: PerspectiveDashArtists[]) => (
@@ -79,6 +77,7 @@ type ChartProps = {
   isMobile: boolean;
 };
 
+// Artist chart is child element of ChartBlock. Both see all and insights use both -- Michael
 const ArtistsChart: React.SFC<RouteComponentProps &
   ChartProps &
   UserIdProp> = ({
@@ -89,21 +88,27 @@ const ArtistsChart: React.SFC<RouteComponentProps &
   userId,
   isMobile
 }) => {
-  // console.log('ArtistsChart: isMobile', isMobile)
-  // console.count('Artist Chart Render')
+  console.log("xxxARTISTCHARTPROPS", {
+    pathParams,
+    artists,
+    history,
+    height,
+    userId,
+    isMobile
+  });
 
-  const artistSlice = artists.slice(0, 3);
   const yAxisArtistWidth = isMobile ? 50 : 150;
   const yAxisAchievementsWidth = isMobile ? 50 : 75;
 
   return (
     <ResponsiveContainer
       width="100%"
-      height={height * artistSlice.length + 100}
+      height={height * artists.length + 100}
+      className="artist-chart"
     >
       <BarChart
         layout="vertical"
-        data={artistSlice}
+        data={artists}
         onClick={navigateToArtist(history, pathParams)}
       >
         <XAxis
@@ -201,7 +206,7 @@ const ChartBlock: React.SFC<
   console.log("TCL: isMobile", isMobile);
 
   return (
-    <div>
+    <div className="chart-block">
       {children}
       {params.artists.length > 0 ? (
         <ArtistsChartWithRouter {...params} {...{ isMobile }} />
