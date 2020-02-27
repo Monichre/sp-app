@@ -17,6 +17,7 @@ const formatListeningTime = (total: number) => {
   const hours = hrs ? `${hrs}h ` : "";
   const minutes = mins ? `${mins}m` : "";
 
+  if (hrs === 0 && mins === 0) return "0m";
   return `${hours}${minutes}`;
 };
 
@@ -50,7 +51,7 @@ export const ArtistListElement: React.SFC<ArtistListElementProps> = ({
         <OrderNumber>{place}</OrderNumber>
         <ArtistInfo>
           <ArtistName>{artist.name}</ArtistName>
-          <TimePlayed>{perspective == "My" ? ttl : "Me: " + ttl}</TimePlayed>
+          <TimePlayed>{perspective == "Your" ? ttl : "Me: " + ttl}</TimePlayed>
         </ArtistInfo>
         <ArtistImage src={artist.images[0].url} alt="" />
       </ListElement>
