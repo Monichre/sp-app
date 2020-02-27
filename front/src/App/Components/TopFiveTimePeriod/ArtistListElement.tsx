@@ -24,12 +24,14 @@ export type ArtistListElementProps = {
   artist: Artist;
   place: number;
   totalTimeListened: number;
+  perspective: string;
 };
 
 export const ArtistListElement: React.SFC<ArtistListElementProps> = ({
   artist,
   place,
-  totalTimeListened
+  totalTimeListened,
+  perspective
 }) => {
   const ttl = formatListeningTime(totalTimeListened);
   return (
@@ -48,7 +50,7 @@ export const ArtistListElement: React.SFC<ArtistListElementProps> = ({
         <OrderNumber>{place}</OrderNumber>
         <ArtistInfo>
           <ArtistName>{artist.name}</ArtistName>
-          <TimePlayed>{ttl}</TimePlayed>
+          <TimePlayed>{perspective == "My" ? ttl : "Me: " + ttl}</TimePlayed>
         </ArtistInfo>
         <ArtistImage src={artist.images[0].url} alt="" />
       </ListElement>
