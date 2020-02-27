@@ -118,6 +118,7 @@ export const Overview: React.SFC<RouteComponentProps & {
             period={period.replace("This ", "").replace(" Time", "")}
             toggle={closePortal}
             artists={artists}
+            perspective={translatedPerspective}
           />
         </Portal>
       )}

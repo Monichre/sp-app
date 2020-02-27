@@ -34,12 +34,14 @@ export interface TopFiveTimePeriodProps {
   period: string;
   toggle: any;
   artists: any;
+  perspective: string;
 }
 
 export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
   period,
   toggle,
-  artists
+  artists,
+  perspective
 }) => {
   const translatedPerspective = perspectiveMap(perspective);
 
