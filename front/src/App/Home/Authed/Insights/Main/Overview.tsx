@@ -112,12 +112,22 @@ export const Overview: React.SFC<RouteComponentProps & {
       {translatedPerspective == "Everyone" ? (
         <TotalNumberOfUsers>Everyone: 468 people</TotalNumberOfUsers>
       ) : null}
+      {/* {isOpen && (
+        <Portal>
+          <TopFiveTimePeriod
+            period={period.replace("This ", "").replace(" Time", "")}
+            toggle={closePortal}
+            data={artists}
+            perspective={translatedPerspective}
+          />
+        </Portal>
+      )} */}
       {isOpen && (
         <Portal>
           <TopFiveTimePeriod
             period={period.replace("This ", "").replace(" Time", "")}
             toggle={closePortal}
-            artists={artists}
+            data={genres}
             perspective={translatedPerspective}
           />
         </Portal>
@@ -173,6 +183,14 @@ export const Overview: React.SFC<RouteComponentProps & {
             <GenresChartBlock {...{ genres, pathParams }}>
               <BlockTitle>
                 {translatedPerspective} Top Genres {period}
+                <Button
+                  ghost
+                  onClick={(e: any) => openPortal(e)}
+                  shape="round"
+                  style={{ marginLeft: "auto" }}
+                >
+                  Share
+                </Button>
               </BlockTitle>
             </GenresChartBlock>
           </Tooltip>
