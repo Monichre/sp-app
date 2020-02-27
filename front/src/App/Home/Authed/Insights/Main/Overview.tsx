@@ -143,7 +143,10 @@ export const Overview: React.SFC<RouteComponentProps & {
                 </p>
                 <Button
                   ghost
-                  onClick={(e: any) => openPortal(e)}
+                  onClick={(e: any) => {
+                    openPortal(e);
+                    window.Intercom("trackEvent", "share");
+                  }}
                   shape="round"
                   style={{ marginLeft: "auto" }}
                 >
