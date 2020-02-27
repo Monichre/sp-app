@@ -112,6 +112,7 @@ export const Overview: React.SFC<RouteComponentProps & {
       {translatedPerspective == "Everyone" ? (
         <TotalNumberOfUsers>Everyone: 468 people</TotalNumberOfUsers>
       ) : null}
+
       {/* {isOpen && (
         <Portal>
           <TopFiveTimePeriod
@@ -122,6 +123,7 @@ export const Overview: React.SFC<RouteComponentProps & {
           />
         </Portal>
       )} */}
+
       {isOpen && (
         <Portal>
           <TopFiveTimePeriod
