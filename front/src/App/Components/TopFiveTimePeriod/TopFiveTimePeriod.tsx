@@ -24,18 +24,26 @@ console.log("ttl", {
   to_date: to_date.toString()
 });
 
+const perspectiveMap = (perspective: string) => {
+  if (perspective == "Your") {
+    return "My";
+  } else return "Soundpruf's";
+};
+
 export interface TopFiveTimePeriodProps {
   period: string;
   toggle: any;
   artists: any;
+  perspective: string;
 }
 
 export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
   period,
   toggle,
-  artists
+  artists,
+  perspective
 }) => {
-  // const periodLowerCase = period.toLowerCase();
+  const translatedPerspective = perspectiveMap(perspective);
 
   return (
     <OpaqueBackground className="top-five-time-period">
@@ -49,7 +57,9 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
         </TipAndCloseWrapper>
         <TopFiveParentDiv>
           <TopFiveHeader>
-            <Headline>My {period} In Music</Headline>
+            <Headline>
+              {translatedPerspective} {period} In Music
+            </Headline>
             {/* <DateRange>{periodTitle}</DateRange> */}
           </TopFiveHeader>
           {artists.map(({ artist, personal }: any, index: number) => {
