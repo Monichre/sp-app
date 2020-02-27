@@ -41,6 +41,8 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
   toggle,
   artists
 }) => {
+  const translatedPerspective = perspectiveMap(perspective);
+
   return (
     <OpaqueBackground className="top-five-time-period">
       <ModalWrapper>
@@ -53,7 +55,9 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
         </TipAndCloseWrapper>
         <TopFiveParentDiv>
           <TopFiveHeader>
-            <Headline>My {period} In Music</Headline>
+            <Headline>
+              {translatedPerspective} {period} In Music
+            </Headline>
             {/* <DateRange>{periodTitle}</DateRange> */}
           </TopFiveHeader>
           {artists.map(({ artist, personal }: any, index: number) => {
