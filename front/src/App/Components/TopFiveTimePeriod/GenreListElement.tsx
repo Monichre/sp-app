@@ -1,11 +1,12 @@
 import * as React from "react";
 import {
   ListElement,
-  ArtistName,
-  ArtistInfo,
+  GenreName,
+  GenreInfo,
   OrderNumber,
-  TimePlayed
-} from "./ArtistListElement.styles";
+  TimePlayed,
+  GenreImage
+} from "./GenreListElement.styles";
 import { HorizontalRule } from "./TopFiveTimePeriod.styles";
 import { hrsAndMins } from "../../../lib/durationFormats";
 
@@ -44,11 +45,11 @@ export const GenreListElement: React.SFC<GenreListElementProps> = ({
       />
       <ListElement>
         <OrderNumber>{place}</OrderNumber>
-        <ArtistInfo>
-          <ArtistName>{genre}</ArtistName>
+        <GenreInfo>
+          <GenreName>{genre}</GenreName>
           <TimePlayed>{ttl}</TimePlayed>
-        </ArtistInfo>
-        {/* <ArtistImage src={artist.images[0].url} alt="" /> */}
+        </GenreInfo>
+        <GenreImage src="https://via.placeholder.com/100x100" alt="" />
       </ListElement>
       {place == 5 ? null : <HorizontalRule />}
     </div>
