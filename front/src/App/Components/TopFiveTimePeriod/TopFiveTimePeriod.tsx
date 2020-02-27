@@ -24,6 +24,12 @@ console.log("ttl", {
   to_date: to_date.toString()
 });
 
+const perspectiveMap = (perspective: string) => {
+  if (perspective == "Your") {
+    return "My";
+  } else return "Soundpruf's";
+};
+
 export interface TopFiveTimePeriodProps {
   period: string;
   toggle: any;
@@ -35,8 +41,6 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
   toggle,
   artists
 }) => {
-  // const periodLowerCase = period.toLowerCase();
-
   return (
     <OpaqueBackground className="top-five-time-period">
       <ModalWrapper>
