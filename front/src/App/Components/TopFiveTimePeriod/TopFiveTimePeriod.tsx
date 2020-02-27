@@ -6,7 +6,6 @@ import {
   TopFiveHeader,
   Headline,
   LogoDiv,
-  TitleHr,
   CloseButton,
   ModalWrapper,
   Hx,
