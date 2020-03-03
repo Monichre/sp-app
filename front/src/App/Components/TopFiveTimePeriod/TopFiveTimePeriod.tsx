@@ -68,6 +68,7 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
                 place={index + 1}
                 artist={artist}
                 totalTimeListened={personal}
+                perspective={perspective}
               />
             );
           })}

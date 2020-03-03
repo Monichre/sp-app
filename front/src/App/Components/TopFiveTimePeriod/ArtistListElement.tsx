@@ -17,21 +17,38 @@ const formatListeningTime = (total: number) => {
   const hours = hrs ? `${hrs}h ` : "";
   const minutes = mins ? `${mins}m` : "";
 
+  if (hrs === 0 && mins === 0) return "0m";
   return `${hours}${minutes}`;
+};
+
+const displayListeningTime = (ttl: string, perspective: string) => {
+  // if (perspective !== "Your" && ttl === "0m") {
+  //   return "";
+  // } else if (perspective !== "Your") {
+  //   return "Me: " + ttl;
+  // }
+  if (perspective !== "Your") {
+    return "";
+  }
+  return ttl;
 };
 
 export type ArtistListElementProps = {
   artist: Artist;
   place: number;
   totalTimeListened: number;
+  perspective: string;
 };
 
 export const ArtistListElement: React.SFC<ArtistListElementProps> = ({
   artist,
   place,
-  totalTimeListened
+  totalTimeListened,
+  perspective
 }) => {
   const ttl = formatListeningTime(totalTimeListened);
+  const DLT = displayListeningTime(ttl, perspective);
+  console.log("xxxDLT", DLT);
   return (
     <div>
       {/* Better method for this? */}
@@ -48,7 +65,7 @@ export const ArtistListElement: React.SFC<ArtistListElementProps> = ({
         <OrderNumber>{place}</OrderNumber>
         <ArtistInfo>
           <ArtistName>{artist.name}</ArtistName>
-          <TimePlayed>{ttl}</TimePlayed>
+          <TimePlayed>{DLT}</TimePlayed>
         </ArtistInfo>
         <ArtistImage src={artist.images[0].url} alt="" />
       </ListElement>
