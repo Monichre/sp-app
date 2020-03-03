@@ -22,10 +22,13 @@ const formatListeningTime = (total: number) => {
 };
 
 const displayListeningTime = (ttl: string, perspective: string) => {
-  if (perspective !== "Your" && ttl === "0m") {
+  // if (perspective !== "Your" && ttl === "0m") {
+  //   return "";
+  // } else if (perspective !== "Your") {
+  //   return "Me: " + ttl;
+  // }
+  if (perspective !== "Your") {
     return "";
-  } else if (perspective !== "Your") {
-    return "Me: " + ttl;
   }
   return ttl;
 };
