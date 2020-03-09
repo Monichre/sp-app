@@ -81,29 +81,30 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: "Ready",
-    hover: "9,484 monthly streamers on Spotify",
-    name: "Marcus Yates",
+    hover: "958 monthly streamers on Spotify",
+    name: "Barbaro",
     href:
-      "https://open.spotify.com/artist/3Yhv9MAKkZA0k3PLTZXlZQ?si=sdwFZiBmRRmlEypln6SWfQ",
-    src: "https://pbs.twimg.com/profile_images/923245648043851776/fGgNhbvZ.jpg"
+      "https://open.spotify.com/artist/56xyoM0kp95h5kVkAjoOMq?si=YyCUDZH9R7msBh7ll0A-9Q",
+    src:
+      "https://i1.wp.com/duluthfolkschool.com/wp-content/uploads/2019/11/5d2dfb7caef91.image-Kyle-Ollah.jpg?fit=750%2C500&ssl=1"
   },
   {
     title: "Set",
-    hover: "194,469monthly streamers on Spotify",
-    name: "TORRES",
+    hover: "59,677 monthly streamers on Spotify",
+    name: "Nana Adjoa",
     href:
-      "https://open.spotify.com/artist/3lrDYjsghBMfUTiLziD9q9?si=Om9ZmcDzT8qeTYcH8AVq-w",
+      "https://open.spotify.com/artist/2W61gnKGmJykgFSJSvqVCe?si=8neWYz_tQg2-OZm9Dzwf_w",
     src:
-      "https://mediad.publicbroadcasting.net/p/wabe/files/styles/x_large/public/201506/Torres_062315.jpg"
+      "https://static.stereogum.com/uploads/2018/09/NanaAdjoa_Press1-1536604684-640x960.jpg"
   },
   {
     title: "Liftoff",
-    hover: "1,928,298 monthly streamers on Spotify",
-    name: "Whitney",
+    hover: "444,564 monthly streamers on Spotify",
+    name: "Joesef",
     href:
-      "https://open.spotify.com/artist/32aUoW94mJ7xTJI7fG0V1G?si=SMONuKUMRWSJgjKytYjBuA",
+      "https://open.spotify.com/artist/28EyduqESEOVMO6vglvaUZ?si=N2FdXhxdR9Wn-QpOMHkr0w",
     src:
-      "https://images.squarespace-cdn.com/content/57b314e846c3c465f615bdd6/1478723698886-A1XXD5L14IL2O7ZALYG3/SO+IT+GOES+X+WHITNEY-6.jpg?format=1500w&content-type=image%2Fjpeg"
+      "https://s1.ticketm.net/dam/a/b30/860d965f-2b64-4653-8c5f-62f7da19bb30_1186271_TABLET_LANDSCAPE_LARGE_16_9.jpg"
   }
 ];
 
