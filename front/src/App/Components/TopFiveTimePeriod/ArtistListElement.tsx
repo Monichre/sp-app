@@ -30,7 +30,7 @@ const displayListeningTime = (ttl: string, perspective: string) => {
   if (perspective !== "Your") {
     return "";
   }
-  return ttl;
+  return "Time played: " + ttl;
 };
 
 export type ArtistListElementProps = {

@@ -88,15 +88,19 @@ const AB: React.SFC<any> = ({ className, isMobile }) => {
               <Popover
                 content={
                   <p>
-                    Introducing our new share feature!
+                    - Capture your week, month, or life in music by tapping the
+                    "share" button.
+                    <br />- Take a screenshot and share it wherever you want!
                     <br />
-                    Share your week, month, or life in music. Take a screenshot
-                    and share it wherever you want!
+                    <img
+                      src={require("../../../shared/images/exampleshare.gif")}
+                    />
                   </p>
                 }
                 title={
                   <p style={{ margin: 0 }}>
-                    New Feature! <Tag color="blue">Beta</Tag>
+                    <Tag color="blue">New Feature!</Tag> Your top artists in a
+                    shareable image.
                   </p>
                 }
                 trigger="click"
@@ -104,12 +108,13 @@ const AB: React.SFC<any> = ({ className, isMobile }) => {
               >
                 <span onClick={toggleNotifications}>
                   <Badge
-                    count={
-                      localNotifications && localNotifications.total
-                        ? localNotifications.total
-                        : 0
-                    }
-                    color="#e64a19"
+                    count={1}
+                    // count={
+                    //   localNotifications && localNotifications.total
+                    //     ? localNotifications.total
+                    //     : 0
+                    // }
+                    // color="#e64a19"
                   >
                     <Icon type="notification" />
                   </Badge>
