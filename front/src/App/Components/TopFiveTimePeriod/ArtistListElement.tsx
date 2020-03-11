@@ -10,6 +10,7 @@ import {
 import { HorizontalRule } from "./TopFiveTimePeriod.styles";
 import { Artist } from "../../../../../back/src/fns/graphql/types";
 import { hrsAndMins } from "../../../lib/durationFormats";
+import { Clock, Watch } from "../../../shared/icons";
 
 const formatListeningTime = (total: number) => {
   const totalInMilliseconds = total * 3600000;
@@ -65,7 +66,9 @@ export const ArtistListElement: React.SFC<ArtistListElementProps> = ({
         <OrderNumber>{place}</OrderNumber>
         <ArtistInfo>
           <ArtistName>{artist.name}</ArtistName>
-          <TimePlayed>{DLT}</TimePlayed>
+          <TimePlayed>
+            <Clock /> {DLT}
+          </TimePlayed>
         </ArtistInfo>
         <ArtistImage src={artist.images[0].url} alt="" />
       </ListElement>

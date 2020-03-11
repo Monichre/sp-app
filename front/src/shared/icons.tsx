@@ -1,5 +1,5 @@
-import * as React from "react"
-import styled from 'styled-components'
+import * as React from "react";
+import styled from "styled-components";
 
 export const MinusSquareO = (props: any) => (
   // @ts-ignore
@@ -11,7 +11,7 @@ export const MinusSquareO = (props: any) => (
       />
     </g>
   </svg>
-)
+);
 
 export const PlusSquareO = (props: any) => (
   // @ts-ignore
@@ -23,7 +23,7 @@ export const PlusSquareO = (props: any) => (
       />
     </g>
   </svg>
-)
+);
 
 export const CloseSquareO = (props: any) => (
   // @ts-ignore
@@ -35,23 +35,88 @@ export const CloseSquareO = (props: any) => (
       />
     </g>
   </svg>
-)
+);
 
-export const ArrowNext: any = ({color='#fff', onClick}: any) => 
+export const ArrowNext: any = ({ color = "#fff", onClick }: any) => (
   <div onClick={onClick}>
     // @ts-ignore
-   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-arrow-right-circle"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="feather feather-arrow-right-circle"
+    >
+      <circle cx="12" cy="12" r="10"></circle>
+      <polyline points="12 16 16 12 12 8"></polyline>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+    </svg>
   </div>
+);
 
-
-export const ArrowPrev: any = ({color='#fff', onClick}: any) => 
+export const ArrowPrev: any = ({ color = "#fff", onClick }: any) => (
   <div onClick={onClick}>
-   // @ts-ignore
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={color}  strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-arrow-left-circle"><circle cx="12" cy="12" r="10"></circle><polyline points="12 8 8 12 12 16"></polyline><line x1="16" y1="12" x2="8" y2="12"></line></svg>
+    // @ts-ignore
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="feather feather-arrow-left-circle"
+    >
+      <circle cx="12" cy="12" r="10"></circle>
+      <polyline points="12 8 8 12 12 16"></polyline>
+      <line x1="16" y1="12" x2="8" y2="12"></line>
+    </svg>
   </div>
+);
 
+export const Clock: any = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    className="feather feather-clock"
+  >
+    <circle cx="12" cy="12" r="10"></circle>
+    <polyline points="12 6 12 12 16 14"></polyline>
+  </svg>
+);
 
-
+export const Watch: any = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    className="feather feather-watch"
+  >
+    <circle cx="12" cy="12" r="7"></circle>
+    <polyline points="12 9 12 12 13.5 13.5"></polyline>
+    <path d="M16.51 17.35l-.35 3.83a2 2 0 0 1-2 1.82H9.83a2 2 0 0 1-2-1.82l-.35-3.83m.01-10.7l.35-3.83A2 2 0 0 1 9.83 1h4.35a2 2 0 0 1 2 1.82l.35 3.83"></path>
+  </svg>
+);
 
 export const Music = () => (
   // @ts-ignore
@@ -69,14 +134,26 @@ export const Music = () => (
     <path d="M9 17H5a2 2 0 0 0-2 2 2 2 0 0 0 2 2h2a2 2 0 0 0 2-2zm12-2h-4a2 2 0 0 0-2 2 2 2 0 0 0 2 2h2a2 2 0 0 0 2-2z" />
     <polyline points="9 17 9 5 21 3 21 15" />
   </svg>
-)
+);
 
-export const FirstTopListenerAward = () => (<img src='/icons/first.svg' />)
-
-
-
+export const FirstTopListenerAward = () => <img src="/icons/first.svg" />;
 
 export const MenuIcon: any = () => (
   // @ts-ignore
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-  )
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#fff"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="feather feather-menu"
+  >
+    <line x1="3" y1="12" x2="21" y2="12"></line>
+    <line x1="3" y1="6" x2="21" y2="6"></line>
+    <line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+);

@@ -108,13 +108,10 @@ const AB: React.SFC<any> = ({ className, isMobile }) => {
               >
                 <span onClick={toggleNotifications}>
                   <Badge
-                    count={1}
-                    // count={
-                    //   localNotifications && localNotifications.total
-                    //     ? localNotifications.total
-                    //     : 0
-                    // }
-                    // color="#e64a19"
+                    count={
+                      1
+                      // <StarOutlined style={{ color: "#f5222d" }} />
+                    }
                   >
                     <Icon type="notification" />
                   </Badge>
