@@ -49,7 +49,7 @@ export const GenreListElement: React.SFC<GenreListElementProps> = ({
           <GenreName>{genre}</GenreName>
           <TimePlayed>{ttl}</TimePlayed>
         </GenreInfo>
-        <GenreImage src="https://via.placeholder.com/100x100" alt="" />
+        {/* <GenreImage src="https://via.placeholder.com/100x100" alt="" /> */}
       </ListElement>
       {place == 5 ? null : <HorizontalRule />}
     </div>

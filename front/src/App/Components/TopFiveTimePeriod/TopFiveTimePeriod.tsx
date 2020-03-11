@@ -56,6 +56,7 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
 }) => {
   const translatedPerspective = perspectiveMap(perspective);
   console.log("xxxARTIST-OR-GENRE", artistOrGenre(data));
+  const content = artistOrGenre(data);
 
   return (
     <OpaqueBackground className="top-five-time-period">
@@ -67,7 +68,7 @@ export const TopFiveTimePeriod: React.SFC<TopFiveTimePeriodProps> = ({
             <Vx />
           </CloseButton>
         </TipAndCloseWrapper>
-        <TopFiveParentDiv>
+        <TopFiveParentDiv className="top-five-parent-div">
           <TopFiveHeader>
             <Headline>
               {translatedPerspective} {period} In Music
