@@ -84,8 +84,8 @@ export const ArrowPrev: any = ({ color = "#fff", onClick }: any) => (
 export const Clock: any = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
+    width="14"
+    height="14"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -102,8 +102,8 @@ export const Clock: any = () => (
 export const Watch: any = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
+    width="13"
+    height="13"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"

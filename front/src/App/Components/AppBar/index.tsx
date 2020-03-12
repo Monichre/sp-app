@@ -92,9 +92,7 @@ const AB: React.SFC<any> = ({ className, isMobile }) => {
                     "share" button.
                     <br />- Take a screenshot and share it wherever you want!
                     <br />
-                    <img
-                      src={require("../../../shared/images/exampleshare.gif")}
-                    />
+                    <img src={require("../../../shared/images/share2.gif")} />
                   </p>
                 }
                 title={
