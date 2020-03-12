@@ -28,11 +28,12 @@ export const AchievementHoverSummary: React.SFC<AchievementHoverSummaryProps> = 
 }) => {
   return (
     <HoverBoxWrapper genres={genres}>
+      {/* Commenting out Comment Blurb
       <BubbleAprox></BubbleAprox>
       <Bubble>
         <BubbleIcon>i</BubbleIcon>
         <BubbleContent>{content}</BubbleContent>
-      </Bubble>
+      </Bubble> */}
       {children}
       {/* <AchievementAxisTitle achievementsGraph={achievementsGraph}>
                 <h4>Platform Leaders {period ? period : null}</h4>

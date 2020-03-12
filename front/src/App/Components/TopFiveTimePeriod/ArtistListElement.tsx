@@ -10,6 +10,7 @@ import {
 import { HorizontalRule } from "./TopFiveTimePeriod.styles";
 import { Artist } from "../../../../../back/src/fns/graphql/types";
 import { hrsAndMins } from "../../../lib/durationFormats";
+import { Clock, Watch } from "../../../shared/icons";
 
 const formatListeningTime = (total: number) => {
   const totalInMilliseconds = total * 3600000;
@@ -30,7 +31,11 @@ const displayListeningTime = (ttl: string, perspective: string) => {
   if (perspective !== "Your") {
     return "";
   }
-  return ttl;
+  return (
+    <div>
+      <Clock /> {ttl}
+    </div>
+  );
 };
 
 export type ArtistListElementProps = {
