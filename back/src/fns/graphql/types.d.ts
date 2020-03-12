@@ -1,4 +1,4 @@
-// Generated in 2019-08-28T22:57:15-04:00
+// Generated in 2020-03-10T22:21:50-05:00
 // REGENERATE THIS BY STARTING THE LOCAL SERVER
 // AND THEN RUNNING `back % yarn generate`
 
@@ -12,6 +12,8 @@ export interface Query {
   getUserInfo: UserInfoResponse;
 
   getUserAchievements?: Maybe<(Maybe<UserAchievement>)[]>;
+
+  getAllUsers?: Maybe<(Maybe<User>)[]>;
 
   _?: Maybe<string>;
 
@@ -50,6 +52,8 @@ export interface UserInfoResponse {
   photoURL?: Maybe<string>;
 
   initialHarvestComplete?: Maybe<boolean>;
+
+  statRecordsEnriched?: Maybe<boolean>;
 }
 
 export interface UserAchievement {
@@ -463,6 +467,12 @@ export namespace QueryResolvers {
       TContext
     >;
 
+    getAllUsers?: GetAllUsersResolver<
+      Maybe<(Maybe<User>)[]>,
+      TypeParent,
+      TContext
+    >;
+
     _?: _Resolver<Maybe<string>, TypeParent, TContext>;
 
     ping?: PingResolver<Maybe<BasicResponse>, TypeParent, TContext>;
@@ -542,6 +552,11 @@ export namespace QueryResolvers {
     uk: string;
   }
 
+  export type GetAllUsersResolver<
+    R = Maybe<(Maybe<User>)[]>,
+    Parent = {},
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
   export type _Resolver<
     R = Maybe<string>,
     Parent = {},
@@ -674,6 +689,12 @@ export namespace UserInfoResponseResolvers {
       TypeParent,
       TContext
     >;
+
+    statRecordsEnriched?: StatRecordsEnrichedResolver<
+      Maybe<boolean>,
+      TypeParent,
+      TContext
+    >;
   }
 
   export type UidResolver<
@@ -702,6 +723,11 @@ export namespace UserInfoResponseResolvers {
     TContext = Context
   > = Resolver<R, Parent, TContext>;
   export type InitialHarvestCompleteResolver<
+    R = Maybe<boolean>,
+    Parent = UserInfoResponse,
+    TContext = Context
+  > = Resolver<R, Parent, TContext>;
+  export type StatRecordsEnrichedResolver<
     R = Maybe<boolean>,
     Parent = UserInfoResponse,
     TContext = Context

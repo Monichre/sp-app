@@ -31,7 +31,11 @@ const displayListeningTime = (ttl: string, perspective: string) => {
   if (perspective !== "Your") {
     return "";
   }
-  return "Time played: " + ttl;
+  return (
+    <div>
+      <Clock /> {ttl}
+    </div>
+  );
 };
 
 export type ArtistListElementProps = {
@@ -66,9 +70,7 @@ export const ArtistListElement: React.SFC<ArtistListElementProps> = ({
         <OrderNumber>{place}</OrderNumber>
         <ArtistInfo>
           <ArtistName>{artist.name}</ArtistName>
-          <TimePlayed>
-            <Clock /> {DLT}
-          </TimePlayed>
+          <TimePlayed>{DLT}</TimePlayed>
         </ArtistInfo>
         <ArtistImage src={artist.images[0].url} alt="" />
       </ListElement>
