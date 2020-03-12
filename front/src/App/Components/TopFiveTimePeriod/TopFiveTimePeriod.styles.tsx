@@ -71,37 +71,37 @@ export const Vx = styled.div`
   top: 11.5px;
 `;
 
-// export const TopFiveParentDiv = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   background-size: cover;
-//   background: rgb(246, 133, 31);
-//   background: linear-gradient(
-//     0deg,
-//     rgba(246, 133, 31, 1) 0%,
-//     rgba(229, 76, 25, 1) 100%
-//   );
-//   max-width: 375px;
-//   padding: 20px;
-//   border-radius: 10px;
-//   margin-top: 10px;
-// `;
-
 export const TopFiveParentDiv = styled.div`
   display: flex;
   flex-direction: column;
   background-size: cover;
-  background: rgb(0, 0, 0);
+  background: rgb(246, 133, 31);
   background: linear-gradient(
     0deg,
-    rgba(76, 76, 255, 1) 0%,
-    rgba(101, 214, 238, 1) 100%
+    rgba(246, 133, 31, 1) 0%,
+    rgba(229, 76, 25, 1) 100%
   );
   max-width: 375px;
   padding: 20px;
   border-radius: 10px;
   margin-top: 10px;
 `;
+
+// export const TopFiveParentDiv = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   background-size: cover;
+//   background: rgb(0, 0, 0);
+//   background: linear-gradient(
+//     0deg,
+//     rgba(76, 76, 255, 1) 0%,
+//     rgba(101, 214, 238, 1) 100%
+//   );
+//   max-width: 375px;
+//   padding: 20px;
+//   border-radius: 10px;
+//   margin-top: 10px;
+// `;
 
 export const TopFiveHeader = styled.div`
   text-align: center;
