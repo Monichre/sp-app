@@ -104,7 +104,15 @@ export const Overview: React.SFC<RouteComponentProps & {
   const genreContentSummary = `We're currently building out new features for platform genre leaders`;
   const artistContentSummary = `Introducing "Artist Leaders!" Think you're probably the biggest listener on Soundpruf to Tyler, The Creator? Or Lizzo? Maybe Yam Haus? Now you can prove it. If you are currently in 1st, 2nd or 3rd place for lifetime listening for an artist, you'll now see a badge indicating that to the right of the artist names in all Top lists. If you don't have a lifetime leader badge for that artist, you can see who does! You can also view your achievements per time perspective, including week and month, by clicking the links to the left and exploring the slide-out panel. Just remember, you never know when you might lose first place!`;
   const artistCount = artists.length === 3 ? 3 : null;
+
+  // fix syntax
   const { openPortal, closePortal, isOpen, Portal } = usePortal();
+  const {
+    openPortal: openPortal1,
+    closePortal: closePortal1,
+    isOpen: isOpen1,
+    Portal: Portal1
+  } = usePortal();
 
   return (
     <>
@@ -112,15 +120,27 @@ export const Overview: React.SFC<RouteComponentProps & {
       {translatedPerspective == "Everyone" ? (
         <TotalNumberOfUsers>Everyone: 468 people</TotalNumberOfUsers>
       ) : null}
+
       {isOpen && (
         <Portal>
           <TopFiveTimePeriod
             period={period.replace("This ", "").replace(" Time", "")}
             toggle={closePortal}
-            artists={artists}
+            data={artists}
             perspective={translatedPerspective}
           />
         </Portal>
+      )}
+
+      {isOpen1 && (
+        <Portal1>
+          <TopFiveTimePeriod
+            period={period.replace("This ", "").replace(" Time", "")}
+            toggle={closePortal1}
+            data={genres}
+            perspective={translatedPerspective}
+          />
+        </Portal1>
       )}
 
       <Row>
@@ -173,6 +193,14 @@ export const Overview: React.SFC<RouteComponentProps & {
             <GenresChartBlock {...{ genres, pathParams }}>
               <BlockTitle>
                 {translatedPerspective} Top Genres {period}
+                <Button
+                  ghost
+                  onClick={(e: any) => openPortal1(e)}
+                  shape="round"
+                  style={{ marginLeft: "auto" }}
+                >
+                  Share
+                </Button>
               </BlockTitle>
             </GenresChartBlock>
           </Tooltip>

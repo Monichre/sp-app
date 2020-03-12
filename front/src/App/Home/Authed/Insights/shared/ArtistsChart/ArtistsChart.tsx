@@ -88,15 +88,6 @@ const ArtistsChart: React.SFC<RouteComponentProps &
   userId,
   isMobile
 }) => {
-  console.log("xxxARTISTCHARTPROPS", {
-    pathParams,
-    artists,
-    history,
-    height,
-    userId,
-    isMobile
-  });
-
   const yAxisArtistWidth = isMobile ? 50 : 150;
   const yAxisAchievementsWidth = isMobile ? 50 : 75;
 

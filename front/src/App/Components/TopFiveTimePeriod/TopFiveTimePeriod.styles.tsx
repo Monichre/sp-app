@@ -87,6 +87,22 @@ export const TopFiveParentDiv = styled.div`
   margin-top: 10px;
 `;
 
+// export const TopFiveParentDiv = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   background-size: cover;
+//   background: rgb(0, 0, 0);
+//   background: linear-gradient(
+//     0deg,
+//     rgba(76, 76, 255, 1) 0%,
+//     rgba(101, 214, 238, 1) 100%
+//   );
+//   max-width: 375px;
+//   padding: 20px;
+//   border-radius: 10px;
+//   margin-top: 10px;
+// `;
+
 export const TopFiveHeader = styled.div`
   text-align: center;
   margin-bottom: 20px;
