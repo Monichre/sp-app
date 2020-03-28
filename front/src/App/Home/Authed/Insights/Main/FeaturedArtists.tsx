@@ -81,30 +81,28 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: "Ready",
-    hover: "958 monthly streamers on Spotify",
-    name: "Barbaro",
+    hover: "18,703 monthly streamers on Spotify",
+    name: "Chappaqua Wrestling",
     href:
-      "https://open.spotify.com/artist/56xyoM0kp95h5kVkAjoOMq?si=YyCUDZH9R7msBh7ll0A-9Q",
-    src:
-      "https://i1.wp.com/duluthfolkschool.com/wp-content/uploads/2019/11/5d2dfb7caef91.image-Kyle-Ollah.jpg?fit=750%2C500&ssl=1"
+      "https://open.spotify.com/artist/5S4qUw22ZF7gTPUEx61SyC?si=yF2wHKF6TguxPKSoS58m6w",
+    src: "https://f4.bcbits.com/img/0011461584_10.jpg"
   },
   {
     title: "Set",
-    hover: "59,677 monthly streamers on Spotify",
-    name: "Nana Adjoa",
+    hover: "639,834 monthly streamers on Spotify",
+    name: "(Sandy) Alex G",
     href:
-      "https://open.spotify.com/artist/2W61gnKGmJykgFSJSvqVCe?si=8neWYz_tQg2-OZm9Dzwf_w",
+      "https://open.spotify.com/artist/6lcwlkAjBPSKnFBZjjZFJs?si=XRy-wXzTRv6eIyofRvRqoA",
     src:
-      "https://static.stereogum.com/uploads/2018/09/NanaAdjoa_Press1-1536604684-640x960.jpg"
+      "https://img.apmcdn.org/b70fe93a07870a989e35cc132ec1d8af2113b901/uncropped/30ca1b-20190909-sandy-alex-g.jpg"
   },
   {
     title: "Liftoff",
-    hover: "444,564 monthly streamers on Spotify",
-    name: "Joesef",
-    href:
-      "https://open.spotify.com/artist/28EyduqESEOVMO6vglvaUZ?si=N2FdXhxdR9Wn-QpOMHkr0w",
+    hover: "2,014,129 monthly streamers on Spotify",
+    name: "Beach Bunny",
+    href: "https://open.spotify.com/artist/2vnB6tuQMaQpORiRdvXF9H",
     src:
-      "https://s1.ticketm.net/dam/a/b30/860d965f-2b64-4653-8c5f-62f7da19bb30_1186271_TABLET_LANDSCAPE_LARGE_16_9.jpg"
+      "https://cdn2.thelineofbestfit.com/images/made/images/remote/https_cdn2.thelineofbestfit.com/media/2014/Beach_Bunny_1_1290_1290.jpg"
   }
 ];
 
