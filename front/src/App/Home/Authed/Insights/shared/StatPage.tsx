@@ -41,9 +41,7 @@ const NavSelect = styled.select`
   // font-family: ${TITLE_FONT}
 
   z-index: 20;
-  position: fixed;
-  top: 0;
-  right: 0;
+  position: relative;
   cursor: pointer;
   width: 100%;
   display: block;
@@ -61,9 +59,6 @@ const NavSelect = styled.select`
 	background-position: right .7em top 50%, 0 0;
 	background-size: .65em auto, 100%;
   border-bottom: 1px solid rgba(255,255,255,.1);
-  @media (max-width: 1000px) {
-    top: 60px !important;
-  }
 `;
 
 const NavOption: React.SFC<{ pathParams: TPathParams; label: string }> = ({
@@ -176,7 +171,7 @@ export const StatPage: React.SFC<{
       </Large>
       <NotLarge>
         <AppBar className="smallScreen" />
-        <VerticalSpacer height="25px" />
+        {/* <VerticalSpacer height="25px" /> */}
         <NavSelect
           data-test="top-artists-period-select"
           onChange={(e) => navTo(e.target.value)}
@@ -192,7 +187,10 @@ export const StatPage: React.SFC<{
             />
           ))}
         </NavSelect>
-        <VerticalSpacer height="55px" />
+        {/* Conditionally render a Vertical Spacer when time scope is lifetime, because other time scopes show trend arrow */}
+        {pathParams.timeScope === "lifetime" ? (
+          <VerticalSpacer height="21px" />
+        ) : null}
         <TimeBlockPair
           {...{ pathParams, stats: stats[pathParams.timeScope] }}
         />
