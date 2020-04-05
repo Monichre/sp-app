@@ -61,11 +61,11 @@ plugins:
   - serverless-offline
 
 custom:
-################################################################################
-# custom: GLOBAL VARIABLES
-################################################################################
-# Trying not to use env: variables anywhere else
-# Centralize them all here
+  ################################################################################
+  # custom: GLOBAL VARIABLES
+  ################################################################################
+  # Trying not to use env: variables anywhere else
+  # Centralize them all here
 
   # needed when generating the expected frontend url
   platform: sp-app
@@ -80,15 +80,15 @@ custom:
   # then used by -front project to get api gateway path & config used
   ssmTargetPath: /${self:service}/target/${self:custom.target}
   # used by this service to get CONFIG set
-  ssmConfigPath:  /${self:service}/config/${self:custom.config}
+  ssmConfigPath: /${self:service}/config/${self:custom.config}
 
-################################################################################
-# custom: OFFLINE/ONLINE
-################################################################################
-# shenanigans needed to specify offline/online
-# offline: we use a bunch of local mock services, everything should be localhost:xxxx
-# online: we use cfn functions to get urls & references
-# right now this is tightly bound to config=local|test, but that is dumb
+  ################################################################################
+  # custom: OFFLINE/ONLINE
+  ################################################################################
+  # shenanigans needed to specify offline/online
+  # offline: we use a bunch of local mock services, everything should be localhost:xxxx
+  # online: we use cfn functions to get urls & references
+  # right now this is tightly bound to config=local|test, but that is dumb
 
   # this should be refactored to use the below pattern
   DYNAMO_ENDPOINT: ${env:DynamoEndpoint, "https://dynamodb.${self:custom.region}.amazonaws.com"}
@@ -130,18 +130,18 @@ custom:
           - "/spotify/callback"
 
   FRONTEND_CUSTOMAUTH_URI:
-      local: "http://localhost:3000/customAuth"
-      test:
-        Fn::Join:
-          - ""
-          - - "http://"
-            - "${self:custom.platform}"
-            - "-front-"
-            - "${self:custom.target}"
-            - "-frontend"
-            - ".s3-website-us-east-1.amazonaws.com"
-            - "/customAuth"
-      live: "http://live.soundpruf.com/customAuth"
+    local: "http://localhost:3000/customAuth"
+    test:
+      Fn::Join:
+        - ""
+        - - "http://"
+          - "${self:custom.platform}"
+          - "-front-"
+          - "${self:custom.target}"
+          - "-frontend"
+          - ".s3-website-us-east-1.amazonaws.com"
+          - "/customAuth"
+    live: "http://live.soundpruf.com/customAuth"
 
   # unify the below with the offline/online above
   LAYER_REF:
@@ -186,9 +186,9 @@ custom:
     # StreamCreatePlayFromSpotify:
     #   Ref: StreamCreatePlayFromSpotify
 
-################################################################################
-# custom: PLUGINS
-################################################################################
+  ################################################################################
+  # custom: PLUGINS
+  ################################################################################
   # epsagon:
   #   token: 47d802aa-0e78-43c9-8220-d3e02acbf4f1
   #   appName: ${self:custom.ns}
@@ -229,10 +229,10 @@ custom:
           - onPlayUpdateAchievementStats
 
   webpack:
-    packager: 'yarn'
+    packager: "yarn"
 
   serverless-offline-kinesis:
-    apiVersion: '2013-12-02'
+    apiVersion: "2013-12-02"
     endpoint: http://0.0.0.0:4567
     region: us-east-1
     accessKeyId: root
@@ -240,12 +240,10 @@ custom:
     skipCacheInvalidation: false
     readInterval: 2000
 
-
 functions:
-
-################################################################################
-# functions: spotify auth handlers
-################################################################################
+  ################################################################################
+  # functions: spotify auth handlers
+  ################################################################################
 
   spotifyRedirect:
     handler: src/fns/spotify/redirect.handler
@@ -283,9 +281,9 @@ functions:
           method: get
           cors: true
 
-################################################################################
-# functions: graphql handlers
-################################################################################
+  ################################################################################
+  # functions: graphql handlers
+  ################################################################################
 
   graphql:
     handler: src/fns/graphql/graphql.handler
@@ -314,9 +312,9 @@ functions:
           method: get
           cors: true
 
-################################################################################
-# functions: DEMETER - harvesting play data from spotify
-################################################################################
+  ################################################################################
+  # functions: DEMETER - harvesting play data from spotify
+  ################################################################################
 
   # periodically called by frontend
   # triggers a harvest check for the active user
@@ -326,7 +324,7 @@ functions:
     events:
       - sqs:
           arn:
-            Fn::GetAtt: [ QueueStartHarvestUser, Arn ]
+            Fn::GetAtt: [QueueStartHarvestUser, Arn]
     handler: src/fns/demeter/startHarvestUser.handler
     layers:
       - ${self:custom.LAYER_REF.${self:custom.config}}
@@ -352,13 +350,12 @@ functions:
       QUEUE_TARGET: ${self:custom.ref.QueueHiFetchSpotifyPlays}
       QUEUE_VALIDATION_ERRORS: ${self:custom.ref.QueueValidationErrors}
 
-
   # fetch latest plays for user and feed them to enrich
   fetchSpotifyPlaysHI:
     events:
       - sqs:
           arn:
-            Fn::GetAtt: [ QueueHiFetchSpotifyPlays, Arn ]
+            Fn::GetAtt: [QueueHiFetchSpotifyPlays, Arn]
     handler: src/fns/demeter/fetchSpotifyPlays.handler
     layers:
       - ${self:custom.LAYER_REF.${self:custom.config}}
@@ -375,7 +372,7 @@ functions:
     events:
       - sqs:
           arn:
-            Fn::GetAtt: [ QueueEnrichPlayArtists, Arn ]
+            Fn::GetAtt: [QueueEnrichPlayArtists, Arn]
     handler: src/fns/demeter/enrichPlayArtists.handler
     layers:
       - ${self:custom.LAYER_REF.${self:custom.config}}
@@ -387,18 +384,18 @@ functions:
       SPOTIFY_REDIRECT_URI: ${self:custom.SPOTIFY_REDIRECT_URI.${self:custom.config}}
       QUEUE_VALIDATION_ERRORS: ${self:custom.ref.QueueValidationErrors}
 
-################################################################################
-# functions: FLORENCE: stat cruncher
-################################################################################
-# all of these trigger on ddb streams on TablePlay
-# and update various axes of stats for the play that was just recorded
+  ################################################################################
+  # functions: FLORENCE: stat cruncher
+  ################################################################################
+  # all of these trigger on ddb streams on TablePlay
+  # and update various axes of stats for the play that was just recorded
 
   onPlayUpdateTotalStats:
     events:
       - stream:
           type: dynamodb
           arn:
-            Fn::GetAtt: [ TablePlay, StreamArn ]
+            Fn::GetAtt: [TablePlay, StreamArn]
     handler: src/fns/florence/onPlayUpdateTotalStats.handler
     layers:
       - ${self:custom.LAYER_REF.${self:custom.config}}
@@ -411,7 +408,7 @@ functions:
       - stream:
           type: dynamodb
           arn:
-            Fn::GetAtt: [ TablePlay, StreamArn ]
+            Fn::GetAtt: [TablePlay, StreamArn]
     handler: src/fns/florence/onPlayUpdateArtistStats.handler
     layers:
       - ${self:custom.LAYER_REF.${self:custom.config}}
@@ -424,7 +421,7 @@ functions:
       - stream:
           type: dynamodb
           arn:
-            Fn::GetAtt: [ TableStat, StreamArn ]
+            Fn::GetAtt: [TableStat, StreamArn]
     handler: src/fns/florence/onPlayUpdateAchievements.handler
     layers:
       - ${self:custom.LAYER_REF.${self:custom.config}}
@@ -434,13 +431,12 @@ functions:
       TABLE_USER: ${self:custom.ref.TableUser}
       QUEUE_VALIDATION_ERRORS: ${self:custom.ref.QueueValidationErrors}
 
-
   onPlayUpdateGenreStats:
     events:
       - stream:
           type: dynamodb
           arn:
-            Fn::GetAtt: [ TablePlay, StreamArn ]
+            Fn::GetAtt: [TablePlay, StreamArn]
     handler: src/fns/florence/onPlayUpdateGenreStats.handler
     layers:
       - ${self:custom.LAYER_REF.${self:custom.config}}
@@ -449,16 +445,16 @@ functions:
       TABLE_ACHIEVEMENT: ${self:custom.ref.TableAchievement}
       QUEUE_VALIDATION_ERRORS: ${self:custom.ref.QueueValidationErrors}
 
-################################################################################
-# functions: error queue
-################################################################################
-# eventually break this out to be target-aware
-# so i dont freak out when dev errors show up in slack
+  ################################################################################
+  # functions: error queue
+  ################################################################################
+  # eventually break this out to be target-aware
+  # so i dont freak out when dev errors show up in slack
   errorToSlack:
     events:
       - sqs:
           arn:
-            Fn::GetAtt: [ QueueValidationErrors, Arn ]
+            Fn::GetAtt: [QueueValidationErrors, Arn]
     handler: src/fns/errorToSlack.handler
     layers:
       - ${self:custom.LAYER_REF.${self:custom.config}}
@@ -470,32 +466,30 @@ functions:
 ################################################################################
 # this is WIP prototype of custom resource handler for spinning up firebase auth instances
 
-  # customResource:
-  #   handler: src/fns/customResourceFirebase.handler
-  #   layers:
-  #     - ${self:custom.LAYER_REF.${self:custom.config}}
-
+# customResource:
+#   handler: src/fns/customResourceFirebase.handler
+#   layers:
+#     - ${self:custom.LAYER_REF.${self:custom.config}}
 
 resources:
   Description: soundpruf back-end services
 
   Resources:
-
-################################################################################
-# resources: error queue
-################################################################################
-# 
+    ################################################################################
+    # resources: error queue
+    ################################################################################
+    #
     QueueValidationErrors:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: ${self:custom.ns}-QueueValidationErrors
 
-################################################################################
-# resources: DEPLOYMENT
-################################################################################
-# these ssm resources are all used by the frontend build process
-# they get compiled into the frontend
-# only public things here (eg no private keys)
+    ################################################################################
+    # resources: DEPLOYMENT
+    ################################################################################
+    # these ssm resources are all used by the frontend build process
+    # they get compiled into the frontend
+    # only public things here (eg no private keys)
 
     ParameterTargetAPIEndpoint:
       Type: AWS::SSM::Parameter
@@ -518,21 +512,21 @@ resources:
         Name: ${self:custom.ssmTargetPath}/public/FIREBASE_API_KEY
         Type: String
         Value: ${ssm:${self:custom.ssmConfigPath}/FIREBASE_API_KEY}
-      
+
     ParameterFirebaseAuthDomain:
       Type: AWS::SSM::Parameter
       Properties:
         Name: ${self:custom.ssmTargetPath}/public/FIREBASE_AUTH_DOMAIN
         Type: String
         Value: ${ssm:${self:custom.ssmConfigPath}/FIREBASE_AUTH_DOMAIN}
-      
+
     ParameterFirebaseDatabaseUrl:
       Type: AWS::SSM::Parameter
       Properties:
         Name: ${self:custom.ssmTargetPath}/public/FIREBASE_DATABASE_URL
         Type: String
         Value: ${ssm:${self:custom.ssmConfigPath}/FIREBASE_DATABASE_URL}
-      
+
     ParameterFirebaseProjectId:
       Type: AWS::SSM::Parameter
       Properties:
@@ -547,9 +541,9 @@ resources:
         Type: String
         Value: ${ssm:${self:custom.ssmConfigPath}/LOGROCKET_APP_ID}
 
-################################################################################
-# resources: prototype USER AUTH
-################################################################################
+    ################################################################################
+    # resources: prototype USER AUTH
+    ################################################################################
 
     # need proper gcp creds to complete this
     # TestCustomResource:
@@ -561,9 +555,9 @@ resources:
     #     GCPFolderName: sp-auth
     #     TestInput: myInput
 
-################################################################################
-# resources: USER INFO
-################################################################################
+    ################################################################################
+    # resources: USER INFO
+    ################################################################################
 
     TableUser:
       Type: AWS::DynamoDB::Table
@@ -583,9 +577,9 @@ resources:
         StreamSpecification:
           StreamViewType: NEW_AND_OLD_IMAGES
 
-################################################################################
-# resources: prototype HARVEST
-################################################################################
+    ################################################################################
+    # resources: prototype HARVEST
+    ################################################################################
 
     TablePlay:
       Type: AWS::DynamoDB::Table
@@ -627,9 +621,9 @@ resources:
     #     Name: ${self:custom.ns}-StreamCreatePlayFromSpotify
     #     ShardCount: 1
 
-################################################################################
-# resources: stats
-################################################################################
+    ################################################################################
+    # resources: stats
+    ################################################################################
     TableStat:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -652,82 +646,79 @@ resources:
         StreamSpecification:
           StreamViewType: NEW_AND_OLD_IMAGES
         GlobalSecondaryIndexes:
-        - IndexName: GSIReverse
-          KeySchema:
-            - AttributeName: sk
-              KeyType: HASH
-            - AttributeName: pk
-              KeyType: RANGE
-          Projection:
-            ProjectionType: ALL
-        - IndexName: TopListenerGSI
-          KeySchema:
-            - AttributeName: artistAchievementsId
-              KeyType: HASH
-            - AttributeName: playDurationMs
-              KeyType: RANGE
-          Projection:
-            ProjectionType: ALL
+          - IndexName: GSIReverse
+            KeySchema:
+              - AttributeName: sk
+                KeyType: HASH
+              - AttributeName: pk
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: TopListenerGSI
+            KeySchema:
+              - AttributeName: artistAchievementsId
+                KeyType: HASH
+              - AttributeName: playDurationMs
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
         LocalSecondaryIndexes:
-        - IndexName: LSIPlayDuration
-          KeySchema:
-            - AttributeName: pk
-              KeyType: HASH
-            - AttributeName: playDurationMs
-              KeyType: RANGE
-          Projection:
-            ProjectionType: ALL
-
-
-################################################################################
-# resources: TableAchievement
-################################################################################
-
-
-    TableAchievement:
-          Type: AWS::DynamoDB::Table
-          Properties:
-            TableName: ${self:custom.ns}-TableAchievement
-            AttributeDefinitions:
-              - AttributeName: pk # Will be Artist's pk/spotify uid
-                AttributeType: S
-              - AttributeName: ak 
-                AttributeType: S
-              - AttributeName: uk 
-                AttributeType: S
-              - AttributeName: auk 
-                AttributeType: S
-              - AttributeName: total
-                AttributeType: N
+          - IndexName: LSIPlayDuration
             KeySchema:
               - AttributeName: pk
                 KeyType: HASH
-              - AttributeName: ak
+              - AttributeName: playDurationMs
                 KeyType: RANGE
-            BillingMode: PAY_PER_REQUEST
-            StreamSpecification:
-              StreamViewType: NEW_AND_OLD_IMAGES
-            GlobalSecondaryIndexes:
-            - IndexName: ArtistUserAchievementGSI
-              KeySchema:
-                - AttributeName: auk
-                  KeyType: HASH
-              Projection:
-                ProjectionType: ALL
-            - IndexName: ArtistAchievementHoldersGSI # //: cc ArtistAchievementHoldersIndex#1
-              KeySchema:
-                - AttributeName: ak
-                  KeyType: HASH
-                - AttributeName: total
-                  KeyType: RANGE
-              Projection:
-                ProjectionType: ALL
-            - IndexName: UserAchievementGSI
-              KeySchema:
-                - AttributeName: pk
-                  KeyType: HASH
-                - AttributeName: uk
-                  KeyType: RANGE
-              Projection:
-                ProjectionType: ALL
-      
+            Projection:
+              ProjectionType: ALL
+
+    ################################################################################
+    # resources: TableAchievement
+    ################################################################################
+
+    TableAchievement:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.ns}-TableAchievement
+        AttributeDefinitions:
+          - AttributeName: pk # Will be Artist's pk/spotify uid
+            AttributeType: S
+          - AttributeName: ak
+            AttributeType: S
+          - AttributeName: uk
+            AttributeType: S
+          - AttributeName: auk
+            AttributeType: S
+          - AttributeName: total
+            AttributeType: N
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: ak
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
+        GlobalSecondaryIndexes:
+          - IndexName: ArtistUserAchievementGSI
+            KeySchema:
+              - AttributeName: auk
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+          - IndexName: ArtistAchievementHoldersGSI # //: cc ArtistAchievementHoldersIndex#1
+            KeySchema:
+              - AttributeName: ak
+                KeyType: HASH
+              - AttributeName: total
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: UserAchievementGSI
+            KeySchema:
+              - AttributeName: pk
+                KeyType: HASH
+              - AttributeName: uk
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
