@@ -1,5 +1,3 @@
 export const mapSizesToProps = ({ width }: any) => ({
-    isMobile: width < 786,
-  })
-  
-  
+  isMobile: width < 1001,
+});
