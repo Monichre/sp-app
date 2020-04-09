@@ -32,7 +32,7 @@ width: 100%;
 // width: ${bgSize}rem;
 border-radius: 0.5rem;
 background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("${({
-  src
+  src,
 }) => src}");
 background-position: center center;
 background-size: cover;
@@ -58,7 +58,7 @@ export const ArtistPromoItem: React.SFC<FeaturedArtist> = ({
   hover,
   src,
   href,
-  name
+  name,
 }) => (
   <div data-tip={hover}>
     <ArtistLinkBlock data-test="artist-row" target="new" {...{ href, src }}>
@@ -81,29 +81,31 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: "Ready",
-    hover: "18,703 monthly streamers on Spotify",
-    name: "Chappaqua Wrestling",
+    hover: "418 monthly streamers on Spotify",
+    name: "Tom the Lion",
     href:
-      "https://open.spotify.com/artist/5S4qUw22ZF7gTPUEx61SyC?si=yF2wHKF6TguxPKSoS58m6w",
-    src: "https://f4.bcbits.com/img/0011461584_10.jpg"
+      "https://open.spotify.com/artist/2jmWN7KyREhT8sbISzFaWf?si=bJUkG7BMQPKW13_4wRmfxQ",
+    src:
+      "https://www.clashmusic.com/sites/default/files/styles/article_feature/public/field/image/RNI-Films-IMG-43645191-60BF-4942-B4AA-A3C163294EBE_V3.jpeg?itok=6XWNeqRa",
   },
   {
     title: "Set",
-    hover: "639,834 monthly streamers on Spotify",
-    name: "(Sandy) Alex G",
+    hover: "13,978 monthly streamers on Spotify",
+    name: "NOBRO",
     href:
-      "https://open.spotify.com/artist/6lcwlkAjBPSKnFBZjjZFJs?si=XRy-wXzTRv6eIyofRvRqoA",
+      "https://open.spotify.com/artist/5Tomvwat8AxMGd2ewkDNPs?si=PJPO2GEWQoCcJroRaPAf-w",
     src:
-      "https://img.apmcdn.org/b70fe93a07870a989e35cc132ec1d8af2113b901/uncropped/30ca1b-20190909-sandy-alex-g.jpg"
+      "https://thegauntlet.ca/wp-content/uploads/2020/01/ARTS_NOBRO_ChrisMacArthur-2882-1160x773.jpg",
   },
   {
     title: "Liftoff",
-    hover: "2,014,129 monthly streamers on Spotify",
-    name: "Beach Bunny",
-    href: "https://open.spotify.com/artist/2vnB6tuQMaQpORiRdvXF9H",
+    hover: "168,239 monthly streamers on Spotify",
+    name: "nascar aloe",
+    href:
+      "https://open.spotify.com/artist/03LEDukdM723NRLz4UXeNv?si=GP94fhanRU6jW9HLx7t05A",
     src:
-      "https://cdn2.thelineofbestfit.com/images/made/images/remote/https_cdn2.thelineofbestfit.com/media/2014/Beach_Bunny_1_1290_1290.jpg"
-  }
+      "https://www.jankysmooth.com/wp-content/uploads/2020/02/568D3286-0100-4260-B6AD-CBA180DB312C.jpeg",
+  },
 ];
 
 export const FeaturedArtists: React.SFC = () => (
