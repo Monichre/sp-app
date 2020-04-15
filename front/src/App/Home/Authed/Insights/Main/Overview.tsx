@@ -12,7 +12,7 @@ import {
   BlockTitle,
   SeeAllLink,
   SeeAllLinkInner,
-  SeeAllIcon
+  SeeAllIcon,
 } from "../shared/BlockTitle";
 import { GenresChartBlock } from "../shared/GenresChart";
 import { TimeseriesChart } from "../shared/TimeseriesChart";
@@ -72,7 +72,7 @@ export const normalizeTimeScope = (pathParams: any) => {
     thisMonth: "This Month",
     thisYear: "This Year",
     life: "Life Time",
-    lifetime: "Life Time"
+    lifetime: "Life Time",
   };
   const { timeScope, perspective }: any = pathParams;
 
@@ -88,9 +88,9 @@ export const Overview: React.SFC<RouteComponentProps & {
     insightsDash: {
       [pathParams.timeScope]: {
         timeSeries,
-        [pathParams.perspective]: { artists, genres }
-      }
-    }
+        [pathParams.perspective]: { artists, genres },
+      },
+    },
   } = suspensefulHook(
     useInsightsDash({ variables: { uid }, suspend: true, pollInterval: 10000 })
   );
@@ -111,14 +111,14 @@ export const Overview: React.SFC<RouteComponentProps & {
     openPortal: openPortal1,
     closePortal: closePortal1,
     isOpen: isOpen1,
-    Portal: Portal1
+    Portal: Portal1,
   } = usePortal();
 
   return (
     <>
       {/* Gets total users when perspective is Everyone. Currently Static Data */}
       {translatedPerspective == "Everyone" ? (
-        <TotalNumberOfUsers>Everyone: 468 people</TotalNumberOfUsers>
+        <TotalNumberOfUsers>Everyone: 546 people</TotalNumberOfUsers>
       ) : null}
 
       {isOpen && (
@@ -211,7 +211,7 @@ export const Overview: React.SFC<RouteComponentProps & {
           backgroundColor: "rgba(216,216,216,.055)",
           borderRadius: "12px",
           padding: "2em",
-          margin: "30px auto"
+          margin: "30px auto",
         }}
       >
         <TimeseriesChart
@@ -223,7 +223,7 @@ export const Overview: React.SFC<RouteComponentProps & {
           backgroundColor: "rgba(216,216,216,.055)",
           borderRadius: "12px",
           padding: "2em",
-          margin: "30px auto"
+          margin: "30px auto",
         }}
       >
         <BlockTitle>Emerging Artists: Staff Picks</BlockTitle>
