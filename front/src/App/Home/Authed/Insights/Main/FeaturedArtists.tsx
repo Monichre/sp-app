@@ -81,30 +81,30 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: "Ready",
-    hover: "418 monthly streamers on Spotify",
-    name: "Tom the Lion",
+    hover: "8,696 monthly streamers on Spotify",
+    name: "BRETT NEWSKI",
     href:
-      "https://open.spotify.com/artist/2jmWN7KyREhT8sbISzFaWf?si=bJUkG7BMQPKW13_4wRmfxQ",
+      "https://open.spotify.com/artist/7jukMDCSMJSIcdlsKJ44IW?si=bPxnZiVxRSqUXioqF7_HKQ",
     src:
-      "https://www.clashmusic.com/sites/default/files/styles/article_feature/public/field/image/RNI-Films-IMG-43645191-60BF-4942-B4AA-A3C163294EBE_V3.jpeg?itok=6XWNeqRa",
+      "https://s3.amazonaws.com/radiomilwaukee-wordpress-uploads/wp-content/uploads/2020/02/05172506/NEWSKI-orange-WEB-cred-Kelly-bolter-1480x987.jpg",
   },
   {
     title: "Set",
-    hover: "13,978 monthly streamers on Spotify",
-    name: "NOBRO",
+    hover: "7,638 monthly streamers on Spotify",
+    name: "NOVACUB",
     href:
-      "https://open.spotify.com/artist/5Tomvwat8AxMGd2ewkDNPs?si=PJPO2GEWQoCcJroRaPAf-w",
+      "https://open.spotify.com/artist/5AgzqwERKzaLXw6wSL5LcO?si=dgV5gLmWS3GoEADyFn_E9Q",
     src:
-      "https://thegauntlet.ca/wp-content/uploads/2020/01/ARTS_NOBRO_ChrisMacArthur-2882-1160x773.jpg",
+      "https://assets.bigcartel.com/account_images/2536034/BIGCARTEL.jpg?auto=format&fit=max&h=1200&w=1200",
   },
   {
     title: "Liftoff",
-    hover: "168,239 monthly streamers on Spotify",
-    name: "nascar aloe",
+    hover: "534,301 monthly streamers on Spotify",
+    name: "Remi Wolf",
     href:
-      "https://open.spotify.com/artist/03LEDukdM723NRLz4UXeNv?si=GP94fhanRU6jW9HLx7t05A",
+      "https://open.spotify.com/artist/0NB5HROxc8dDBXpkIi1v3d?si=WxKOXMMfSp-OtBgIyjZPUg",
     src:
-      "https://www.jankysmooth.com/wp-content/uploads/2020/02/568D3286-0100-4260-B6AD-CBA180DB312C.jpeg",
+      "https://diy-magazine.s3.amazonaws.com/d/diy/Artists/R/Remi-Wolf/_landscape/358486/Screenshot-2020-04-08-at-16.49.11.jpg",
   },
 ];
 
