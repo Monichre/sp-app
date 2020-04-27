@@ -81,30 +81,28 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: "Ready",
-    hover: "8,696 monthly streamers on Spotify",
-    name: "BRETT NEWSKI",
+    hover: "1,200 monthly streamers on Spotify",
+    name: "Queen Moo",
     href:
-      "https://open.spotify.com/artist/7jukMDCSMJSIcdlsKJ44IW?si=bPxnZiVxRSqUXioqF7_HKQ",
-    src:
-      "https://s3.amazonaws.com/radiomilwaukee-wordpress-uploads/wp-content/uploads/2020/02/05172506/NEWSKI-orange-WEB-cred-Kelly-bolter-1480x987.jpg",
+      "https://open.spotify.com/artist/6c6Nk6a7Xk5t8NVWRnNonq?si=dyYycUUBTU6NmTjPoPfmlw",
+    src: "https://s9.limitedrun.com/images/1244474/queenmoo_website.jpg",
   },
   {
     title: "Set",
-    hover: "7,638 monthly streamers on Spotify",
-    name: "NOVACUB",
+    hover: "108,344 monthly streamers on Spotify",
+    name: "Muzz",
     href:
-      "https://open.spotify.com/artist/5AgzqwERKzaLXw6wSL5LcO?si=dgV5gLmWS3GoEADyFn_E9Q",
+      "https://open.spotify.com/artist/4nZTcwItN2j9H21sJBZ2Nq?si=42hhTZelTVmKkOKWjxZ8ww",
     src:
-      "https://assets.bigcartel.com/account_images/2536034/BIGCARTEL.jpg?auto=format&fit=max&h=1200&w=1200",
+      "https://www.rollingstone.com/wp-content/uploads/2020/03/Muzz_byDrielyS-000485810006.jpg",
   },
   {
     title: "Liftoff",
-    hover: "534,301 monthly streamers on Spotify",
-    name: "Remi Wolf",
+    hover: "1,857,931 monthly streamers on Spotify",
+    name: "Nebu Kiniza",
     href:
-      "https://open.spotify.com/artist/0NB5HROxc8dDBXpkIi1v3d?si=WxKOXMMfSp-OtBgIyjZPUg",
-    src:
-      "https://diy-magazine.s3.amazonaws.com/d/diy/Artists/R/Remi-Wolf/_landscape/358486/Screenshot-2020-04-08-at-16.49.11.jpg",
+      "https://open.spotify.com/artist/5lCY3tqdQxbeg5igSlObaT?si=oTyC_8DXQZyo7Fj03-5hmA",
+    src: "https://idolwiki.com/pics/NebuKiniza/NebuKiniza.jpg",
   },
 ];
 
