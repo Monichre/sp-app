@@ -81,28 +81,27 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: "Ready",
-    hover: "1,200 monthly streamers on Spotify",
-    name: "Queen Moo",
+    hover: "12,341 monthly streamers on Spotify",
+    name: "ELLES",
     href:
-      "https://open.spotify.com/artist/6c6Nk6a7Xk5t8NVWRnNonq?si=dyYycUUBTU6NmTjPoPfmlw",
-    src: "https://s9.limitedrun.com/images/1244474/queenmoo_website.jpg",
+      "https://open.spotify.com/artist/6EbSbVKlRuKxfIfr8H7mCo?si=r1-fo46LTBSp7xZ8czUIQg",
+    src: "https://f4.bcbits.com/img/a2677796609_10.jpg",
   },
   {
     title: "Set",
-    hover: "108,344 monthly streamers on Spotify",
-    name: "Muzz",
+    hover: "126,551 monthly streamers on Spotify",
+    name: "MIKE",
     href:
-      "https://open.spotify.com/artist/4nZTcwItN2j9H21sJBZ2Nq?si=42hhTZelTVmKkOKWjxZ8ww",
-    src:
-      "https://www.rollingstone.com/wp-content/uploads/2020/03/Muzz_byDrielyS-000485810006.jpg",
+      "https://open.spotify.com/artist/1wlzPS1hSNrkriIIwLFTmU?si=6xx1y36kScycd8C73qFNPw",
+    src: "https://cdn3.pitchfork.com/longform/599/Mike1.jpg",
   },
   {
     title: "Liftoff",
-    hover: "1,857,931 monthly streamers on Spotify",
-    name: "Nebu Kiniza",
+    hover: "295,939 monthly streamers on Spotify",
+    name: "Vagabon",
     href:
-      "https://open.spotify.com/artist/5lCY3tqdQxbeg5igSlObaT?si=oTyC_8DXQZyo7Fj03-5hmA",
-    src: "https://idolwiki.com/pics/NebuKiniza/NebuKiniza.jpg",
+      "https://open.spotify.com/artist/17mwzDXKn4ra9cuxXaptwp?si=6zuY75GKSiipm-mqNDdr9gA",
+    src: "https://guitar.com/wp-content/uploads/2019/08/vagabon@1400x1050.jpg",
   },
 ];
 
