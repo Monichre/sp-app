@@ -81,27 +81,30 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: "Ready",
-    hover: "12,341 monthly streamers on Spotify",
-    name: "ELLES",
+    hover: "192 monthly streamers on Spotify",
+    name: "Druzy Rose",
     href:
-      "https://open.spotify.com/artist/6EbSbVKlRuKxfIfr8H7mCo?si=r1-fo46LTBSp7xZ8czUIQg",
-    src: "https://f4.bcbits.com/img/a2677796609_10.jpg",
+      "https://open.spotify.com/artist/35U1xElwokOIOHuzBRPAMF?si=THyFKt3kTRCThCO4SB0MdQ",
+    src:
+      "https://scontent.ffcm1-2.fna.fbcdn.net/v/t1.0-9/74229561_675300442878640_4279286499251322880_o.jpg?_nc_cat=104&_nc_sid=e3f864&_nc_ohc=IHPMj3Sg30AAX9S7Hzw&_nc_ht=scontent.ffcm1-2.fna&oh=7baf398c2aad813ddc5eb891b4cb1a59&oe=5EE11A5D",
   },
   {
     title: "Set",
-    hover: "126,551 monthly streamers on Spotify",
-    name: "MIKE",
+    hover: "170,952 monthly streamers on Spotify",
+    name: "Harvio",
     href:
-      "https://open.spotify.com/artist/1wlzPS1hSNrkriIIwLFTmU?si=6xx1y36kScycd8C73qFNPw",
-    src: "https://cdn3.pitchfork.com/longform/599/Mike1.jpg",
+      "https://open.spotify.com/artist/0VCoyPtLDeOvxwvHeCX7Jx?si=xGUoUnvpTy6CGdeA3yR9Ng",
+    src:
+      "https://d34qmkt8w5wll9.cloudfront.net/commercial-releases/cover_art/jpeg/4395.jpg",
   },
   {
     title: "Liftoff",
-    hover: "295,939 monthly streamers on Spotify",
-    name: "Vagabon",
+    hover: "649,852 monthly streamers on Spotify",
+    name: "Zaia",
     href:
-      "https://open.spotify.com/artist/17mwzDXKn4ra9cuxXaptwp?si=6zuY75GKSiipm-mqNDdr9gA",
-    src: "https://guitar.com/wp-content/uploads/2019/08/vagabon@1400x1050.jpg",
+      "https://open.spotify.com/artist/1m0t5VYISq6TcyMo7UqLMz?si=zYqjnqwFRnysNgu2HD12-w",
+    src:
+      "https://thesource.com/wp-content/uploads/2018/04/Barriers-release-press-4.jpeg",
   },
 ];
 
