@@ -81,30 +81,30 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: "Ready",
-    hover: "192 monthly streamers on Spotify",
-    name: "Druzy Rose",
+    hover: "2,023 monthly streamers on Spotify",
+    name: "Latinta",
     href:
-      "https://open.spotify.com/artist/35U1xElwokOIOHuzBRPAMF?si=THyFKt3kTRCThCO4SB0MdQ",
+      "https://open.spotify.com/artist/52HsqcRvu3nkNgED7TXaHC?si=a5tza7fLR7mqSBRSjwBQbw",
     src:
-      "https://scontent.ffcm1-2.fna.fbcdn.net/v/t1.0-9/74229561_675300442878640_4279286499251322880_o.jpg?_nc_cat=104&_nc_sid=e3f864&_nc_ohc=IHPMj3Sg30AAX9S7Hzw&_nc_ht=scontent.ffcm1-2.fna&oh=7baf398c2aad813ddc5eb891b4cb1a59&oe=5EE11A5D",
+      "https://images.prismic.io/sofarlive/3742530c-bfa6-4ba6-8bee-2c2cc1741d56_200503_KL_Latinta_artists_page_headers_3600x3600_v1.jpg?auto=compress,format&rect=0,0,3600,3600&w=3600&h=3600",
   },
   {
     title: "Set",
-    hover: "170,952 monthly streamers on Spotify",
-    name: "Harvio",
+    hover: "254,321 monthly streamers on Spotify",
+    name: "Brooke Annibale",
     href:
-      "https://open.spotify.com/artist/0VCoyPtLDeOvxwvHeCX7Jx?si=xGUoUnvpTy6CGdeA3yR9Ng",
+      "https://open.spotify.com/artist/1JojxxteIsItgolTdalOb3?si=MtBVc2pCTeyT2Dgir1wAFA",
     src:
-      "https://d34qmkt8w5wll9.cloudfront.net/commercial-releases/cover_art/jpeg/4395.jpg",
+      "https://media1.fdncms.com/pittsburgh/imager/u/original/1857930/brooke.jpg",
   },
   {
     title: "Liftoff",
-    hover: "649,852 monthly streamers on Spotify",
-    name: "Zaia",
+    hover: "1,281,515 monthly streamers on Spotify",
+    name: "Yung Lean",
     href:
-      "https://open.spotify.com/artist/1m0t5VYISq6TcyMo7UqLMz?si=zYqjnqwFRnysNgu2HD12-w",
+      "https://open.spotify.com/artist/67lytN32YpUxiSeWlKfHJ3?si=v3g1-YzlR9u8aLUHpdwahw",
     src:
-      "https://thesource.com/wp-content/uploads/2018/04/Barriers-release-press-4.jpeg",
+      "https://i-d-images.vice.com/images/2016/05/13/untitled-article-1463136767-body-image-1463136921.jpg?crop=1xw%3A0.3727xh%3B0xw%2C0.0073xh&resize=2000%3A*",
   },
 ];
 
