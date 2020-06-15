@@ -81,30 +81,30 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: "Ready",
-    hover: "2,023 monthly streamers on Spotify",
-    name: "Latinta",
+    hover: "16,523 monthly streamers on Spotify",
+    name: "Onipa",
     href:
-      "https://open.spotify.com/artist/52HsqcRvu3nkNgED7TXaHC?si=a5tza7fLR7mqSBRSjwBQbw",
+      "https://open.spotify.com/artist/3M4siMIW7Pm9cT4jb1oNb5?si=i-tqiobhTOmbBe6FV2ZQGw",
     src:
-      "https://images.prismic.io/sofarlive/3742530c-bfa6-4ba6-8bee-2c2cc1741d56_200503_KL_Latinta_artists_page_headers_3600x3600_v1.jpg?auto=compress,format&rect=0,0,3600,3600&w=3600&h=3600",
+      "https://scontent-msp1-1.xx.fbcdn.net/v/t1.0-9/s960x960/89895636_769578163573631_7199228141515046912_o.jpg?_nc_cat=109&_nc_sid=8024bb&_nc_oc=AQl8sfD0AqIkT5vlL0UHWTLg-Uh9NeojKIMDbUzUph13yWydPXYsvEFb6wuEkSs7Oj0&_nc_ht=scontent-msp1-1.xx&_nc_tp=7&oh=9081f2a08e4c3591cc2263db7b8420ee&oe=5EF170A6",
   },
   {
     title: "Set",
-    hover: "254,321 monthly streamers on Spotify",
-    name: "Brooke Annibale",
+    hover: "167,815 monthly streamers on Spotify",
+    name: "Rahli",
     href:
-      "https://open.spotify.com/artist/1JojxxteIsItgolTdalOb3?si=MtBVc2pCTeyT2Dgir1wAFA",
+      "https://open.spotify.com/artist/6WwVzGJQWr2jU3iBgl8WPm?si=FJ9Z4euKRZaF3VxN6KMGtA",
     src:
-      "https://media1.fdncms.com/pittsburgh/imager/u/original/1857930/brooke.jpg",
+      "https://elevator-media.imgix.net/2019/10/Rahli.jpg?fit=scale&fm=pjpg&h=650&ixlib=php-1.2.1&w=600&wpsize=medium&s=ed6bb671bac611b6b3bea99e2a7a3535",
   },
   {
     title: "Liftoff",
-    hover: "1,281,515 monthly streamers on Spotify",
-    name: "Yung Lean",
+    hover: "221,458 monthly streamers on Spotify",
+    name: "salute",
     href:
-      "https://open.spotify.com/artist/67lytN32YpUxiSeWlKfHJ3?si=v3g1-YzlR9u8aLUHpdwahw",
+      "https://open.spotify.com/artist/1np8xozf7ATJZDi9JX8Dx5?si=KKaSTp4PSs--eG386ZIeEw",
     src:
-      "https://i-d-images.vice.com/images/2016/05/13/untitled-article-1463136767-body-image-1463136921.jpg?crop=1xw%3A0.3727xh%3B0xw%2C0.0073xh&resize=2000%3A*",
+      "https://scontent-msp1-1.xx.fbcdn.net/v/t31.0-0/p640x640/13227419_1314842381877077_303597481520075945_o.jpg?_nc_cat=100&_nc_sid=7aed08&_nc_oc=AQkwwq21Qq-1RmUcx0l-2okKtRPqfjGmaXMfMQjxcAE1nt6d99tWBzaoFVSpVAd8r6U&_nc_ht=scontent-msp1-1.xx&_nc_tp=6&oh=8279777463a0a312d1ec97ad3d0f5f8e&oe=5EF3C81B",
   },
 ];
 
