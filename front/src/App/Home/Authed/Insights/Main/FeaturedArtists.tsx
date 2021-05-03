@@ -81,30 +81,30 @@ type FeaturedArtist = {
 const featuredArtists: FeaturedArtist[] = [
   {
     title: "Ready",
-    hover: "16,523 monthly streamers on Spotify",
-    name: "Onipa",
+    hover: "155,313 monthly streamers on Spotify",
+    name: "Nubya Garcia",
     href:
-      "https://open.spotify.com/artist/3M4siMIW7Pm9cT4jb1oNb5?si=i-tqiobhTOmbBe6FV2ZQGw",
+      "https://open.spotify.com/artist/6O5k8LLRfDK8v9jj1GazAQ?si=OfOauefwSUOjeVWejePtFw&dl_branch=1&nd=1",
     src:
-      "https://scontent-msp1-1.xx.fbcdn.net/v/t1.0-9/s960x960/89895636_769578163573631_7199228141515046912_o.jpg?_nc_cat=109&_nc_sid=8024bb&_nc_oc=AQl8sfD0AqIkT5vlL0UHWTLg-Uh9NeojKIMDbUzUph13yWydPXYsvEFb6wuEkSs7Oj0&_nc_ht=scontent-msp1-1.xx&_nc_tp=7&oh=9081f2a08e4c3591cc2263db7b8420ee&oe=5EF170A6",
+      "https://cdn2.jazztimes.com/2020/09/nubya-garcia-adama-jalloh.jpg",
   },
   {
     title: "Set",
     hover: "167,815 monthly streamers on Spotify",
-    name: "Rahli",
+    name: "Doc Robinson",
     href:
-      "https://open.spotify.com/artist/6WwVzGJQWr2jU3iBgl8WPm?si=FJ9Z4euKRZaF3VxN6KMGtA",
+      "https://open.spotify.com/artist/5O0efDEpkqEmWbXD2zpkjz?si=XB6ye6J7S-yA9hwTm3n5IQ&dl_branch=1&nd=1",
     src:
-      "https://elevator-media.imgix.net/2019/10/Rahli.jpg?fit=scale&fm=pjpg&h=650&ixlib=php-1.2.1&w=600&wpsize=medium&s=ed6bb671bac611b6b3bea99e2a7a3535",
+      "http://volumemagazine.net/wp-content/uploads/2016/12/DSCF1101-1038x576-1000x576.jpg",
   },
   {
     title: "Liftoff",
-    hover: "221,458 monthly streamers on Spotify",
-    name: "salute",
+    hover: "946,874 monthly streamers on Spotify",
+    name: "Dreamer Boy",
     href:
-      "https://open.spotify.com/artist/1np8xozf7ATJZDi9JX8Dx5?si=KKaSTp4PSs--eG386ZIeEw",
+      "https://open.spotify.com/artist/1UJKiAI4Evnhh1ExDse25D?si=P3U3PBiLT9SWBziQ1ZTQgg&dl_branch=1&nd=1",
     src:
-      "https://scontent-msp1-1.xx.fbcdn.net/v/t31.0-0/p640x640/13227419_1314842381877077_303597481520075945_o.jpg?_nc_cat=100&_nc_sid=7aed08&_nc_oc=AQkwwq21Qq-1RmUcx0l-2okKtRPqfjGmaXMfMQjxcAE1nt6d99tWBzaoFVSpVAd8r6U&_nc_ht=scontent-msp1-1.xx&_nc_tp=6&oh=8279777463a0a312d1ec97ad3d0f5f8e&oe=5EF3C81B",
+      "https://readdork.com/wp-content/uploads/2020/11/dreamer-boy-nov20-47.jpg",
   },
 ];
 
